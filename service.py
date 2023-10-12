@@ -54,6 +54,12 @@ class UsersService:
         cur = self._con.cursor()
         return set(cur.execute("""SELECT study_group FROM students""").fetchall())
 
+    def get_group_of_id_tg(self, tg_id: int):
+        cur = self._con.cursor()
+
+        data = cur.execute(f'SELECT study_group FROM students WHERE telegram_id = "{tg_id}"').fetchone()
+        return data
+
     def get_user_of_group(self, group):
         cur = self._con.cursor()
         return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
