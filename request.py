@@ -14,6 +14,7 @@ dp = None
 def threat():  # второй поток для рассылки
     while True:
         schedule.run_pending()
+
 def SendMessage(id, text):
     print(id, text)
     zap = f'''https://api.telegram.org/bot{Settings.BOT_TOKEN.get_secret_value()}/sendMessage'''
@@ -48,8 +49,8 @@ def job(bot):
 
 
 def restart_schedule(bot):
-    print(99999)
-    global dp
-    dp = Dispatcher(bot)
+    # print(99999)
+    # global dp
+    # dp = Dispatcher(bot)
     schedule.every().second.do(job, bot=bot)
 
