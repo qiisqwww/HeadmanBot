@@ -10,6 +10,7 @@ from service import UsersService
 
 
 async def main():
+
     storage = MemoryStorage()  # Создаем хранилище
 
     bot = Bot(config.BOT_TOKEN.get_secret_value())  # Получаем токен бота из файла с конфигом
