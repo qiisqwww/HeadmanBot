@@ -1,14 +1,8 @@
-import random
-
 import schedule
 from aiogram import Dispatcher, types
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from work_api import API
 from service import UsersService
-from config.config_reader import config
-import json
-import requests
 
 api = API()
 dp = None
@@ -23,15 +17,15 @@ def get_keyboard():
     return keyboard
 
 async def job(k, bot):
-    print(111)
+    # print(111)
     with UsersService() as con:
         groups = con.get_groups()
-        print(groups)
+        # print(groups)
         for group in groups:
             api.regenerate(group[0])
             day = api.get_today()
             for lesson in day:
-                print(con.get_user_of_group(group[0]), group)
+                # print(con.get_user_of_group(group[0]), group)
                 for Id in con.get_user_of_group(group[0]):
                     await bot(Id[0], 'текст' + str(lesson), reply_markup=get_keyboard())
 
