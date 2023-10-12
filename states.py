@@ -10,3 +10,5 @@ class RegStates(StatesGroup):
 
 class SetHeadMen(StatesGroup):
     get_password = State()
+
+# class ReqPars(StatesGroup):

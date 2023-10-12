@@ -1,4 +1,4 @@
-#import logging
+import logging
 import random
 from typing import Optional
 
@@ -105,8 +105,41 @@ async def job(k, bot):# k он ругается, если уберёшь отл�
 async def input_text_prompt(clbck: CallbackQuery, state: FSMContext):
     data, flag = clbck.data.split('_')[1:]
     name, time = list_pars[data].split('_')
-    with UsersService as con:
-        con.g
+    with UsersService() as con:
+        group = con.get_group_of_id_tg(clbck.from_user.id)
+        list_group[group][name+'_'+time]['Y' if flag == '1' else 'N'].append(clbck.from_user.id)
+    print(list_group)
     await clbck.message.edit_text(f"Ок я поняла, на паре {name}, которая начнётся в {time}, ты "
-                                  f"{'' if flag == '1' else 'не '}будешь.",
+                                  f"{'' if flag == '1' else 'НЕ '}БУДЕШЬ.",
                                   reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[]))
+
+# @router.message(Command("next"))
+# async def next(message: types.Message, state: FSMContext) -> None:
+#     await message.answer(text='')
+#     # with UsersService() as con:
+#     #     group = con.get_group_of_id_tg(message.from_user.id)
+#     #     api.regenerate(group)
+#     #     lesson = api.get_today()
+#     #     if len(lesson) == 0:
+#     #         await message.answer(text='пар сегодня нет')
+#     #         return
+#     #
+#     #
+#     #     ok_list = list_group[group]['']['Y']
+#     # await message.answer(text = '')
+#
+# @router.message(Command("next"))
+# async def next(message: types.Message, state: FSMContext) -> None:
+#     await message.answer(text='Введи ')
+#     # with UsersService() as con:
+#     #     group = con.get_group_of_id_tg(message.from_user.id)
+#     #     api.regenerate(group)
+#     #     lesson = api.get_today()
+#     #     if len(lesson) == 0:
+#     #         await message.answer(text='пар сегодня нет')
+#     #         return
+#     #
+#     #
+#     #     ok_list = list_group[group]['']['Y']
+#     # await message.answer(text = '')
+#
