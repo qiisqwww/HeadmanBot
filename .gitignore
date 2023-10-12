@@ -1,5 +1,5 @@
 venv
-logs.log
+\logs
 .env.txt
 __pycache__
 .idea

@@ -20,7 +20,7 @@ from middlewares import RegMiddleware
 router = Router()
 api = API()
 list_pars = {'ind':'0'}
-
+list_group = {}
 router.message.middleware(RegMiddleware())
 router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
@@ -82,23 +82,28 @@ def get_keyboard(data):
 
 
 async def job(k, bot):# k он ругается, если уберёшь отлично
-    print(111)
+    global list_pars, list_group
+    list_pars = {'ind': '0'}
+    list_group = {}
     with UsersService() as con:
         groups = con.get_groups()
         print(groups)
         for group in groups:
+            list_group[group] = {}
             api.regenerate(group[0])
             day = api.get_today()
             for lesson in day:
+                list_group[group]['_'.join(map(str, lesson))] = {'Y' : [], 'N' : []}
                 print(con.get_user_of_group(group[0]), group)
                 for Id in con.get_user_of_group(group[0]):
                     await bot(Id[0], f'Привет, ты будешь на паре {lesson[0]}, которая начнётся в {lesson[1]}', reply_markup=get_keyboard(lesson))
-def h(F):
-    print(F.data.split('_'))
-    return F.data.split('_')[0] == "n"
+
 @router.callback_query(F.data.split('_')[0] == "n")
 async def input_text_prompt(clbck: CallbackQuery, state: FSMContext):
     data, flag = clbck.data.split('_')[1:]
     name, time = list_pars[data].split('_')
-
-    await clbck.message.edit_text(f"Ок я поняла, на паре {name}, которая начнётся в {time}, ты {'' if flag == '1' else 'не '}будешь.", reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[]))
+    with UsersService as con:
+        con.g
+    await clbck.message.edit_text(f"Ок я поняла, на паре {name}, которая начнётся в {time}, ты "
+                                  f"{'' if flag == '1' else 'не '}будешь.",
+                                  reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[]))
