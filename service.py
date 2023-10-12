@@ -20,6 +20,14 @@ class UsersService:
                         study_group TEXT,
                         is_headman TEXT)""")
 
+    def is_registered(self,tg_id : int):
+        cur = self._con.cursor()
+
+        data = cur.execute("SELECT telegram_id FROM students")
+        return tg_id in [user_id for (user_id, ) in data]
+
+
+
     def registration(self,tg_id : int, user_name : str, name_surname : str, study_group : str) -> bool:
         cur = self._con.cursor()
 

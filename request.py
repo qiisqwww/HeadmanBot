@@ -3,7 +3,7 @@ from aiogram import Dispatcher
 
 from work_api import API
 from service import UsersService
-from config.config_reader import Settings
+from config.config_reader import config
 import json
 import requests
 
@@ -14,10 +14,9 @@ dp = None
 def threat():  # второй поток для рассылки
     while True:
         schedule.run_pending()
-
 def SendMessage(id, text):
     print(id, text)
-    zap = f'''https://api.telegram.org/bot{Settings.BOT_TOKEN.get_secret_value()}/sendMessage'''
+    zap = f'''https://api.telegram.org/bot{config.BOT_TOKEN.get_secret_value()}/sendMessage'''
     params = {'chat_id': id, 'text': text, "reply_markup": json.dumps({
         "inline_keyboard": [
             [
@@ -49,8 +48,8 @@ def job(bot):
 
 
 def restart_schedule(bot):
-    # print(99999)
-    # global dp
-    # dp = Dispatcher(bot)
+    #print(99999)
+    #global dp
+    #dp = Dispatcher(bot)
     schedule.every().second.do(job, bot=bot)
 
