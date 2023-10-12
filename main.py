@@ -22,10 +22,11 @@ async def main():
         con.create_table()
 
     logging.info('bot is starting')
-    await bot.delete_webhook(drop_pending_updates=True)  # Игнорируем все команды, отправленные до запуска бота
-    await dp.start_polling(bot)  # Запуск бота
     restart_schedule(bot)
     threat()
+    await bot.delete_webhook(drop_pending_updates=True)  # Игнорируем все команды, отправленные до запуска бота
+    await dp.start_polling(bot)  # Запуск бота
+
 
 
 
