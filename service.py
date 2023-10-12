@@ -19,14 +19,13 @@ class UsersService:
                         name_surname TEXT,
                         study_group TEXT,
                         is_headman TEXT)""")
+        logging.info("table created")
 
     def is_registered(self,tg_id : int):
         cur = self._con.cursor()
 
         data = cur.execute("SELECT telegram_id FROM students")
         return tg_id in [user_id for (user_id, ) in data]
-
-
 
     def registration(self,tg_id : int, user_name : str, name_surname : str, study_group : str) -> bool:
         cur = self._con.cursor()
@@ -35,15 +34,21 @@ class UsersService:
             count_id = cur.execute("""SELECT COUNT(*) FROM students""").fetchone()[0]  # Создаем id пользователя с помощью кол-ва участников
             cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, ?, 0)", (count_id, tg_id, user_name, name_surname, study_group))  # Добавляем строчку в таблицу
 
-            logging.info('registered in database')
+            logging.info("user was registered in database")
             return True
-        except: return False
+        except:
+            logging.warning("user wasn't registered in database (exception)")
+            return False
 
-    def set_status(self, telegram_id):
+    def set_status(self, telegram_id) -> bool:
         cur = self._con.cursor()
-        cur.execute(f'''UPDATE students
-                                    SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
-        self._con.commit()
+        try :
+            cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
+            logging.info("headmen status was set")
+        except:
+            logging.warning("headmen status wasn't set (exception)")
+            return False
+
 
     def get_groups(self):
         cur = self._con.cursor()
