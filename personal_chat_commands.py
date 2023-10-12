@@ -8,9 +8,11 @@ from service import UsersService
 from states import RegStates
 from messages import (START_MESSAGE, REG_MESSAGE_0,REG_MESSAGE_1, REG_MESSAGE_2,
                       SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE)
+from middlewares import RegMiddleware
 
 router = Router()
 
+router.message.middleware(RegMiddleware)
 router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
 @router.message(Command("start"))
