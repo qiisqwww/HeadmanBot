@@ -23,12 +23,13 @@ async def main():
     with UsersService() as con:
         con.create_table()
 
-    logging.info('bot is starting')
+    logging.info("bot is starting")
     #threat()
 
-    print(1325435)
     await bot.delete_webhook(drop_pending_updates=True)  # Игнорируем все команды, отправленные до запуска бота
     await dp.start_polling(bot)  # Запуск бота
+
+    logging.info("bot was turned off")
 
 if __name__ == '__main__':
     asyncio.run(main())

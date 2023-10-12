@@ -1,4 +1,4 @@
-#import logging
+import logging
 
 from aiogram import types, Router, F
 from aiogram.filters import Command
@@ -9,7 +9,7 @@ from service import UsersService
 from states import RegStates, SetHeadMen
 from messages import (START_MESSAGE, REG_MESSAGE_1, REG_MESSAGE_2,
                       SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE, PASS_ASK_MESSAGE,
-                      STAROSTA_REG_MESSAGE)
+                      STAROSTA_REG_MESSAGE, UNSUCCESFULL_STAROSTA_REG_MESSAGE)
 from middlewares import RegMiddleware
 
 router = Router()
@@ -20,12 +20,14 @@ router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отв�
 @router.message(Command("start"))
 async def start_cmd(message: types.Message, state:FSMContext) -> None:
     await message.answer(text = START_MESSAGE + '\n'+ REG_MESSAGE_1)
+    logging.info("start command")
 
     await state.set_state(RegStates.surname_input)
 
 @router.message(RegStates.surname_input, F.text)
 async def handling_surname(message: types.Message, state: FSMContext) -> None:
     await state.update_data(name_surname = message.text)
+    logging.info("name and surname handled")
 
     await message.answer(text = REG_MESSAGE_2)
 
@@ -34,6 +36,7 @@ async def handling_surname(message: types.Message, state: FSMContext) -> None:
 @router.message(RegStates.group_input, F.text)
 async def handling_group(message: types.Message, state: FSMContext) -> None:
     await state.update_data(group = message.text)
+    logging.info("group name handled")
 
     user_data = await state.get_data()
 
@@ -55,9 +58,9 @@ async def start_headmen(message: types.Message, state:FSMContext) -> None:
 async def get_password(message: types.Message, state:FSMContext) -> None:
     if message.text == config.PASSWORD.get_secret_value():
         with UsersService() as con:
-            con.set_headmen()
-
-        await message.answer(text = STAROSTA_REG_MESSAGE)
+            isset = con.set_headmen()
+            if isset: await message.answer(text = STAROSTA_REG_MESSAGE)
+            else: await message.answer(text = UNSUCCESFULL_STAROSTA_REG_MESSAGE)
 
     await state.clear()
 
