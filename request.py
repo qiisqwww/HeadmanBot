@@ -1,5 +1,8 @@
+import random
+
 import schedule
-from aiogram import Dispatcher
+from aiogram import Dispatcher, types
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from work_api import API
 from service import UsersService
@@ -11,40 +14,28 @@ api = API()
 dp = None
 
 
-def threat():  # второй поток для рассылки
-    while True:
-        schedule.run_pending()
-def SendMessage(id, text):
-    print(id, text)
-    zap = f'''https://api.telegram.org/bot{config.BOT_TOKEN.get_secret_value()}/sendMessage'''
-    params = {'chat_id': id, 'text': text, "reply_markup": json.dumps({
-        "inline_keyboard": [
-            [
-                {
-                    "text": "Даааа",
-                    "callback_data": 'para'
-                },
-                {
-                    "text": "Неееее",
-                    "callback_data": 'para'
-                }
-            ]]
-    })}
-    return requests.get(zap, params=params).json()
 
-def job(bot):
+def get_keyboard():
+    buttons = [
+        [types.InlineKeyboardButton(text="Подтвердить", callback_data="num_finish")]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+async def job(k, bot):
     print(111)
     with UsersService() as con:
         groups = con.get_groups()
+        print(groups)
         for group in groups:
             api.regenerate(group[0])
             day = api.get_today()
             for lesson in day:
                 print(con.get_user_of_group(group[0]), group)
                 for Id in con.get_user_of_group(group[0]):
-                    SendMessage(Id, 'текст' + str(lesson))
+                    await bot(Id[0], 'текст' + str(lesson), reply_markup=get_keyboard())
 
-    return schedule.CancelJob
+
 
 
 def restart_schedule(bot):

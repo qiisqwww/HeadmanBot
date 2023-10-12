@@ -1,12 +1,10 @@
 import asyncio
 import logging
-import schedule
-
-from request import restart_schedule, threat
-from aiogram import Dispatcher, Bot
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from aiogram import Dispatcher, Bot, types
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from personal_chat_commands import router as personal_chat_router
+from personal_chat_commands import router as personal_chat_router, job
 from config.config_reader import config
 from service import UsersService
 
@@ -18,13 +16,16 @@ async def main():
     dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(personal_chat_router)  # Добавляем роутеры в диспетчер
     logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG)  # Указываем файл для логирования
-    schedule.every().day.at("06:50").do(restart_schedule, bot=bot)  # рассылка уведомлений
-    #restart_schedule(bot)
+
+    scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
+    scheduler.add_job(job,'interval',seconds=50 ,args=(1, bot.send_message))
+
+    await job(1 , bot.send_message)
+    scheduler.start()
     with UsersService() as con:
         con.create_table()
 
-    logging.info("bot is starting")
-    #threat()
+    logging.info('bot is starting')
 
     await bot.delete_webhook(drop_pending_updates=True)  # Игнорируем все команды, отправленные до запуска бота
     await dp.start_polling(bot)  # Запуск бота
