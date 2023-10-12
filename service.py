@@ -23,7 +23,7 @@ class UsersService:
     def is_registered(self,tg_id : int):
         cur = self._con.cursor()
 
-        data = cur.execute("SELECT telegram_id FROM users")
+        data = cur.execute("SELECT telegram_id FROM students")
         return tg_id in [user_id for (user_id, ) in data]
 
 

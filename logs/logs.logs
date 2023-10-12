@@ -272,3 +272,5 @@ INFO:root:middleware started
 INFO:root:connected to database
 INFO:root:disconnected from database
 INFO:aiogram.event:Update id=230956387 is handled. Duration 125 ms by bot id=5922725603
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
