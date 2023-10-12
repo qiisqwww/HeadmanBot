@@ -31,7 +31,19 @@ class UsersService:
             return True
         except: return False
 
+    def set_status(self, telegram_id):
+        cur = self._con.cursor()
+        cur.execute(f'''UPDATE students
+                                    SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
+        self._con.commit()
 
+    def get_groups(self):
+        cur = self._con.cursor()
+        return set(cur.execute("""SELECT study_group FROM students""").fetchall())
+
+    def get_user_of_group(self, group):
+        cur = self._con.cursor()
+        return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
     def __enter__(self):
         return self
 
@@ -41,3 +53,7 @@ class UsersService:
         self._con.commit()
         self._con.close()
         logging.info('disconnected from database')
+
+if __name__ == '__main__':
+    with UsersService() as con:
+        print(con.get_user_of_group('ИКБО-20-23'))

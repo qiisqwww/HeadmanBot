@@ -6,4 +6,7 @@ __all__ = ["RegStates"]
 class RegStates(StatesGroup):
     surname_input = State()
     group_input = State()
-    registered = State()
+
+
+class SetHeadMen(StatesGroup):
+    get_password = State()

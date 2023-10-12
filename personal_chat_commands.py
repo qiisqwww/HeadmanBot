@@ -3,9 +3,10 @@
 from aiogram import types, Router, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from config.config_reader import config
 
 from service import UsersService
-from states import RegStates
+from states import RegStates, SetHeadMen
 from messages import (START_MESSAGE, REG_MESSAGE_0,REG_MESSAGE_1, REG_MESSAGE_2,
                       SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE)
 
@@ -41,5 +42,19 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
 
         await state.clear()
 
+@router.message(Command("set_headmen"))
+async def start_headmen(message: types.Message, state:FSMContext) -> None:
+    await message.answer(text = "ОК, какая пароль")
 
+    await state.set_state(RegStates.surname_input)
+
+@router.message(SetHeadMen.get_password, F.text)
+async def get_password(message: types.Message, state:FSMContext) -> None:
+    if message.text == config.PASSWORD.get_secret_value():
+        with UsersService() as con:
+            con.set_headmen()
+
+        await message.answer(text = 'ok')
+
+    await state.clear()
 
