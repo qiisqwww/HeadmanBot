@@ -1,10 +1,15 @@
 #import logging
+import random
+from typing import Optional
 
 from aiogram import types, Router, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from config.config_reader import config
+from aiogram.filters.callback_data import CallbackData
+from aiogram.types import CallbackQuery
 
+from config.config_reader import config
+from work_api import API
 from service import UsersService
 from states import RegStates, SetHeadMen
 from messages import (START_MESSAGE, REG_MESSAGE_1, REG_MESSAGE_2,
@@ -13,6 +18,8 @@ from messages import (START_MESSAGE, REG_MESSAGE_1, REG_MESSAGE_2,
 from middlewares import RegMiddleware
 
 router = Router()
+api = API()
+list_pars = {'ind':'0'}
 
 router.message.middleware(RegMiddleware())
 router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
@@ -61,3 +68,37 @@ async def get_password(message: types.Message, state:FSMContext) -> None:
 
     await state.clear()
 
+def get_keyboard(data):
+    data = '_'.join(map(str, data))
+    list_pars[list_pars['ind']] = data
+    data = list_pars['ind']
+    buttons = [
+        [types.InlineKeyboardButton(text="Да", callback_data=str(f'n_{data}_1')),
+         types.InlineKeyboardButton(text="Нет", callback_data=str(f'n_{data}_0'))]
+    ]
+    list_pars['ind'] = hex(int(list_pars['ind'], 16) + 1)[2:]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
+async def job(k, bot):# k он ругается, если уберёшь отлично
+    print(111)
+    with UsersService() as con:
+        groups = con.get_groups()
+        print(groups)
+        for group in groups:
+            api.regenerate(group[0])
+            day = api.get_today()
+            for lesson in day:
+                print(con.get_user_of_group(group[0]), group)
+                for Id in con.get_user_of_group(group[0]):
+                    await bot(Id[0], f'Привет, ты будешь на паре {lesson[0]}, которая начнётся в {lesson[1]}', reply_markup=get_keyboard(lesson))
+def h(F):
+    print(F.data.split('_'))
+    return F.data.split('_')[0] == "n"
+@router.callback_query(F.data.split('_')[0] == "n")
+async def input_text_prompt(clbck: CallbackQuery, state: FSMContext):
+    data, flag = clbck.data.split('_')[1:]
+    name, time = list_pars[data].split('_')
+
+    await clbck.message.edit_text(f"Ок я поняла, на паре {name}, которая начнётся в {time}, ты {'' if flag == '1' else 'не '}будешь.", reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[]))
