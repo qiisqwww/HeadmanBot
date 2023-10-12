@@ -15,7 +15,7 @@ async def main():
     bot = Bot(config.BOT_TOKEN.get_secret_value())  # Получаем токен бота из файла с конфигом
     dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(personal_chat_router)  # Добавляем роутеры в диспетчер
-    logging.basicConfig(filename='logs/logs.log', level=logging.DEBUG)  # Указываем файл для логирования
+    logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG)  # Указываем файл для логирования
 
     with UsersService() as con:
         con.create_table()

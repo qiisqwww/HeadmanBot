@@ -7,7 +7,7 @@ class UsersService:
     _conn: sq.Connection
 
     def __init__(self) -> None:
-        self._con = sq.connect(r'database\bot.db')
+        self._con = sq.connect(r'database\bot.db', check_same_thread=False)
         logging.info('connected to database')
 
     def create_table(self) -> None:

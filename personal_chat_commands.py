@@ -15,15 +15,7 @@ router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отв�
 
 @router.message(Command("start"))
 async def start_cmd(message: types.Message, state:FSMContext) -> None:
-    await message.answer(text = START_MESSAGE)
-
-    await state.set_state(RegStates.name_input)
-
-@router.message(RegStates.name_input, F.text)
-async def handling_name(message: types.Message, state: FSMContext) -> None:
-    await state.update_data(name=message.text)
-
-    await message.answer(text = REG_MESSAGE_1)
+    await message.answer(text = START_MESSAGE + '\n'+ REG_MESSAGE_1)
 
     await state.set_state(RegStates.surname_input)
 
@@ -42,8 +34,7 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
     user_data = await state.get_data()
 
     with UsersService() as con:
-        isreg : bool = con.registration(message.from_user.id,message.from_user.username,
-                                        user_data["name"] + " " + user_data["surname"],
+        isreg : bool = con.registration(message.from_user.id,message.from_user.username,user_data["surname"],
                                         user_data["group"])
         if isreg: await message.answer(text = SUCCESFULLY_REG_MESSAGE)
         else: await message.answer(text = UNSUCCESFULLY_REG_MESSAGE)
