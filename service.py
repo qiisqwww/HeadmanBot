@@ -1,7 +1,9 @@
 import sqlite3 as sq
 import logging
 
+
 __all__ = ["UsersService"]
+
 
 class UsersService:
     _conn: sq.Connection
@@ -18,16 +20,22 @@ class UsersService:
                         user_name TEXT,
                         name_surname TEXT,
                         study_group TEXT,
-                        is_headman TEXT)""")
+                        is_headmen INTEGER)""")
         logging.info("table created")
 
-    def is_registered(self,tg_id : int):
+    def is_registered(self, tg_id: int):
         cur = self._con.cursor()
 
         data = cur.execute("SELECT telegram_id FROM students")
         return tg_id in [user_id for (user_id, ) in data]
 
-    def registration(self,tg_id : int, user_name : str, name_surname : str, study_group : str) -> bool:
+    def is_headmen(self, tg_id: int):
+        cur = self._con.cursor()
+
+        data = cur.execute("SELECT telegram_id FROM students WHERE is_headmen = 1")
+        return tg_id in [headmen_id for (headmen_id,) in data]
+
+    def registration(self, tg_id: int, user_name: str, name_surname: str, study_group: str) -> bool:
         cur = self._con.cursor()
 
         try:
@@ -49,7 +57,6 @@ class UsersService:
             logging.warning("headmen status wasn't set (exception)")
             return False
 
-
     def get_groups(self):
         cur = self._con.cursor()
         return set(cur.execute("""SELECT study_group FROM students""").fetchall())
@@ -63,16 +70,13 @@ class UsersService:
     def get_user_of_group(self, group):
         cur = self._con.cursor()
         return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
+
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, tb):
         if exc_type is not None:
-           logging.error(exc_type + " " + exc_value + " " + tb)
+           logging.error(exc_type)
         self._con.commit()
         self._con.close()
         logging.info('disconnected from database')
-
-if __name__ == '__main__':
-    with UsersService() as con:
-        print(con.get_user_of_group('ИКБО-20-23'))
