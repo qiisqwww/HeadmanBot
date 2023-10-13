@@ -1,5 +1,6 @@
-from aiogram.types import ReplyKeyboardMarkup,KeyboardButton
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram.types import (ReplyKeyboardMarkup,KeyboardButton,
+                           InlineKeyboardButton, InlineKeyboardMarkup)
+from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 def load_start_kb() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()

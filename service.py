@@ -42,7 +42,7 @@ class UsersService:
 
     def set_status(self, telegram_id) -> bool:
         cur = self._con.cursor()
-        try :
+        try:
             cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
             logging.info("headmen status was set")
         except:
@@ -68,7 +68,7 @@ class UsersService:
 
     def __exit__(self, exc_type, exc_value, tb):
         if exc_type is not None:
-           print(exc_type, exc_value, tb)
+           logging.error(exc_type + " " + exc_value + " " + tb)
         self._con.commit()
         self._con.close()
         logging.info('disconnected from database')
