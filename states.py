@@ -11,4 +11,5 @@ class RegStates(StatesGroup):
 class SetHeadMen(StatesGroup):
     get_password = State()
 
-# class ReqPars(StatesGroup):
+class ReqPars(StatesGroup):
+    group_input_req = State()

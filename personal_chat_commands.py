@@ -1,26 +1,24 @@
 import logging
-import random
-from typing import Optional
 
 from aiogram import types, Router, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery
 
 from config.config_reader import config
 from work_api import API
 from service import UsersService
-from states import RegStates, SetHeadMen
+from states import RegStates, SetHeadMen, ReqPars
 from messages import (START_MESSAGE, REG_MESSAGE_1, REG_MESSAGE_2,
                       SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE, PASS_ASK_MESSAGE,
                       STAROSTA_REG_MESSAGE, UNSUCCESFULL_STAROSTA_REG_MESSAGE)
 from middlewares import RegMiddleware
 
 router = Router()
-api = API()
-list_pars = {'ind':'0'}
-list_group = {}
+router0 = Router()
+router0.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
+
+
 router.message.middleware(RegMiddleware())
 router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
@@ -70,7 +68,9 @@ async def get_password(message: types.Message, state:FSMContext) -> None:
             else: await message.answer(text = UNSUCCESFULL_STAROSTA_REG_MESSAGE)
 
     await state.clear()
-
+api = API()
+list_pars = {'ind':'0'}
+list_group = {}
 def get_keyboard(data):
     data = '_'.join(map(str, data))
     list_pars[list_pars['ind']] = data
@@ -92,54 +92,61 @@ async def job(k, bot):# k он ругается, если уберёшь отл�
         groups = con.get_groups()
         print(groups)
         for group in groups:
-            list_group[group] = {}
+            list_group[group[0]] = {}
             api.regenerate(group[0])
             day = api.get_today()
             for lesson in day:
-                list_group[group]['_'.join(map(str, lesson))] = {'Y' : [], 'N' : []}
+                list_group[group[0]]['_'.join(map(str, lesson))] = {'Y' : [], 'N' : []}
                 print(con.get_user_of_group(group[0]), group)
                 for Id in con.get_user_of_group(group[0]):
                     await bot(Id[0], f'Привет, ты будешь на паре {lesson[0]}, которая начнётся в {lesson[1]}', reply_markup=get_keyboard(lesson))
 
 @router.callback_query(F.data.split('_')[0] == "n")
-async def input_text_prompt(clbck: CallbackQuery, state: FSMContext):
+async def input_text_prompt(clbck: CallbackQuery):
     data, flag = clbck.data.split('_')[1:]
     name, time = list_pars[data].split('_')
     with UsersService() as con:
         group = con.get_group_of_id_tg(clbck.from_user.id)
+        print(group)
         list_group[group][name+'_'+time]['Y' if flag == '1' else 'N'].append(clbck.from_user.id)
     print(list_group)
     await clbck.message.edit_text(f"Ок я поняла, на паре {name}, которая начнётся в {time}, ты "
                                   f"{'' if flag == '1' else 'НЕ '}БУДЕШЬ.",
                                   reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[]))
 
-# @router.message(Command("next"))
-# async def next(message: types.Message, state: FSMContext) -> None:
-#     await message.answer(text='')
-#     # with UsersService() as con:
-#     #     group = con.get_group_of_id_tg(message.from_user.id)
-#     #     api.regenerate(group)
-#     #     lesson = api.get_today()
-#     #     if len(lesson) == 0:
-#     #         await message.answer(text='пар сегодня нет')
-#     #         return
-#     #
-#     #
-#     #     ok_list = list_group[group]['']['Y']
-#     # await message.answer(text = '')
-#
-# @router.message(Command("next"))
-# async def next(message: types.Message, state: FSMContext) -> None:
-#     await message.answer(text='Введи ')
-#     # with UsersService() as con:
-#     #     group = con.get_group_of_id_tg(message.from_user.id)
-#     #     api.regenerate(group)
-#     #     lesson = api.get_today()
-#     #     if len(lesson) == 0:
-#     #         await message.answer(text='пар сегодня нет')
-#     #         return
-#     #
-#     #
-#     #     ok_list = list_group[group]['']['Y']
-#     # await message.answer(text = '')
-#
+@router0.message(Command("next"))
+async def next_(message: types.Message, state: FSMContext) -> None:
+    print(8888)
+    with UsersService() as con:
+        group = con.get_group_of_id_tg(message.from_user.id)
+        api.regenerate(group)
+        lessons = api.get_today()
+        print(lessons)
+        if len(lessons) == 0:
+            await message.answer(text='пар сегодня нет')
+            return
+        kb = [[types.KeyboardButton(text=lesson[0] + '/' + lesson[1])] for lesson in lessons]
+        keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+    await message.answer(text='На какую пару сегодняшнего дня ты хочешь узнать информацию', reply_markup=keyboard)
+    await state.set_state(ReqPars.group_input_req)
+
+
+@router0.message(ReqPars.group_input_req, F.text)
+async def group_input_req(message: types.Message, state: FSMContext) -> None:
+    await message.answer(text='Отлично', reply_markup=types.ReplyKeyboardMarkup(keyboard=[]))
+    with UsersService() as con:
+        # message.text
+        para = message.text.replace('/', '_')
+        group = con.get_group_of_id_tg(message.from_user.id)
+        api.regenerate(group)
+        lesson = api.get_today()
+        if len(lesson) == 0:
+            await message.answer(text='пар сегодня нет')
+            return
+        print(list_group)
+        print(group, para)
+        ok_list = list_group[group][para]['Y']
+        no_list = list_group[group][para]['N']
+        none_list = [i for i in con.get_user_of_group(group) if i not in ok_list or i not in no_list]
+    await message.answer(text = f'{str(ok_list)} {str(no_list)} {str(none_list)}')
+
