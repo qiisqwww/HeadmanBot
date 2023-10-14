@@ -1,7 +1,9 @@
 import sqlite3 as sq
 import logging
 
+
 __all__ = ["UsersService"]
+
 
 class UsersService:
     _conn: sq.Connection
@@ -18,16 +20,22 @@ class UsersService:
                         user_name TEXT,
                         name_surname TEXT,
                         study_group TEXT,
-                        is_headman TEXT)""")
+                        is_headmen INTEGER)""")
         logging.info("table created")
 
-    def is_registered(self,tg_id : int):
+    def is_registered(self, tg_id: int):
         cur = self._con.cursor()
 
         data = cur.execute("SELECT telegram_id FROM students")
         return tg_id in [user_id for (user_id, ) in data]
 
-    def registration(self,tg_id : int, user_name : str, name_surname : str, study_group : str) -> bool:
+    def is_headmen(self, tg_id: int):
+        cur = self._con.cursor()
+
+        data = cur.execute("SELECT telegram_id FROM students WHERE is_headmen = 1")
+        return tg_id in [headmen_id for (headmen_id,) in data]
+
+    def registration(self, tg_id: int, user_name: str, name_surname: str, study_group: str) -> bool:
         cur = self._con.cursor()
 
         try:
@@ -42,12 +50,10 @@ class UsersService:
 
     def set_status(self, telegram_id) -> bool:
         cur = self._con.cursor()
-        try :
-            cur.execute(f'''UPDATE students SET is_headman="{1}" WHERE telegram_id = "{str(telegram_id)}"''')
+        try:
+            cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
             logging.info("headmen status was set")
-            return True
-        except Exception as e:
-            print(e)
+        except:
             logging.warning("headmen status wasn't set (exception)")
             return False
 
@@ -66,6 +72,7 @@ class UsersService:
         cur = self._con.cursor()
         return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
 
+
     def get_user_of_id_tg(self, id_tg):
         cur = self._con.cursor()
 
@@ -77,7 +84,7 @@ class UsersService:
 
     def __exit__(self, exc_type, exc_value, tb):
         if exc_type is not None:
-           print(exc_type, exc_value, tb)
+           logging.error(exc_type)
         self._con.commit()
         self._con.close()
         logging.info('disconnected from database')

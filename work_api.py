@@ -1,6 +1,7 @@
 from datetime import *
 import requests
 
+
 class API:
     def __init__(self):
         """
@@ -14,8 +15,7 @@ class API:
         Возвращает:
         - Ничего не возвращает.
         """
-        self.start = datetime(2023, 8, 28) # в начале следующего семестра эту дату нужно будет поменять
-
+        self.start = datetime(2023, 8, 28)  # в начале следующего семестра эту дату нужно будет поменять
 
     def regenerate(self, group):
         """
@@ -56,6 +56,7 @@ class API:
                 self.day.append([lesson['discipline']['name'], lesson['calls']['time_start']])
         return self.day
 
-if __name__ == '__main__':
+
+"""if __name__ == '__main__':
     a = API()
-    print(a.get_today())
+    print(a.get_today())"""
