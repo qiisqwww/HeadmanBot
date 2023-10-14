@@ -17,6 +17,8 @@ from middlewares import RegMiddleware
 router = Router()
 router0 = Router()
 router0.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
+router1 = Router()
+router1.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
 
 router.message.middleware(RegMiddleware())
@@ -52,18 +54,18 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
         else: await message.answer(text = UNSUCCESFULLY_REG_MESSAGE)
 
         await state.clear()
-
-@router.message(Command("set_headmen"))
+# от это тоже хорошо бы перенести
+@router1.message(Command("set_headmen"))
 async def start_headmen(message: types.Message, state:FSMContext) -> None:
     await message.answer(text = PASS_ASK_MESSAGE)
 
-    await state.set_state(RegStates.surname_input)
+    await state.set_state(SetHeadMen.get_password)
 
-@router.message(SetHeadMen.get_password, F.text)
+@router1.message(SetHeadMen.get_password, F.text)
 async def get_password(message: types.Message, state:FSMContext) -> None:
     if message.text == config.PASSWORD.get_secret_value():
         with UsersService() as con:
-            isset = con.set_headmen()
+            isset = con.set_status(message.from_user.id)
             if isset: await message.answer(text = STAROSTA_REG_MESSAGE)
             else: await message.answer(text = UNSUCCESFULL_STAROSTA_REG_MESSAGE)
 
@@ -99,7 +101,7 @@ async def job(k, bot):# k он ругается, если уберёшь отл�
                 list_group[group[0]]['_'.join(map(str, lesson))] = {'Y' : [], 'N' : []}
                 print(con.get_user_of_group(group[0]), group)
                 for Id in con.get_user_of_group(group[0]):
-                    await bot(Id[0], f'Привет, ты будешь на паре {lesson[0]}, которая начнётся в {lesson[1]}', reply_markup=get_keyboard(lesson))
+                    await bot(Id[0], f'Привет, ты будешь на паре {lesson[0]}, которая начнётся в {lesson[1]}?', reply_markup=get_keyboard(lesson))
 
 @router.callback_query(F.data.split('_')[0] == "n")
 async def input_text_prompt(clbck: CallbackQuery):
@@ -118,6 +120,10 @@ async def input_text_prompt(clbck: CallbackQuery):
 async def next_(message: types.Message, state: FSMContext) -> None:
     print(8888)
     with UsersService() as con:
+        print(con.get_user_of_id_tg(message.from_user.id))
+        if con.get_user_of_id_tg(message.from_user.id)[5] == '0':
+            await message.answer(text='Не наглей, эти права есть только у админки')
+            return
         group = con.get_group_of_id_tg(message.from_user.id)
         api.regenerate(group)
         lessons = api.get_today()
@@ -127,7 +133,7 @@ async def next_(message: types.Message, state: FSMContext) -> None:
             return
         kb = [[types.KeyboardButton(text=lesson[0] + '/' + lesson[1])] for lesson in lessons]
         keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer(text='На какую пару сегодняшнего дня ты хочешь узнать информацию', reply_markup=keyboard)
+    await message.answer(text='На какую пару сегодняшнего дня ты хочешь узнать информацию?', reply_markup=keyboard)
     await state.set_state(ReqPars.group_input_req)
 
 
@@ -146,7 +152,15 @@ async def group_input_req(message: types.Message, state: FSMContext) -> None:
         print(list_group)
         print(group, para)
         ok_list = list_group[group][para]['Y']
-        no_list = list_group[group][para]['N']
-        none_list = [i for i in con.get_user_of_group(group) if i not in ok_list or i not in no_list]
-    await message.answer(text = f'{str(ok_list)} {str(no_list)} {str(none_list)}')
+        # no_list = list_group[group][para]['N']
+        none_list = [i[0] for i in con.get_user_of_group(group) if i[0] not in ok_list]
+        on_text = 'Придут:\n'
+        for user in ok_list:
+            on_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+        no_text = 'Не придут:\n'
+        for user in none_list:
+            no_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+        await message.answer(text = f'{on_text}')
+        await message.answer(text = f'{no_text}')
+
 

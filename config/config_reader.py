@@ -9,4 +9,5 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='config\.env.txt', env_file_encoding='utf-8')
 
 
+
 config = Settings()

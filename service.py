@@ -43,9 +43,11 @@ class UsersService:
     def set_status(self, telegram_id) -> bool:
         cur = self._con.cursor()
         try :
-            cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
+            cur.execute(f'''UPDATE students SET is_headman="{1}" WHERE telegram_id = "{str(telegram_id)}"''')
             logging.info("headmen status was set")
-        except:
+            return True
+        except Exception as e:
+            print(e)
             logging.warning("headmen status wasn't set (exception)")
             return False
 
@@ -57,12 +59,19 @@ class UsersService:
     def get_group_of_id_tg(self, tg_id: int):
         cur = self._con.cursor()
 
-        data = cur.execute(f'SELECT study_group FROM students WHERE telegram_id = "{tg_id}"').fetchone()
+        data = cur.execute(f'SELECT study_group FROM students WHERE telegram_id = "{str(tg_id)}"').fetchone()
         return data[0]
 
     def get_user_of_group(self, group):
         cur = self._con.cursor()
         return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
+
+    def get_user_of_id_tg(self, id_tg):
+        cur = self._con.cursor()
+
+        data = cur.execute(f'SELECT * FROM students WHERE telegram_id = "{str(id_tg)}"').fetchone()
+        return data
+
     def __enter__(self):
         return self
 

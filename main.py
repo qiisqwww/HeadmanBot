@@ -4,7 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Dispatcher, Bot, types
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from personal_chat_commands import router as personal_chat_router, job, router0 as router_chat_next
+from personal_chat_commands import router as personal_chat_router, job, router0 as router_chat_next, router1 as router_set_headmen
 from config.config_reader import config
 from service import UsersService
 
@@ -15,12 +15,13 @@ async def main():
     bot = Bot(config.BOT_TOKEN.get_secret_value())  # Получаем токен бота из файла с конфигом
     dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(personal_chat_router)  # Добавляем роутеры в диспетчер
-    dp.include_routers(router_chat_next)  # Добавляем роутеры в диспетчер
+    dp.include_routers(router_chat_next)
+    dp.include_routers(router_set_headmen)# Добавляем роутеры в диспетчер
 
     logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG)  # Указываем файл для логирования
 
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    scheduler.add_job(job,'interval',seconds=50 ,args=(1, bot.send_message))
+    scheduler.add_job(job,'interval',seconds=60 ,args=(1, bot.send_message))
 
     await job(1 , bot.send_message)
     scheduler.start()
