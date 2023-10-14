@@ -51,9 +51,11 @@ class UsersService:
     def set_status(self, telegram_id) -> bool:
         cur = self._con.cursor()
         try:
-            cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE name = "{telegram_id}"''')
+            cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE telegram_id = "{telegram_id}"''')
             logging.info("headmen status was set")
-        except:
+            return True
+        except Exception as e:
+            print(e)
             logging.warning("headmen status wasn't set (exception)")
             return False
 

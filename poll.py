@@ -76,7 +76,7 @@ async def next_(message: types.Message, state: FSMContext) -> None:
             return
         kb = [[types.KeyboardButton(text=lesson[0] + '/' + lesson[1])] for lesson in lessons]
         keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer(text='На какую пару сегодняшнего дня ты хочешь узнать информацию', reply_markup=keyboard)
+    await message.answer(text='На какую пару сегодняшнего дня ты хочешь узнать информацию?', reply_markup=keyboard)
     await state.set_state(ReqPars.group_input_req)
 
 
@@ -95,7 +95,13 @@ async def group_input_req(message: types.Message, state: FSMContext) -> None:
         print(list_group)
         print(group, para)
         ok_list = list_group[group][para]['Y']
-        no_list = list_group[group][para]['N']
-        none_list = [i for i in con.get_user_of_group(group) if i not in ok_list or i not in no_list]
-    await message.answer(text = f'{str(ok_list)} {str(no_list)} {str(none_list)}')
-
+        # no_list = list_group[group][para]['N']
+        none_list = [i[0] for i in con.get_user_of_group(group) if i[0] not in ok_list]
+        on_text = 'Придут:\n'
+        for user in ok_list:
+            on_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+        no_text = 'Не придут:\n'
+        for user in none_list:
+            no_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+        await message.answer(text=f'{on_text}')
+        await message.answer(text=f'{no_text}')
