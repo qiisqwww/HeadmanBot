@@ -1,7 +1,8 @@
 __all__ = ["START_MESSAGE","REG_MESSAGE_1", "REG_MESSAGE_2",
            "SUCCESFULLY_REG_MESSAGE", "UNSUCCESFULLY_REG_MESSAGE", "PASS_ASK_MESSAGE",
            "STAROSTA_REG_MESSAGE","UNSUCCESFULL_STAROSTA_REG_MESSAGE", "ALREADY_HEADMAN_MESSAGE",
-           "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE"]
+           "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE",
+           "WRONG_PASSWORD"]
 
 START_MESSAGE = """
 Привет! Я - твоя староста!"""
@@ -39,3 +40,6 @@ MUST_BE_REG_MESSAGE = """
 MUST_BE_HEADMEN_MESSAGE = """
 Для выполнения данной команды вы должны быть старостой.
 Для регистрации как страоста - /set_headmen"""
+
+WRONG_PASSWORD = """
+Вы ввели неверный пароль!"""

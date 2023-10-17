@@ -1,15 +1,16 @@
 import asyncio
 import logging
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.memory import MemoryStorage
-from headmen_reg_commands import router as router_set_headmen
-from poll import router as router_chat_next
+
 from personal_chat_commands import router as personal_chat_router
 from headmen_reg_commands import router as headmen_reg_router
 from poll import router as poll_router, job
 from config.config_reader import config
 from service import UsersService
+from callbacks import router as callback_router
 
 
 async def main():
@@ -17,7 +18,8 @@ async def main():
 
     bot = Bot(config.BOT_TOKEN.get_secret_value())  # Получаем токен бота из файла с конфигом
     dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
-    dp.include_routers(personal_chat_router, headmen_reg_router, poll_router)  # Добавляем роутеры в диспетчер
+    dp.include_routers(personal_chat_router, headmen_reg_router,
+                       poll_router, callback_router)  # Добавляем роутеры в диспетчер
 
     logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG)  # Указываем файл для логирования
 

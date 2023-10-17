@@ -20,7 +20,8 @@ class UsersService:
                         user_name TEXT,
                         name_surname TEXT,
                         study_group TEXT,
-                        is_headmen INTEGER)""")
+                        is_headmen INTEGER,
+                        attendance TEXT)""")
         logging.info("table created")
 
     def is_registered(self, tg_id: int):
@@ -40,7 +41,7 @@ class UsersService:
 
         try:
             count_id = cur.execute("""SELECT COUNT(*) FROM students""").fetchone()[0]  # Создаем id пользователя с помощью кол-ва участников
-            cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, ?, 0)", (count_id, tg_id, user_name, name_surname, study_group))  # Добавляем строчку в таблицу
+            cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, ?, 0, 0)", (count_id, tg_id, user_name, name_surname, study_group))  # Добавляем строчку в таблицу
 
             logging.info("user was registered in database")
             return True
@@ -75,11 +76,66 @@ class UsersService:
         return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
 
 
-    def get_user_of_id_tg(self, id_tg):
+    def get_user_of_id_tg(self, id_tg: int):
         cur = self._con.cursor()
 
         data = cur.execute(f'SELECT * FROM students WHERE telegram_id = "{str(id_tg)}"').fetchone()
         return data
+
+    def change_attendance(self,tg_id: int, cb_data: str):
+        cur = self._con.cursor()
+        attendance = cur.execute("SELECT attendance from students WHERE telegram_id = ?",
+                                 (tg_id,)).fetchone()[0]
+
+        new_attendance = attendance
+        match cb_data:
+            case "all":
+                new_attendance = "1"*len(attendance)
+            case "none":
+                new_attendance = "2"*len(attendance)
+            case "1":
+                if not "2" in attendance:
+                    new_attendance = "2" + "1"*(len(attendance)-1)
+                else:
+                    new_attendance = ""
+                    for i in range(len(attendance)):
+                        if attendance[i] == "1" and i == int(cb_data) - 1:
+                            new_attendance += "2"
+                        else: new_attendance += attendance[i]
+            case "2":
+                if not "2" in attendance:
+                    new_attendance = "12" + "1"*(len(attendance)-2)
+                else:
+                    new_attendance = ""
+                    for i in range(len(attendance)):
+                        if attendance[i] == "1" and i == int(cb_data) - 1:
+                            new_attendance += "2"
+                        else:
+                            new_attendance += attendance[i]
+            case "3":
+                if not "2" in attendance:
+                    new_attendance = "112" + "1"*(len(attendance) - 3)
+                else:
+                    new_attendance = ""
+                    for i in range(len(attendance)):
+                        if attendance[i] == "1" and i == int(cb_data) - 1:
+                            new_attendance += "2"
+                        else:
+                            new_attendance += attendance[i]
+            case "4":
+                if not "2" in attendance:
+                    new_attendance = "1114"
+                else:
+                    new_attendance = ""
+                    for i in range(len(attendance)):
+                        if attendance[i] == "1" and i == int(cb_data) - 1:
+                            new_attendance += "2"
+                        else:
+                            new_attendance += attendance[i]
+
+        cur.execute("UPDATE students SET attendance = ? WHERE telegram_id = ?",
+                    (new_attendance, tg_id))
+
 
     def __enter__(self):
         return self

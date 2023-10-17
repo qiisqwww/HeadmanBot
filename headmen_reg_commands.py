@@ -7,8 +7,10 @@ from aiogram.fsm.context import FSMContext
 from config.config_reader import config
 from service import UsersService
 from states import SetHeadMen
-from messages import PASS_ASK_MESSAGE, STAROSTA_REG_MESSAGE, UNSUCCESFULL_STAROSTA_REG_MESSAGE
+from messages import (PASS_ASK_MESSAGE, STAROSTA_REG_MESSAGE, UNSUCCESFULL_STAROSTA_REG_MESSAGE,
+                      WRONG_PASSWORD)
 from middlewares import HeadmenRegMiddleware
+from buttons import load_attendance_kb
 
 router = Router()
 
@@ -17,7 +19,7 @@ router.message.middleware(HeadmenRegMiddleware())
 
 @router.message(Command("set_headmen"))
 async def start_headmen(message: types.Message, state: FSMContext) -> None:
-    await message.answer(text=PASS_ASK_MESSAGE)
+    await message.answer(text=PASS_ASK_MESSAGE, reply_markup=load_attendance_kb(3))
     logging.info("set_headmen command, password was asked")
 
     await state.set_state(SetHeadMen.get_password)
@@ -33,5 +35,7 @@ async def get_password(message: types.Message, state: FSMContext) -> None:
                 await message.answer(text=STAROSTA_REG_MESSAGE)
             else:
                 await message.answer(text=UNSUCCESFULL_STAROSTA_REG_MESSAGE)
+    else:
+        await message.answer(text=WRONG_PASSWORD)
 
     await state.clear()
