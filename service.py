@@ -1,5 +1,6 @@
 import sqlite3 as sq
 import logging
+import datetime
 
 
 __all__ = ["UsersService"]
@@ -49,10 +50,10 @@ class UsersService:
             logging.warning("user wasn't registered in database (exception)")
             return False
 
-    def set_status(self, telegram_id) -> bool:
+    def set_status(self, tg_id: int) -> bool:
         cur = self._con.cursor()
         try:
-            cur.execute(f'''UPDATE students SET is_headmen="{1}" WHERE telegram_id = "{telegram_id}"''')
+            cur.execute("UPDATE students SET is_headmen = 1 WHERE telegram_id = ?", (tg_id, ))
             logging.info("headmen status was set")
             return True
         except Exception as e:
@@ -68,23 +69,23 @@ class UsersService:
     def get_group_of_id_tg(self, tg_id: int):
         cur = self._con.cursor()
 
-        data = cur.execute(f'SELECT study_group FROM students WHERE telegram_id = "{str(tg_id)}"').fetchone()
+        data = cur.execute("SELECT study_group FROM students WHERE telegram_id = ?", (tg_id, )).fetchone()
         return data[0]
 
     def get_user_of_group(self, group):
         cur = self._con.cursor()
-        return cur.execute(f'''SELECT telegram_id FROM students WHERE study_group = "{group}"''').fetchall()
+        return cur.execute("SELECT telegram_id FROM students WHERE study_group = ?", (group, )).fetchall()
 
 
-    def get_user_of_id_tg(self, id_tg: int):
+    def get_user_of_id_tg(self, tg_id: int):
         cur = self._con.cursor()
 
-        data = cur.execute(f'SELECT * FROM students WHERE telegram_id = "{str(id_tg)}"').fetchone()
+        data = cur.execute("SELECT * FROM students WHERE telegram_id = ?", (tg_id, )).fetchone()
         return data
 
     def change_attendance(self,tg_id: int, cb_data: str):
         cur = self._con.cursor()
-        attendance = cur.execute("SELECT attendance from students WHERE telegram_id = ?",
+        attendance = cur.execute("SELECT attendance FROM students WHERE telegram_id = ?",
                                  (tg_id,)).fetchone()[0]
 
         new_attendance = attendance
@@ -136,6 +137,13 @@ class UsersService:
         cur.execute("UPDATE students SET attendance = ? WHERE telegram_id = ?",
                     (new_attendance, tg_id))
 
+
+    def get_time(self, tg_id: int) -> datetime.datetime.time:
+        cur = self._con.cursor()
+        time = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id, )).fetchone()
+        print(time)
+
+        return datetime.time(*map(int, time[0].split(":")))
 
     def __enter__(self):
         return self

@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from aiogram import BaseMiddleware
 from aiogram.types import Message
@@ -78,3 +79,23 @@ class HeadmenCommandsMiddleware(BaseMiddleware):
 
             logging.info("headmen command middleware finished")
             return await handler(event, data)
+
+class CallbackMiddleware(BaseMiddleware):
+    async def __call__(
+        self,
+        handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
+        event: Message,
+        data: Dict[str, Any]
+    ) -> Any:
+        logging.info("callback middleware started")
+
+        user_id = event.from_user.id
+
+        with UsersService() as con:
+            print(con.get_time(user_id), datetime.datetime.now().time())
+            if con.get_time(user_id) < datetime.datetime.now().time():
+                logging.warning("callback middleware finished, lesson was already started")
+                return
+
+        logging.info("callback middleware finished")
+        return await handler(event,data)
