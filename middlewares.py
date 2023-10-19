@@ -67,17 +67,23 @@ class HeadmenCommandsMiddleware(BaseMiddleware):
         event: Message,
         data: Dict[str, Any]
     ) -> Any:
-        logging.info('headmen command middleware started')
+        logging.info('headmen commands middleware started')
 
         user_id = event.from_user.id
 
         with UsersService() as con:
-            if not con.is_headmen(user_id):
-                await event.reply(MUST_BE_HEADMEN_MESSAGE)
-                logging.warning("headmen command middleware finished, user must me headman to use this command")
+
+            if not con.is_registered(user_id):
+                await event.reply(MUST_BE_REG_MESSAGE)
+                logging.warning("headmen commands middleware finished, user must be registered")
                 return
 
-            logging.info("headmen command middleware finished")
+            if not con.is_headmen(user_id):
+                await event.reply(MUST_BE_HEADMEN_MESSAGE)
+                logging.warning("headmen commands middleware finished, user must me headman to use this command")
+                return
+
+            logging.info("headmen commands middleware finished")
             return await handler(event, data)
 
 class CallbackMiddleware(BaseMiddleware):
