@@ -1,6 +1,6 @@
 import logging
 import datetime
-
+from pprint import pprint
 from aiogram import BaseMiddleware
 from aiogram.types import Message
 from typing import Callable, Dict, Any, Awaitable
@@ -97,11 +97,13 @@ class CallbackMiddleware(BaseMiddleware):
 
         user_id = event.from_user.id
 
-        with UsersService() as con:
-            print(con.get_time(user_id), datetime.datetime.now().time())
-            if con.get_time(user_id) < datetime.datetime.now().time():
-                logging.warning("callback middleware finished, lesson was already started")
-                return
+        # with UsersService() as con:
+        #     print(12 < datetime.datetime.now().time().hour, datetime.datetime.now().time().hour)
+        #     if 12 < datetime.datetime.now().time().hour:
+        #         pprint(event)
+        #         pprint(data)
+        #         logging.warning("callback middleware finished, lesson was already started")
+        #         return await handler(event, data)
 
         logging.info("callback middleware finished")
         return await handler(event,data)

@@ -16,10 +16,9 @@ router = Router()
 
 router.message.middleware(HeadmenRegMiddleware())
 
-
 @router.message(Command("set_headmen"))
 async def start_headmen(message: types.Message, state: FSMContext) -> None:
-    await message.answer(text=PASS_ASK_MESSAGE, reply_markup=load_attendance_kb(3))
+    await message.answer(text=PASS_ASK_MESSAGE)
     logging.info("set_headmen command, password was asked")
 
     await state.set_state(SetHeadMen.get_password)

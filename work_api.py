@@ -53,7 +53,16 @@ class API:
         print(week)
         for lesson in self.req['lessons']:
             if week in lesson['weeks'] and now_day == lesson['weekday']:
-                self.day.append([lesson['discipline']['name'], lesson['calls']['time_start']])
+                text = []
+                count = 0
+                for i in lesson['discipline']['name'].split():
+                    if count + len(i) + 1 <= 17:
+                        text.append(i)
+                        count += len(i) + 1
+                    else:
+                        text.append('...')
+                        break
+                self.day.append([' '.join(text), ':'.join(lesson['calls']['time_start'].split(':')[:2])])
         return self.day
 
 
