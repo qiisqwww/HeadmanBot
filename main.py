@@ -8,6 +8,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from personal_chat_commands import router as personal_chat_router
 from headmen_reg_commands import router as headmen_reg_router
+from headmen_commands import router as headmen_cmd_router
 from poll import router as poll_router, job
 from config.config_reader import config
 from service import UsersService
@@ -20,7 +21,7 @@ async def main():
     bot = Bot(config.BOT_TOKEN.get_secret_value())  # Получаем токен бота из файла с конфигом
     dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(personal_chat_router, headmen_reg_router,
-                       poll_router, callback_router)  # Добавляем роутеры в диспетчер
+                       poll_router, callback_router, headmen_cmd_router)  # Добавляем роутеры в диспетчер
 
     logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG)  # Указываем файл для логирования
 
@@ -28,8 +29,8 @@ async def main():
         con.create_table()
 
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    scheduler.add_job(job,'interval',seconds=60 ,args=(1, bot.send_message))
-
+    #scheduler.add_job(job,'cron', day_of_week='mon-sun', hour=8, minute=30, args=(1, bot.send_message))
+    scheduler.add_job(job, 'interval', seconds=60, args=(1, bot.send_message))
     await job(1, bot.send_message)
     scheduler.start()
 
