@@ -5,7 +5,7 @@ from aiogram.filters import Command
 
 from work_api import API
 from service import UsersService
-from buttons import load_void_kb
+from buttons import load_void_kb, load_choose_lesson_kb
 from messages import (load_attendance_for_headmen, NO_LESSONS_TODAY,
                       CHOOSE_GETSTAT_LESSON)
 from middlewares import HeadmenCommandsMiddleware
@@ -35,10 +35,7 @@ async def getstat_command(message: types.Message, state: FSMContext) -> None:
             await message.answer(NO_LESSONS_TODAY)
             return
 
-        kb = [[types.KeyboardButton(text=f'{lesson + 1}) {lessons[lesson][0]} {lessons[lesson][1]}')]
-              for lesson in range(len(lessons))]
-        keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=keyboard)
+        await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
 
     await state.set_state(ReqPars.group_input_req)
 

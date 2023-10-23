@@ -19,6 +19,19 @@ def load_attendance_kb(lessons: list) -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
+def load_choose_lesson_kb(lessons: list) -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    buttons = []
+
+    for lesson in range(len(lessons)):
+        buttons.append(KeyboardButton(text=f'{lesson + 1}) {lessons[lesson][0]} {lessons[lesson][1]}'))
+
+    builder.add(*buttons)
+    builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True)
+
+
 def load_void_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     return builder.as_markup(resize_keyboard=True)

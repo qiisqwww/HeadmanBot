@@ -6,9 +6,8 @@ __all__ = ["START_MESSAGE", "REG_MESSAGE_1", "REG_MESSAGE_2",
            "SUCCESFULLY_REG_MESSAGE", "UNSUCCESFULLY_REG_MESSAGE", "PASS_ASK_MESSAGE",
            "STAROSTA_REG_MESSAGE", "UNSUCCESFULL_STAROSTA_REG_MESSAGE", "ALREADY_HEADMAN_MESSAGE",
            "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE",
-           "WRONG_PASSWORD", "ALL_MESSAGE", "NONE_MESSAGE", "SKIP1_MESSAGE", "SKIP2_MESSAGE",
-           "SKIP3_MESSAGE", "SKIP4_MESSAGE", "load_attendance_for_headmen", "NO_LESSONS_TODAY",
-           "CHOOSE_GETSTAT_LESSON"]
+           "WRONG_PASSWORD", "ALL_MESSAGE", "NONE_MESSAGE", "load_attendance_for_headmen",
+           "NO_LESSONS_TODAY", "CHOOSE_GETSTAT_LESSON", "POLL_MESSAGE"]
 
 START_MESSAGE = """
 Привет! Я - твоя староста!"""
@@ -56,27 +55,14 @@ ALL_MESSAGE = """
 NONE_MESSAGE = """
 Вы не посетите пары """
 
-SKIP1_MESSAGE = """
-Вы не посетите 1 пару
-"""
-
-SKIP2_MESSAGE = """
-Вы не посетите 2 пару
-"""
-
-SKIP3_MESSAGE = """
-Вы не посетите 3 пару
-"""
-
-SKIP4_MESSAGE = """
-Вы не посетите 4 пару
-"""
-
 NO_LESSONS_TODAY = """
 Сегодня нет пар!"""
 
 CHOOSE_GETSTAT_LESSON = """
 Какая пара вас интересует?"""
+
+POLL_MESSAGE = """
+На какие сегодняшие пары ты придешь?"""
 
 
 def load_attendance_for_headmen(message: types.Message) -> str:
@@ -94,11 +80,11 @@ def load_attendance_for_headmen(message: types.Message) -> str:
 
         for user_id in con.get_user_of_group(group):
             user_id = user_id[0]
-            print(con.get_pars(user_id))
-            if len(con.get_pars(user_id).replace('0', '')) == 0:
+            print(con.get_lessons(user_id))
+            if len(con.get_lessons(user_id).replace('0', '')) == 0:
                 none_checked_in.append(user_id)
                 continue
-            match con.get_pars(user_id)[lesson]:
+            match con.get_lessons(user_id)[lesson]:
                 case '0':  # мне лень при нажатии на кнопку я приду на пару n обновлять всю
                     # бд тем, что я не приду, поэтому я встроил такую проверку, да пиздец,
                     # но я на семинаре по процедурке, у меня есть ещё пара дел

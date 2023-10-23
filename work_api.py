@@ -64,8 +64,3 @@ class API:
                         break
                 self.day.append([' '.join(text), ':'.join(lesson['calls']['time_start'].split(':')[:2])])
         return self.day
-
-
-"""if __name__ == '__main__':
-    a = API()
-    print(a.get_today())"""

@@ -109,14 +109,19 @@ class UsersService:
     def get_time(self, tg_id: int) -> datetime.datetime.time:
         cur = self._con.cursor()
         time = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id, )).fetchone()
-        print(time)
 
         return datetime.time(*map(int, time[0].split(":")))
 
-    def get_pars(self, tg_id: int) -> str:
+    def set_time(self, time: str, group: str) -> None:
         cur = self._con.cursor()
-        pars = cur.execute("SELECT attendance FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
-        return pars[0]
+        cur.execute("UPDATE students SET time = ? WHERE study_group = ?",
+                    (time, group))
+
+    def get_lessons(self, tg_id: int) -> str:
+        cur = self._con.cursor()
+        lessons = cur.execute("SELECT attendance FROM students WHERE telegram_id = ?",
+                              (tg_id,)).fetchone()
+        return lessons[0]
 
     def __enter__(self):
         return self
