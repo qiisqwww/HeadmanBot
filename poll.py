@@ -5,6 +5,7 @@ from work_api import API
 from service import UsersService
 from middlewares import HeadmenCommandsMiddleware
 from messages import POLL_MESSAGE
+import logging
 
 
 router = Router()
@@ -28,5 +29,10 @@ async def job(k, bot):  # ругается, если убрать k
             day = [x for x in day if not (str(x) in seen or seen_add(str(x)))]
             con.set_time(first_lesson_time, group[0])
             for user_id in con.get_user_of_group(group[0]):
-                con.change_attendance(user_id[0], f'start {len(day)}')
-                await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
+                try:
+                    con.change_attendance(user_id[0], f'start {len(day)}')
+                    await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
+                except Exception as e:
+                    print(e)
+                    logging.warning(e)
+

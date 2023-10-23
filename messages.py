@@ -95,11 +95,11 @@ def load_attendance_for_headmen(message: types.Message) -> str:
                     no_visit.append(user_id)
 
         for user in none_checked_in:
-            none_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+            none_text += str(con.get_user_of_id_tg(user)[2]) + '\n'
         for user in visit:
-            visit_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+            visit_text += str(con.get_user_of_id_tg(user)[2]) + '\n'
         for user in no_visit:
-            no_text += str(con.get_user_of_id_tg(user)[3]) + '\n'
+            no_text += str(con.get_user_of_id_tg(user)[2]) + '\n'
 
         attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n'
 

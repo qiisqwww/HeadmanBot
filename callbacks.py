@@ -29,10 +29,11 @@ async def poll_callback(callback: types.CallbackQuery):
 
         data = [str(i[1:-1]) for i in callback_data[1:-1].split(', ')]
         group = con.get_group_of_id_tg(callback.from_user.id)
-
         api.regenerate(group)
         day = api.get_today()
-
+        seen = set()
+        seen_add = seen.add
+        day = [x for x in day if not (str(x) in seen or seen_add(str(x)))]
         z = con.get_lessons(callback.from_user.id)
         a = []
         info = 0

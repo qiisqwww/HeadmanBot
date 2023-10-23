@@ -9,7 +9,7 @@ from states import RegStates
 from messages import (START_MESSAGE, REG_MESSAGE_1, REG_MESSAGE_2,
                       SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE)
 from middlewares import RegMiddleware
-
+from work_api import API
 router = Router()
 
 router.message.middleware(RegMiddleware())
@@ -36,6 +36,11 @@ async def handling_surname(message: types.Message, state: FSMContext) -> None:
 
 @router.message(RegStates.group_input, F.text)
 async def handling_group(message: types.Message, state: FSMContext) -> None:
+    api = API()
+    if not api.regenerate(message.text)[0]:
+        await message.answer(text="Такой группы нет, подумай, где ты учишься!!!!!!")
+        await state.set_state(RegStates.group_input)
+        return
     await state.update_data(group=message.text)
     logging.info("group name handled")
 

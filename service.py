@@ -15,14 +15,16 @@ class UsersService:
 
     def create_table(self) -> None:
         cur = self._con.cursor()
-        cur.execute("""CREATE TABLE IF NOT EXISTS students(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        telegram_id INTEGER,
-                        user_name TEXT,
-                        name_surname TEXT,
-                        study_group TEXT,
-                        is_headmen INTEGER,
-                        attendance TEXT)""")
+        cur.execute("""CREATE TABLE  IF NOT EXISTS students (
+    telegram_id  INTEGER,
+    user_name    TEXT,
+    name_surname TEXT,
+    study_group  TEXT,
+    is_headmen   INTEGER,
+    attendance   TEXT,
+    time         TEXT
+);
+""")
         logging.info("table created")
 
     def is_registered(self, tg_id: int):
@@ -41,11 +43,8 @@ class UsersService:
         cur = self._con.cursor()
 
         try:
-            count_id = cur.execute("""SELECT COUNT(*) FROM students""").fetchone()[0]
-            # Создаем id пользователя с помощью кол-ва участников
-
-            cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, ?, 0, 0, 0)",
-                        (count_id, tg_id, user_name, name_surname, study_group))  # Добавляем строчку в таблицу
+            cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, 0, 0, 0)",
+                        (tg_id, user_name, name_surname, study_group))  # Добавляем строчку в таблицу
 
             logging.info("user was registered in database")
             return True
