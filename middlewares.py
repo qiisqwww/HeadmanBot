@@ -99,7 +99,8 @@ class CallbackMiddleware(BaseMiddleware):
         user_id = event.from_user.id
 
         with UsersService() as con:
-            if con.get_time(user_id).hour <= datetime.datetime.now().time().hour:
+            a = 60 * con.get_time(user_id).hour + con.get_time(user_id).minute + 90
+            if a <= datetime.datetime.now().time().hour * 60 + datetime.datetime.now().time().minute:
                  logging.warning("callback middleware finished, lesson was already started")
                  await event.answer("Занятия уже начались!")
                  return

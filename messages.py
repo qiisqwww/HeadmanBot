@@ -13,7 +13,7 @@ START_MESSAGE = """
 Привет! Я - твоя староста!"""
 
 REG_MESSAGE_1 = """
-Для начала, напомни, как тебя зовут?"""
+Для начала, напомни, как тебя зовут? (И фамилию)"""
 
 REG_MESSAGE_2 = """
 Из какой ты группы? (!Вводить строго в формате ХХХХ-ХХ-ХХ!)"""
@@ -95,11 +95,11 @@ def load_attendance_for_headmen(message: types.Message) -> str:
                     no_visit.append(user_id)
 
         for user in none_checked_in:
-            none_text += str(con.get_user_of_id_tg(user)[2]) + '\n'
+            none_text += str(con.get_user_of_id_tg(user)[2]) + ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
         for user in visit:
-            visit_text += str(con.get_user_of_id_tg(user)[2]) + '\n'
+            visit_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
         for user in no_visit:
-            no_text += str(con.get_user_of_id_tg(user)[2]) + '\n'
+            no_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
 
         attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n'
 

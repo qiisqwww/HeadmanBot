@@ -48,5 +48,7 @@ async def poll_callback(callback: types.CallbackQuery):
         info = 'lesson ' + str(info)
         con.change_attendance(callback.from_user.id, info)
 
-        await callback.message.edit_text(f'Вы посетите {callback_data} пару', reply_markup=load_attendance_kb(day))
+        await callback.message.edit_text(f'Вы посетите пару {callback_data[0]}, '
+                                         f'которая начнётся в {callback_data[1]}',
+                                         reply_markup=load_attendance_kb(day))
 

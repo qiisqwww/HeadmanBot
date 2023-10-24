@@ -108,7 +108,6 @@ class UsersService:
     def get_time(self, tg_id: int) -> datetime.datetime.time:
         cur = self._con.cursor()
         time = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id, )).fetchone()
-
         return datetime.time(*map(int, time[0].split(":")))
 
     def set_time(self, time: str, group: str) -> None:
