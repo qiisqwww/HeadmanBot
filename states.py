@@ -14,3 +14,4 @@ class SetHeadMen(StatesGroup):
 
 class ReqPars(StatesGroup):
     group_input_req = State()
+    another_group_input = State()

@@ -27,10 +27,12 @@ async def getstat_command(message: types.Message, state: FSMContext) -> None:
     with UsersService() as con:
         group = con.get_group_of_id_tg(message.from_user.id)
         api.regenerate(group)
-        lessons = api.get_today()
+        day = api.get_today()
+
         seen = set()
         seen_add = seen.add
-        lessons = [lesson for lesson in lessons if not (str(lessons) in seen or seen_add(str(lessons)))]
+        lessons = [lesson for lesson in day if not (str(lesson) in seen or seen_add(str(lesson)))]
+
 
         if len(lessons) == 0:
             await message.answer(NO_LESSONS_TODAY)

@@ -69,7 +69,10 @@ def load_attendance_for_headmen(message: types.Message) -> str:
     visit_text = 'Придут:\n'
     none_text = 'Не отметились:\n'
     no_text = 'Не придут:\n'
-    lesson = int(message.text.split(') ')[0]) - 1
+    try:
+        lesson = int(message.text.split(') ')[0]) - 1
+    except Exception as e:
+        return "Вы ввели неверные данные!"
 
     no_visit = []
     none_checked_in = []
