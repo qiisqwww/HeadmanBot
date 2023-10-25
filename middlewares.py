@@ -101,13 +101,12 @@ class CallbackMiddleware(BaseMiddleware):
         user_id = event.from_user.id
         flag = get_flag(data, "callback")
 
-
         if flag == "poll":
             with UsersService() as con:
                 a = 60 * con.get_time(user_id).hour + con.get_time(user_id).minute + 90
                 if a <= datetime.datetime.now().time().hour * 60 + datetime.datetime.now().time().minute:
                     logging.warning("(poll) callback middleware finished, lesson was already started")
-                    await event.reply("Вы не можете отметиться! Занятия уже начались!")
+                    await event.message.edit_text("Вы не можете отметиться! Занятия уже начались!")
                     return
 
                 logging.info("(poll) callback middleware finished")
@@ -116,7 +115,3 @@ class CallbackMiddleware(BaseMiddleware):
         if flag == "attendance":
             logging.info("(attendance) callback middlewre finished")
             return await handler(event, data)
-
-
-
-

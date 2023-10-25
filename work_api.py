@@ -64,4 +64,8 @@ class API:
                         break
                 self.day.append([' '.join(text), ':'.join(lesson['calls']['time_start'].split(':')[:2])])
 
+        seen = set()
+        seen_add = seen.add
+        self.day = [x for x in self.day if not (str(x) in seen or seen_add(str(x)))]
+
         return self.day

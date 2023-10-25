@@ -18,6 +18,7 @@ router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отв�
 
 api = API()
 
+
 @router.message(Command("getstat"))
 async def getstat_command(message: types.Message) -> None:
     logging.info("getstat command")
@@ -25,17 +26,11 @@ async def getstat_command(message: types.Message) -> None:
     with UsersService() as con:
         group = con.get_group_of_id_tg(message.from_user.id)
         api.regenerate(group)
-        day = api.get_today()
-
-        seen = set()
-        seen_add = seen.add
-        lessons = [lesson for lesson in day if not (str(lesson) in seen or seen_add(str(lesson)))]
-
+        lessons = api.get_today()
 
         if len(lessons) == 0:
             await message.answer(NO_LESSONS_TODAY)
             return
 
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
-
 
