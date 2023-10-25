@@ -83,24 +83,24 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
             user_id = user_id[0]
             print(con.get_lessons(user_id))
             if len(con.get_lessons(user_id).replace('0', '')) == 0:
-                none_checked_in.append(user_id)
+                none_checked_in.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
                 continue
             match con.get_lessons(user_id)[lesson]:
                 case '0':  # мне лень при нажатии на кнопку я приду на пару n обновлять всю
                     # бд тем, что я не приду, поэтому я встроил такую проверку, да пиздец,
                     # но я на семинаре по процедурке, у меня есть ещё пара дел
-                    no_visit.append(user_id)
+                    no_visit.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
                 case '1':
-                    visit.append(user_id)
+                    visit.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
                 case '2':
-                    no_visit.append(user_id)
+                    no_visit.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
 
-        for user in none_checked_in:
-            none_text += str(con.get_user_of_id_tg(user)[2]) + ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
-        for user in visit:
-            visit_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
-        for user in no_visit:
-            no_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
+        for user in sorted(none_checked_in, key=lambda s: s[0]):
+            none_text += user[1]
+        for user in sorted(visit, key=lambda s: s[0]):
+            visit_text += user[1]
+        for user in sorted(no_visit, key=lambda s: s[0]):
+            no_text += user[1]
 
         attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n' + "Что-то еще?"
 
