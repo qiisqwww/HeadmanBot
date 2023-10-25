@@ -1,6 +1,7 @@
 import logging
 import datetime
-from pprint import pprint
+
+from aiogram.dispatcher.flags import get_flag
 from aiogram import BaseMiddleware
 from aiogram.types import Message
 from typing import Callable, Dict, Any, Awaitable
@@ -10,7 +11,8 @@ from messages import (ALREADY_REGISTERED_MESSAGE, ALREADY_HEADMAN_MESSAGE, MUST_
 from service import UsersService
 
 
-__all__ = ["RegMiddleware", "HeadmenRegMiddleware", "HeadmenCommandsMiddleware"]
+__all__ = ["RegMiddleware", "HeadmenRegMiddleware",
+           "HeadmenCommandsMiddleware", "CallbackMiddleware"]
 
 
 class RegMiddleware(BaseMiddleware):
@@ -97,13 +99,24 @@ class CallbackMiddleware(BaseMiddleware):
         logging.info("callback middleware started")
 
         user_id = event.from_user.id
+        flag = get_flag(data, "callback")
 
-        with UsersService() as con:
-            a = 60 * con.get_time(user_id).hour + con.get_time(user_id).minute + 90
-            if a <= datetime.datetime.now().time().hour * 60 + datetime.datetime.now().time().minute:
-                 logging.warning("callback middleware finished, lesson was already started")
-                 await event.answer("Занятия уже начались!")
-                 return
 
-        logging.info("callback middleware finished")
-        return await handler(event, data)
+        if flag == "poll":
+            with UsersService() as con:
+                a = 60 * con.get_time(user_id).hour + con.get_time(user_id).minute + 90
+                if a <= datetime.datetime.now().time().hour * 60 + datetime.datetime.now().time().minute:
+                    logging.warning("(poll) callback middleware finished, lesson was already started")
+                    await event.reply("Вы не можете отметиться! Занятия уже начались!")
+                    return
+
+                logging.info("(poll) callback middleware finished")
+                return await handler(event, data)
+
+        if flag == "attendance":
+            logging.info("(attendance) callback middlewre finished")
+            return await handler(event, data)
+
+
+
+

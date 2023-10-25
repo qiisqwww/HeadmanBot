@@ -6,7 +6,7 @@ __all__ = ["START_MESSAGE", "REG_MESSAGE_1", "REG_MESSAGE_2",
            "SUCCESFULLY_REG_MESSAGE", "UNSUCCESFULLY_REG_MESSAGE", "PASS_ASK_MESSAGE",
            "STAROSTA_REG_MESSAGE", "UNSUCCESFULL_STAROSTA_REG_MESSAGE", "ALREADY_HEADMAN_MESSAGE",
            "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE",
-           "WRONG_PASSWORD", "ALL_MESSAGE", "NONE_MESSAGE", "load_attendance_for_headmen",
+           "WRONG_PASSWORD", "ALL_MESSAGE", "NONE_MESSAGE", "attendance_for_headmen_message",
            "NO_LESSONS_TODAY", "CHOOSE_GETSTAT_LESSON", "POLL_MESSAGE"]
 
 START_MESSAGE = """
@@ -65,21 +65,19 @@ POLL_MESSAGE = """
 На какие сегодняшие пары ты придешь?"""
 
 
-def load_attendance_for_headmen(message: types.Message) -> str:
+def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
     visit_text = 'Придут:\n'
     none_text = 'Не отметились:\n'
     no_text = 'Не придут:\n'
-    try:
-        lesson = int(message.text.split(') ')[0]) - 1
-    except Exception as e:
-        return "Вы ввели неверные данные!"
+
+    lesson = int(callback.data)
 
     no_visit = []
     none_checked_in = []
     visit = []
 
     with UsersService() as con:
-        group = con.get_group_of_id_tg(message.from_user.id)
+        group = con.get_group_of_id_tg(callback.from_user.id)
 
         for user_id in con.get_user_of_group(group):
             user_id = user_id[0]
@@ -104,6 +102,6 @@ def load_attendance_for_headmen(message: types.Message) -> str:
         for user in no_visit:
             no_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
 
-        attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n'
+        attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n' + "Что-то еще?"
 
         return attendance

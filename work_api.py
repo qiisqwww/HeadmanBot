@@ -63,4 +63,5 @@ class API:
                         text.append('...')
                         break
                 self.day.append([' '.join(text), ':'.join(lesson['calls']['time_start'].split(':')[:2])])
+
         return self.day

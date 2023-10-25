@@ -5,12 +5,10 @@ from aiogram.filters import Command
 
 from work_api import API
 from service import UsersService
-from buttons import load_void_kb, load_choose_lesson_kb
-from messages import (load_attendance_for_headmen, NO_LESSONS_TODAY,
+from buttons import load_choose_lesson_kb
+from messages import (NO_LESSONS_TODAY,
                       CHOOSE_GETSTAT_LESSON)
 from middlewares import HeadmenCommandsMiddleware
-from states import ReqPars
-from aiogram.fsm.context import FSMContext
 
 
 router = Router()
@@ -21,7 +19,7 @@ router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отв�
 api = API()
 
 @router.message(Command("getstat"))
-async def getstat_command(message: types.Message, state: FSMContext) -> None:
+async def getstat_command(message: types.Message) -> None:
     logging.info("getstat command")
 
     with UsersService() as con:
@@ -40,13 +38,4 @@ async def getstat_command(message: types.Message, state: FSMContext) -> None:
 
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
 
-    await state.set_state(ReqPars.group_input_req)
 
-
-@router.message(ReqPars.group_input_req, F.text)
-async def send_attendance_msg(message: types.Message, state: FSMContext) -> None:
-    logging.info("lesson name handled")
-
-    await message.answer(text=load_attendance_for_headmen(message), reply_markup=load_void_kb())
-
-    await state.clear()

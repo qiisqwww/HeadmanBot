@@ -4,17 +4,17 @@ from aiogram import types, Router, F
 
 from service import UsersService
 from middlewares import CallbackMiddleware
-from messages import (ALL_MESSAGE, NONE_MESSAGE)
-from buttons import load_attendance_kb, load_void_kb
+from messages import (ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message)
+from buttons import load_attendance_kb, load_void_kb, load_choose_lesson_kb
 from work_api import API
 
 router = Router()
 router.callback_query.middleware(CallbackMiddleware())
 api = API()
 
-@router.callback_query(F.data.startswith("attendance"))
-async def poll_callback(callback: types.CallbackQuery):
-    logging.info("attendance callback handled")
+@router.callback_query(F.data.startswith("attendance"), flags={"callback" : "poll"})
+async def check_in_callback(callback: types.CallbackQuery):
+    logging.info("check_in callback handled")
     callback_data = callback.data.split("_")[1]
 
     with UsersService() as con:
@@ -52,3 +52,19 @@ async def poll_callback(callback: types.CallbackQuery):
                                          f'которая начнётся в {callback_data[1]}',
                                          reply_markup=load_attendance_kb(day))
 
+
+@router.callback_query(flags={"callback" : "attendance"})
+async def attendance_send_callback(callback: types.CallbackQuery):
+    logging.info("attendance callback handled")
+
+    with UsersService() as con:
+        group = con.get_group_of_id_tg(callback.from_user.id)
+        api.regenerate(group)
+        day = api.get_today()
+
+        seen = set()
+        seen_add = seen.add
+        lessons = [lesson for lesson in day if not (str(lesson) in seen or seen_add(str(lesson)))]
+
+        await callback.message.edit_text(text=f"{lessons[int(callback.data)][0]}, {lessons[int(callback.data)][1]}\n\n" +
+                                           attendance_for_headmen_message(callback), reply_markup=load_choose_lesson_kb(lessons))
