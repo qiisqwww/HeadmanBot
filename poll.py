@@ -27,7 +27,8 @@ async def job(k, bot):  # ругается, если убрать k
             seen = set()
             seen_add = seen.add
             day = [x for x in day if not (str(x) in seen or seen_add(str(x)))]
-            con.set_time(first_lesson_time[0], group[0])
+            con.set_time(first_lesson_time, group[0])
+
             for user_id in con.get_user_of_group(group[0]):
                 try:
                     con.change_attendance(user_id[0], f'start {len(day)}')

@@ -30,8 +30,8 @@ async def main():
 
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     scheduler.add_job(job,'cron', day_of_week='mon-sun', hour=8, minute=30, args=(1, bot.send_message))
-    scheduler.add_job(job, 'interval', seconds=60, args=(1, bot.send_message))
-    await job(1, bot.send_message)
+    #scheduler.add_job(job, 'interval', seconds=60, args=(1, bot.send_message))
+    #await job(1, bot.send_message)
     scheduler.start()
 
     logging.info('bot is starting')
