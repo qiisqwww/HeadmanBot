@@ -10,6 +10,11 @@ from messages import (START_MESSAGE, REG_MESSAGE_1_1, REG_MESSAGE_1_2, REG_MESSA
                       SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE)
 from middlewares import RegMiddleware
 from work_api import API
+
+
+__all__ = ["router"]
+
+
 router = Router()
 
 router.message.middleware(RegMiddleware())

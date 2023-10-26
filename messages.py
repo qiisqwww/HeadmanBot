@@ -84,23 +84,24 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
 
         for user in con.get_user_of_group(group):
             user_id = user[0]
-            print(con.get_lessons(user_id))
             if len(con.get_lessons(user_id).replace('0', '')) == 0:
-                none_checked_in.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
+                none_checked_in.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
                 continue
             match con.get_lessons(user_id)[lesson]:
                 case '0':  # мне лень при нажатии на кнопку я приду на пару n обновлять всю
                     # бд тем, что я не приду, поэтому я встроил такую проверку, да пиздец,
                     # но я на семинаре по процедурке, у меня есть ещё пара дел
-                    no_visit.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
+                    no_visit.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
                 case '1':
-                    visit.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
+                    visit.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
                 case '2':
-                    no_visit.append([con.get_user_of_id_tg(user_id)[2], str(con.get_user_of_id_tg(user_id)[2]) + ' @' + str(con.get_user_of_id_tg(user_id)[1]) + '\n'])
+                    no_visit.append([str(con.get_user_of_id_tg(user_id)[2]),
+                                        f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
 
         for user in sorted(none_checked_in, key=lambda s: s[0]):
             none_text += user[1]
         for user in sorted(visit, key=lambda s: s[0]):
+            print(user)
             visit_text += user[1]
         for user in sorted(no_visit, key=lambda s: s[0]):
             no_text += user[1]

@@ -11,6 +11,10 @@ from messages import (PASS_ASK_MESSAGE, STAROSTA_REG_MESSAGE, UNSUCCESFULL_STARO
                       WRONG_PASSWORD)
 from middlewares import HeadmenRegMiddleware
 
+
+__all__ = ["router"]
+
+
 router = Router()
 
 router.message.middleware(HeadmenRegMiddleware())

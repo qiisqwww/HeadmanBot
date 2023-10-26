@@ -10,6 +10,9 @@ from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON)
 from middlewares import HeadmenCommandsMiddleware
 
 
+__all__ = ["router"]
+
+
 router = Router()
 
 router.message.middleware(HeadmenCommandsMiddleware())

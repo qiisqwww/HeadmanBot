@@ -1,12 +1,16 @@
 import logging
 
 from aiogram import types, Router, F
+from aiogram.enums import ParseMode
 
 from service import UsersService
 from middlewares import CallbackMiddleware
 from messages import (ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message)
 from buttons import load_attendance_kb, load_void_kb, load_choose_lesson_kb
 from work_api import API
+
+
+__all__ = ["router"]
 
 
 router = Router()
@@ -64,5 +68,6 @@ async def attendance_send_callback(callback: types.CallbackQuery):
 
         await callback.message.edit_text(text=f"{lessons[int(callback.data)][0]}, "
                                             f"{lessons[int(callback.data)][1]}\n\n"
-                                              + f"{attendance_for_headmen_message(callback)}",
-                                         reply_markup=load_choose_lesson_kb(lessons))
+                                              + attendance_for_headmen_message(callback),
+                                         reply_markup=load_choose_lesson_kb(lessons),
+                                         parse_mode=ParseMode.HTML)
