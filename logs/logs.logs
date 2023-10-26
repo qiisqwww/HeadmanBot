@@ -1,0 +1,18 @@
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-27 07:00:00+03:00 (in 33917.464351 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:root:callback middleware started
+INFO:root:connected to database
+WARNING:root:(poll) callback middleware finished, lesson was already started
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318331 is handled. Duration 265 ms by bot id=6650110444
+INFO:aiogram.dispatcher:Polling stopped for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:aiogram.dispatcher:Polling stopped
