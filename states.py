@@ -1,10 +1,12 @@
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.fsm.context import FSMContext
 
-__all__ = ["RegStates"]
+__all__ = ["RegStates", "SetHeadMen"]
+
 
 class RegStates(StatesGroup):
-    name_input = State()
     surname_input = State()
     group_input = State()
-    registered = State()
+
+
+class SetHeadMen(StatesGroup):
+    get_password = State()
