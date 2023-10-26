@@ -4,3 +4,4 @@ logs.logs
 __pycache__
 .idea
 database
+database.db

@@ -34,22 +34,26 @@ async def check_in_callback(callback: types.CallbackQuery):
             return
 
         data = [str(i[1:-1]) for i in callback_data[1:-1].split(', ')]
+
         group = con.get_group_of_id_tg(callback.from_user.id)
         api.regenerate(group)
         lessons = api.get_today()
 
-        z = con.get_lessons(callback.from_user.id)
-        a = []
-        info = 0
+        lessons_in_states = con.get_lessons(callback.from_user.id)
+        already_chosen_lessons_in_numbers = []
+
         for lesson in range(len(lessons)):
             if lessons[lesson] == data:
-                info = lesson
-                a.append(lesson)
-            if z[lesson] == '1':
-                a.append(lesson)
-        for i in sorted(a, reverse=True):
+                chosen_lesson = lesson
+                already_chosen_lessons_in_numbers.append(lesson)
+            if lessons_in_states[lesson] == '1':
+                already_chosen_lessons_in_numbers.append(lesson)
+
+        for i in sorted(already_chosen_lessons_in_numbers, reverse=True):
             lessons.pop(i)
-        info = 'lesson ' + str(info)
+
+        info = 'lesson ' + str(chosen_lesson)
+        print(info, already_chosen_lessons_in_numbers, lessons)
         con.change_attendance(callback.from_user.id, info)
 
         await callback.message.edit_text(f'Вы посетите пару {data[0]}, '
