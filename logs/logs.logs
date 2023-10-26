@@ -2259,3 +2259,176 @@ INFO:root:disconnected from database
 INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 11:56:30 MSK)" executed successfully
 INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
 INFO:aiogram.dispatcher:Polling stopped
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:15:03.781582+03:00 (in 58.427362 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:16:03.781582+03:00 (in 59.990371 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:16:03 MSK)" (scheduled at 2023-10-26 15:15:03.781582+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:16:03 MSK)" executed successfully
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:17:09.515655+03:00 (in 59.995999 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @Antoni678901bot id=5342995443 - 'Antoni678901'
+INFO:root:registration middleware started
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:registration middleware finished
+INFO:root:start command
+INFO:aiogram.event:Update id=173499610 is handled. Duration 406 ms by bot id=5342995443
+INFO:root:registration middleware started
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:registration middleware finished
+INFO:root:surname handled
+INFO:aiogram.event:Update id=173499611 is handled. Duration 140 ms by bot id=5342995443
+INFO:root:registration middleware started
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:registration middleware finished
+INFO:root:name handled
+INFO:aiogram.event:Update id=173499612 is handled. Duration 280 ms by bot id=5342995443
+INFO:root:registration middleware started
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:registration middleware finished
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:group name handled
+INFO:root:connected to database
+INFO:root:user was registered in database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499613 is handled. Duration 719 ms by bot id=5342995443
+INFO:root:headmen middleware started
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:headmen reg middleware finished
+INFO:root:set_headmen command, password was asked
+INFO:aiogram.event:Update id=173499614 is handled. Duration 406 ms by bot id=5342995443
+INFO:root:headmen middleware started
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:headmen reg middleware finished
+INFO:root:password was handled
+INFO:root:connected to database
+INFO:root:headmen status was set
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499615 is handled. Duration 218 ms by bot id=5342995443
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499616 is handled. Duration 655 ms by bot id=5342995443
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499617 is handled. Duration 655 ms by bot id=5342995443
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:17:09.515655+03:00 (in 0.001439 seconds)
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:18:09.515655+03:00 (in 59.987085 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:18:09 MSK)" (scheduled at 2023-10-26 15:17:09.515655+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:18:09 MSK)" executed successfully
+INFO:root:callback middleware started
+INFO:root:connected to database
+WARNING:root:(poll) callback middleware finished, lesson was already started
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499618 is handled. Duration 187 ms by bot id=5342995443
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499619 is handled. Duration 937 ms by bot id=5342995443
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=173499620 is handled. Duration 890 ms by bot id=5342995443
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:19:09.515655+03:00 (in 59.986779 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:19:09 MSK)" (scheduled at 2023-10-26 15:18:09.515655+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:19:09 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:20:09.515655+03:00 (in 59.984203 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:20:09 MSK)" (scheduled at 2023-10-26 15:19:09.515655+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:20:09 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:20:09.515655+03:00 (in 0.001205 seconds)
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 15:21:09.515655+03:00 (in 59.986204 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:21:09 MSK)" (scheduled at 2023-10-26 15:20:09.515655+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 15:21:09 MSK)" executed successfully
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @Antoni678901bot id=5342995443 - 'Antoni678901'
