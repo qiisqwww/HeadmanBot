@@ -6,8 +6,7 @@ from aiogram.filters import Command
 from work_api import API
 from service import UsersService
 from buttons import load_choose_lesson_kb
-from messages import (NO_LESSONS_TODAY,
-                      CHOOSE_GETSTAT_LESSON)
+from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON)
 from middlewares import HeadmenCommandsMiddleware
 
 
@@ -33,4 +32,3 @@ async def getstat_command(message: types.Message) -> None:
             return
 
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
-

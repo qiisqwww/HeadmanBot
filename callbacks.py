@@ -64,5 +64,5 @@ async def attendance_send_callback(callback: types.CallbackQuery):
 
         await callback.message.edit_text(text=f"{lessons[int(callback.data)][0]}, "
                                             f"{lessons[int(callback.data)][1]}\n\n"
-                                              + attendance_for_headmen_message(callback),
+                                              + f"{attendance_for_headmen_message(callback)}",
                                          reply_markup=load_choose_lesson_kb(lessons))

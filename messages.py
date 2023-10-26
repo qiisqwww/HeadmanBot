@@ -2,7 +2,7 @@ from aiogram import types
 
 from service import UsersService
 
-__all__ = ["START_MESSAGE", "REG_MESSAGE_1", "REG_MESSAGE_2",
+__all__ = ["START_MESSAGE", "REG_MESSAGE_1_1", "REG_MESSAGE_1_2","REG_MESSAGE_2",
            "SUCCESFULLY_REG_MESSAGE", "UNSUCCESFULLY_REG_MESSAGE", "PASS_ASK_MESSAGE",
            "STAROSTA_REG_MESSAGE", "UNSUCCESFULL_STAROSTA_REG_MESSAGE", "ALREADY_HEADMAN_MESSAGE",
            "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE",
@@ -12,8 +12,11 @@ __all__ = ["START_MESSAGE", "REG_MESSAGE_1", "REG_MESSAGE_2",
 START_MESSAGE = """
 Привет! Я - твоя староста!"""
 
-REG_MESSAGE_1 = """
-Для начала, напомни, как тебя зовут? (И фамилию)"""
+REG_MESSAGE_1_1 = """
+Для начала, введи свою фамилию?"""
+
+REG_MESSAGE_1_2 = """
+Теперь отправь мне свое имя"""
 
 REG_MESSAGE_2 = """
 Из какой ты группы? (!Вводить строго в формате ХХХХ-ХХ-ХХ!)"""
@@ -44,7 +47,7 @@ MUST_BE_REG_MESSAGE = """
 
 MUST_BE_HEADMEN_MESSAGE = """
 Для выполнения данной команды вы должны быть старостой.
-Для регистрации как страоста - /set_headmen"""
+Для регистрации как староста - /set_headmen"""
 
 WRONG_PASSWORD = """
 Вы ввели неверный пароль!"""
@@ -79,8 +82,8 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
     with UsersService() as con:
         group = con.get_group_of_id_tg(callback.from_user.id)
 
-        for user_id in con.get_user_of_group(group):
-            user_id = user_id[0]
+        for user in con.get_user_of_group(group):
+            user_id = user[0]
             print(con.get_lessons(user_id))
             if len(con.get_lessons(user_id).replace('0', '')) == 0:
                 none_checked_in.append(user_id)
@@ -96,10 +99,13 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
                     no_visit.append(user_id)
 
         for user in none_checked_in:
+            #none_text += f'<a href="tg://user?id={user}">{con.get_user_of_id_tg(user)[2]}</a>'
             none_text += str(con.get_user_of_id_tg(user)[2]) + ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
         for user in visit:
+            #visit_text += f'<a href="tg://user?id={user}">{con.get_user_of_id_tg(user)[2]}</a>'
             visit_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
         for user in no_visit:
+            #no_text += f'<a href="tg://user?id={user}">{con.get_user_of_id_tg(user)[2]}</a>'
             no_text += str(con.get_user_of_id_tg(user)[2]) +  ' @' + str(con.get_user_of_id_tg(user)[1]) + '\n'
 
         attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n' + "Что-то еще?"
