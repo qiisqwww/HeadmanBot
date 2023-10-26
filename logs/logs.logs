@@ -1,0 +1,435 @@
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 07:00:00+03:00 (in 20378.482208 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:root:headmen middleware started
+INFO:root:connected to database
+WARNING:root:headmen reg middleware finished, already registered as headmen
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318144 is handled. Duration 234 ms by bot id=6650110444
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-27 07:00:00+03:00 (in 81681.997712 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318166 is handled. Duration 952 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318167 is handled. Duration 217 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318168 is handled. Duration 312 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318169 is handled. Duration 202 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318170 is handled. Duration 281 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318171 is handled. Duration 186 ms by bot id=6650110444
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-27 07:00:00+03:00 (in 80917.979853 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @grand_headman_bot id=6650110444 - 'Grand Headman MIREA'
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318172 is handled. Duration 280 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318173 is handled. Duration 92 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318174 is handled. Duration 77 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318175 is handled. Duration 93 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318176 is handled. Duration 77 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318177 is handled. Duration 155 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318178 is handled. Duration 187 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318179 is handled. Duration 108 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318180 is handled. Duration 77 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318181 is handled. Duration 217 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318182 is handled. Duration 188 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318183 is handled. Duration 93 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318184 is handled. Duration 203 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318185 is handled. Duration 172 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318186 is handled. Duration 202 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318187 is handled. Duration 218 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318188 is handled. Duration 202 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318189 is handled. Duration 202 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318190 is handled. Duration 94 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318191 is handled. Duration 359 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318192 is handled. Duration 265 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318193 is handled. Duration 156 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318194 is handled. Duration 217 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318195 is handled. Duration 217 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318196 is handled. Duration 219 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318197 is handled. Duration 204 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318198 is handled. Duration 312 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318199 is handled. Duration 187 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318200 is handled. Duration 234 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318201 is handled. Duration 250 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318202 is handled. Duration 312 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:(attendance) callback middlewre finished
+INFO:root:attendance callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318203 is handled. Duration 170 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318204 is handled. Duration 219 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318205 is handled. Duration 109 ms by bot id=6650110444
+INFO:root:callback middleware started
+INFO:root:connected to database
+INFO:root:(poll) callback middleware finished
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318206 is handled. Duration 265 ms by bot id=6650110444
+INFO:root:headmen commands middleware started
+INFO:root:connected to database
+INFO:root:headmen commands middleware finished
+INFO:root:getstat command
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-20-23 HTTP/1.1" 200 19769
+INFO:root:disconnected from database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=105318207 is handled. Duration 359 ms by bot id=6650110444
