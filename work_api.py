@@ -50,7 +50,6 @@ class API:
         self.day = []
         now = datetime.now()
         week, now_day = (now - self.start).days // 7 + 1, now.weekday() + 1
-        print(week)
         for lesson in self.req['lessons']:
             if week in lesson['weeks'] and now_day == lesson['weekday']:
                 text = []
