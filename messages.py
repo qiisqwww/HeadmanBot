@@ -101,7 +101,6 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
         for user in sorted(none_checked_in, key=lambda s: s[0]):
             none_text += user[1]
         for user in sorted(visit, key=lambda s: s[0]):
-            print(user)
             visit_text += user[1]
         for user in sorted(no_visit, key=lambda s: s[0]):
             no_text += user[1]
