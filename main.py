@@ -12,12 +12,13 @@ from headmen_commands import router as headmen_cmd_router
 from poll import router as poll_router, job
 from service import UsersService
 from callbacks import router as callback_router
+from config.config_reader import config
 
 
 async def main():
     storage = MemoryStorage()  # Создаем хранилище
 
-    bot = Bot('6650110444:AAFt6ac-uqfMaEZXx7IcE1myXz1kk1cC0IE')  # Получаем токен бота из файла с конфигом
+    bot = Bot(config.BOT_TOKEN.get_secret_value())  # Получаем токен бота из файла с конфигом
     dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(personal_chat_router, headmen_reg_router,
                        poll_router, callback_router, headmen_cmd_router)  # Добавляем роутеры в диспетчер
