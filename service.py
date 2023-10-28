@@ -60,7 +60,6 @@ class UsersService:
             logging.info("headmen status was set")
             return True
         except Exception as e:
-            print(e)
             logging.warning("headmen status wasn't set (exception)")
             return False
 

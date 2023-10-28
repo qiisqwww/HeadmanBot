@@ -19,7 +19,6 @@ api = API()
 async def job(k, bot):  # ругается, если убрать k
     with UsersService() as con:
         groups = con.get_groups()
-        print(groups)
         for group in groups:
             api.regenerate(group[0])
             day = api.get_today()
@@ -34,6 +33,5 @@ async def job(k, bot):  # ругается, если убрать k
                     con.change_attendance(user_id[0], f'start {len(day)}')
                     await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
                 except Exception as e:
-                    print(e)
                     logging.warning(e)
 

@@ -53,7 +53,6 @@ async def check_in_callback(callback: types.CallbackQuery):
             lessons.pop(i)
 
         info = 'lesson ' + str(chosen_lesson)
-        print(info, already_chosen_lessons_in_numbers, lessons)
         con.change_attendance(callback.from_user.id, info)
 
         await callback.message.edit_text(f'Вы посетите пару {data[0]}, '
