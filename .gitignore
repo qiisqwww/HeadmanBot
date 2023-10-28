@@ -1,6 +1,7 @@
 venv
 logs.logs
-.env.txt
+.env.tx:a:q
+
 __pycache__
 .idea
 database

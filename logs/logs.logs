@@ -2259,3 +2259,486 @@ INFO:root:disconnected from database
 INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 11:56:30 MSK)" executed successfully
 INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
 INFO:aiogram.dispatcher:Polling stopped
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+ERROR:root:<class 'asyncio.exceptions.CancelledError'>
+INFO:root:disconnected from database
+ERROR:asyncio:Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x00000260F90868C0>
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:27:11.752174+03:00 (in 56.883683 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:callback middleware started
+INFO:root:connected to database
+WARNING:root:(poll) callback middleware finished, lesson was already started
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956823 is handled. Duration 1218 ms by bot id=5922725603
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:aiogram.dispatcher:Polling stopped
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:27:45.841327+03:00 (in 50.570281 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:28:45.841327+03:00 (in 59.992973 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:28:45 MSK)" (scheduled at 2023-10-26 14:27:45.841327+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+ERROR:root:<class 'sqlite3.OperationalError'>
+INFO:root:disconnected from database
+ERROR:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:28:45 MSK)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\apscheduler\executors\base_py3.py", line 29, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\poll.py", line 30, in job
+    con.set_time(first_lesson_time, group[0])
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\service.py", line 115, in set_time
+    cur.execute("UPDATE students SET time = ? WHERE study_group = ?",
+sqlite3.OperationalError: database is locked
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956825 is handled. Duration 29625 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:29:45.841327+03:00 (in 59.981378 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:29:45 MSK)" (scheduled at 2023-10-26 14:28:45.841327+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:29:45 MSK)" executed successfully
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956826 is handled. Duration 141 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:30:45.841327+03:00 (in 59.999965 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:30:45 MSK)" (scheduled at 2023-10-26 14:29:45.841327+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:30:45 MSK)" executed successfully
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:aiogram.dispatcher:Polling stopped
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:30:54.405562+03:00 (in 55.503913 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:check_in callback handled
+INFO:root:connected to database
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956828 is handled. Duration 344 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:31:54.405562+03:00 (in 59.990838 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:31:54 MSK)" (scheduled at 2023-10-26 14:30:54.405562+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:31:54 MSK)" executed successfully
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956829 is handled. Duration 250 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:32:54.405562+03:00 (in 59.989536 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:32:54 MSK)" (scheduled at 2023-10-26 14:31:54.405562+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:root:<class 'asyncio.exceptions.CancelledError'>
+INFO:root:disconnected from database
+ERROR:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:32:54 MSK)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 633, in run_until_complete
+    self.run_forever()
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\windows_events.py", line 321, in run_forever
+    super().run_forever()
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 600, in run_forever
+    self._run_once()
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 1860, in _run_once
+    event_list = self._selector.select(timeout)
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\windows_events.py", line 439, in select
+    self._poll(timeout)
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\asyncio\windows_events.py", line 788, in _poll
+    status = _overlapped.GetQueuedCompletionStatus(self._iocp, ms)
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\apscheduler\executors\base_py3.py", line 29, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\poll.py", line 35, in job
+    await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\client\bot.py", line 2709, in send_message
+    return await self(call, request_timeout=request_timeout)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\client\bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\client\session\base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\client\session\aiohttp.py", line 167, in make_request
+    async with session.post(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiohttp\client.py", line 1167, in __aenter__
+    self._resp = await self._coro
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiohttp\client.py", line 586, in _request
+    await resp.start(conn)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiohttp\client_reqrep.py", line 905, in start
+    message, payload = await protocol.read()  # type: ignore[union-attr]
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiohttp\streams.py", line 616, in read
+    await self._waiter
+asyncio.exceptions.CancelledError
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:33:08.342542+03:00 (in 51.684918 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956831 is handled. Duration 7890 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:33:08.342542+03:00 (in 0.001761 seconds)
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:34:08.342542+03:00 (in 59.985836 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:34:08 MSK)" (scheduled at 2023-10-26 14:33:08.342542+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:34:08 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:35:08.342542+03:00 (in 59.997356 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:35:08 MSK)" (scheduled at 2023-10-26 14:34:08.342542+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:35:08 MSK)" executed successfully
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:aiogram.dispatcher:Polling stopped
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:36:28.197688+03:00 (in 57.093285 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956833 is handled. Duration 3670 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:37:28.197688+03:00 (in 59.996750 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:37:28 MSK)" (scheduled at 2023-10-26 14:36:28.197688+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:37:28 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:38:28.197688+03:00 (in 59.988989 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:38:28 MSK)" (scheduled at 2023-10-26 14:37:28.197688+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:38:28 MSK)" executed successfully
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956834 is handled. Duration 250 ms by bot id=5922725603
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+ERROR:root:<class 'sqlite3.OperationalError'>
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956836 is not handled. Duration 11109 ms by bot id=5922725603
+ERROR:aiogram.event:Cause exception while process update id=230956836 by bot id=5922725603
+OperationalError: database is locked
+Traceback (most recent call last):
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\callbacks.py", line 57, in check_in_callback
+    con.change_attendance(callback.from_user.id, info)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\service.py", line 105, in change_attendance
+    cur.execute("UPDATE students SET attendance = ? WHERE telegram_id = ?",
+sqlite3.OperationalError: database is locked
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956835 is handled. Duration 11827 ms by bot id=5922725603
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:39:28.197688+03:00 (in 59.983362 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:39:28 MSK)" (scheduled at 2023-10-26 14:38:28.197688+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:39:28 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:39:28.197688+03:00 (in 0.004708 seconds)
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:40:28.197688+03:00 (in 59.989704 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:40:28 MSK)" (scheduled at 2023-10-26 14:39:28.197688+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:40:28 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:41:28.197688+03:00 (in 59.984450 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:41:28 MSK)" (scheduled at 2023-10-26 14:40:28.197688+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:41:28 MSK)" executed successfully
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:41:28.197688+03:00 (in 0.001796 seconds)
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:42:28.197688+03:00 (in 59.985837 seconds)
+INFO:apscheduler.executors.default:Running job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:42:28 MSK)" (scheduled at 2023-10-26 14:41:28.197688+03:00)
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+ERROR:root:<class 'KeyboardInterrupt'>
+INFO:root:disconnected from database
+ERROR:apscheduler.executors.default:Job "job (trigger: interval[0:01:00], next run at: 2023-10-26 14:42:28 MSK)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\apscheduler\executors\base_py3.py", line 29, in run_coroutine_job
+    retval = await job.func(*job.args, **job.kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\poll.py", line 24, in job
+    api.regenerate(group[0])
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\work_api.py", line 33, in regenerate
+    self.req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group}").json()
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\urllib3\connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\urllib3\connection.py", line 461, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1374, in getresponse
+    response.begin()
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\ssl.py", line 1273, in recv_into
+    return self.read(nbytes, buffer)
+  File "C:\Users\dima-\AppData\Local\Programs\Python\Python310\lib\ssl.py", line 1129, in read
+    return self._sslobj.read(len, buffer)
+KeyboardInterrupt
+INFO:root:connected to database
+INFO:root:table created
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+WARNING:root:Telegram server says - Forbidden: bot was blocked by the user
+INFO:root:disconnected from database
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Added job "job" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:root:bot is starting
+DEBUG:apscheduler.scheduler:Looking for jobs to run
+DEBUG:apscheduler.scheduler:Next wakeup is due at 2023-10-26 14:42:43.596676+03:00 (in 55.995445 seconds)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:root:check_in callback handled
+INFO:root:connected to database
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): timetable.mirea.ru:443
+DEBUG:urllib3.connectionpool:https://timetable.mirea.ru:443 "GET /api/groups/name/%D0%98%D0%9A%D0%91%D0%9E-40-23 HTTP/1.1" 200 20746
+ERROR:root:<class 'UnboundLocalError'>
+INFO:root:disconnected from database
+INFO:aiogram.event:Update id=230956837 is not handled. Duration 2686 ms by bot id=5922725603
+ERROR:aiogram.event:Cause exception while process update id=230956837 by bot id=5922725603
+UnboundLocalError: local variable 'chosen_lesson' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\Users\dima-\bot_MIREA_IKBO40-23\callbacks.py", line 55, in check_in_callback
+    info = 'lesson ' + str(chosen_lesson)
+UnboundLocalError: local variable 'chosen_lesson' referenced before assignment
+INFO:aiogram.dispatcher:Polling stopped for bot @ikbo_40_23_bot id=5922725603 - '» ¡Œ-40-23 Bot'
+INFO:aiogram.dispatcher:Polling stopped
