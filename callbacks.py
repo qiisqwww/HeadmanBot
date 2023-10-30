@@ -51,7 +51,6 @@ async def check_in_callback(callback: types.CallbackQuery):
 
         for i in sorted(already_chosen_lessons_in_numbers, reverse=True):
             lessons.pop(i)
-
         info = 'lesson ' + str(chosen_lesson)
         logging.info("commiting try")
         con.change_attendance(callback.from_user.id, info)

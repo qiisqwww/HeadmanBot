@@ -29,9 +29,9 @@ async def main():
         con.create_table()
 
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    scheduler.add_job(job,'cron', day_of_week='mon-sun', hour=7, minute=00, args=(1, bot.send_message))
-    # scheduler.add_job(job, 'interval', seconds=60, args=(1, bot.send_message))
-    # await job(1, bot.send_message)
+    # scheduler.add_job(job,'cron', day_of_week='mon-sun', hour=7, minute=00, args=(bot.send_message,))
+    scheduler.add_job(job, 'interval', seconds=60, args=(bot.send_message, ))
+    await job(bot.send_message)
     scheduler.start()
 
     logging.info('bot is starting')

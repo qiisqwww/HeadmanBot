@@ -16,16 +16,17 @@ router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отв�
 api = API()
 
 
-async def job(k, bot):  # ругается, если убрать k
+async def job(bot):
     with UsersService() as con:
         groups = con.get_groups()
         for group in groups:
             api.regenerate(group[0])
-            day = api.get_today()
+            try:
+                day = api.get_today()
+            except Exception as e:
+                logging.warning(f"PROBLEMS IN GENERATING LESSONS (API), {e}")
+                return
             first_lesson_time = day[0][1]
-            seen = set()
-            seen_add = seen.add
-            day = [x for x in day if not (str(x) in seen or seen_add(str(x)))]
             con.set_time(first_lesson_time, group[0])
 
             for user_id in con.get_user_of_group(group[0]):

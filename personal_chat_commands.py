@@ -50,7 +50,7 @@ async def handling_name(message: types.Message, state: FSMContext) -> None:
 @router.message(RegStates.group_input, F.text)
 async def handling_group(message: types.Message, state: FSMContext) -> None:
     api = API()
-    if not api.regenerate(message.text)[0]:
+    if not api.regenerate(message.text):
         await message.answer(text="Такой группы нет!")
         await state.set_state(RegStates.group_input)
         return

@@ -6,7 +6,7 @@ from aiogram.filters import Command
 from work_api import API
 from service import UsersService
 from buttons import load_choose_lesson_kb
-from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON)
+from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON, HEADMAN_SEND_MSG_MISTAKE)
 from middlewares import HeadmenCommandsMiddleware
 
 
@@ -27,7 +27,9 @@ async def getstat_command(message: types.Message) -> None:
 
     with UsersService() as con:
         group = con.get_group_of_id_tg(message.from_user.id)
-        api.regenerate(group)
+        if not api.regenerate(group):
+            await message.answer(HEADMAN_SEND_MSG_MISTAKE)
+            return
         lessons = api.get_today()
 
         if len(lessons) == 0:

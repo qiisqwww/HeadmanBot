@@ -17,7 +17,7 @@ class API:
         """
         self.start = datetime(2023, 8, 28)  # в начале следующего семестра эту дату нужно будет поменять
 
-    def regenerate(self, group):
+    def regenerate(self, group) -> bool:
         """
         Получение расписания из API.
 
@@ -31,11 +31,11 @@ class API:
         - Если в запросе были ошибки, возвращает False и сообщение об ошибке.
         """
         self.req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group}").json()
-        if 'errors' in self.req.keys():
-            return False, self.req['errors']
-        return True, 'ok'
+        if 'errors' in list(self.req.keys()):
+            return False
+        return True
 
-    def get_today(self):
+    def get_today(self) -> list:
         """
         Получение расписания на текущий день.
 

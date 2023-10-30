@@ -7,7 +7,7 @@ __all__ = ["START_MESSAGE", "REG_MESSAGE_1_1", "REG_MESSAGE_1_2","REG_MESSAGE_2"
            "STAROSTA_REG_MESSAGE", "UNSUCCESFULL_STAROSTA_REG_MESSAGE", "ALREADY_HEADMAN_MESSAGE",
            "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE",
            "WRONG_PASSWORD", "ALL_MESSAGE", "NONE_MESSAGE", "attendance_for_headmen_message",
-           "NO_LESSONS_TODAY", "CHOOSE_GETSTAT_LESSON", "POLL_MESSAGE"]
+           "NO_LESSONS_TODAY", "CHOOSE_GETSTAT_LESSON", "POLL_MESSAGE", "HEADMAN_SEND_MSG_MISTAKE"  ]
 
 START_MESSAGE = """
 Привет! Я - твоя староста!"""
@@ -66,6 +66,9 @@ CHOOSE_GETSTAT_LESSON = """
 
 POLL_MESSAGE = """
 На какие сегодняшие пары ты придешь?"""
+
+HEADMAN_SEND_MSG_MISTAKE = """
+Произошла какая-то ошибка, и я не могу отправтить тебе информацию!"""
 
 
 def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
