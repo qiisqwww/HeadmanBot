@@ -25,7 +25,7 @@ async def job(bot):
                 day = api.get_today()
             except Exception as e:
                 logging.warning(f"PROBLEMS IN GENERATING LESSONS (API), {e}")
-                return
+                continue
             first_lesson_time = day[0][1]
             con.set_time(first_lesson_time, group[0])
 
@@ -35,4 +35,3 @@ async def job(bot):
                     await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
                 except Exception as e:
                     logging.warning(e)
-
