@@ -23,7 +23,7 @@ async def main():
     dp.include_routers(personal_chat_router, headmen_reg_router,
                        poll_router, callback_router, headmen_cmd_router)  # Добавляем роутеры в диспетчер
 
-    logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG)  # Указываем файл для логирования
+    logging.basicConfig(filename='logs/logs.logs', level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")  # Указываем файл для логирования
 
     with UsersService() as con:
         con.create_table()
