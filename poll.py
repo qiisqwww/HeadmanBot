@@ -35,4 +35,3 @@ async def job(bot):
                     await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
                 except Exception as e:
                     logging.warning(e)
-

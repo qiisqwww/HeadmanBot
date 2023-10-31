@@ -2,11 +2,13 @@ import logging
 
 from aiogram import types, Router, F
 from aiogram.filters import Command
+from aiogram.enums import ParseMode
 
 from work_api import API
 from service import UsersService
 from buttons import load_choose_lesson_kb
-from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON, HEADMAN_SEND_MSG_MISTAKE)
+from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON, HEADMAN_SEND_MSG_MISTAKE,
+                      FAQ_MESSAGE)
 from middlewares import HeadmenCommandsMiddleware
 
 
@@ -37,3 +39,10 @@ async def getstat_command(message: types.Message) -> None:
             return
 
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
+
+
+@router.message(Command("faq"))
+async def faq_command(message: types.Message) -> None:
+    logging.info("faq command")
+
+    await message.answer(FAQ_MESSAGE, parse_mode=ParseMode.MARKDOWN)

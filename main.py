@@ -7,8 +7,8 @@ from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from personal_chat_commands import router as personal_chat_router
-from headmen_reg_commands import router as headmen_reg_router
-from headmen_commands import router as headmen_cmd_router
+from headman_reg_commands import router as headmen_reg_router
+from headman_commands import router as headmen_cmd_router
 from poll import router as poll_router, job
 from service import UsersService
 from callbacks import router as callback_router
