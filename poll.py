@@ -23,10 +23,13 @@ async def job(bot):
             try:
                 api.regenerate(group[0])
                 day = api.get_today()
-                first_lesson_time = day[0][1]
+                if len(day) == 0:
+                    continue
                 print(day)
+                first_lesson_time = day[0][1]
+
             except Exception as e:
-                logging.warning(f"PROBLEMS IN GENERATING LESSONS (API), {e}")
+                logging.warning(f"PROBLEMS IN GENERATING LESSONS (API), {e}, {group[0]}")
                 continue
 
             con.set_time(first_lesson_time, group[0])
@@ -36,4 +39,4 @@ async def job(bot):
                     con.change_attendance(user_id[0], f'start {len(day)}')
                     await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
                 except Exception as e:
-                    logging.warning(e)
+                    logging.warning(f"PROBLEMS IN POLL, {e}")
