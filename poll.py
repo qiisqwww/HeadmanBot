@@ -20,13 +20,15 @@ async def job(bot):
     with UsersService() as con:
         groups = con.get_groups()
         for group in groups:
-            api.regenerate(group[0])
             try:
+                api.regenerate(group[0])
                 day = api.get_today()
+                first_lesson_time = day[0][1]
+                print(day)
             except Exception as e:
                 logging.warning(f"PROBLEMS IN GENERATING LESSONS (API), {e}")
                 continue
-            first_lesson_time = day[0][1]
+
             con.set_time(first_lesson_time, group[0])
 
             for user_id in con.get_user_of_group(group[0]):
