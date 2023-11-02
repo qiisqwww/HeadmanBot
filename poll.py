@@ -36,7 +36,7 @@ async def job(bot):
 
             for user_id in con.get_user_of_group(group[0]):
                 try:
-                    con.change_attendance(user_id[0], f'start {len(day)}')
-                    await bot(user_id[0], POLL_MESSAGE, reply_markup=load_attendance_kb(day))
+                    con.change_attendance(user_id, f'start {len(day)}')
+                    await bot(user_id, POLL_MESSAGE, reply_markup=load_attendance_kb(day))
                 except Exception as e:
                     logging.warning(f"EXCEPTION IN POLL, {e}")
