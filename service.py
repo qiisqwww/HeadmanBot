@@ -75,7 +75,9 @@ class UsersService:
 
     def get_user_of_group(self, group):
         cur = self._con.cursor()
-        return cur.execute("SELECT telegram_id FROM students WHERE study_group = ?", (group, )).fetchall()
+
+        data = cur.execute("SELECT telegram_id FROM students WHERE study_group = ?", (group, )).fetchall()
+        return [user[0] for user in data]
 
     def get_user_of_id_tg(self, tg_id: int):
         cur = self._con.cursor()
