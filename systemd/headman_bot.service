@@ -4,6 +4,6 @@ Description=Headman bot
 
 [Service]
 Type=simple
-ExecStart=/opt/headmanbot/scripts/start.sh
-ExecStop=/opt/headmanbot/scripts/down.sh
+ExecStart=/var/www/headmanbot/scripts/start.sh
+ExecStop=/var/www/headmanbot/scripts/down.sh
 Restart=always

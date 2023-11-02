@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo docker-compose -f /opt/headmanbot/docker-compose.yml down
+sudo docker-compose -f /var/www/headmanbot/docker-compose.yml down

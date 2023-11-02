@@ -1,5 +1,4 @@
 from os import getenv
-from typing import NoReturn, Self
 
 __all__ = [
     "UndefinedEnvError",
@@ -18,7 +17,7 @@ class UndefinedEnvError(Exception):
 
 
 class StrEnv(str):
-    def __new__(cls, env_name: str) -> Self | NoReturn:
+    def __new__(cls, env_name: str):
         env = getenv(env_name, None)
         if env is None:
             raise UndefinedEnvError(env_name)
