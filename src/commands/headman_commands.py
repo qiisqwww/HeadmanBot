@@ -15,18 +15,20 @@ from middlewares import HeadmenCommandsMiddleware
 from services import UsersService
 from work_api import API
 
-__all__ = ["router"]
+__all__ = [
+    "headman_router",
+]
 
 
-router = Router()
+headman_router = Router()
 
-router.message.middleware(HeadmenCommandsMiddleware())
-router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
+headman_router.message.middleware(HeadmenCommandsMiddleware())
+headman_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
 api = API()
 
 
-@router.message(Command("getstat"))
+@headman_router.message(Command("getstat"))
 async def getstat_command(message: types.Message) -> None:
     logging.info("getstat command")
 
@@ -44,7 +46,7 @@ async def getstat_command(message: types.Message) -> None:
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
 
 
-@router.message(Command("faq"))
+@headman_router.message(Command("faq"))
 async def faq_command(message: types.Message) -> None:
     logging.info("faq command")
 

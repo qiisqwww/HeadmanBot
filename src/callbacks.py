@@ -10,16 +10,16 @@ from services import UsersService
 from work_api import API
 
 __all__ = [
-    "router",
+    "callback_router",
 ]
 
 
-router = Router()
-router.callback_query.middleware(CallbackMiddleware())
+callback_router = Router()
+callback_router.callback_query.middleware(CallbackMiddleware())
 api = API()
 
 
-@router.callback_query(F.data.startswith("attendance"), flags={"callback": "poll"})
+@callback_router.callback_query(F.data.startswith("attendance"), flags={"callback": "poll"})
 async def check_in_callback(callback: types.CallbackQuery):
     logging.info("check_in callback handled")
     callback_data = callback.data.split("_")[1]
@@ -62,7 +62,7 @@ async def check_in_callback(callback: types.CallbackQuery):
         )
 
 
-@router.callback_query(flags={"callback": "attendance"})
+@callback_router.callback_query(flags={"callback": "attendance"})
 async def attendance_send_callback(callback: types.CallbackQuery):
     logging.info("attendance callback handled")
 

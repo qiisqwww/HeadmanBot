@@ -17,16 +17,18 @@ from services import UsersService
 from states import RegStates
 from work_api import API
 
-__all__ = ["router"]
+__all__ = [
+    "personal_chat_router",
+]
 
 
-router = Router()
+personal_chat_router = Router()
 
-router.message.middleware(RegMiddleware())
-router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
+personal_chat_router.message.middleware(RegMiddleware())
+personal_chat_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
 
-@router.message(Command("start"))
+@personal_chat_router.message(Command("start"))
 async def start_cmd(message: types.Message, state: FSMContext) -> None:
     logging.info("start command")
 
@@ -34,7 +36,7 @@ async def start_cmd(message: types.Message, state: FSMContext) -> None:
     await state.set_state(RegStates.surname_input)
 
 
-@router.message(RegStates.surname_input, F.text)
+@personal_chat_router.message(RegStates.surname_input, F.text)
 async def handling_surname(message: types.Message, state: FSMContext) -> None:
     await state.update_data(surname=message.text)
     logging.info("surname handled")
@@ -43,7 +45,7 @@ async def handling_surname(message: types.Message, state: FSMContext) -> None:
     await state.set_state(RegStates.name_input)
 
 
-@router.message(RegStates.name_input, F.text)
+@personal_chat_router.message(RegStates.name_input, F.text)
 async def handling_name(message: types.Message, state: FSMContext) -> None:
     await state.update_data(name=message.text)
     logging.info("name handled")
@@ -52,7 +54,7 @@ async def handling_name(message: types.Message, state: FSMContext) -> None:
     await state.set_state(RegStates.group_input)
 
 
-@router.message(RegStates.group_input, F.text)
+@personal_chat_router.message(RegStates.group_input, F.text)
 async def handling_group(message: types.Message, state: FSMContext) -> None:
     api = API()
     if not api.regenerate(message.text):

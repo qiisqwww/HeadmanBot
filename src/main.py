@@ -5,11 +5,9 @@ from pathlib import Path
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from callbacks import router as callback_router
+from callbacks import callback_router
+from commands import headman_router, headmen_reg_router, personal_chat_router
 from config import BOT_TOKEN
-from headman_commands import router as headmen_cmd_router
-from headman_reg_commands import router as headmen_reg_router
-from personal_chat_commands import router as personal_chat_router
 from poll import router as poll_router
 from sending_scheduler import SendingScheduler
 from services import UsersService
@@ -29,17 +27,16 @@ def init_logger() -> None:
 
 
 async def main():
-    storage = MemoryStorage()  # Создаем хранилище
+    bot = Bot(BOT_TOKEN)  # Получаем токенstorage бота из файла с конфигом
 
-    bot = Bot(BOT_TOKEN)  # Получаем токен бота из файла с конфигом
-    dp = Dispatcher(storage=storage)  # Создаем диспетчер и передаем ему храналище
+    dp = Dispatcher(storage=MemoryStorage())  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(
         personal_chat_router,
         headmen_reg_router,
         poll_router,
         callback_router,
-        headmen_cmd_router,
-    )  # Добавляем роутеры в диспетчер
+        headman_router,
+    )  # Добавляем роутеры в диспатчер
 
     init_logger()
 

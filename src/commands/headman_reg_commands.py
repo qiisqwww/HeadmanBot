@@ -16,16 +16,16 @@ from services import UsersService
 from states import SetHeadman
 
 __all__ = [
-    "router",
+    "headmen_reg_router",
 ]
 
 
-router = Router()
+headmen_reg_router = Router()
 
-router.message.middleware(HeadmenRegMiddleware())
+headmen_reg_router.message.middleware(HeadmenRegMiddleware())
 
 
-@router.message(Command("set_headman"))
+@headmen_reg_router.message(Command("set_headman"))
 async def start_headmen(message: types.Message, state: FSMContext) -> None:
     await message.answer(text=PASS_ASK_MESSAGE)
     logging.info("set_headman command, password was asked")
@@ -33,7 +33,7 @@ async def start_headmen(message: types.Message, state: FSMContext) -> None:
     await state.set_state(SetHeadman.get_password)
 
 
-@router.message(SetHeadman.get_password, F.text)
+@headmen_reg_router.message(SetHeadman.get_password, F.text)
 async def get_password(message: types.Message, state: FSMContext) -> None:
     logging.info("password was handled")
     if message.text == HEADMAN_PASSWORD:
