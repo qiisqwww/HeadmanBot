@@ -7,3 +7,5 @@ services:
     build: 
       dockerfile: Dockerfile
       context: .
+    volumes:
+      - ./src:/app
