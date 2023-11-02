@@ -1,0 +1,29 @@
+[tool.pylint]
+max-line-length = 120
+disable = [
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "too-few-public-methods",
+    "cyclic-import",
+    "unspecified-encoding",
+    "redefined-outer-name",
+    "useless-return",
+    "W0511",
+    "C0103",
+    "R0801",
+    "E0401"
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.black]
+color = true
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = true
