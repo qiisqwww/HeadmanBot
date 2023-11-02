@@ -43,7 +43,7 @@ class UsersService:
         cur = self._con.cursor()
 
         try:
-            cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, 0, 0, 0)",
+            cur.execute("INSERT INTO students VALUES(?, ?, ?, ?, 0, 0, 0, 0)",
                         (tg_id, user_name, name_surname, study_group))  # Добавляем строчку в таблицу
 
             logging.info("user was registered in database")
