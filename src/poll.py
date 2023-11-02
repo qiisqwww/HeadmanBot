@@ -1,12 +1,12 @@
-from aiogram import Router, F
-
-from buttons import load_attendance_kb
-from work_api import API
-from service import UsersService
-from middlewares import HeadmenCommandsMiddleware
-from messages import POLL_MESSAGE
 import logging
 
+from aiogram import F, Router
+
+from buttons import load_attendance_kb
+from messages import POLL_MESSAGE
+from middlewares import HeadmenCommandsMiddleware
+from services import UsersService
+from work_api import API
 
 router = Router()
 
@@ -36,7 +36,7 @@ async def job(bot):
 
             for user_id in con.get_user_of_group(group[0]):
                 try:
-                    con.change_attendance(user_id, f'start {len(day)}')
+                    con.change_attendance(user_id, f"start {len(day)}")
                     await bot(user_id, POLL_MESSAGE, reply_markup=load_attendance_kb(day))
                 except Exception as e:
                     logging.warning(f"EXCEPTION IN POLL, {e}")

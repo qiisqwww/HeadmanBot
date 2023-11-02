@@ -1,16 +1,21 @@
 import logging
 
-from aiogram import types, Router, F
+from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-from service import UsersService
-from states import RegStates
-from messages import (START_MESSAGE, REG_MESSAGE_1_1, REG_MESSAGE_1_2, REG_MESSAGE_2,
-                      SUCCESFULLY_REG_MESSAGE, UNSUCCESFULLY_REG_MESSAGE)
+from messages import (
+    REG_MESSAGE_1_1,
+    REG_MESSAGE_1_2,
+    REG_MESSAGE_2,
+    START_MESSAGE,
+    SUCCESFULLY_REG_MESSAGE,
+    UNSUCCESFULLY_REG_MESSAGE,
+)
 from middlewares import RegMiddleware
+from services import UsersService
+from states import RegStates
 from work_api import API
-
 
 __all__ = ["router"]
 
@@ -25,7 +30,7 @@ router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отв�
 async def start_cmd(message: types.Message, state: FSMContext) -> None:
     logging.info("start command")
 
-    await message.answer(text=START_MESSAGE + '\n' + REG_MESSAGE_1_1)
+    await message.answer(text=START_MESSAGE + "\n" + REG_MESSAGE_1_1)
     await state.set_state(RegStates.surname_input)
 
 
@@ -34,7 +39,7 @@ async def handling_surname(message: types.Message, state: FSMContext) -> None:
     await state.update_data(surname=message.text)
     logging.info("surname handled")
 
-    await message.answer(text = REG_MESSAGE_1_2)
+    await message.answer(text=REG_MESSAGE_1_2)
     await state.set_state(RegStates.name_input)
 
 
@@ -61,8 +66,12 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
     user_data = await state.get_data()
 
     with UsersService() as con:
-        isreg: bool = con.registration(message.from_user.id, message.from_user.username,
-                                       user_data["surname"] + " " + user_data["name"], user_data["group"])
+        isreg: bool = con.registration(
+            message.from_user.id,
+            message.from_user.username,
+            user_data["surname"] + " " + user_data["name"],
+            user_data["group"],
+        )
 
         if isreg:
             await message.answer(text=SUCCESFULLY_REG_MESSAGE)

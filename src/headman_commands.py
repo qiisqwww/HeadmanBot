@@ -1,16 +1,19 @@
 import logging
 
-from aiogram import types, Router, F
-from aiogram.filters import Command
+from aiogram import F, Router, types
 from aiogram.enums import ParseMode
+from aiogram.filters import Command
 
-from work_api import API
-from service import UsersService
 from buttons import load_choose_lesson_kb
-from messages import (NO_LESSONS_TODAY, CHOOSE_GETSTAT_LESSON, HEADMAN_SEND_MSG_MISTAKE,
-                      FAQ_MESSAGE)
+from messages import (
+    CHOOSE_GETSTAT_LESSON,
+    FAQ_MESSAGE,
+    HEADMAN_SEND_MSG_MISTAKE,
+    NO_LESSONS_TODAY,
+)
 from middlewares import HeadmenCommandsMiddleware
-
+from services import UsersService
+from work_api import API
 
 __all__ = ["router"]
 

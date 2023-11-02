@@ -1,28 +1,27 @@
-import logging
 import datetime
+import logging
+from typing import Any, Awaitable, Callable, Dict
 
-from aiogram.dispatcher.flags import get_flag
 from aiogram import BaseMiddleware
+from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
-from typing import Callable, Dict, Any, Awaitable
 
-from messages import (ALREADY_REGISTERED_MESSAGE, ALREADY_HEADMAN_MESSAGE, MUST_BE_REG_MESSAGE,
-                      MUST_BE_HEADMEN_MESSAGE)
-from service import UsersService
+from messages import (
+    ALREADY_HEADMAN_MESSAGE,
+    ALREADY_REGISTERED_MESSAGE,
+    MUST_BE_HEADMEN_MESSAGE,
+    MUST_BE_REG_MESSAGE,
+)
+from services import UsersService
 
-
-__all__ = ["RegMiddleware", "HeadmenRegMiddleware",
-           "HeadmenCommandsMiddleware", "CallbackMiddleware"]
+__all__ = ["RegMiddleware", "HeadmenRegMiddleware", "HeadmenCommandsMiddleware", "CallbackMiddleware"]
 
 
 class RegMiddleware(BaseMiddleware):
     async def __call__(
-        self,
-        handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-        event: Message,
-        data: Dict[str, Any]
+        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
     ) -> Any:
-        logging.info('registration middleware started')
+        logging.info("registration middleware started")
 
         user_id = event.from_user.id
 
@@ -38,12 +37,9 @@ class RegMiddleware(BaseMiddleware):
 
 class HeadmenRegMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-            event: Message,
-            data: Dict[str, Any]
+        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
     ) -> Any:
-        logging.info('headmen middleware started')
+        logging.info("headmen middleware started")
 
         user_id = event.from_user.id
 
@@ -64,17 +60,13 @@ class HeadmenRegMiddleware(BaseMiddleware):
 
 class HeadmenCommandsMiddleware(BaseMiddleware):
     async def __call__(
-        self,
-        handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-        event: Message,
-        data: Dict[str, Any]
+        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
     ) -> Any:
-        logging.info('headmen commands middleware started')
+        logging.info("headmen commands middleware started")
 
         user_id = event.from_user.id
 
         with UsersService() as con:
-
             if not con.is_registered(user_id):
                 await event.reply(MUST_BE_REG_MESSAGE)
                 logging.warning("headmen commands middleware finished, user must be registered")
@@ -91,10 +83,7 @@ class HeadmenCommandsMiddleware(BaseMiddleware):
 
 class CallbackMiddleware(BaseMiddleware):
     async def __call__(
-        self,
-        handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-        event: Message,
-        data: Dict[str, Any]
+        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
     ) -> Any:
         logging.info("callback middleware started")
 

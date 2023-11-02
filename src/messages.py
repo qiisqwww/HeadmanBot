@@ -1,13 +1,31 @@
 from aiogram import types
 
-from service import UsersService
+from services import UsersService
 
-__all__ = ["START_MESSAGE", "REG_MESSAGE_1_1", "REG_MESSAGE_1_2","REG_MESSAGE_2",
-           "SUCCESFULLY_REG_MESSAGE", "UNSUCCESFULLY_REG_MESSAGE", "PASS_ASK_MESSAGE",
-           "STAROSTA_REG_MESSAGE", "UNSUCCESFULL_STAROSTA_REG_MESSAGE", "ALREADY_HEADMAN_MESSAGE",
-           "MUST_BE_REG_MESSAGE", "MUST_BE_HEADMEN_MESSAGE", "ALREADY_REGISTERED_MESSAGE",
-           "WRONG_PASSWORD", "ALL_MESSAGE", "NONE_MESSAGE", "attendance_for_headmen_message",
-           "NO_LESSONS_TODAY", "CHOOSE_GETSTAT_LESSON", "POLL_MESSAGE", "HEADMAN_SEND_MSG_MISTAKE", "FAQ_MESSAGE"]
+__all__ = [
+    "START_MESSAGE",
+    "REG_MESSAGE_1_1",
+    "REG_MESSAGE_1_2",
+    "REG_MESSAGE_2",
+    "SUCCESFULLY_REG_MESSAGE",
+    "UNSUCCESFULLY_REG_MESSAGE",
+    "PASS_ASK_MESSAGE",
+    "STAROSTA_REG_MESSAGE",
+    "UNSUCCESFULL_STAROSTA_REG_MESSAGE",
+    "ALREADY_HEADMAN_MESSAGE",
+    "MUST_BE_REG_MESSAGE",
+    "MUST_BE_HEADMEN_MESSAGE",
+    "ALREADY_REGISTERED_MESSAGE",
+    "WRONG_PASSWORD",
+    "ALL_MESSAGE",
+    "NONE_MESSAGE",
+    "attendance_for_headmen_message",
+    "NO_LESSONS_TODAY",
+    "CHOOSE_GETSTAT_LESSON",
+    "POLL_MESSAGE",
+    "HEADMAN_SEND_MSG_MISTAKE",
+    "FAQ_MESSAGE",
+]
 
 START_MESSAGE = """
 Привет! Я - помощник твоей старосты"""
@@ -95,9 +113,9 @@ FAQ_MESSAGE = """
 
 
 def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
-    visit_text = 'Придут:\n'
-    none_text = 'Не отметились:\n'
-    no_text = 'Не придут:\n'
+    visit_text = "Придут:\n"
+    none_text = "Не отметились:\n"
+    no_text = "Не придут:\n"
 
     lesson = int(callback.data)
 
@@ -109,17 +127,36 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
         group = con.get_group_of_id_tg(callback.from_user.id)
 
         for user_id in con.get_user_of_group(group):
-            if len(con.get_lessons(user_id).replace('0', '')) == 0:
-                none_checked_in.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
+            if len(con.get_lessons(user_id).replace("0", "")) == 0:
+                none_checked_in.append(
+                    [
+                        str(con.get_user_of_id_tg(user_id)[2]),
+                        f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                    ]
+                )
                 continue
             match con.get_lessons(user_id)[lesson]:
-                case '0':
-                    no_visit.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
-                case '1':
-                    visit.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
-                case '2':
-                    no_visit.append([str(con.get_user_of_id_tg(user_id)[2]),
-                                        f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
+                case "0":
+                    no_visit.append(
+                        [
+                            str(con.get_user_of_id_tg(user_id)[2]),
+                            f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                        ]
+                    )
+                case "1":
+                    visit.append(
+                        [
+                            str(con.get_user_of_id_tg(user_id)[2]),
+                            f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                        ]
+                    )
+                case "2":
+                    no_visit.append(
+                        [
+                            str(con.get_user_of_id_tg(user_id)[2]),
+                            f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                        ]
+                    )
 
         for user in sorted(none_checked_in, key=lambda s: s[0]):
             none_text += user[1]
@@ -128,6 +165,6 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
         for user in sorted(no_visit, key=lambda s: s[0]):
             no_text += user[1]
 
-        attendance = none_text + '\n' + visit_text + '\n' + no_text + '\n' + "Что-то еще?"
+        attendance = none_text + "\n" + visit_text + "\n" + no_text + "\n" + "Что-то еще?"
 
         return attendance
