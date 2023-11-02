@@ -10,10 +10,10 @@ __all__ = ["START_MESSAGE", "REG_MESSAGE_1_1", "REG_MESSAGE_1_2","REG_MESSAGE_2"
            "NO_LESSONS_TODAY", "CHOOSE_GETSTAT_LESSON", "POLL_MESSAGE", "HEADMAN_SEND_MSG_MISTAKE", "FAQ_MESSAGE"]
 
 START_MESSAGE = """
-Привет! Я - твоя староста!"""
+Привет! Я - помощник твоей старосты"""
 
 REG_MESSAGE_1_1 = """
-Для начала, введи свою фамилию?"""
+Для начала, введи свою фамилию"""
 
 REG_MESSAGE_1_2 = """
 Теперь отправь мне свое имя"""
@@ -48,10 +48,11 @@ MUST_BE_REG_MESSAGE = """
 
 MUST_BE_HEADMEN_MESSAGE = """
 Для выполнения данной команды вы должны быть старостой.
-Для регистрации как староста - /set_headmen"""
+Для регистрации как староста - /set_headman"""
 
 WRONG_PASSWORD = """
-Вы ввели неверный пароль!"""
+Вы ввели неверный пароль!
+Если вы староста, но у вас нет пароля - обратитесь к @qiisqwww"""
 
 ALL_MESSAGE = """
 Вы посетите все пары"""
@@ -106,15 +107,12 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
     with UsersService() as con:
         group = con.get_group_of_id_tg(callback.from_user.id)
 
-        for user in con.get_user_of_group(group):
-            user_id = user[0]
+        for user_id in con.get_user_of_group(group):
             if len(con.get_lessons(user_id).replace('0', '')) == 0:
                 none_checked_in.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
                 continue
             match con.get_lessons(user_id)[lesson]:
-                case '0':  # мне лень при нажатии на кнопку я приду на пару n обновлять всю
-                    # бд тем, что я не приду, поэтому я встроил такую проверку, да пиздец,
-                    # но я на семинаре по процедурке, у меня есть ещё пара дел
+                case '0':
                     no_visit.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
                 case '1':
                     visit.append([str(con.get_user_of_id_tg(user_id)[2]),f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n'])
