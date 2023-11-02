@@ -5,7 +5,7 @@ services:
     env_file:
       - ./.env/.dev.env
     build: 
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: .
     volumes:
       - ./src:/app

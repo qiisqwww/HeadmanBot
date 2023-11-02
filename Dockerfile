@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Start bot with this command. Will be called when docker container will be started.
-CMD ["python", "src/main.py"]
+CMD ["python", "main.py"]
