@@ -3,7 +3,8 @@ logs.logs
 .env.txt
 __pycache__
 .idea
-database
 database.db
 bot.db
 ./config/.env.test
+logs
+.env/
