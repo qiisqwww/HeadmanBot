@@ -57,7 +57,7 @@ async def handling_name(message: types.Message, state: FSMContext) -> None:
 @personal_chat_router.message(RegStates.group_input, F.text)
 async def handling_group(message: types.Message, state: FSMContext) -> None:
     api = MireaScheduleApi()
-    if not api.group_exists(message.text):
+    if not await api.group_exists(message.text):
         await message.answer(text="Такой группы нет!")
         await state.set_state(RegStates.group_input)
         return

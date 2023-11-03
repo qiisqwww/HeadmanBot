@@ -38,7 +38,7 @@ async def check_in_callback(callback: types.CallbackQuery):
         data = [str(i[1:-1]) for i in callback_data[1:-1].split(", ")]
 
         group = con.get_group_of_id_tg(callback.from_user.id)
-        lessons = api.get_schedule(group)
+        lessons = await api.get_schedule(group)
 
         lessons_in_states = con.get_lessons(callback.from_user.id)
         already_chosen_lessons_in_numbers = []
@@ -67,7 +67,7 @@ async def attendance_send_callback(callback: types.CallbackQuery):
 
     with UsersService() as con:
         group = con.get_group_of_id_tg(callback.from_user.id)
-        lessons = api.get_schedule(group)
+        lessons = await api.get_schedule(group)
 
         await callback.message.edit_text(
             text=f"{lessons[int(callback.data)][0]}, "

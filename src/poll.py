@@ -21,7 +21,7 @@ async def job(bot):
         groups = con.get_groups()
         for group in groups:
             try:
-                day = api.get_schedule(group[0])
+                day = await api.get_schedule(group[0])
 
             except Exception as e:
                 logging.warning(f"EXCEPTION IN GENERATING LESSONS (API), {e}, {group[0]}")

@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from typing import Any, Generator, Iterable
 
-import requests
+from httpx import AsyncClient
 
 __all__ = [
     "MireaScheduleApi",
@@ -13,19 +13,22 @@ class MireaScheduleApi:
     _MAX_LESSON_NAME_LEN: int = 16
     _CURRENT_SEMESTR_START: datetime = datetime(year=2023, month=8, day=28)
 
-    def get_schedule(self, group_name: str, day: datetime | None = None) -> list[tuple[str, str]]:
+    async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[tuple[str, str]]:
         """By default return today schedule."""
         day = day or datetime.now()
 
-        json_schedule = self._get_json(group_name)
+        json_schedule = await self._get_json(group_name)
         return self._parse_schedule(json_schedule, day)
 
-    def group_exists(self, group_name: str) -> bool:
-        response = requests.get(self._URL.format(group_name=group_name)).json()
-        return "errors" not in response
+    async def group_exists(self, group_name: str) -> bool:
+        async with AsyncClient() as client:
+            response = await client.get(self._URL.format(group_name=group_name))
+            return "errors" not in response.json()
 
-    def _get_json(self, group_name: str) -> dict[str, Any]:
-        return requests.get(self._URL.format(group_name=group_name)).json()
+    async def _get_json(self, group_name: str) -> dict[str, Any]:
+        async with AsyncClient() as client:
+            response = await client.get(self._URL.format(group_name=group_name))
+            return response.json()
 
     def _remove_words(self, string: str, remove_words: int) -> str:
         words = string.split()
