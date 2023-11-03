@@ -12,8 +12,8 @@ from ..messages import (
     NO_LESSONS_TODAY,
 )
 from ..middlewares import HeadmenCommandsMiddleware
+from ..mirea_api import MireaScheduleApi
 from ..services import UsersService
-from ..work_api import API
 
 __all__ = [
     "headman_router",
@@ -25,7 +25,7 @@ headman_router = Router()
 headman_router.message.middleware(HeadmenCommandsMiddleware())
 headman_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
-api = API()
+api = MireaScheduleApi()
 
 
 @headman_router.message(Command("getstat"))
@@ -34,10 +34,10 @@ async def getstat_command(message: types.Message) -> None:
 
     with UsersService() as con:
         group = con.get_group_of_id_tg(message.from_user.id)
-        if not api.regenerate(group):
+        if not api.group_exists(group):
             await message.answer(HEADMAN_SEND_MSG_MISTAKE)
             return
-        lessons = api.get_today()
+        lessons = api.get_schedule(group)
 
         if len(lessons) == 0:
             await message.answer(NO_LESSONS_TODAY)

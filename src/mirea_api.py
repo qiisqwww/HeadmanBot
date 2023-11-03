@@ -20,6 +20,10 @@ class MireaScheduleApi:
         json_schedule = self._get_json(group_name)
         return self._parse_schedule(json_schedule, day)
 
+    def group_exists(self, group_name: str) -> bool:
+        response = requests.get(self._URL.format(group_name=group_name)).json()
+        return "errors" not in response
+
     def _get_json(self, group_name: str) -> dict[str, Any]:
         return requests.get(self._URL.format(group_name=group_name)).json()
 

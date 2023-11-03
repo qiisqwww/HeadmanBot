@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import pytest
 import requests
 
 from src.mirea_api import MireaScheduleApi
@@ -24,7 +25,7 @@ class MockResponse:
             return json.loads(json_data.read())
 
 
-def test_mirea_api(monkeypatch) -> None:
+def test_mirea_api_parsing(monkeypatch) -> None:
     def fake_get(_: str) -> MockResponse:
         return MockResponse()
 
@@ -33,3 +34,15 @@ def test_mirea_api(monkeypatch) -> None:
 
     for day in daterange(datetime(year=2023, month=10, day=1), datetime(year=2023, month=10, day=31)):
         assert api.get_schedule(GROUP_NAME, day) == PARSE_RESULT[day]
+
+
+@pytest.mark.parametrize(
+    "group_name,exists",
+    [
+        ("ИКБО-40-23", True),
+        ("SOME_GROUP", False),
+    ],
+)
+def test_mirea_api_group_exists(group_name: str, exists: bool) -> None:
+    api = MireaScheduleApi()
+    assert api.group_exists(group_name) == exists

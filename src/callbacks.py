@@ -6,8 +6,8 @@ from aiogram.enums import ParseMode
 from .buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
 from .messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
 from .middlewares import CallbackMiddleware
+from .mirea_api import MireaScheduleApi
 from .services import UsersService
-from .work_api import API
 
 __all__ = [
     "callback_router",
@@ -16,7 +16,7 @@ __all__ = [
 
 callback_router = Router()
 callback_router.callback_query.middleware(CallbackMiddleware())
-api = API()
+api = MireaScheduleApi()
 
 
 @callback_router.callback_query(F.data.startswith("attendance"), flags={"callback": "poll"})
@@ -38,8 +38,7 @@ async def check_in_callback(callback: types.CallbackQuery):
         data = [str(i[1:-1]) for i in callback_data[1:-1].split(", ")]
 
         group = con.get_group_of_id_tg(callback.from_user.id)
-        api.regenerate(group)
-        lessons = api.get_today()
+        lessons = api.get_schedule(group)
 
         lessons_in_states = con.get_lessons(callback.from_user.id)
         already_chosen_lessons_in_numbers = []
@@ -68,8 +67,7 @@ async def attendance_send_callback(callback: types.CallbackQuery):
 
     with UsersService() as con:
         group = con.get_group_of_id_tg(callback.from_user.id)
-        api.regenerate(group)
-        lessons = api.get_today()
+        lessons = api.get_schedule(group)
 
         await callback.message.edit_text(
             text=f"{lessons[int(callback.data)][0]}, "

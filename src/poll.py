@@ -5,15 +5,15 @@ from aiogram import F, Router
 from .buttons import load_attendance_kb
 from .messages import POLL_MESSAGE
 from .middlewares import HeadmenCommandsMiddleware
+from .mirea_api import MireaScheduleApi
 from .services import UsersService
-from .work_api import API
 
 router = Router()
 
 router.message.middleware(HeadmenCommandsMiddleware())
 router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
-api = API()
+api = MireaScheduleApi()
 
 
 async def job(bot):
@@ -21,8 +21,7 @@ async def job(bot):
         groups = con.get_groups()
         for group in groups:
             try:
-                api.regenerate(group[0])
-                day = api.get_today()
+                day = api.get_schedule(group[0])
 
             except Exception as e:
                 logging.warning(f"EXCEPTION IN GENERATING LESSONS (API), {e}, {group[0]}")

@@ -8,3 +8,5 @@ bot.db
 ./config/.env.test
 logs
 .env/
+.coverage
+.pytest_cache
