@@ -1,6 +1,9 @@
-from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.state import State, StatesGroup
 
-__all__ = ["RegStates", "SetHeadman"]
+__all__ = [
+    "RegStates",
+    "SetHeadman",
+]
 
 
 class RegStates(StatesGroup):

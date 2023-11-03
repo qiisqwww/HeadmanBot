@@ -1,16 +1,15 @@
-import asyncio
 import logging
 from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from callbacks import callback_router
-from commands import headman_router, headmen_reg_router, personal_chat_router
-from config import BOT_TOKEN
-from poll import router as poll_router
-from sending_scheduler import SendingScheduler
-from services import UsersService
+from .callbacks import callback_router
+from .commands import headman_router, headmen_reg_router, personal_chat_router
+from .config import BOT_TOKEN
+from .poll import router as poll_router
+from .sending_scheduler import SendingScheduler
+from .services import UsersService
 
 LOGGING_PATH = Path("logs/logs.log")
 
@@ -52,7 +51,3 @@ async def main():
     await dp.start_polling(bot)  # Запуск бота
 
     logging.info("bot was turned off")
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

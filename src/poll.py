@@ -2,11 +2,11 @@ import logging
 
 from aiogram import F, Router
 
-from buttons import load_attendance_kb
-from messages import POLL_MESSAGE
-from middlewares import HeadmenCommandsMiddleware
-from services import UsersService
-from work_api import API
+from .buttons import load_attendance_kb
+from .messages import POLL_MESSAGE
+from .middlewares import HeadmenCommandsMiddleware
+from .services import UsersService
+from .work_api import API
 
 router = Router()
 

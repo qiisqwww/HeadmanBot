@@ -1,17 +1,21 @@
-from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
-                           InlineKeyboardButton, InlineKeyboardMarkup)
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def load_attendance_kb(lessons: list) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    buttons = [InlineKeyboardButton(text="Буду на всех", callback_data="attendance_all"),
-               InlineKeyboardButton(text="Меня сегодня не будет", callback_data="attendance_none")]
+    buttons = [
+        InlineKeyboardButton(text="Буду на всех", callback_data="attendance_all"),
+        InlineKeyboardButton(text="Меня сегодня не будет", callback_data="attendance_none"),
+    ]
 
     for i in range(len(lessons)):
-        buttons.append(InlineKeyboardButton(text=f"Буду на {lessons[i][1]} {lessons[i][0]}",
-                                            callback_data=f"attendance_{lessons[i]}"))
+        buttons.append(
+            InlineKeyboardButton(
+                text=f"Буду на {lessons[i][1]} {lessons[i][0]}", callback_data=f"attendance_{lessons[i]}"
+            )
+        )
 
     builder.add(*buttons)
     builder.adjust(2)
@@ -24,8 +28,11 @@ def load_choose_lesson_kb(lessons: list) -> InlineKeyboardMarkup:
     buttons = []
 
     for lesson in range(len(lessons)):
-        buttons.append(InlineKeyboardButton(text=f'{lesson + 1}) {lessons[lesson][0]} {lessons[lesson][1]}',
-                                            callback_data=str(lesson)))
+        buttons.append(
+            InlineKeyboardButton(
+                text=f"{lesson + 1}) {lessons[lesson][0]} {lessons[lesson][1]}", callback_data=str(lesson)
+            )
+        )
 
     builder.add(*buttons)
     builder.adjust(1)

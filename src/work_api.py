@@ -1,4 +1,5 @@
 from datetime import *
+
 import requests
 
 
@@ -31,7 +32,7 @@ class API:
         - Если в запросе были ошибки, возвращает False и сообщение об ошибке.
         """
         self.req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group}").json()
-        if 'errors' in list(self.req.keys()):
+        if "errors" in list(self.req.keys()):
             return False
         return True
 
@@ -50,18 +51,18 @@ class API:
         self.day = []
         now = datetime.now()
         week, now_day = (now - self.start).days // 7 + 1, now.weekday() + 1
-        for lesson in self.req['lessons']:
-            if week in lesson['weeks'] and now_day == lesson['weekday']:
+        for lesson in self.req["lessons"]:
+            if week in lesson["weeks"] and now_day == lesson["weekday"]:
                 text = []
                 count = 0
-                for i in lesson['discipline']['name'].split():
+                for i in lesson["discipline"]["name"].split():
                     if count + len(i) + 1 <= 17:
                         text.append(i)
                         count += len(i) + 1
                     else:
-                        text.append('...')
+                        text.append("...")
                         break
-                self.day.append([' '.join(text), ':'.join(lesson['calls']['time_start'].split(':')[:2])])
+                self.day.append([" ".join(text), ":".join(lesson["calls"]["time_start"].split(":")[:2])])
 
         seen = set()
         seen_add = seen.add

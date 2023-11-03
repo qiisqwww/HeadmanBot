@@ -4,7 +4,7 @@ from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-from messages import (
+from ..messages import (
     REG_MESSAGE_1_1,
     REG_MESSAGE_1_2,
     REG_MESSAGE_2,
@@ -12,10 +12,10 @@ from messages import (
     SUCCESFULLY_REG_MESSAGE,
     UNSUCCESFULLY_REG_MESSAGE,
 )
-from middlewares import RegMiddleware
-from services import UsersService
-from states import RegStates
-from work_api import API
+from ..middlewares import RegMiddleware
+from ..services import UsersService
+from ..states import RegStates
+from ..work_api import API
 
 __all__ = [
     "personal_chat_router",

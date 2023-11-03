@@ -1,8 +1,8 @@
 from aiogram import Bot
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from config import DEBUG
-from poll import job
+from .config import DEBUG
+from .poll import job
 
 __all__ = [
     "SendingScheduler",

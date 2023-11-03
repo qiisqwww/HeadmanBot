@@ -3,11 +3,11 @@ import logging
 from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 
-from buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
-from messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
-from middlewares import CallbackMiddleware
-from services import UsersService
-from work_api import API
+from .buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
+from .messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
+from .middlewares import CallbackMiddleware
+from .services import UsersService
+from .work_api import API
 
 __all__ = [
     "callback_router",

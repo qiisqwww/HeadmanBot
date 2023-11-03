@@ -4,16 +4,16 @@ from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
 
-from buttons import load_choose_lesson_kb
-from messages import (
+from ..buttons import load_choose_lesson_kb
+from ..messages import (
     CHOOSE_GETSTAT_LESSON,
     FAQ_MESSAGE,
     HEADMAN_SEND_MSG_MISTAKE,
     NO_LESSONS_TODAY,
 )
-from middlewares import HeadmenCommandsMiddleware
-from services import UsersService
-from work_api import API
+from ..middlewares import HeadmenCommandsMiddleware
+from ..services import UsersService
+from ..work_api import API
 
 __all__ = [
     "headman_router",

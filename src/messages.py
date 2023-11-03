@@ -1,6 +1,6 @@
 from aiogram import types
 
-from services import UsersService
+from .services import UsersService
 
 __all__ = [
     "START_MESSAGE",

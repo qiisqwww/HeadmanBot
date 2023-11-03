@@ -4,16 +4,16 @@ from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-from config import HEADMAN_PASSWORD
-from messages import (
+from ..config import HEADMAN_PASSWORD
+from ..messages import (
     PASS_ASK_MESSAGE,
     STAROSTA_REG_MESSAGE,
     UNSUCCESFULL_STAROSTA_REG_MESSAGE,
     WRONG_PASSWORD,
 )
-from middlewares import HeadmenRegMiddleware
-from services import UsersService
-from states import SetHeadman
+from ..middlewares import HeadmenRegMiddleware
+from ..services import UsersService
+from ..states import SetHeadman
 
 __all__ = [
     "headmen_reg_router",

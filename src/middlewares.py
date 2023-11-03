@@ -6,13 +6,13 @@ from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
 
-from messages import (
+from .messages import (
     ALREADY_HEADMAN_MESSAGE,
     ALREADY_REGISTERED_MESSAGE,
     MUST_BE_HEADMEN_MESSAGE,
     MUST_BE_REG_MESSAGE,
 )
-from services import UsersService
+from .services import UsersService
 
 __all__ = ["RegMiddleware", "HeadmenRegMiddleware", "HeadmenCommandsMiddleware", "CallbackMiddleware"]
 

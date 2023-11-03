@@ -6,7 +6,7 @@ __all__ = [
     "UsersService",
 ]
 
-from config import DB_PATH
+from ..config import DB_PATH
 
 
 class UsersService:
