@@ -3,3 +3,7 @@ dev:
 
 down:
 	docker-compose down
+
+test:
+	pytest --cov=src --color=yes --ignore src tests
+
