@@ -20,8 +20,7 @@ class ClearingJob:
         if DEBUG:
             self._scheduler.add_job(self._send,
                                     "interval",
-                                    seconds=60,
-                                    args=(bot.send_message, ))
+                                    seconds=60)
         else:
             self._scheduler.add_job(self._send,
                                     "cron",
