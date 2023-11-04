@@ -36,10 +36,8 @@ class DownloadJob:
     async def get_schedule():
         with UsersService() as con:
             for group in con.get_groups():
-                group = group[0]
-
-                req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group}").json()
-                data = {group: req}
+                req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group[0]}").json()
+                data = {group[0]: req}
 
                 with open('src/json/schedule.json', 'w') as file:
                     json.dump(data, file)
@@ -59,8 +57,8 @@ class DownloadJob:
                 if group[0] in downloaded_groups:
                     continue
 
-                req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group}").json()
-                data = {group: req}
+                req = requests.get(f"https://timetable.mirea.ru/api/groups/name/{group[0]}").json()
+                data = {group[0]: req}
 
                 with open('src/json/schedule.json', 'w') as file:
                     json.dump(data, file)
