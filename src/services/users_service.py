@@ -33,17 +33,17 @@ class UsersService:
         )
         logging.info("table created")
 
-    def is_registered(self, tg_id: int):
+    def is_registered(self, tg_id: int) -> bool:
         cur = self._con.cursor()
 
-        data = cur.execute("SELECT telegram_id FROM students")
-        return tg_id in [user_id for (user_id,) in data]
+        data = cur.execute("SELECT telegram_id FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
+        return bool(data)
 
-    def is_headmen(self, tg_id: int):
+    def is_headmen(self, tg_id: int) -> bool:
         cur = self._con.cursor()
 
-        data = cur.execute("SELECT telegram_id FROM students WHERE is_headmen = 1")
-        return tg_id in [headmen_id for (headmen_id,) in data]
+        data = cur.execute("SELECT is_headmen FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
+        return bool(data[0])
 
     def registration(self, tg_id: int, user_name: str, name_surname: str, study_group: str) -> bool:
         cur = self._con.cursor()
@@ -70,9 +70,10 @@ class UsersService:
             logging.warning("headmen status wasn't set (exception)")
             return False
 
-    def get_groups(self):
+    def get_groups(self) -> tuple[str, ...]:
         cur = self._con.cursor()
-        return set(cur.execute("""SELECT study_group FROM students""").fetchall())
+        data: list[tuple[str]] = cur.execute("""SELECT DISTINCT study_group FROM students""").fetchall()
+        return tuple(value[0] for value in data)
 
     def get_group_of_id_tg(self, tg_id: int):
         cur = self._con.cursor()
@@ -114,7 +115,7 @@ class UsersService:
 
     def get_time(self, tg_id: int) -> time:
         cur = self._con.cursor()
-        first_lesson_start = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
+        first_lesson_start = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()[0]
         return time.fromisoformat(first_lesson_start)
 
     def set_time(self, time: str, group: str) -> None:
@@ -126,12 +127,14 @@ class UsersService:
         lessons = cur.execute("SELECT attendance FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
         return lessons[0]
 
-    def __enter__(self):
+    def __enter__(self) -> "UsersService":
         return self
 
-    def __exit__(self, exc_type, *_):
+    def __exit__(self, exc_type, *_) -> None:
         if exc_type is not None:
             logging.error(exc_type)
+
         self._con.commit()
         self._con.close()
+
         logging.info("disconnected from database")

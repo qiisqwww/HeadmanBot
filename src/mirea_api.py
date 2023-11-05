@@ -3,6 +3,8 @@ from typing import Any, Iterable
 
 from httpx import AsyncClient
 
+from src.config.config import DEBUG
+
 from .dto import Lesson
 
 __all__ = [
@@ -18,6 +20,8 @@ class MireaScheduleApi:
     async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[Lesson]:
         """By default return today schedule."""
         day = day or datetime.now()
+        if DEBUG:
+            day = datetime(year=2023, month=10, day=4)
 
         json_schedule = await self._get_json(group_name)
         parsed_schedule = self._parse_schedule(json_schedule, day)

@@ -1,17 +1,13 @@
 import logging
-from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from .callbacks import callback_router
 from .commands import headman_router, headmen_reg_router, personal_chat_router
-from .config import BOT_TOKEN
-from .poll import router as poll_router
-from .sending_scheduler import SendingScheduler
+from .config import BOT_TOKEN, LOGGING_PATH
+from .jobs import ClearingJob, SendingJob
 from .services import UsersService
-
-LOGGING_PATH = Path("logs/logs.log")
 
 
 def init_logger() -> None:
@@ -32,7 +28,6 @@ async def main():
     dp.include_routers(
         personal_chat_router,
         headmen_reg_router,
-        poll_router,
         callback_router,
         headman_router,
     )  # Добавляем роутеры в диспатчер
@@ -42,8 +37,11 @@ async def main():
     with UsersService() as con:
         con.create_table()
 
-    scheduler = SendingScheduler(bot)
-    scheduler.start()
+    sending = SendingJob(bot)
+    clearing = ClearingJob()
+
+    sending.start()
+    clearing.start()
 
     logging.info("bot is starting")
 
