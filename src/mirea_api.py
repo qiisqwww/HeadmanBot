@@ -1,7 +1,9 @@
 from datetime import datetime, time
-from typing import Any, Generator, Iterable
+from typing import Any, Iterable
 
 from httpx import AsyncClient
+
+from .dto import Lesson
 
 __all__ = [
     "MireaScheduleApi",
@@ -13,12 +15,20 @@ class MireaScheduleApi:
     _MAX_LESSON_NAME_LEN: int = 16
     _CURRENT_SEMESTR_START: datetime = datetime(year=2023, month=8, day=28)
 
-    async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[tuple[str, str]]:
+    async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[Lesson]:
         """By default return today schedule."""
         day = day or datetime.now()
 
         json_schedule = await self._get_json(group_name)
-        return self._parse_schedule(json_schedule, day)
+        parsed_schedule = self._parse_schedule(json_schedule, day)
+
+        return [
+            Lesson(
+                discipline=discipline,
+                start_time=start_time,
+            )
+            for discipline, start_time in parsed_schedule
+        ]
 
     async def group_exists(self, group_name: str) -> bool:
         async with AsyncClient() as client:
@@ -58,11 +68,11 @@ class MireaScheduleApi:
         start_time: str = self._clean_start_time(lesson["calls"]["time_start"])
         return (lesson_name, start_time)
 
-    def _get_lessons_by_day(self, lessons: Iterable, weekday: int) -> Generator:
-        return (lesson for lesson in lessons if lesson["weekday"] == weekday)
+    def _get_lessons_by_day(self, lessons: Iterable, weekday: int) -> filter:
+        return filter(lambda lesson: lesson["weekday"] == weekday, lessons)
 
-    def _get_lessons_by_week(self, lessons: Iterable, week_num: int) -> Generator:
-        return (lesson for lesson in lessons if week_num in lesson["weeks"])
+    def _get_lessons_by_week(self, lessons: Iterable, week_num: int) -> filter:
+        return filter(lambda lesson: week_num in lesson["weeks"], lessons)
 
     def _get_week_num(self, day: datetime) -> int:
         return (day - self._CURRENT_SEMESTR_START).days // 7 + 1

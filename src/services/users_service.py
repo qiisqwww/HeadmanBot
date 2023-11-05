@@ -1,6 +1,6 @@
-import datetime
 import logging
 import sqlite3 as sq
+from datetime import time
 
 __all__ = [
     "UsersService",
@@ -112,10 +112,10 @@ class UsersService:
 
         cur.execute("UPDATE students SET attendance = ? WHERE telegram_id = ?", (new_attendance, tg_id))
 
-    def get_time(self, tg_id: int) -> datetime.datetime.time:
+    def get_time(self, tg_id: int) -> time:
         cur = self._con.cursor()
-        time = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
-        return datetime.time(*map(int, time[0].split(":")))
+        first_lesson_start = cur.execute("SELECT time FROM students WHERE telegram_id = ?", (tg_id,)).fetchone()
+        return time.fromisoformat(first_lesson_start)
 
     def set_time(self, time: str, group: str) -> None:
         cur = self._con.cursor()
@@ -129,7 +129,7 @@ class UsersService:
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_value, tb):
+    def __exit__(self, exc_type, *_):
         if exc_type is not None:
             logging.error(exc_type)
         self._con.commit()

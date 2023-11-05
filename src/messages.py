@@ -25,6 +25,7 @@ __all__ = [
     "POLL_MESSAGE",
     "HEADMAN_SEND_MSG_MISTAKE",
     "FAQ_MESSAGE",
+    "GROUP_DOESNT_EXISTS_MESSAGE",
 ]
 
 START_MESSAGE = """
@@ -111,13 +112,15 @@ FAQ_MESSAGE = """
 Это в Ваших же интересах. Если возникла такая ситуация, что необходимо отредактировать введенные при регистрации данные - обращаться сюда: @qiisqwww
 """
 
+GROUP_DOESNT_EXISTS_MESSAGE = "Такой группы нет!"
+
 
 def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
 
-    lesson = int(callback.data)
+    lesson_idx = int(callback.data)
 
     no_visit = []
     none_checked_in = []
@@ -135,7 +138,7 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
                     ]
                 )
                 continue
-            match con.get_lessons(user_id)[lesson]:
+            match con.get_lessons(user_id)[lesson_idx]:
                 case "0":
                     no_visit.append(
                         [

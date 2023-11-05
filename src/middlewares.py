@@ -1,6 +1,6 @@
-import datetime
 import logging
-from typing import Any, Awaitable, Callable, Dict
+from datetime import datetime, timedelta
+from typing import Any, Awaitable, Callable
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
@@ -19,7 +19,7 @@ __all__ = ["RegMiddleware", "HeadmenRegMiddleware", "HeadmenCommandsMiddleware",
 
 class RegMiddleware(BaseMiddleware):
     async def __call__(
-        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
+        self, handler: Callable[[Message, dict[str, Any]], Awaitable[Any]], event: Message, data: dict[str, Any]
     ) -> Any:
         logging.info("registration middleware started")
 
@@ -37,7 +37,7 @@ class RegMiddleware(BaseMiddleware):
 
 class HeadmenRegMiddleware(BaseMiddleware):
     async def __call__(
-        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
+        self, handler: Callable[[Message, dict[str, Any]], Awaitable[Any]], event: Message, data: dict[str, Any]
     ) -> Any:
         logging.info("headmen middleware started")
 
@@ -60,7 +60,7 @@ class HeadmenRegMiddleware(BaseMiddleware):
 
 class HeadmenCommandsMiddleware(BaseMiddleware):
     async def __call__(
-        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
+        self, handler: Callable[[Message, dict[str, Any]], Awaitable[Any]], event: Message, data: dict[str, Any]
     ) -> Any:
         logging.info("headmen commands middleware started")
 
@@ -83,7 +83,7 @@ class HeadmenCommandsMiddleware(BaseMiddleware):
 
 class CallbackMiddleware(BaseMiddleware):
     async def __call__(
-        self, handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
+        self, handler: Callable[[Message, dict[str, Any]], Awaitable[Any]], event: Message, data: dict[str, Any]
     ) -> Any:
         logging.info("callback middleware started")
 
@@ -91,16 +91,16 @@ class CallbackMiddleware(BaseMiddleware):
         flag = get_flag(data, "callback")
 
         if flag == "poll":
+            lesson_len = timedelta(hours=1, minutes=30)
+            now = datetime.now()
+
             with UsersService() as con:
-                a = 60 * con.get_time(user_id).hour + con.get_time(user_id).minute + 90
-                if a < datetime.datetime.now().time().hour * 60 + datetime.datetime.now().time().minute:
+                first_lesson_time = datetime.combine(datetime.today(), con.get_time(user_id))
+
+                if now > first_lesson_time + lesson_len:
                     logging.warning("(poll) callback middleware finished, lesson was already started")
                     await event.message.edit_text("Вы не можете отметиться! Занятия уже начались!")
                     return
 
-                logging.info("(poll) callback middleware finished")
-                return await handler(event, data)
-
-        if flag == "attendance":
-            logging.info("(attendance) callback middlewre finished")
-            return await handler(event, data)
+        logging.info(f"({flag}) callback middleware finished")
+        return await handler(event, data)

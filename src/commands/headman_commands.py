@@ -37,9 +37,9 @@ async def getstat_command(message: types.Message) -> None:
         if not await api.group_exists(group):
             await message.answer(HEADMAN_SEND_MSG_MISTAKE)
             return
-        lessons = await api.get_schedule(group)
 
-        if len(lessons) == 0:
+        lessons = await api.get_schedule(group)
+        if not lessons:
             await message.answer(NO_LESSONS_TODAY)
             return
 

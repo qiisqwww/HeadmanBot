@@ -5,6 +5,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
 from ..messages import (
+    GROUP_DOESNT_EXISTS_MESSAGE,
     REG_MESSAGE_1_1,
     REG_MESSAGE_1_2,
     REG_MESSAGE_2,
@@ -32,7 +33,7 @@ personal_chat_router.message.filter(F.chat.type.in_({"private"}))  # Бот бу
 async def start_cmd(message: types.Message, state: FSMContext) -> None:
     logging.info("start command")
 
-    await message.answer(text=START_MESSAGE + "\n" + REG_MESSAGE_1_1)
+    await message.answer(f"{START_MESSAGE}\n{REG_MESSAGE_1_1}")
     await state.set_state(RegStates.surname_input)
 
 
@@ -41,7 +42,7 @@ async def handling_surname(message: types.Message, state: FSMContext) -> None:
     await state.update_data(surname=message.text)
     logging.info("surname handled")
 
-    await message.answer(text=REG_MESSAGE_1_2)
+    await message.answer(REG_MESSAGE_1_2)
     await state.set_state(RegStates.name_input)
 
 
@@ -50,7 +51,7 @@ async def handling_name(message: types.Message, state: FSMContext) -> None:
     await state.update_data(name=message.text)
     logging.info("name handled")
 
-    await message.answer(text=REG_MESSAGE_2)
+    await message.answer(REG_MESSAGE_2)
     await state.set_state(RegStates.group_input)
 
 
@@ -58,7 +59,7 @@ async def handling_name(message: types.Message, state: FSMContext) -> None:
 async def handling_group(message: types.Message, state: FSMContext) -> None:
     api = MireaScheduleApi()
     if not await api.group_exists(message.text):
-        await message.answer(text="Такой группы нет!")
+        await message.answer(GROUP_DOESNT_EXISTS_MESSAGE)
         await state.set_state(RegStates.group_input)
         return
 
@@ -76,8 +77,8 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
         )
 
         if isreg:
-            await message.answer(text=SUCCESFULLY_REG_MESSAGE)
+            await message.answer(SUCCESFULLY_REG_MESSAGE)
         else:
-            await message.answer(text=UNSUCCESFULLY_REG_MESSAGE)
+            await message.answer(UNSUCCESFULLY_REG_MESSAGE)
 
     await state.clear()

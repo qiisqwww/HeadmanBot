@@ -4,6 +4,7 @@ from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 
 from .buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
+from .dto import Lesson
 from .messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
 from .middlewares import CallbackMiddleware
 from .mirea_api import MireaScheduleApi
@@ -21,7 +22,6 @@ api = MireaScheduleApi()
 
 @callback_router.callback_query(F.data.startswith("attendance"), flags={"callback": "poll"})
 async def check_in_callback(callback: types.CallbackQuery):
-    logging.info("check_in callback handled")
     callback_data = callback.data.split("_")[1]
 
     with UsersService() as con:
@@ -35,7 +35,7 @@ async def check_in_callback(callback: types.CallbackQuery):
             await callback.message.edit_text(NONE_MESSAGE, reply_markup=load_void_kb())
             return
 
-        data = [str(i[1:-1]) for i in callback_data[1:-1].split(", ")]
+        data = Lesson.from_str(callback_data)
 
         group = con.get_group_of_id_tg(callback.from_user.id)
         lessons = await api.get_schedule(group)
@@ -43,21 +43,23 @@ async def check_in_callback(callback: types.CallbackQuery):
         lessons_in_states = con.get_lessons(callback.from_user.id)
         already_chosen_lessons_in_numbers = []
 
-        for lesson in range(len(lessons)):
-            if lessons[lesson] == data:
-                chosen_lesson = lesson
-                already_chosen_lessons_in_numbers.append(lesson)
-            if lessons_in_states[lesson] == "1":
-                already_chosen_lessons_in_numbers.append(lesson)
+        for idx, lesson in enumerate(lessons):
+            if lesson == data:
+                chosen_lesson = idx
+                already_chosen_lessons_in_numbers.append(idx)
+            if lessons_in_states[idx] == "1":
+                already_chosen_lessons_in_numbers.append(idx)
 
         for i in sorted(already_chosen_lessons_in_numbers, reverse=True):
             lessons.pop(i)
-        info = "lesson " + str(chosen_lesson)
+
+        info = f"lesson {str(chosen_lesson)}"
         logging.info("commiting try")
         con.change_attendance(callback.from_user.id, info)
 
         await callback.message.edit_text(
-            f"Вы посетите пару {data[0]}, " f"которая начнётся в {data[1]}", reply_markup=load_attendance_kb(lessons)
+            f"Вы посетите пару {data.discipline}, которая начнётся в {data.start_time}",
+            reply_markup=load_attendance_kb(lessons),
         )
 
 
@@ -69,9 +71,10 @@ async def attendance_send_callback(callback: types.CallbackQuery):
         group = con.get_group_of_id_tg(callback.from_user.id)
         lessons = await api.get_schedule(group)
 
+        lesson = lessons[int(callback.data)]
+
         await callback.message.edit_text(
-            text=f"{lessons[int(callback.data)][0]}, "
-            f"{lessons[int(callback.data)][1]}\n\n" + attendance_for_headmen_message(callback),
+            text=f"{lesson.discipline}, {lesson.start_time}\n\n" + attendance_for_headmen_message(callback),
             reply_markup=load_choose_lesson_kb(lessons),
             parse_mode=ParseMode.HTML,
         )
