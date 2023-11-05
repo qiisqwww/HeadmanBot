@@ -6,6 +6,7 @@ services:
       - ./.env/.env
     build: 
       dockerfile: Dockerfile
+      context: ./
     volumes:
       - /var/log/headman_bot:/app/logs
-      - /var/www/HeadmanBot/db_data/bot.db:/app/db_data
+      - /var/www/HeadmanBot/db_data:/app/db_data
