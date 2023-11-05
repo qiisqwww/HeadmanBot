@@ -8,4 +8,4 @@ services:
       dockerfile: Dockerfile
     volumes:
       - /var/log/headman_bot:/app/logs
-      - ./db_data/bot.db:/app/db_data
+      - /var/www/HeadmanBot/db_data/bot.db:/app/db_data
