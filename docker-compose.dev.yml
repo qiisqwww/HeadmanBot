@@ -8,4 +8,4 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./logs:/app/logs
-      - ./bot.db:/app/bot.db
+      - ./db_data:/app/db_data

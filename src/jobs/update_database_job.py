@@ -2,16 +2,27 @@ import logging
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from src.config.config import DEBUG
 from src.mirea_api import MireaScheduleApi
 from src.services import UsersService
 
+__all__ = [
+    "UpdateDatabaseJob",
+]
 
-class ClearingJob:
+
+class UpdateDatabaseJob:
+    """Set correct start time of first lesson for today schedule."""
+
     _scheduler: AsyncIOScheduler
 
     def __init__(self):
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-        self._scheduler.add_job(self._send, "cron", day_of_week="mon-sun", hour=2, minute=00)
+
+        if DEBUG:
+            self._scheduler.add_job(self._send)
+        else:
+            self._scheduler.add_job(self._send, "cron", day_of_week="mon-sun", hour=2, minute=00)
 
     def start(self):
         self._scheduler.start()

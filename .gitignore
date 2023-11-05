@@ -10,3 +10,4 @@ logs
 .env/
 .coverage
 .pytest_cache
+db_data/

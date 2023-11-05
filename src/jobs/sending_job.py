@@ -10,15 +10,21 @@ from src.messages import POLL_MESSAGE
 from src.mirea_api import MireaScheduleApi
 from src.services import UsersService
 
+__all__ = [
+    "SendingJob",
+]
+
 
 class SendingJob:
+    """Send everyone message which allow user to choose lessons which will be visited."""
+
     _scheduler: AsyncIOScheduler
 
     def __init__(self, bot: Bot):
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
         if DEBUG:
-            self._scheduler.add_job(self._send, "interval", seconds=10, args=(bot.send_message,))
+            self._scheduler.add_job(self._send, args=(bot.send_message,))
         else:
             self._scheduler.add_job(
                 self._send, "cron", day_of_week="mon-sun", hour=7, minute=00, args=(bot.send_message,)

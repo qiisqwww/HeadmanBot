@@ -25,12 +25,11 @@ headman_router = Router()
 headman_router.message.middleware(HeadmenCommandsMiddleware())
 headman_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
-api = MireaScheduleApi()
-
 
 @headman_router.message(Command("getstat"))
 async def getstat_command(message: types.Message) -> None:
     logging.info("getstat command")
+    api = MireaScheduleApi()
 
     with UsersService() as con:
         group = con.get_group_of_id_tg(message.from_user.id)

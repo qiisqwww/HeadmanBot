@@ -7,5 +7,5 @@ services:
     build: 
       dockerfile: Dockerfile
     volumes:
-      - ./logs:/app/logs
-      - ./bot.db:/app/bot.db
+      - /var/log/headman_bot:/app/logs
+      - ./db_data/bot.db:/app/db_data
