@@ -4,28 +4,28 @@ from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-from ..config import HEADMAN_PASSWORD
-from ..messages import (
+from src.config import HEADMAN_PASSWORD
+from src.messages import (
     PASS_ASK_MESSAGE,
     STAROSTA_REG_MESSAGE,
     UNSUCCESFULL_STAROSTA_REG_MESSAGE,
     WRONG_PASSWORD,
 )
-from ..middlewares import HeadmenRegMiddleware
-from ..services import UsersService
-from ..states import SetHeadman
+from src.middlewares import HeadmanRegMiddleware
+from src.services import UsersService
+from src.states import SetHeadman
 
 __all__ = [
-    "headmen_reg_router",
+    "headman_reg_router",
 ]
 
 
-headmen_reg_router = Router()
+headman_reg_router = Router()
 
-headmen_reg_router.message.middleware(HeadmenRegMiddleware())
+headman_reg_router.message.middleware(HeadmanRegMiddleware())
 
 
-@headmen_reg_router.message(Command("set_headman"))
+@headman_reg_router.message(Command("set_headman"))
 async def start_headmen(message: types.Message, state: FSMContext) -> None:
     await message.answer(text=PASS_ASK_MESSAGE)
     logging.info("set_headman command, password was asked")
@@ -33,7 +33,7 @@ async def start_headmen(message: types.Message, state: FSMContext) -> None:
     await state.set_state(SetHeadman.get_password)
 
 
-@headmen_reg_router.message(SetHeadman.get_password, F.text)
+@headman_reg_router.message(SetHeadman.get_password, F.text)
 async def get_password(message: types.Message, state: FSMContext) -> None:
     logging.info("password was handled")
     if message.text == HEADMAN_PASSWORD:

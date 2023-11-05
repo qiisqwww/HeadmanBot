@@ -4,16 +4,16 @@ from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
 
-from ..buttons import load_choose_lesson_kb
-from ..messages import (
+from src.buttons import load_choose_lesson_kb
+from src.messages import (
     CHOOSE_GETSTAT_LESSON,
     FAQ_MESSAGE,
     HEADMAN_SEND_MSG_MISTAKE,
     NO_LESSONS_TODAY,
 )
-from ..middlewares import HeadmenCommandsMiddleware
-from ..mirea_api import MireaScheduleApi
-from ..services import UsersService
+from src.middlewares import HeadmanCommandsMiddleware
+from src.mirea_api import MireaScheduleApi
+from src.services import UsersService
 
 __all__ = [
     "headman_router",
@@ -22,7 +22,7 @@ __all__ = [
 
 headman_router = Router()
 
-headman_router.message.middleware(HeadmenCommandsMiddleware())
+headman_router.message.middleware(HeadmanCommandsMiddleware())
 headman_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
 

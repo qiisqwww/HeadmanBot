@@ -4,7 +4,7 @@ from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-from ..messages import (
+from src.messages import (
     GROUP_DOESNT_EXISTS_MESSAGE,
     REG_MESSAGE_1_1,
     REG_MESSAGE_1_2,
@@ -13,10 +13,10 @@ from ..messages import (
     SUCCESFULLY_REG_MESSAGE,
     UNSUCCESFULLY_REG_MESSAGE,
 )
-from ..middlewares import RegMiddleware
-from ..mirea_api import MireaScheduleApi
-from ..services import UsersService
-from ..states import RegStates
+from src.middlewares import RegMiddleware
+from src.mirea_api import MireaScheduleApi
+from src.services import UsersService
+from src.states import RegStates
 
 __all__ = [
     "personal_chat_router",

@@ -3,8 +3,7 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from .callbacks import callback_router
-from .commands import headman_router, headmen_reg_router, personal_chat_router
+from .handlers import callback_router, headman_router, headman_reg_router, personal_chat_router
 from .config import BOT_TOKEN, LOGGING_PATH
 from .jobs import SendingJob, UpdateDatabaseJob
 from .services import UsersService
@@ -24,9 +23,9 @@ async def main():
     dp = Dispatcher(storage=MemoryStorage())  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(
         personal_chat_router,
-        headmen_reg_router,
+        headman_reg_router,
         callback_router,
-        headman_router,
+        headman_router
     )  # Добавляем роутеры в диспатчер
 
     init_logger()

@@ -1,6 +1,4 @@
-from .headman_commands import headman_router
-from .headman_reg_commands import headmen_reg_router
-from .personal_chat_commands import personal_chat_router
+from src.handlers.command_handlers.headman_commands import headman_router
 
 __all__ = [
     "headman_router",

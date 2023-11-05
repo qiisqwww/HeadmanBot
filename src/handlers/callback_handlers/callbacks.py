@@ -3,12 +3,12 @@ import logging
 from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 
-from .buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
-from .dto import Lesson
-from .messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
-from .middlewares import CallbackMiddleware
-from .mirea_api import MireaScheduleApi
-from .services import UsersService
+from src.buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
+from src.dto import Lesson
+from src.messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
+from src.middlewares import CallbackMiddleware
+from src.mirea_api import MireaScheduleApi
+from src.services import UsersService
 
 __all__ = [
     "callback_router",
