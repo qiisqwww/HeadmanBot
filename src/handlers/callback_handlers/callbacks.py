@@ -4,11 +4,13 @@ from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 
 from src.buttons import load_attendance_kb, load_choose_lesson_kb, load_void_kb
-from src.dto import Lesson
+from src.enums.visit_status import VisitStatus
 from src.messages import ALL_MESSAGE, NONE_MESSAGE, attendance_for_headmen_message
 from src.middlewares import CallbackMiddleware
 from src.mirea_api import MireaScheduleApi
-from src.services import UsersService
+from src.services.attendance_service import AttendanceService
+from src.services.lesson_service import LessonService
+from src.services.student_service import StudentService
 
 __all__ = [
     "callback_router",
@@ -23,58 +25,45 @@ api = MireaScheduleApi()
 @callback_router.callback_query(F.data.startswith("attendance"), flags={"callback": "poll"})
 async def check_in_callback(callback: types.CallbackQuery):
     callback_data = callback.data.split("_")[1]
+    user_id = callback.from_user.id
 
-    with UsersService() as con:
+    async with AttendanceService() as attendance_service:
         if callback_data == "all":
-            con.change_attendance(callback.from_user.id, callback_data + " 0")
+            await attendance_service.set_status_for_all_lessons(user_id, VisitStatus.VISIT)
             await callback.message.edit_text(ALL_MESSAGE, reply_markup=load_void_kb())
             return
 
         if callback_data == "none":
-            con.change_attendance(callback.from_user.id, callback_data + " 0")
+            await attendance_service.set_status_for_all_lessons(user_id, VisitStatus.NOT_VISIT)
             await callback.message.edit_text(NONE_MESSAGE, reply_markup=load_void_kb())
             return
 
-        data = Lesson.from_str(callback_data)
+    async with LessonService() as lesson_service:
+        choosen_lesson = await lesson_service.get(int(callback_data))
 
-        group = con.get_group_of_id_tg(callback.from_user.id)
-        lessons = await api.get_schedule(group)
+    async with AttendanceService() as attendance_service:
+        await attendance_service.set_status(user_id, choosen_lesson.id, VisitStatus.VISIT)
+        attendance = await attendance_service.get(user_id)
 
-        lessons_in_states = con.get_lessons(callback.from_user.id)
-        already_chosen_lessons_in_numbers = []
+    non_visit_lessons = list(filter(lambda el: el[1] != VisitStatus.VISIT, attendance.lessons))
 
-        for idx, lesson in enumerate(lessons):
-            if lesson == data:
-                chosen_lesson = idx
-                already_chosen_lessons_in_numbers.append(idx)
-            if lessons_in_states[idx] == "1":
-                already_chosen_lessons_in_numbers.append(idx)
-
-        for i in sorted(already_chosen_lessons_in_numbers, reverse=True):
-            lessons.pop(i)
-
-        info = f"lesson {str(chosen_lesson)}"
-        logging.info("commiting try")
-        con.change_attendance(callback.from_user.id, info)
-
-        await callback.message.edit_text(
-            f"Вы посетите пару {data.discipline}, которая начнётся в {data.start_time}",
-            reply_markup=load_attendance_kb(lessons),
-        )
+    await callback.message.edit_text(
+        f"Вы посетите пару {choosen_lesson.discipline}, которая начнётся в {choosen_lesson.start_time}",
+        reply_markup=load_attendance_kb([lesson for lesson, status in non_visit_lessons]),
+    )
 
 
 @callback_router.callback_query(flags={"callback": "attendance"})
 async def attendance_send_callback(callback: types.CallbackQuery):
     logging.info("attendance callback handled")
+    user_id = callback.from_user.id
 
-    with UsersService() as con:
-        group = con.get_group_of_id_tg(callback.from_user.id)
-        lessons = await api.get_schedule(group)
-
-        lesson = lessons[int(callback.data)]
+    async with StudentService() as student_service:
+        schedule = await student_service.get_schedule(user_id)
+        lesson = tuple(filter(lambda lesson: lesson.id == int(callback.data), schedule))[0]
 
         await callback.message.edit_text(
             text=f"{lesson.discipline}, {lesson.start_time}\n\n" + attendance_for_headmen_message(callback),
-            reply_markup=load_choose_lesson_kb(lessons),
+            reply_markup=load_choose_lesson_kb(schedule),
             parse_mode=ParseMode.HTML,
         )

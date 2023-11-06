@@ -1,4 +1,6 @@
-from ..dto.student import Student
+from src.services.lesson_service import LessonService
+
+from ..dto import Lesson, Student
 from .base import Service
 from .group_service import GroupService
 
@@ -62,3 +64,18 @@ class StudentService(Service):
         records = await self._con.fetch(query)
 
         return tuple(Student.from_record(record) for record in records)
+
+    async def get_schedule(self, student_id: int) -> tuple[Lesson, ...] | None:
+        async with StudentService() as student_service:
+            student = await student_service.get(student_id)
+
+        async with GroupService() as group_service:
+            group = await group_service.get(student.group_id)
+
+        async with LessonService() as lesson_service:
+            lessons = await lesson_service.get_by_group(group.id)
+
+        if lessons is None:
+            return None
+
+        return lessons

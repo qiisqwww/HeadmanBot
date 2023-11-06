@@ -1,3 +1,6 @@
+from src.dto.attendance import Attendance
+from src.dto.lesson import Lesson
+
 from ..enums import VisitStatus
 from .base import Service
 from .group_service import GroupService
@@ -44,3 +47,26 @@ class AttendanceService(Service):
 
         for student in students:
             await self.create(student.telegram_id)
+
+    async def set_status_for_all_lessons(self, student_id: int, visit_status: VisitStatus) -> None:
+        async with StudentService() as student_service:
+            lessons = await student_service.get_schedule(student_id)
+
+        for lesson in lessons:
+            await self.set_status(student_id, lesson.id, visit_status)
+
+    async def get(self, student_id: int) -> Attendance:
+        query = "SELECT lesson_id,visit_status FROM attendance WHERE student_id = $1"
+        records = await self._con.fetch(query, student_id)
+
+        lessons_with_status: list[tuple[Lesson, VisitStatus]] = []
+
+        for record in records:
+            async with LessonService() as lesson_service:
+                lesson = await lesson_service.get(record["lessond_id"])
+                lessons_with_status.append((lesson, VisitStatus(record["visit_status"])))
+
+        return Attendance(
+            student_id=student_id,
+            lessons=lessons_with_status,
+        )

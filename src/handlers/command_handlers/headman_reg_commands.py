@@ -5,14 +5,9 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
 from src.config import HEADMAN_PASSWORD
-from src.messages import (
-    PASS_ASK_MESSAGE,
-    STAROSTA_REG_MESSAGE,
-    UNSUCCESFULL_STAROSTA_REG_MESSAGE,
-    WRONG_PASSWORD,
-)
+from src.messages import PASS_ASK_MESSAGE, STAROSTA_REG_MESSAGE, WRONG_PASSWORD
 from src.middlewares import HeadmanRegMiddleware
-from src.services import UsersService
+from src.services.student_service import StudentService
 from src.states import SetHeadman
 
 __all__ = [
@@ -37,12 +32,9 @@ async def start_headmen(message: types.Message, state: FSMContext) -> None:
 async def get_password(message: types.Message, state: FSMContext) -> None:
     logging.info("password was handled")
     if message.text == HEADMAN_PASSWORD:
-        with UsersService() as con:
-            isset = con.set_status(message.from_user.id)
-            if isset:
-                await message.answer(text=STAROSTA_REG_MESSAGE)
-            else:
-                await message.answer(text=UNSUCCESFULL_STAROSTA_REG_MESSAGE)
+        async with StudentService() as student_service:
+            await student_service.make_headman(message.from_user.id)
+            await message.answer(text=STAROSTA_REG_MESSAGE)
     else:
         await message.answer(text=WRONG_PASSWORD)
 

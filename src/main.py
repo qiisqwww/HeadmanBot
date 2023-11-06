@@ -3,10 +3,15 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from .handlers import callback_router, headman_router, headman_reg_router, personal_chat_router
 from .config import BOT_TOKEN, LOGGING_PATH
+from .database import init_database
+from .handlers import (
+    callback_router,
+    headman_reg_router,
+    headman_router,
+    personal_chat_router,
+)
 from .jobs import SendingJob, UpdateDatabaseJob
-from .services import UsersService
 
 
 def init_logger() -> None:
@@ -14,30 +19,28 @@ def init_logger() -> None:
         filename=LOGGING_PATH,
         level=logging.DEBUG,
         format="%(asctime)s %(levelname)s %(message)s",
-    )  # Указываем файл для логирования
+    )
 
 
 async def main():
-    bot = Bot(BOT_TOKEN)  # Получаем токенstorage бота из файла с конфигом
+    bot = Bot(BOT_TOKEN)
 
     dp = Dispatcher(storage=MemoryStorage())  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(
         personal_chat_router,
         headman_reg_router,
         callback_router,
-        headman_router
+        headman_router,
     )  # Добавляем роутеры в диспатчер
 
+    await init_database()
     init_logger()
-
-    with UsersService() as con:
-        con.create_table()
 
     sender = SendingJob(bot)
     updater = UpdateDatabaseJob()
 
-    sender.start()
     updater.start()
+    sender.start()
 
     logging.info("bot is starting")
 

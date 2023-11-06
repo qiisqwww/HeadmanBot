@@ -4,13 +4,12 @@ from typing import Any, Awaitable, Callable
 from aiogram import BaseMiddleware
 from aiogram.types import Message
 
-from src.messages import (
-    MUST_BE_HEADMEN_MESSAGE,
-    MUST_BE_REG_MESSAGE,
-)
-from src.services import UsersService
+from src.messages import MUST_BE_HEADMEN_MESSAGE, MUST_BE_REG_MESSAGE
+from src.services.student_service import StudentService
 
-__all__ = ["HeadmanCommandsMiddleware"]
+__all__ = [
+    "HeadmanCommandsMiddleware",
+]
 
 
 class HeadmanCommandsMiddleware(BaseMiddleware):
@@ -21,16 +20,17 @@ class HeadmanCommandsMiddleware(BaseMiddleware):
 
         user_id = event.from_user.id
 
-        with UsersService() as con:
-            if not con.is_registered(user_id):
+        async with StudentService() as student_service:
+            if not await student_service.is_registered(user_id):
                 await event.reply(MUST_BE_REG_MESSAGE)
                 logging.warning("headmen commands middleware finished, user must be registered")
                 return
 
-            if not con.is_headmen(user_id):
+            if not await student_service.is_headman(user_id):
                 await event.reply(MUST_BE_HEADMEN_MESSAGE)
                 logging.warning("headmen commands middleware finished, user must me headman to use this command")
                 return
 
             logging.info("headmen commands middleware finished")
+
             return await handler(event, data)

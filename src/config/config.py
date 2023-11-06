@@ -17,7 +17,7 @@ __all__ = [
 DEBUG: bool = bool(BoolEnv("DEBUG"))
 BOT_TOKEN: str = StrEnv("BOT_TOKEN")
 HEADMAN_PASSWORD: str = StrEnv("HEADMAN_PASSWORD")
-LOGGING_PATH: Path = Path(StrEnv("logs/log.log"))
+LOGGING_PATH: Path = Path(StrEnv("LOGGING_PATH"))
 
 DB_USER: str = StrEnv("DB_USER")
 DB_PASS: str = StrEnv("DB_PASS")

@@ -13,7 +13,8 @@ from src.messages import (
 )
 from src.middlewares import HeadmanCommandsMiddleware
 from src.mirea_api import MireaScheduleApi
-from src.services import UsersService
+from src.services.group_service import GroupService
+from src.services.student_service import StudentService
 
 __all__ = [
     "headman_router",
@@ -31,13 +32,20 @@ async def getstat_command(message: types.Message) -> None:
     logging.info("getstat command")
     api = MireaScheduleApi()
 
-    with UsersService() as con:
-        group = con.get_group_of_id_tg(message.from_user.id)
-        if not await api.group_exists(group):
+    user_id = message.from_user.id
+
+    async with StudentService() as student_service:
+        headman = await student_service.get(user_id)
+
+        async with GroupService() as group_service:
+            group = await group_service.get(headman.group_id)
+
+        if not await api.group_exists(group.name):
             await message.answer(HEADMAN_SEND_MSG_MISTAKE)
             return
 
-        lessons = await api.get_schedule(group)
+        lessons = await student_service.get_schedule(user_id)
+
         if not lessons:
             await message.answer(NO_LESSONS_TODAY)
             return

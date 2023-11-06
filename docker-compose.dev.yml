@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres
     env_file:
-      - ./.env/database.dev.env
+      - ./.env/.database.dev.env
     volumes:
       - postgres_dev_data:/var/lib/posgresql/data
     ports:

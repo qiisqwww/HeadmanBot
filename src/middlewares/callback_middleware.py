@@ -6,9 +6,11 @@ from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
 
-from src.services import UsersService
+from src.services.student_service import StudentService
 
-__all__ = ["CallbackMiddleware"]
+__all__ = [
+    "CallbackMiddleware",
+]
 
 
 class CallbackMiddleware(BaseMiddleware):
@@ -24,8 +26,9 @@ class CallbackMiddleware(BaseMiddleware):
             lesson_len = timedelta(hours=1, minutes=30)
             now = datetime.now()
 
-            with UsersService() as con:
-                first_lesson_time = datetime.combine(datetime.today(), con.get_time(user_id))
+            async with StudentService() as student_service:
+                schedule = await student_service.get_schedule(user_id)
+                first_lesson_time = datetime.combine(datetime.today(), schedule[0].start_time)
 
                 if now > first_lesson_time + lesson_len:
                     logging.warning("(poll) callback middleware finished, lesson was already started")

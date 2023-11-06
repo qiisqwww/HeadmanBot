@@ -124,7 +124,7 @@ def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
 
-    lesson_idx = int(callback.data)
+    lesson_id = int(callback.data)
 
     no_visit = []
     none_checked_in = []

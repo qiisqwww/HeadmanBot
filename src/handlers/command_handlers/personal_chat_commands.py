@@ -11,11 +11,10 @@ from src.messages import (
     REG_MESSAGE_2,
     START_MESSAGE,
     SUCCESFULLY_REG_MESSAGE,
-    UNSUCCESFULLY_REG_MESSAGE,
 )
 from src.middlewares import RegMiddleware
 from src.mirea_api import MireaScheduleApi
-from src.services import UsersService
+from src.services.student_service import StudentService
 from src.states import RegStates
 
 __all__ = [
@@ -68,17 +67,14 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
 
     user_data = await state.get_data()
 
-    with UsersService() as con:
-        isreg: bool = con.registration(
-            message.from_user.id,
-            message.from_user.username,
-            user_data["surname"] + " " + user_data["name"],
-            user_data["group"],
+    async with StudentService() as student_service:
+        await student_service.create(
+            telegram_id=message.from_user.id,
+            telegram_name=message.from_user.username,
+            name=user_data["name"],
+            surname=user_data["surname"],
+            group_name=user_data["group"],
         )
-
-        if isreg:
-            await message.answer(SUCCESFULLY_REG_MESSAGE)
-        else:
-            await message.answer(UNSUCCESFULLY_REG_MESSAGE)
+        await message.answer(SUCCESFULLY_REG_MESSAGE)
 
     await state.clear()

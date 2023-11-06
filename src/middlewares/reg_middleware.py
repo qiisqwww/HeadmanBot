@@ -5,7 +5,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message
 
 from src.messages import ALREADY_REGISTERED_MESSAGE
-from src.services import UsersService
+from src.services.student_service import StudentService
 
 __all__ = ["RegMiddleware"]
 
@@ -18,11 +18,12 @@ class RegMiddleware(BaseMiddleware):
 
         user_id = event.from_user.id
 
-        with UsersService() as con:
-            if con.is_registered(user_id):
+        async with StudentService() as student_service:
+            if await student_service.is_registered(user_id):
                 await event.reply(ALREADY_REGISTERED_MESSAGE)
                 logging.warning("middleware finished, already registered")
                 return
 
         logging.info("registration middleware finished")
+
         return await handler(event, data)
