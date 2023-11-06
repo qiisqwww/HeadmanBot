@@ -1,11 +1,24 @@
 version: '3.9'
 
 services:
+  postgres:
+    image: postgres
+    env_file:
+      - ./.env/database.dev.env
+    volumes:
+      - postgres_dev_data:/var/lib/posgresql/data
+    ports:
+      - 5432:5432
+
   headman_bot:
     env_file:
       - ./.env/.dev.env
     build: 
       dockerfile: Dockerfile
+    depends_on:
+      - postgres
     volumes:
       - ./logs:/app/logs
-      - ./db_data:/app/db_data
+
+volumes:
+  postgres_dev_data:
