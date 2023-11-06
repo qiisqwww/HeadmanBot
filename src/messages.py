@@ -1,6 +1,8 @@
 from aiogram import types
 
-from .services import UsersService
+from src.enums.visit_status import VisitStatus
+from src.services.attendance_service import AttendanceService
+from src.services.student_service import StudentService
 
 __all__ = [
     "START_MESSAGE",
@@ -119,57 +121,58 @@ FAQ_MESSAGE = """
 GROUP_DOESNT_EXISTS_MESSAGE = "Такой группы нет!"
 
 
-def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
+async def attendance_for_headmen_message(callback: types.CallbackQuery) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
 
     lesson_id = int(callback.data)
+    headman_id = callback.from_user.id
 
-    no_visit = []
-    none_checked_in = []
+    not_visit = []
     visit = []
+    not_checked = []
 
-    with UsersService() as con:
-        group = con.get_group_of_id_tg(callback.from_user.id)
+    async with StudentService() as student_service:
+        headman = await student_service.get(headman_id)
+        users = await student_service.filter_by_group(headman.group_id)
 
-        for user_id in con.get_user_of_group(group):
-            if len(con.get_lessons(user_id).replace("0", "")) == 0:
-                none_checked_in.append(
-                    [
-                        str(con.get_user_of_id_tg(user_id)[2]),
-                        f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
-                    ]
-                )
-                continue
-            match con.get_lessons(user_id)[lesson_idx]:
-                case "0":
-                    no_visit.append(
+    user_link = '<a href="tg://user?id={user_id}">{surname} {name}</a>\n'
+
+    async with AttendanceService() as attendance_service:
+        for user in users:
+            attendance = await attendance_service.get(user.telegram_id)
+
+            attendance_lesson = tuple(filter(lambda el: el[0].id == lesson_id, attendance.lessons))[0]
+
+            match attendance_lesson[1]:
+                case VisitStatus.NOT_CHECKED:
+                    not_checked.append(
                         [
-                            str(con.get_user_of_id_tg(user_id)[2]),
-                            f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                            f"{user.surname} {user.name}",
+                            user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
                         ]
                     )
-                case "1":
+                case VisitStatus.VISIT:
                     visit.append(
                         [
-                            str(con.get_user_of_id_tg(user_id)[2]),
-                            f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                            f"{user.surname} {user.name}",
+                            user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
                         ]
                     )
-                case "2":
-                    no_visit.append(
+                case VisitStatus.NOT_VISIT:
+                    not_visit.append(
                         [
-                            str(con.get_user_of_id_tg(user_id)[2]),
-                            f'<a href="tg://user?id={user_id}">{con.get_user_of_id_tg(user_id)[2]}</a>\n',
+                            f"{user.surname} {user.name}",
+                            user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
                         ]
                     )
 
-        for user in sorted(none_checked_in, key=lambda s: s[0]):
+        for user in sorted(not_checked, key=lambda s: s[0]):
             none_text += user[1]
         for user in sorted(visit, key=lambda s: s[0]):
             visit_text += user[1]
-        for user in sorted(no_visit, key=lambda s: s[0]):
+        for user in sorted(not_visit, key=lambda s: s[0]):
             no_text += user[1]
 
         attendance = none_text + "\n" + visit_text + "\n" + no_text + "\n" + "Что-то еще?"

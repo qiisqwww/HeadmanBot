@@ -31,7 +31,7 @@ class GroupService(Service):
         if group:
             return group
 
-        query = "INSERT INTO groups (name), VALUES($1) RETERNING id"
+        query = "INSERT INTO groups (name) VALUES($1) RETURNING id"
         group_id: int = await self._con.fetchval(query, name)
         return Group(id=group_id, name=name)
 

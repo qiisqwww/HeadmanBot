@@ -11,14 +11,18 @@ create table if not exists lessons (
     weekday smallint NOT NULL
 );
 
+
 create table if not exists universities (
     id bigserial primary key,
     name varchar(255) NOT NULL UNIQUE
 );
 
+
+
 create table if not exists students (
     telegram_id bigint primary key,
     group_id bigint references groups(id),
+    university_id bigint references universities(id),
     name varchar(255) NOT NULL,
     surname varchar(255) NOT NULL,
     telegram_name varchar(255) NULL,

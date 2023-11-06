@@ -1,4 +1,4 @@
-from datetime import time
+from datetime import time, timezone
 
 from ..dto import Lesson
 from .base import Service
@@ -28,10 +28,8 @@ class LessonService(Service):
         return tuple(Lesson.from_record(record) for record in records)
 
     async def create(self, discipline: str, group_id: int, start_time: time, weekday: int) -> None:
-        query = (
-            "SELECT * from lessons WHERE discipline = $1 AND WHERE group_id = $2"
-            "AND WHERE start_time = $3 AND WHERE weekday = $4"
-        )
+        start_time = time(hour=start_time.hour, minute=start_time.minute, tzinfo=timezone.utc)
+        query = "SELECT * from lessons WHERE discipline = $1 AND group_id = $2 AND start_time = $3 AND weekday = $4"
 
         record = await self._con.fetchrow(query, discipline, group_id, start_time, weekday)
 
@@ -42,5 +40,5 @@ class LessonService(Service):
         await self._con.execute(query, discipline, group_id, start_time, weekday)
 
     async def delete_all_lessons(self) -> None:
-        query = "TRUNCATE TABLE lessons"
+        query = "TRUNCATE TABLE lessons CASCADE"
         await self._con.execute(query)

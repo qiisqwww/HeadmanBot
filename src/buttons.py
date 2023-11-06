@@ -17,7 +17,8 @@ def load_attendance_kb(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
     for lesson in lessons:
         buttons.append(
             InlineKeyboardButton(
-                text=f"Буду на {lesson.start_time} {lesson.discipline}", callback_data=f"attendance_{lesson.id}"
+                text=f"Буду на {lesson.start_time.strftime('%H:%M')} {lesson.discipline}",
+                callback_data=f"attendance_{lesson.id}",
             )
         )
 
@@ -34,7 +35,8 @@ def load_choose_lesson_kb(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
     for idx, lesson in enumerate(lessons):
         buttons.append(
             InlineKeyboardButton(
-                text=f"({idx + 1}) {lesson.discipline} {lesson.start_time}", callback_data=str(lesson.id)
+                text=f"({idx + 1}) {lesson.discipline} {lesson.start_time.strftime('%H:%M')}",
+                callback_data=str(lesson.id),
             )
         )
 

@@ -48,7 +48,7 @@ async def check_in_callback(callback: types.CallbackQuery):
     non_visit_lessons = list(filter(lambda el: el[1] != VisitStatus.VISIT, attendance.lessons))
 
     await callback.message.edit_text(
-        f"Вы посетите пару {choosen_lesson.discipline}, которая начнётся в {choosen_lesson.start_time}",
+        f"Вы посетите пару {choosen_lesson.discipline}, которая начнётся в {choosen_lesson.start_time.strftime('%H:%M')}",
         reply_markup=load_attendance_kb([lesson for lesson, status in non_visit_lessons]),
     )
 
@@ -63,7 +63,7 @@ async def attendance_send_callback(callback: types.CallbackQuery):
         lesson = tuple(filter(lambda lesson: lesson.id == int(callback.data), schedule))[0]
 
         await callback.message.edit_text(
-            text=f"{lesson.discipline}, {lesson.start_time}\n\n" + attendance_for_headmen_message(callback),
+            text=f"{lesson.discipline}, {lesson.start_time}\n\n" + await attendance_for_headmen_message(callback),
             reply_markup=load_choose_lesson_kb(schedule),
             parse_mode=ParseMode.HTML,
         )

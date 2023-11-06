@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.services.lesson_service import LessonService
 
 from ..dto import Lesson, Student
@@ -24,12 +26,12 @@ class StudentService(Service):
         self, telegram_id: int, name: str, surname: str, telegram_name: str | None, group_name: str
     ) -> None:
         async with GroupService() as groups_service:
-            group_id = await groups_service.create(group_name)
+            group = await groups_service.create(group_name)
 
         university_id = MIREA_ID  # TODO: Create UniversityService
-        query = "INSERT INTO students VALUES($1, $2, $3, $4, $5, $6, $7)"
+        query = "INSERT INTO students (telegram_id, group_id, university_id, name, surname, telegram_name, is_headman) VALUES($1, $2, $3, $4, $5, $6, $7)"
 
-        await self._con.execute(query, telegram_id, group_id, university_id, name, surname, telegram_name, False)
+        await self._con.execute(query, telegram_id, group.id, university_id, name, surname, telegram_name, False)
 
     async def make_headman(self, telegram_id: int) -> None:
         query = "UPDATE students SET is_headman = true WHERE telegram_id = $1"
@@ -44,20 +46,14 @@ class StudentService(Service):
 
         return Student.from_record(record)
 
-    async def get_by_group(self, group_name: str) -> Student | None:
-        async with GroupService() as groups_service:
-            group = await groups_service.get_by_name(group_name)
-
-        if group is None:
-            return None
-
+    async def filter_by_group(self, group_id: int) -> tuple[Student, ...] | None:
         query = "SELECT * FROM students WHERE group_id = $1"
-        record = await self._con.fetchrow(query, group.id)
+        records = await self._con.fetch(query, group_id)
 
-        if record is None:
+        if records is None:
             return None
 
-        return Student.from_record(record)
+        return tuple(Student.from_record(record) for record in records)
 
     async def all(self) -> tuple[Student, ...]:
         query = "SELECT * from students"
@@ -74,6 +70,8 @@ class StudentService(Service):
 
         async with LessonService() as lesson_service:
             lessons = await lesson_service.get_by_group(group.id)
+
+        lessons = tuple(filter(lambda lesson: lesson.weekday == datetime.now().weekday(), lessons))
 
         if lessons is None:
             return None

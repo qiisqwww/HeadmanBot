@@ -14,7 +14,7 @@ class Lesson:
     group_id: int
     discipline: str
     start_time: time
-    weeekday: int
+    weekday: int
 
     @classmethod
     def from_record(cls, record: Record) -> "Lesson":
