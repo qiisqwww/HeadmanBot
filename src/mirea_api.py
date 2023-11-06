@@ -3,10 +3,6 @@ from typing import Any, Iterable
 
 from httpx import AsyncClient
 
-from src.config.config import DEBUG
-
-from .dto import Lesson
-
 __all__ = [
     "MireaScheduleApi",
 ]
@@ -17,22 +13,14 @@ class MireaScheduleApi:
     _MAX_LESSON_NAME_LEN: int = 16
     _CURRENT_SEMESTR_START: datetime = datetime(year=2023, month=8, day=28)
 
-    async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[Lesson]:
+    async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[tuple[str, time]]:
         """By default return today schedule."""
         day = day or datetime.now()
-        if DEBUG:
-            day = datetime(year=2023, month=10, day=4)
 
         json_schedule = await self._get_json(group_name)
         parsed_schedule = self._parse_schedule(json_schedule, day)
 
-        return [
-            Lesson(
-                discipline=discipline,
-                start_time=start_time,
-            )
-            for discipline, start_time in parsed_schedule
-        ]
+        return [(discipline, time.fromisoformat(start_time)) for discipline, start_time in parsed_schedule]
 
     async def group_exists(self, group_name: str) -> bool:
         async with AsyncClient() as client:
@@ -62,14 +50,9 @@ class MireaScheduleApi:
 
         return shrinked_name
 
-    def _clean_start_time(self, raw_start_time: str) -> str:
-        """Transform date from '10:00:00' into '10:00' format."""
-        clean_start_time, _ = raw_start_time.rsplit(":", 1)
-        return clean_start_time
-
     def _parse_lesson(self, lesson: dict) -> tuple[str, str]:
-        lesson_name: str = self._shrink_lesson_name(lesson["discipline"]["name"])
-        start_time: str = self._clean_start_time(lesson["calls"]["time_start"])
+        lesson_name: str = lesson["discipline"]["name"]
+        start_time: str = lesson["calls"]["time_start"]
         return (lesson_name, start_time)
 
     def _get_lessons_by_day(self, lessons: Iterable, weekday: int) -> filter:

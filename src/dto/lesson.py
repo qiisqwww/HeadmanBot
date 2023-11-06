@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from datetime import time
+
+from asyncpg import Record
 
 __all__ = [
     "Lesson",
@@ -7,12 +10,12 @@ __all__ = [
 
 @dataclass(frozen=True, slots=True)
 class Lesson:
+    id: int
+    group_id: int
     discipline: str
-    start_time: str  # In format like "10:00"
-
-    def __str__(self) -> str:
-        return f"{self.discipline}|{self.start_time}"
+    start_time: time
+    weeekday: int
 
     @classmethod
-    def from_str(cls, string: str) -> "Lesson":
-        return Lesson(*string.split("|"))
+    def from_record(cls, record: Record) -> "Lesson":
+        return Lesson(**dict(record))

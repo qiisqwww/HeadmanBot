@@ -4,3 +4,4 @@ pytest
 pytest-cov
 pytest-randomly
 types-requests
+asyncpg-stubs==0.29.0
