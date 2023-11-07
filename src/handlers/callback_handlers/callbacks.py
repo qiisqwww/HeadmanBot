@@ -63,7 +63,8 @@ async def attendance_send_callback(callback: CallbackQuery):
         lesson = tuple(filter(lambda lesson: lesson.id == int(callback.data), schedule))[0]
 
         await callback.message.edit_text(
-            text=f"{lesson.discipline}, {lesson.start_time}\n\n" + await attendance_for_headmen_message(callback),
+            text=f"{lesson.discipline}, {lesson.start_time.strftime('%H:%M')}\n\n"
+            + await attendance_for_headmen_message(callback),
             reply_markup=load_choose_lesson_kb(schedule),
             parse_mode=ParseMode.HTML,
         )

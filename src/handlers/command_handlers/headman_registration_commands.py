@@ -16,7 +16,7 @@ __all__ = [
 
 headman_registration_router = Router()
 headman_registration_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=True))
-headman_registration_router.message.middleware.register(CheckHeadmanMiddleware(must_be_headman=False))
+headman_registration_router.message.middleware(CheckHeadmanMiddleware(must_be_headman=False))
 
 
 @headman_registration_router.message(Command("set_headman"))
