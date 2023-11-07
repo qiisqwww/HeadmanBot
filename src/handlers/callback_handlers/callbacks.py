@@ -23,6 +23,13 @@ api = MireaScheduleApi()
 @callback_router.callback_query(F.data.startswith("attendance"), flags={"callback": "poll"})
 @logger.catch
 async def check_in_callback(callback: CallbackQuery):
+    if callback.message is None:
+        return
+
+    if callback.data is None:
+        logger.error("No callback data for change attendance.")
+        return
+
     callback_data = callback.data.split("_")[1]
     user_id = callback.from_user.id
 
@@ -55,16 +62,21 @@ async def check_in_callback(callback: CallbackQuery):
 @callback_router.callback_query(flags={"callback": "attendance"})
 @logger.catch
 async def attendance_send_callback(callback: CallbackQuery):
+    if callback.message is None:
+        return
+
     logger.info("attendance callback handled")
-    user_id = callback.from_user.id
+
+    headman_id = callback.from_user.id
 
     async with StudentService() as student_service:
-        schedule = await student_service.get_schedule(user_id)
+        schedule = await student_service.get_schedule(headman_id)
         lesson = tuple(filter(lambda lesson: lesson.id == int(callback.data), schedule))[0]
 
+        lesson_id = int(callback.data)
         await callback.message.edit_text(
             text=f"{lesson.discipline}, {lesson.start_time.strftime('%H:%M')}\n\n"
-            + await attendance_for_headmen_message(callback),
+            + await attendance_for_headmen_message(lesson_id, headman_id),
             reply_markup=load_choose_lesson_kb(schedule),
             parse_mode=ParseMode.HTML,
         )

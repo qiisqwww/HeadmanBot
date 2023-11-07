@@ -3,7 +3,7 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.dto.lesson import Lesson
+from src.dto import Lesson
 
 
 def load_attendance_kb(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
