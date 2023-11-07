@@ -8,6 +8,7 @@ from src.messages import PASS_ASK_MESSAGE, STAROSTA_REG_MESSAGE, WRONG_PASSWORD
 from src.middlewares import CheckHeadmanMiddleware, CheckRegistrationMiddleware
 from src.services import StudentService
 from src.states import SetHeadman
+from src.buttons import load_headman_kb
 
 __all__ = [
     "headman_registration_router",
@@ -40,7 +41,7 @@ async def get_password(message: types.Message, state: FSMContext) -> None:
     if message.text == HEADMAN_PASSWORD:
         async with StudentService() as student_service:
             await student_service.make_headman(user_id)
-            await message.answer(STAROSTA_REG_MESSAGE)
+            await message.answer(STAROSTA_REG_MESSAGE, reply_markup=load_headman_kb())
     else:
         await message.answer(WRONG_PASSWORD)
 
