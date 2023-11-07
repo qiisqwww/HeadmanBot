@@ -1,4 +1,3 @@
-import logging
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -23,8 +22,8 @@ class UpdateDatabaseJob:
         else:
             self._scheduler.add_job(self._send, "cron", day_of_week="mon-sun", hour=2, minute=00)
 
-    def start(self):
-        logging.error("IMHERE")
+    def start(self) -> None:
+        self._scheduler.start()
 
     @staticmethod
     async def _send() -> None:

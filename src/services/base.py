@@ -1,6 +1,5 @@
-import logging
-
 from asyncpg import Connection
+from loguru import logger
 
 from ..database.db import get_db_connection
 
@@ -18,8 +17,8 @@ class Service:
 
     async def __aexit__(self, exc_type, *_) -> None:
         if exc_type is not None:
-            logging.error(exc_type)
+            logger.error(exc_type)
 
-        logging.info("disconnected from database")
+        logger.trace("disconnected from database")
 
         await self._con.close()

@@ -1,27 +1,27 @@
-import logging
-
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from loguru import logger
 
-from src.jobs.update_schedule_job import UpdateScheduleJob
-from src.services.university_service import UniversityService
-
-from .config import BOT_TOKEN, LOGGING_PATH
-from .database import init_database
-from .handlers import (
+from src.config import BOT_TOKEN, DEBUG, LOGGING_PATH
+from src.database import init_database
+from src.handlers import (
     callback_router,
-    headman_reg_router,
+    headman_registration_router,
     headman_router,
-    personal_chat_router,
+    student_registration_router,
 )
-from .jobs import SendingJob, UpdateDatabaseJob
+from src.jobs import SendingJob, UpdateDatabaseJob, UpdateScheduleJob
+from src.services import UniversityService
 
 
 def init_logger() -> None:
-    logging.basicConfig(
-        filename=LOGGING_PATH,
-        level=logging.DEBUG,
-        format="%(asctime)s %(levelname)s %(message)s",
+    logger.add(
+        LOGGING_PATH,
+        compression="zip",
+        rotation="500 MB",
+        enqueue=True,
+        backtrace=DEBUG,
+        diagnose=DEBUG,
     )
 
 
@@ -36,8 +36,8 @@ async def main():
 
     dp = Dispatcher(storage=MemoryStorage())  # Создаем диспетчер и передаем ему храналище
     dp.include_routers(
-        personal_chat_router,
-        headman_reg_router,
+        student_registration_router,
+        headman_registration_router,
         callback_router,
         headman_router,
     )  # Добавляем роутеры в диспатчер
@@ -54,9 +54,9 @@ async def main():
     updater.start()
     sender.start()
 
-    logging.info("bot is starting")
+    logger.info("Bot is starting.")
 
     await bot.delete_webhook(drop_pending_updates=True)  # Игнорируем все команды, отправленные до запуска бота
     await dp.start_polling(bot)  # Запуск бота
 
-    logging.info("bot was turned off")
+    logger.info("Bot was turned off.")

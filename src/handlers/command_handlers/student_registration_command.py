@@ -1,8 +1,7 @@
-import logging
-
 from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from loguru import logger
 
 from src.messages import (
     GROUP_DOESNT_EXISTS_MESSAGE,
@@ -12,49 +11,51 @@ from src.messages import (
     START_MESSAGE,
     SUCCESFULLY_REG_MESSAGE,
 )
-from src.middlewares import RegMiddleware
+from src.middlewares import CheckRegistrationMiddleware
 from src.mirea_api import MireaScheduleApi
 from src.services.student_service import StudentService
 from src.states import RegStates
 
 __all__ = [
-    "personal_chat_router",
+    "student_registration_router",
 ]
 
-
-personal_chat_router = Router()
-
-personal_chat_router.message.middleware(RegMiddleware())
-personal_chat_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
+student_registration_router = Router()
+student_registration_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
+student_registration_router.message.filter(F.chat.type.in_({"private"}))
 
 
-@personal_chat_router.message(Command("start"))
+@student_registration_router.message(Command("start"))
+@logger.catch
 async def start_cmd(message: types.Message, state: FSMContext) -> None:
-    logging.info("start command")
+    logger.info("start command")
 
     await message.answer(f"{START_MESSAGE}\n{REG_MESSAGE_1_1}")
     await state.set_state(RegStates.surname_input)
 
 
-@personal_chat_router.message(RegStates.surname_input, F.text)
+@student_registration_router.message(RegStates.surname_input, F.text)
+@logger.catch
 async def handling_surname(message: types.Message, state: FSMContext) -> None:
     await state.update_data(surname=message.text)
-    logging.info("surname handled")
+    logger.info("surname handled")
 
     await message.answer(REG_MESSAGE_1_2)
     await state.set_state(RegStates.name_input)
 
 
-@personal_chat_router.message(RegStates.name_input, F.text)
+@student_registration_router.message(RegStates.name_input, F.text)
+@logger.catch
 async def handling_name(message: types.Message, state: FSMContext) -> None:
     await state.update_data(name=message.text)
-    logging.info("name handled")
+    logger.info("name handled")
 
     await message.answer(REG_MESSAGE_2)
     await state.set_state(RegStates.group_input)
 
 
-@personal_chat_router.message(RegStates.group_input, F.text)
+@student_registration_router.message(RegStates.group_input, F.text)
+@logger.catch
 async def handling_group(message: types.Message, state: FSMContext) -> None:
     api = MireaScheduleApi()
     if not await api.group_exists(message.text):
@@ -63,7 +64,7 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
         return
 
     await state.update_data(group=message.text)
-    logging.info("group name handled")
+    logger.info("group name handled")
 
     user_data = await state.get_data()
 

@@ -1,8 +1,7 @@
-import logging
-
 from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
+from loguru import logger
 
 from src.buttons import load_choose_lesson_kb
 from src.messages import (
@@ -11,7 +10,7 @@ from src.messages import (
     HEADMAN_SEND_MSG_MISTAKE,
     NO_LESSONS_TODAY,
 )
-from src.middlewares import HeadmanCommandsMiddleware
+from src.middlewares import CheckHeadmanMiddleware, CheckRegistrationMiddleware
 from src.mirea_api import MireaScheduleApi
 from src.services.group_service import GroupService
 from src.services.student_service import StudentService
@@ -23,13 +22,16 @@ __all__ = [
 
 headman_router = Router()
 
-headman_router.message.middleware(HeadmanCommandsMiddleware())
+headman_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=True))
+headman_router.message.middleware.register(CheckHeadmanMiddleware(must_be_headman=True))
+
 headman_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет отвечать только в личных сообщениях
 
 
 @headman_router.message(Command("getstat"))
+@logger.catch
 async def getstat_command(message: types.Message) -> None:
-    logging.info("getstat command")
+    logger.trace("getstat command")
     api = MireaScheduleApi()
 
     user_id = message.from_user.id
@@ -55,6 +57,6 @@ async def getstat_command(message: types.Message) -> None:
 
 @headman_router.message(Command("faq"))
 async def faq_command(message: types.Message) -> None:
-    logging.info("faq command")
+    logger.trace("faq command")
 
     await message.answer(FAQ_MESSAGE, parse_mode=ParseMode.MARKDOWN)
