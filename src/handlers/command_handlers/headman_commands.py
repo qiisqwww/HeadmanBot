@@ -9,11 +9,13 @@ from src.messages import (
     FAQ_MESSAGE,
     HEADMAN_SEND_MSG_MISTAKE,
     NO_LESSONS_TODAY,
+    LOOK_WHAT_I_FOUND_MESSAGE
 )
 from src.middlewares import CheckHeadmanMiddleware, CheckRegistrationMiddleware
 from src.mirea_api import MireaScheduleApi
 from src.services.group_service import GroupService
 from src.services.student_service import StudentService
+from src.buttons import load_headman_kb
 
 __all__ = [
     "headman_router",
@@ -52,6 +54,7 @@ async def getstat_command(message: types.Message) -> None:
             await message.answer(NO_LESSONS_TODAY)
             return
 
+        await message.answer(LOOK_WHAT_I_FOUND_MESSAGE, reply_markup = load_headman_kb())
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
 
 
