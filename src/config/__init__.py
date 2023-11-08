@@ -8,6 +8,8 @@ from .config import (
     DEBUG,
     HEADMAN_PASSWORD,
     LOGGING_PATH,
+    REDIS_PORT,
+    REDIS_HOST
 )
 
 __all__ = [
@@ -20,4 +22,6 @@ __all__ = [
     "DB_NAME",
     "DB_PORT",
     "DB_HOST",
+    "REDIS_PORT",
+    "REDIS_HOST"
 ]
