@@ -9,6 +9,7 @@ from src.handlers import (
     headman_registration_router,
     headman_router,
     student_registration_router,
+    void_router
 )
 from src.jobs import SendingJob, UpdateDatabaseJob, UpdateScheduleJob
 from src.services import UniversityService
@@ -40,6 +41,7 @@ async def main():
         headman_registration_router,
         callback_router,
         headman_router,
+        void_router
     )  # Добавляем роутеры в диспатчер
 
     await init_database()
