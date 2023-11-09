@@ -13,6 +13,7 @@ from src.handlers import (
 )
 from src.jobs import SendingJob, UpdateDatabaseJob, UpdateScheduleJob
 from src.services import UniversityService
+from src.middlewares import ThrottlingMiddleware
 
 
 def init_logger() -> None:
@@ -43,6 +44,7 @@ async def main():
         headman_router,
         void_router
     )  # Добавляем роутеры в диспатчер
+    dp.message.middleware(ThrottlingMiddleware())
 
     await init_database()
     await add_unis()
