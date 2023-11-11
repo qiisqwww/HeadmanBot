@@ -1,5 +1,5 @@
 # Choose image for project. It will be downloaded from https://hub.docker.com/
-FROM python:3.10-alpine
+FROM python:3.11-alpine
 
 # Set work directory for container
 WORKDIR /app

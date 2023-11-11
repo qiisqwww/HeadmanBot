@@ -1,3 +1,5 @@
+from asyncpg.pool import PoolConnectionProxy
+
 from src.enums import VisitStatus
 from src.services import AttendanceService, StudentService
 
@@ -118,7 +120,7 @@ FAQ_MESSAGE = """
 GROUP_DOESNT_EXISTS_MESSAGE = "Такой группы нет!"
 
 
-async def attendance_for_headmen_message(lesson_id: int, headman_id: int) -> str:
+async def attendance_for_headmen_message(lesson_id: int, headman_id: int, conn: PoolConnectionProxy) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
@@ -127,49 +129,48 @@ async def attendance_for_headmen_message(lesson_id: int, headman_id: int) -> str
     visit = []
     not_checked = []
 
-    async with StudentService() as student_service:
-        headman = await student_service.get(headman_id)
-        users = await student_service.filter_by_group(headman.group_id)
+    student_service = StudentService(conn)
+    attendance_service = AttendanceService(conn)
+
+    headman = await student_service.get(headman_id)
+    users = await student_service.filter_by_group(headman.group_id)
 
     user_link = '<a href="tg://user?id={user_id}">{surname} {name}</a>\n'
 
-    async with AttendanceService() as attendance_service:
-        for user in users:
-            attendance = await attendance_service.get(user.telegram_id)
-            attendance_lesson = tuple(filter(lambda el: el[0].id == lesson_id, attendance.lessons))[0]
+    for user in users:
+        attendance = await attendance_service.get(user.telegram_id)
+        attendance_lesson = tuple(filter(lambda el: el[0].id == lesson_id, attendance.lessons))[0]
 
-            match attendance_lesson[1]:
-                case VisitStatus.NOT_CHECKED:
-                    not_checked.append(
-                        [
-                            f"{user.surname} {user.name}",
-                            user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
-                        ]
-                    )
-                case VisitStatus.VISIT:
-                    visit.append(
-                        [
-                            f"{user.surname} {user.name}",
-                            user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
-                        ]
-                    )
-                case VisitStatus.NOT_VISIT:
-                    not_visit.append(
-                        [
-                            f"{user.surname} {user.name}",
-                            user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
-                        ]
-                    )
+        match attendance_lesson[1]:
+            case VisitStatus.NOT_CHECKED:
+                not_checked.append(
+                    [
+                        f"{user.surname} {user.name}",
+                        user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
+                    ]
+                )
+            case VisitStatus.VISIT:
+                visit.append(
+                    [
+                        f"{user.surname} {user.name}",
+                        user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
+                    ]
+                )
+            case VisitStatus.NOT_VISIT:
+                not_visit.append(
+                    [
+                        f"{user.surname} {user.name}",
+                        user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
+                    ]
+                )
 
-        for user in sorted(not_checked, key=lambda s: s[0]):
-            none_text += user[1]
+    for user in sorted(not_checked, key=lambda s: s[0]):
+        none_text += user[1]
 
-        for user in sorted(visit, key=lambda s: s[0]):
-            visit_text += user[1]
+    for user in sorted(visit, key=lambda s: s[0]):
+        visit_text += user[1]
 
-        for user in sorted(not_visit, key=lambda s: s[0]):
-            no_text += user[1]
+    for user in sorted(not_visit, key=lambda s: s[0]):
+        no_text += user[1]
 
-        attendance = none_text + "\n" + visit_text + "\n" + no_text + "\n" + "Что-то еще?"
-
-        return attendance
+    return none_text + "\n" + visit_text + "\n" + no_text + "\n" + "Что-то еще?"

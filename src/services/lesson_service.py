@@ -1,6 +1,10 @@
-from datetime import time, timezone
+from datetime import datetime, time, timedelta
 
-from ..dto import Lesson
+from src.repositories.group_repository import GroupRepository
+
+from ..dto import Group
+from ..mirea_api import MireaScheduleApi
+from ..repositories import LessonRepository
 from .base import Service
 
 __all__ = [
@@ -9,32 +13,10 @@ __all__ = [
 
 
 class LessonService(Service):
-    async def get(self, lesson_id: int) -> Lesson | None:
-        query = "SELECT * FROM lessons WHERE id = $1"
-        record = await self._con.fetchrow(query, lesson_id)
-
-        if record is None:
-            return record
-
-        return Lesson.from_record(record)
-
-    async def get_by_group(self, group_id: int) -> tuple[Lesson, ...] | None:
-        query = "SELECT * FROM lessons WHERE group_id = $1"
-        records = await self._con.fetch(query, group_id)
-
-        if records is None:
-            return None
-
-        return tuple(Lesson.from_record(record) for record in records)
-
     async def create(self, discipline: str, group_id: int, start_time: time, weekday: int) -> None:
-        start_time = time(hour=start_time.hour, minute=start_time.minute, tzinfo=timezone.utc)
-        query = "SELECT * from lessons WHERE discipline = $1 AND group_id = $2 AND start_time = $3 AND weekday = $4"
-
-        record = await self._con.fetchrow(query, discipline, group_id, start_time, weekday)
-
-        if record is not None:
-            return
+        lesson_repository = LessonRepository(self._con)
+        if await lesson_repository.find(discipline, group_id, start_time, weekday) is None:
+            return None
 
         query = "INSERT INTO lessons (discipline, group_id, start_time, weekday) VALUES($1, $2, $3, $4)"
         await self._con.execute(query, discipline, group_id, start_time, weekday)
@@ -42,3 +24,31 @@ class LessonService(Service):
     async def delete_all_lessons(self) -> None:
         query = "TRUNCATE TABLE lessons CASCADE"
         await self._con.execute(query)
+
+    async def _recreate_schedule_for_group(self, group: Group) -> None:
+        lesson_service = LessonService(self._con)
+        first_day = datetime.today() - timedelta(days=datetime.today().weekday() % 7)
+        api = MireaScheduleApi()
+
+        for weekday in range(6):
+            current_day = first_day + timedelta(days=weekday)
+            lessons = await api.get_schedule(group.name, day=current_day)
+
+            for lesson in lessons:
+                await lesson_service.create(
+                    discipline=lesson[0],
+                    start_time=lesson[1],
+                    group_id=group.id,
+                    weekday=weekday,
+                )
+
+    async def recreate_lessons(self) -> None:
+        """Recreate lessons for current week"""
+
+        lesson_service = LessonService(self._con)
+        await lesson_service.delete_all_lessons()
+
+        groups = await GroupRepository(self._con).all()
+
+        for group in groups:
+            await self._recreate_schedule_for_group(group)

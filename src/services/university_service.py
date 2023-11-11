@@ -1,4 +1,5 @@
-from ..dto import University
+from src.repositories.university_repository import UniversityRepository
+
 from .base import Service
 
 __all__ = [
@@ -7,21 +8,14 @@ __all__ = [
 
 
 class UniversityService(Service):
-    async def all(self) -> list[University]:
-        query = "SELECT * FROM universities"
-        records = await self._con.fetch(query)
-
-        return [University.from_record(record) for record in records]
-
     async def exists(self, name: str) -> bool:
-        query = "SELECT id FROM universities WHERE name  = $1"
-        result = await self._con.fetchval(query, name)
+        uni = await UniversityRepository(self._con).get_by_name(name)
 
-        return bool(result)
+        return uni is not None
 
     async def create(self, name: str) -> None:
         if await self.exists(name):
-            return None
+            return
 
         query = "INSERT INTO universities(name) VALUES($1)"
         await self._con.execute(query, name)

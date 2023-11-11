@@ -1,6 +1,8 @@
 from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.types.message import Message
+from asyncpg import Pool
 from loguru import logger
 
 from src.messages import (
@@ -46,7 +48,7 @@ async def handling_surname(message: types.Message, state: FSMContext) -> None:
 
 @student_registration_router.message(RegStates.name_input, F.text)
 @logger.catch
-async def handling_name(message: types.Message, state: FSMContext) -> None:
+async def handling_name(message: Message, state: FSMContext) -> None:
     await state.update_data(name=message.text)
     logger.info("name handled")
 
@@ -56,19 +58,19 @@ async def handling_name(message: types.Message, state: FSMContext) -> None:
 
 @student_registration_router.message(RegStates.group_input, F.text)
 @logger.catch
-async def handling_group(message: types.Message, state: FSMContext) -> None:
-    api = MireaScheduleApi()
+async def handling_group(message: Message, state: FSMContext, api: MireaScheduleApi, pool: Pool) -> None:
     if not await api.group_exists(message.text):
         await message.answer(GROUP_DOESNT_EXISTS_MESSAGE)
         await state.set_state(RegStates.group_input)
         return
 
     await state.update_data(group=message.text)
-    logger.info("group name handled")
+    logger.info("Group name handled")
 
     user_data = await state.get_data()
+    async with pool.acquire() as conn:
+        student_service = StudentService(conn)
 
-    async with StudentService() as student_service:
         await student_service.create(
             telegram_id=message.from_user.id,
             telegram_name=message.from_user.username,
@@ -78,4 +80,4 @@ async def handling_group(message: types.Message, state: FSMContext) -> None:
         )
         await message.answer(SUCCESFULLY_REG_MESSAGE)
 
-    await state.clear()
+        await state.clear()

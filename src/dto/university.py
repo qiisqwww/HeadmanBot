@@ -1,17 +1,21 @@
 from dataclasses import dataclass
+from typing import Mapping, Self
 
-from asyncpg import Record
+from .dto import DTO
 
 __all__ = [
     "University",
 ]
 
 
-@dataclass
-class University:
+@dataclass(slots=True)
+class University(DTO):
     id: int
     name: str
 
     @classmethod
-    def from_record(cls, record: Record) -> "University":
-        return University(**dict(record))
+    def from_mapping(cls, data: Mapping) -> Self:
+        return cls(
+            id=data["id"],
+            name=data["name"],
+        )

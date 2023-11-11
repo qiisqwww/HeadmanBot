@@ -4,6 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message
 from loguru import logger
 
+from src.database.db import get_pool
 from src.messages import ALREADY_HEADMAN_MESSAGE, MUST_BE_HEADMEN_MESSAGE
 from src.services.student_service import StudentService
 
@@ -27,8 +28,10 @@ class CheckHeadmanMiddleware(BaseMiddleware):
             return
 
         user_id = event.from_user.id
+        pool = await get_pool()
 
-        async with StudentService() as student_service:
+        async with pool.acquire() as con:
+            student_service = StudentService(con)
             is_headman = await student_service.is_headman(user_id)
 
         if is_headman != self._must_be_headman and self._must_be_headman:
@@ -41,5 +44,5 @@ class CheckHeadmanMiddleware(BaseMiddleware):
             logger.trace("headmen reg middleware finished, already registered as headmen")
             return
 
-        logger.trace("headmen commands middleware finished")
+        logger.info("headman commands middleware finished")
         return await handler(event, data)

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+from typing import Mapping, Self
 
-from asyncpg import Record
+from .dto import DTO
 
 __all__ = [
     "Student",
@@ -8,7 +9,7 @@ __all__ = [
 
 
 @dataclass(slots=True)
-class Student:
+class Student(DTO):
     telegram_id: int
     group_id: int
     university_id: int
@@ -18,5 +19,13 @@ class Student:
     is_headman: bool
 
     @classmethod
-    def from_record(cls, record: Record) -> "Student":
-        return Student(**dict(record))
+    def from_mapping(cls, data: Mapping) -> Self:
+        return cls(
+            telegram_id=data["telegram_id"],
+            group_id=data["group_id"],
+            university_id=data["university_id"],
+            name=data["name"],
+            surname=data["surname"],
+            telegram_name=data["telegram_name"],
+            is_headman=data["is_headman"],
+        )

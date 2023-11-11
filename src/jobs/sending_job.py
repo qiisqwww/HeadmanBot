@@ -6,6 +6,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from src.buttons import load_attendance_kb
 from src.config import DEBUG
+from src.database.db import get_pool
 from src.messages import POLL_MESSAGE
 from src.services.group_service import GroupService
 from src.services.lesson_service import LessonService
@@ -36,19 +37,23 @@ class SendingJob:
 
     @staticmethod
     async def _send(poll_user: Callable):
-        async with GroupService() as group_service:
+        pool = await get_pool()
+
+        async with pool.acquire() as con:
+            group_service = GroupService(con)
+            lesson_service = LessonService(con)
+            student_service = StudentService(con)
+
             groups = await group_service.all()
 
-        for group in groups:
-            async with LessonService() as lesson_service:
+            for group in groups:
                 schedule = await lesson_service.get_by_group(group.id)
-            schedule = tuple(filter(lambda lesson: lesson.weekday == datetime.now().weekday(), schedule))
+                schedule = tuple(filter(lambda lesson: lesson.weekday == datetime.now().weekday(), schedule))
 
-            if schedule is None:
-                continue
+                if schedule is None:
+                    continue
 
-            async with StudentService() as student_service:
                 users = await student_service.filter_by_group(group.id)
 
-            for user in users:
-                await poll_user(user.telegram_id, POLL_MESSAGE, reply_markup=load_attendance_kb(schedule))
+                for user in users:
+                    await poll_user(user.telegram_id, POLL_MESSAGE, reply_markup=load_attendance_kb(schedule))

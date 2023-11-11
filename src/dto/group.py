@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+from typing import Mapping, Self
 
-from asyncpg import Record
+from src.dto.dto import DTO
 
 __all__ = [
     "Group",
@@ -8,10 +9,13 @@ __all__ = [
 
 
 @dataclass(slots=True)
-class Group:
+class Group(DTO):
     id: int
     name: str
 
     @classmethod
-    def from_record(cls, record: Record) -> "Group":
-        return Group(**dict(record))
+    def from_mapping(cls, data: Mapping) -> Self:
+        return cls(
+            id=data["id"],
+            name=data["name"],
+        )

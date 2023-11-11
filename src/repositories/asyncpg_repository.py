@@ -1,11 +1,17 @@
+from typing import TypeVar
+
 from asyncpg.pool import PoolConnectionProxy
 
+from .async_repository import AsyncRepository
+
 __all__ = [
-    "Service",
+    "AsyncpgRepository",
 ]
 
+DTO = TypeVar("DTO")
 
-class Service:
+
+class AsyncpgRepository(AsyncRepository[DTO]):
     _con: PoolConnectionProxy
 
     def __init__(self, con: PoolConnectionProxy) -> None:

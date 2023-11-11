@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import Any, Mapping, Self
+
+from src.dto.dto import DTO
 
 from ..enums import VisitStatus
 from .lesson import Lesson
@@ -9,6 +12,21 @@ __all__ = [
 
 
 @dataclass(slots=True)
-class Attendance:
+class Attendance(DTO):
     student_id: int
-    lessons: list[tuple[Lesson, VisitStatus]]
+    lesson: Lesson
+    status: VisitStatus
+
+    def __gt__(self, other: Any) -> bool:
+        if not isinstance(other, Attendance):
+            return NotImplemented
+
+        return self.lesson > other.lesson
+
+    @classmethod
+    def from_mapping(cls, data: Mapping) -> Self:
+        return cls(
+            lesson=Lesson.from_mapping(data),
+            status=data["status"],
+            student_id=data["student_id"],
+        )

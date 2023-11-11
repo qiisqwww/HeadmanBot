@@ -1,11 +1,13 @@
 import asyncpg
 from asyncpg.connection import Connection
+from asyncpg.pool import Pool
 
 from .config import DATABASE_URL
 
 __all__ = [
     "get_db_connection",
     "init_database",
+    "get_pool",
 ]
 
 
@@ -22,3 +24,9 @@ async def init_database() -> None:
     await conn.execute(query)
 
     await conn.close()
+
+
+async def get_pool() -> Pool:
+    if not hasattr(get_pool, "pool"):
+        get_pool.pool = await asyncpg.create_pool(DATABASE_URL)
+    return get_pool.pool

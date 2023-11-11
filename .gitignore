@@ -11,3 +11,4 @@ logs
 .coverage
 .pytest_cache
 db_data/
+todo.md

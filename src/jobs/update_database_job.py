@@ -1,8 +1,8 @@
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from src.config.config import DEBUG
-from src.services.attendance_service import AttendanceService
+from src.config import DEBUG
+from src.database import get_pool
+from src.services import AttendanceService
 
 __all__ = [
     "UpdateDatabaseJob",
@@ -27,5 +27,8 @@ class UpdateDatabaseJob:
 
     @staticmethod
     async def _send() -> None:
-        async with AttendanceService() as attendance_service:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            attendance_service = AttendanceService(conn)
+
             await attendance_service.recreate_all_attendance()
