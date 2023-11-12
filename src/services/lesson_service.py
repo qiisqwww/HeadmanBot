@@ -1,6 +1,6 @@
 from datetime import datetime, time, timezone
 
-from src.config.config import DEBUG
+from src.config import DEBUG
 from src.dto import Group, Lesson, Student
 from src.mirea_api import MireaScheduleApi
 

@@ -59,11 +59,14 @@ class SendingJob:
         for user in users:
             try:
                 await bot.send_message(user.telegram_id, POLL_MESSAGE, reply_markup=load_attendance_kb(lessons))
-            except TelegramForbiddenError:
+            except TelegramForbiddenError as e:
                 logger.error(f"Failed to send message to user {user.surname} {user.surname} id={user.telegram_id}")
+                logger.error(e)
 
     @logger.catch
     async def _send(self, bot: Bot) -> None:
+        logger.info("Sending job started.")
+
         if DEBUG:
             await asyncio.sleep(5)
 
@@ -75,3 +78,5 @@ class SendingJob:
 
             for group in groups:
                 await self._send_to_group(bot, con, group)
+
+        logger.info("Sending job finished.")
