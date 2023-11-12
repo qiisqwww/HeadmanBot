@@ -12,3 +12,5 @@ logs
 .pytest_cache
 db_data/
 todo.md
+*.db 
+transform_data.py
