@@ -6,16 +6,10 @@ from asyncpg import Pool
 from loguru import logger
 
 from src.buttons import load_choose_lesson_kb
-from src.messages import (
-    CHOOSE_GETSTAT_LESSON,
-    FAQ_MESSAGE,
-    HEADMAN_SEND_MSG_MISTAKE,
-    NO_LESSONS_TODAY,
-)
+from src.dto import Student
+from src.messages import CHOOSE_GETSTAT_LESSON, FAQ_MESSAGE, NO_LESSONS_TODAY
 from src.middlewares import CheckHeadmanMiddleware, CheckRegistrationMiddleware
-from src.mirea_api import MireaScheduleApi
-from src.services.group_service import GroupService
-from src.services.student_service import StudentService
+from src.services import LessonService
 
 __all__ = [
     "headman_router",
@@ -30,24 +24,13 @@ headman_router.message.filter(F.chat.type.in_({"private"}))  # Бот будет
 
 @headman_router.message(Command("getstat"))
 @logger.catch
-async def getstat_command(message: Message, pool: Pool, api: MireaScheduleApi) -> None:
+async def getstat_command(message: Message, pool: Pool, student: Student) -> None:
     logger.trace("'/getstat' command started.")
-    if message.from_user is None:
-        return
+    headman = student
 
-    user_id = message.from_user.id
-    async with pool.acquire() as conn:
-        student_service = StudentService(conn)
-        group_service = GroupService(conn)
-
-        headman = await student_service.get(user_id)
-        group = await group_service.get(headman.group_id)
-
-        if not await api.group_exists(group.name):
-            await message.answer(HEADMAN_SEND_MSG_MISTAKE)
-            return
-
-        lessons = await student_service.get_schedule(user_id)
+    async with pool.acquire() as con:
+        lesson_service = LessonService(con)
+        lessons = await lesson_service.filter_by_student(headman)
 
         if not lessons:
             await message.answer(NO_LESSONS_TODAY)

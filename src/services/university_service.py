@@ -1,6 +1,6 @@
-from src.repositories.university_repository import UniversityRepository
+from src.dto import University
 
-from .base import Service
+from .service import Service
 
 __all__ = [
     "UniversityService",
@@ -8,14 +8,27 @@ __all__ = [
 
 
 class UniversityService(Service):
-    async def exists(self, name: str) -> bool:
-        uni = await UniversityRepository(self._con).get_by_name(name)
+    async def try_create(self, name: str) -> None:
+        """Trying create new university if is does not exists."""
+        university = await self.find_by_name(name)
 
-        return uni is not None
-
-    async def create(self, name: str) -> None:
-        if await self.exists(name):
+        if university:
             return
 
-        query = "INSERT INTO universities(name) VALUES($1)"
+        await self._create(name)
+
+    async def find_by_name(self, name: str) -> University | None:
+        query = "SELECT id FROM universities WHERE name LIKE $1"
+        pk = await self._con.fetchval(query, name)
+
+        if pk is None:
+            return None
+
+        return University(
+            id=pk,
+            name=name,
+        )
+
+    async def _create(self, name: str) -> None:
+        query = "INSERT INTO universities (name) VALUES($1)"
         await self._con.execute(query, name)

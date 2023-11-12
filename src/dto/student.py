@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, unsafe_hash=True)
 class Student(DTO):
     telegram_id: int
     group_id: int
@@ -29,3 +29,11 @@ class Student(DTO):
             telegram_name=data["telegram_name"],
             is_headman=data["is_headman"],
         )
+
+    @property
+    def telegram_link(self) -> str:
+        return f'<a href="tg://user?id={self.telegram_id}">{self.surname} {self.name}</a>\n'
+
+    @property
+    def fullname(self) -> str:
+        return f"{self.surname} {self.name}"

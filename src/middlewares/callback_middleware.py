@@ -7,7 +7,8 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.database import get_pool
-from src.services import StudentService
+from src.dto import Student
+from src.services import LessonService
 
 __all__ = [
     "CallbackMiddleware",
@@ -25,8 +26,10 @@ class CallbackMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        user_id = event.from_user.id
+        logger.info(f"EVENT TYPE={type(event)}")
+
         flag = get_flag(data, "callback")
+        student: Student = data["student"]
 
         if flag == "poll":
             lesson_len = timedelta(hours=1, minutes=30)
@@ -34,10 +37,10 @@ class CallbackMiddleware(BaseMiddleware):
 
             pool = await get_pool()
             async with pool.acquire() as con:
-                student_service = StudentService(con)
-                schedule = await student_service.get_schedule(user_id)
+                lesson_service = LessonService(con)
+                today_lessons = await lesson_service.filter_by_student(student)
 
-            first_lesson_time = datetime.combine(datetime.today(), schedule[0].start_time)
+            first_lesson_time = datetime.combine(datetime.today(), today_lessons[0].start_time)
 
             if now > first_lesson_time + lesson_len:
                 logger.info("(poll) callback middleware finished, lesson was already started")

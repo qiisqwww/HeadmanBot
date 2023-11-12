@@ -24,3 +24,5 @@ services:
 
 volumes:
   postgres_headman_bot_data:
+    external: True
+    name: "postgres_headman_bot_data"

@@ -29,12 +29,14 @@ class CheckRegistrationMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        user_id = event.from_user.id
+        telegram_id = event.from_user.id
         pool = await get_pool()
 
         async with pool.acquire() as con:
             student_service = StudentService(con)
-            is_registered = await student_service.is_registered(user_id)
+            student = await student_service.find(telegram_id)
+
+        is_registered = student is not None
 
         if is_registered != self._must_be_registered and not self._must_be_registered:
             await event.reply(ALREADY_REGISTERED_MESSAGE)
@@ -47,4 +49,6 @@ class CheckRegistrationMiddleware(BaseMiddleware):
             return
 
         logger.trace("Check is user registred middleware finished.")
+        data["student"] = student
+
         return await handler(event, data)

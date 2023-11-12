@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import time
 from typing import Any, Mapping, Self
 
-from src.dto.dto import DTO
+from .dto import DTO
 
 __all__ = [
     "Lesson",
@@ -13,18 +13,16 @@ __all__ = [
 class Lesson(DTO):
     id: int
     group_id: int
-    discipline: str
+    name: str
     start_time: time
-    weekday: int
 
     @classmethod
     def from_mapping(cls, data: Mapping) -> Self:
         return cls(
             id=data["id"],
             group_id=data["group_id"],
-            discipline=data["discipline"],
+            name=data["name"],
             start_time=data["start_time"],
-            weekday=data["weekday"],
         )
 
     def __gt__(self, other: Any) -> bool:
@@ -32,3 +30,10 @@ class Lesson(DTO):
             return NotImplemented
 
         return self.start_time > other.start_time
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.start_time.strftime('%H:%M')}"
+
+    @property
+    def str_start_time(self) -> str:
+        return self.start_time.strftime("%H:%M")

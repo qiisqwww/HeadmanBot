@@ -20,7 +20,7 @@ class MireaScheduleApi:
         json_schedule = await self._get_json(group_name)
         parsed_schedule = self._parse_schedule(json_schedule, day)
 
-        return [(discipline, time.fromisoformat(start_time)) for discipline, start_time in parsed_schedule]
+        return [(name, time.fromisoformat(start_time)) for name, start_time in parsed_schedule]
 
     async def group_exists(self, group_name: str) -> bool:
         async with AsyncClient() as client:

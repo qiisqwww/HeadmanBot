@@ -1,7 +1,8 @@
 from asyncpg.pool import PoolConnectionProxy
 
+from src.dto import Lesson, Student
 from src.enums import VisitStatus
-from src.services import AttendanceService, StudentService
+from src.services import AttendanceService
 
 __all__ = [
     "START_MESSAGE",
@@ -120,57 +121,34 @@ FAQ_MESSAGE = """
 GROUP_DOESNT_EXISTS_MESSAGE = "Такой группы нет!"
 
 
-async def attendance_for_headmen_message(lesson_id: int, headman_id: int, conn: PoolConnectionProxy) -> str:
+async def attendance_for_headmen_message(lesson: Lesson, headman: Student, con: PoolConnectionProxy) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
 
-    not_visit = []
-    visit = []
-    not_checked = []
+    not_visit: list[Student] = []
+    visit: list[Student] = []
+    not_checked: list[Student] = []
 
-    student_service = StudentService(conn)
-    attendance_service = AttendanceService(conn)
+    attendance_service = AttendanceService(con)
+    attendances = await attendance_service.get_visit_status_for_group_students(headman.group_id, lesson)
 
-    headman = await student_service.get(headman_id)
-    users = await student_service.filter_by_group(headman.group_id)
-
-    user_link = '<a href="tg://user?id={user_id}">{surname} {name}</a>\n'
-
-    for user in users:
-        attendance = await attendance_service.get(user.telegram_id)
-        attendance_lesson = tuple(filter(lambda el: el[0].id == lesson_id, attendance.lessons))[0]
-
-        match attendance_lesson[1]:
+    for student, visit_status in attendances.items():
+        match visit_status:
             case VisitStatus.NOT_CHECKED:
-                not_checked.append(
-                    [
-                        f"{user.surname} {user.name}",
-                        user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
-                    ]
-                )
+                not_checked.append(student)
             case VisitStatus.VISIT:
-                visit.append(
-                    [
-                        f"{user.surname} {user.name}",
-                        user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
-                    ]
-                )
+                visit.append(student)
             case VisitStatus.NOT_VISIT:
-                not_visit.append(
-                    [
-                        f"{user.surname} {user.name}",
-                        user_link.format(user_id=user.telegram_id, surname=user.surname, name=user.name),
-                    ]
-                )
+                not_visit.append(student)
 
-    for user in sorted(not_checked, key=lambda s: s[0]):
-        none_text += user[1]
+    for student in sorted(not_checked, key=lambda student: student.fullname):
+        none_text += student.telegram_link
 
-    for user in sorted(visit, key=lambda s: s[0]):
-        visit_text += user[1]
+    for student in sorted(visit, key=lambda student: student.fullname):
+        visit_text += student.telegram_link
 
-    for user in sorted(not_visit, key=lambda s: s[0]):
-        no_text += user[1]
+    for student in sorted(not_visit, key=lambda student: student.fullname):
+        no_text += student.telegram_link
 
     return none_text + "\n" + visit_text + "\n" + no_text + "\n" + "Что-то еще?"

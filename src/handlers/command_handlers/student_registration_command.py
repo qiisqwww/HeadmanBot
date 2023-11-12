@@ -26,6 +26,8 @@ student_registration_router = Router()
 student_registration_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
 student_registration_router.message.filter(F.chat.type.in_({"private"}))
 
+MIREA_ID = 1  # FIXME:
+
 
 @student_registration_router.message(Command("start"))
 @logger.catch
@@ -58,7 +60,15 @@ async def handling_name(message: Message, state: FSMContext) -> None:
 
 @student_registration_router.message(RegStates.group_input, F.text)
 @logger.catch
-async def handling_group(message: Message, state: FSMContext, api: MireaScheduleApi, pool: Pool) -> None:
+async def handling_group(message: Message, state: FSMContext, pool: Pool) -> None:
+    if message.from_user is None:
+        return
+
+    if message.text is None:
+        await message.answer(GROUP_DOESNT_EXISTS_MESSAGE)
+        return
+
+    api = MireaScheduleApi()
     if not await api.group_exists(message.text):
         await message.answer(GROUP_DOESNT_EXISTS_MESSAGE)
         await state.set_state(RegStates.group_input)
@@ -71,12 +81,13 @@ async def handling_group(message: Message, state: FSMContext, api: MireaSchedule
     async with pool.acquire() as conn:
         student_service = StudentService(conn)
 
-        await student_service.create(
+        await student_service.register(
             telegram_id=message.from_user.id,
             telegram_name=message.from_user.username,
             name=user_data["name"],
             surname=user_data["surname"],
             group_name=user_data["group"],
+            university_id=MIREA_ID,
         )
         await message.answer(SUCCESFULLY_REG_MESSAGE)
 

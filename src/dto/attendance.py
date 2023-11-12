@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 from typing import Any, Mapping, Self
 
-from src.dto.dto import DTO
-
 from ..enums import VisitStatus
+from .dto import DTO
 from .lesson import Lesson
 
 __all__ = [
@@ -27,6 +26,6 @@ class Attendance(DTO):
     def from_mapping(cls, data: Mapping) -> Self:
         return cls(
             lesson=Lesson.from_mapping(data),
-            status=data["status"],
+            status=VisitStatus(data["visit_status"]),
             student_id=data["student_id"],
         )

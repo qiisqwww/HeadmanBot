@@ -10,8 +10,7 @@ from src.handlers import (
     headman_router,
     student_registration_router,
 )
-from src.jobs import SendingJob, UpdateDatabaseJob, UpdateScheduleJob
-from src.mirea_api import MireaScheduleApi
+from src.jobs import SendingJob, UpdateDatabaseJob
 from src.services import UniversityService
 
 
@@ -28,13 +27,17 @@ def init_logger() -> None:
 
 async def add_unis() -> None:
     pool = await get_pool()
-    university_service = UniversityService(await pool.acquire())
-    for uni in ["РТУ МИРЭА"]:
-        await university_service.create(uni)
+    async with pool.acquire() as con:
+        university_service = UniversityService(con)
+        for uni in ["РТУ МИРЭА"]:
+            await university_service.try_create(uni)
 
 
 async def main():
-    dp = Dispatcher(storage=MemoryStorage(), pool=await get_pool(), api=MireaScheduleApi())
+    dp = Dispatcher(
+        storage=MemoryStorage(),
+        pool=await get_pool(),
+    )
     dp.include_routers(
         student_registration_router,
         headman_registration_router,
@@ -49,12 +52,10 @@ async def main():
     bot = Bot(BOT_TOKEN)
 
     sender = SendingJob(bot)
-    updater = UpdateDatabaseJob()
-    schedule_updater = UpdateScheduleJob()
+    database_updater = UpdateDatabaseJob()
 
-    # schedule_updater.start()
-    updater.start()
-    # sender.start()
+    database_updater.start()
+    sender.start()
 
     logger.info("Bot is starting.")
 
