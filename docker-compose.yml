@@ -23,7 +23,7 @@ services:
       - 5432:5432
 
   redis:
-    image: redis:5-alpine
+    image: redis:7.2.3
     restart: on-failure
     ports:
       - 6380:6380
