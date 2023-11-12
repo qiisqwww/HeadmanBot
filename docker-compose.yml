@@ -9,20 +9,14 @@ services:
       context: ./
     volumes:
       - /var/log/headman_bot:/app/logs
-      - /var/www/HeadmanBot/db_data:/app/db_data
     depends_on:
       - postgres
 
   postgres:
     image: postgres
+    restart: always
     env_file:
       - ./.env/.database.env
     volumes:
-      - postgres_headman_bot_data:/var/lib/posgresql/data
-    ports:
-      - 5432:5432
+      - /var/lib/headman_bot_db:/var/lib/posgresql/data
 
-volumes:
-  postgres_headman_bot_data:
-    external: True
-    name: "postgres_headman_bot_data"

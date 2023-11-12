@@ -6,7 +6,7 @@ services:
     env_file:
       - ./.env/.database.dev.env
     volumes:
-      - postgres_dev_data:/var/lib/posgresql/data
+      - headman_bot_postgres_dev_data:/var/lib/posgresql/data
     ports:
       - 5432:5432
 
@@ -21,6 +21,6 @@ services:
       - ./logs:/app/logs
 
 volumes:
-  postgres_dev_data:
+  headman_bot_postgres_dev_data:
     external: True
-    name: "postgres_dev_data"
+    name: "headman_bot_postgres_dev_data"
