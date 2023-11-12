@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy file with requirements into docker container
 COPY ./requirements.txt /app
 
+# Set correct timezone.
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install dependencies:
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
