@@ -22,3 +22,5 @@ services:
 
 volumes:
   postgres_dev_data:
+    external: True
+    name: "postgres_dev_data"
