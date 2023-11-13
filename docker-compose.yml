@@ -24,7 +24,3 @@ services:
   redis:
     image: redis:7.2.3
     restart: on-failure
-    ports:
-      - 6380:6380
-    volumes:
-      - /var/www/HeadmanBot/db_data:/data

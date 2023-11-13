@@ -42,11 +42,11 @@ async def main():
     )
 
     dp.include_routers(
-        void_router,
         student_registration_router,
         headman_router,
         headman_registration_router,
         callback_router,
+        void_router,
     )
 
     dp.message.middleware(ThrottlingMiddleware())

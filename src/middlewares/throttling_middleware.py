@@ -9,7 +9,9 @@ from src.services import RedisService
 
 HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
 
-__all__ = ["ThrottlingMiddleware"]
+__all__ = [
+    "ThrottlingMiddleware",
+]
 
 
 class ThrottlingMiddleware(BaseMiddleware):
