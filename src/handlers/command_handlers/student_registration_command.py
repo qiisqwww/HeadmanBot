@@ -5,6 +5,8 @@ from aiogram.types.message import Message
 from asyncpg import Pool
 from loguru import logger
 
+from src.api import ScheduleApi
+from src.enums.university_id import UniversityId
 from src.messages import (
     GROUP_DOESNT_EXISTS_MESSAGE,
     REG_MESSAGE_1_1,
@@ -14,7 +16,6 @@ from src.messages import (
     SUCCESFULLY_REG_MESSAGE,
 )
 from src.middlewares import CheckRegistrationMiddleware
-from src.mirea_api import MireaScheduleApi
 from src.services.student_service import StudentService
 from src.states import RegStates
 
@@ -25,8 +26,6 @@ __all__ = [
 student_registration_router = Router()
 student_registration_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
 student_registration_router.message.filter(F.chat.type.in_({"private"}))
-
-MIREA_ID = 1  # FIXME:
 
 
 @student_registration_router.message(Command("start"))
@@ -68,7 +67,7 @@ async def handling_group(message: Message, state: FSMContext, pool: Pool) -> Non
         await message.answer(GROUP_DOESNT_EXISTS_MESSAGE)
         return
 
-    api = MireaScheduleApi()
+    api = ScheduleApi(UniversityId.MIREA)
     if not await api.group_exists(message.text):
         await message.answer(GROUP_DOESNT_EXISTS_MESSAGE)
         await state.set_state(RegStates.group_input)
@@ -87,7 +86,7 @@ async def handling_group(message: Message, state: FSMContext, pool: Pool) -> Non
             name=user_data["name"],
             surname=user_data["surname"],
             group_name=user_data["group"],
-            university_id=MIREA_ID,
+            university_id=UniversityId.MIREA,
         )
         await message.answer(SUCCESFULLY_REG_MESSAGE)
 

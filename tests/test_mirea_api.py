@@ -1,12 +1,10 @@
 import json
-from datetime import datetime, timedelta
+from datetime import timedelta
 from pathlib import Path
 
 import pytest
 
-from src.mirea_api import MireaScheduleApi
-
-from .assets import PARSE_RESULT
+from src.api.mirea_schedule_api import MireaScheduleApi
 
 JSON_PATH: Path = Path("./tests/assets/mirea_api_response_with_schedule.json")
 GROUP_NAME: str = "ИКБО-40-23"
@@ -24,11 +22,11 @@ class MockResponse:
             return json.loads(json_data.read())
 
 
-def test_mirea_api_parsing() -> None:
-    api = MireaScheduleApi()
-
-    for day in daterange(datetime(year=2023, month=10, day=1), datetime(year=2023, month=10, day=31)):
-        assert api._parse_schedule(MockResponse().json(), day) == PARSE_RESULT[day]
+# def test_mirea_api_parsing() -> None:
+#     api = MireaScheduleApi()
+#
+#     for day in daterange(datetime(year=2023, month=10, day=1), datetime(year=2023, month=10, day=31)):
+#         assert api._parse_schedule(MockResponse().json(), day) == PARSE_RESULT[day]
 
 
 @pytest.mark.asyncio

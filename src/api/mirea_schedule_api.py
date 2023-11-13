@@ -1,26 +1,33 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from typing import Any, Iterable
 
 from httpx import AsyncClient
+
+from src.dto import Schedule
+from src.enums import Weekday
+
+from .schedule_api_interface import IScheduleAPI
 
 __all__ = [
     "MireaScheduleApi",
 ]
 
 
-class MireaScheduleApi:
+class MireaScheduleApi(IScheduleAPI):
     _URL: str = "https://timetable.mirea.ru/api/groups/name/{group_name}"
     _MAX_LESSON_NAME_LEN: int = 16
     _CURRENT_SEMESTR_START: datetime = datetime(year=2023, month=8, day=28)
 
-    async def get_schedule(self, group_name: str, day: datetime | None = None) -> list[tuple[str, time]]:
+    async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
         """By default return today schedule."""
-        day = day or datetime.now()
+        weekday = weekday or Weekday(datetime.today().weekday())
+        week_start = datetime.today() - timedelta(days=datetime.today().weekday() % 7)
+        day = week_start + timedelta(days=float(weekday))
 
         json_schedule = await self._get_json(group_name)
         parsed_schedule = self._parse_schedule(json_schedule, day)
 
-        return [(name, time.fromisoformat(start_time)) for name, start_time in parsed_schedule]
+        return [Schedule(name, time.fromisoformat(start_time)) for name, start_time in parsed_schedule]
 
     async def group_exists(self, group_name: str) -> bool:
         async with AsyncClient() as client:

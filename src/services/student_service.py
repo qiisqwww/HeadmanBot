@@ -17,13 +17,11 @@ class StudentService(Service):
 
         query = (
             "INSERT INTO students "
-            "(telegram_id, group_id, university_id, name, surname, telegram_name, is_headman)"
-            " VALUES ($1, $2, $3, $4, $5, $6, $7)"
+            "(telegram_id, group_id, university_id, name, surname, telegram_name)"
+            " VALUES ($1, $2, $3, $4, $5, $6)"
         )
 
-        await self._con.execute(
-            query, telegram_id, student_group.id, university_id, name, surname, telegram_name, False
-        )
+        await self._con.execute(query, telegram_id, student_group.id, university_id, name, surname, telegram_name)
 
     async def find(self, telegram_id: int) -> Student | None:
         query = "SELECT * FROM students WHERE telegram_id = $1"
