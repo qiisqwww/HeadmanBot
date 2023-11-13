@@ -23,9 +23,6 @@ class CheckHeadmanMiddleware(BaseMiddleware):
 
     @logger.catch
     async def __call__(self, handler: HandlerType, event: Message, data: dict[str, Any]) -> Any:
-        if event.from_user is None:
-            return
-
         student: Student = data["student"]
 
         if student.is_headman != self._must_be_headman and self._must_be_headman:

@@ -23,9 +23,6 @@ class CallbackMiddleware(BaseMiddleware):
     async def __call__(self, handler: HandlerType, event: CallbackQuery, data: dict[str, Any]) -> Any:
         logger.info("callback middleware started")
 
-        if event.from_user is None:
-            return
-
         if event.message is None:
             return
 
