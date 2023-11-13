@@ -1,5 +1,6 @@
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.enums import ParseMode
 from loguru import logger
 
 from src.config import BOT_TOKEN, DEBUG, LOGGING_PATH
@@ -49,7 +50,7 @@ async def main():
     await add_unis()
     init_logger()
 
-    bot = Bot(BOT_TOKEN)
+    bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
 
     sender = SendingJob(bot)
     database_updater = UpdateDatabaseJob()

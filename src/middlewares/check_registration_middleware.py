@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.database import get_pool
-from src.messages import ALREADY_REGISTERED_MESSAGE, MUST_BE_REG_MESSAGE
+from src.resources import ALREADY_REGISTERED_MESSAGE, MUST_BE_REG_MESSAGE
 from src.services import StudentService
 
 __all__ = [

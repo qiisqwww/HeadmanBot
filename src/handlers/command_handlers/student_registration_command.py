@@ -5,7 +5,7 @@ from aiogram.types.message import Message
 from asyncpg import Pool
 from loguru import logger
 
-from src.messages import (
+from src.resources import (
     GROUP_DOESNT_EXISTS_MESSAGE,
     REG_MESSAGE_1_1,
     REG_MESSAGE_1_2,
@@ -17,6 +17,7 @@ from src.middlewares import CheckRegistrationMiddleware
 from src.mirea_api import MireaScheduleApi
 from src.services.student_service import StudentService
 from src.states import RegStates
+from src.resources import load_become_headman_button
 
 __all__ = [
     "student_registration_router",
@@ -89,6 +90,7 @@ async def handling_group(message: Message, state: FSMContext, pool: Pool) -> Non
             group_name=user_data["group"],
             university_id=MIREA_ID,
         )
-        await message.answer(SUCCESFULLY_REG_MESSAGE)
+        await message.answer(text=SUCCESFULLY_REG_MESSAGE,
+                             reply_markup=load_become_headman_button())
 
         await state.clear()
