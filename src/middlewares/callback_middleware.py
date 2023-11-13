@@ -3,7 +3,7 @@ from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, TelegramObject
 from loguru import logger
 
 from src.database import get_pool
@@ -15,15 +15,18 @@ __all__ = [
 ]
 
 
-HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
+HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 
 class CallbackMiddleware(BaseMiddleware):
     @logger.catch
-    async def __call__(self, handler: HandlerType, event: Message, data: dict[str, Any]) -> Any:
+    async def __call__(self, handler: HandlerType, event: CallbackQuery, data: dict[str, Any]) -> Any:
         logger.info("callback middleware started")
 
         if event.from_user is None:
+            return
+
+        if event.message is None:
             return
 
         logger.info(f"EVENT TYPE={type(event)}")
