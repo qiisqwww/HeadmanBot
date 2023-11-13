@@ -11,6 +11,7 @@ services:
       - /var/log/headman_bot:/app/logs
     depends_on:
       - postgres
+      - redis
 
   postgres:
     image: postgres
