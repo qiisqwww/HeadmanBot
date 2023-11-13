@@ -12,6 +12,8 @@ __all__ = [
     "DB_NAME",
     "DB_PORT",
     "DB_HOST",
+    "REDIS_HOST",
+    "REDIS_PORT"
 ]
 
 DEBUG: bool = bool(BoolEnv("DEBUG"))
@@ -24,3 +26,5 @@ DB_PASS: str = StrEnv("DB_PASS")
 DB_NAME: str = StrEnv("DB_NAME")
 DB_PORT: int = IntEnv("DB_PORT")
 DB_HOST: str = StrEnv("DB_HOST")
+REDIS_HOST: str = StrEnv("REDIS_HOST")
+REDIS_PORT: int = IntEnv("REDIS_PORT")

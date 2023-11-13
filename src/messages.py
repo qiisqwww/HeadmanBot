@@ -28,6 +28,7 @@ __all__ = [
     "HEADMAN_SEND_MSG_MISTAKE",
     "FAQ_MESSAGE",
     "GROUP_DOESNT_EXISTS_MESSAGE",
+    "LOOK_WHAT_I_FOUND_MESSAGE"
 ]
 
 START_MESSAGE = """
@@ -119,6 +120,8 @@ FAQ_MESSAGE = """
 """
 
 GROUP_DOESNT_EXISTS_MESSAGE = "Такой группы нет!"
+
+LOOK_WHAT_I_FOUND_MESSAGE = "Смотри что я нашел по твоему запросу:"
 
 
 async def attendance_for_headmen_message(lesson: Lesson, headman: Student, con: PoolConnectionProxy) -> str:

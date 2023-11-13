@@ -5,9 +5,14 @@ from aiogram.types.message import Message
 from asyncpg import Pool
 from loguru import logger
 
-from src.buttons import load_choose_lesson_kb
+from src.buttons import load_choose_lesson_kb, load_headman_kb
 from src.dto import Student
-from src.messages import CHOOSE_GETSTAT_LESSON, FAQ_MESSAGE, NO_LESSONS_TODAY
+from src.messages import (
+    CHOOSE_GETSTAT_LESSON,
+    FAQ_MESSAGE,
+    LOOK_WHAT_I_FOUND_MESSAGE,
+    NO_LESSONS_TODAY,
+)
 from src.middlewares import CheckHeadmanMiddleware, CheckRegistrationMiddleware
 from src.services import LessonService
 
@@ -36,6 +41,7 @@ async def getstat_command(message: Message, pool: Pool, student: Student) -> Non
             await message.answer(NO_LESSONS_TODAY)
             return
 
+        await message.answer(LOOK_WHAT_I_FOUND_MESSAGE, reply_markup=load_headman_kb())
         await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
 
 
