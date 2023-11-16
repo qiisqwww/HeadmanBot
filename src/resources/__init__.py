@@ -30,8 +30,9 @@ __all__ = ["load_choose_lesson_buttons",
            "NONE_MESSAGE",
            "attendance_for_headmen_message",
            "NO_LESSONS_TODAY",
-           "CHOOSE_GETSTAT_LESSON",
+           "CHOOSE_PAIR_MESSAGE",
            "POLL_MESSAGE",
            "HEADMAN_SEND_MSG_MISTAKE",
            "FAQ_MESSAGE",
-           "GROUP_DOESNT_EXISTS_MESSAGE"]
+           "GROUP_DOESNT_EXISTS_MESSAGE",
+           "WHICH_PAIR_MESSAGE"]

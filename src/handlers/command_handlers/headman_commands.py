@@ -7,9 +7,10 @@ from loguru import logger
 from src.resources import (load_choose_lesson_buttons,
                            load_headman_buttons)
 from src.dto import Student
-from src.resources import (CHOOSE_GETSTAT_LESSON,
+from src.resources import (CHOOSE_PAIR_MESSAGE,
                            FAQ_MESSAGE,
-                           NO_LESSONS_TODAY)
+                           NO_LESSONS_TODAY,
+                           WHICH_PAIR_MESSAGE)
 from src.middlewares import (CheckHeadmanMiddleware,
                              CheckRegistrationMiddleware)
 from src.services import LessonService
@@ -39,7 +40,9 @@ async def getstat_command(message: Message, pool: Pool, student: Student) -> Non
             await message.answer(NO_LESSONS_TODAY)
             return
 
-        await message.answer(text=CHOOSE_GETSTAT_LESSON,
+        await message.answer(text=WHICH_PAIR_MESSAGE,
+                             reply_markup=load_headman_buttons())
+        await message.answer(text=CHOOSE_PAIR_MESSAGE,
                              reply_markup=load_choose_lesson_buttons(lessons))
 
 

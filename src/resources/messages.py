@@ -23,11 +23,12 @@ __all__ = [
     "NONE_MESSAGE",
     "attendance_for_headmen_message",
     "NO_LESSONS_TODAY",
-    "CHOOSE_GETSTAT_LESSON",
+    "CHOOSE_PAIR_MESSAGE",
     "POLL_MESSAGE",
     "HEADMAN_SEND_MSG_MISTAKE",
     "FAQ_MESSAGE",
     "GROUP_DOESNT_EXISTS_MESSAGE",
+    "WHICH_PAIR_MESSAGE"
 ]
 
 START_MESSAGE = """
@@ -63,6 +64,9 @@ STAROSTA_REG_MESSAGE = """
 UNSUCCESFULL_STAROSTA_REG_MESSAGE = """
 Ой! Из-за какой-то ошибки я не смог зарегестрировать тебя, как старосту!"""
 
+WHICH_PAIR_MESSAGE = """
+Какая пара вас интересует?"""
+
 ALREADY_HEADMAN_MESSAGE = """
 Вы и так зарегестрированы как староста!"""
 
@@ -85,8 +89,8 @@ NONE_MESSAGE = """
 NO_LESSONS_TODAY = """
 Сегодня нет пар!"""
 
-CHOOSE_GETSTAT_LESSON = """
-Какая пара вас интересует?"""
+CHOOSE_PAIR_MESSAGE = """
+Выберите пару из списка:"""
 
 POLL_MESSAGE = """
 На какие сегодняшие пары ты придешь?
