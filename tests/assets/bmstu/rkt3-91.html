@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Личный кабинет обучающегося</title>
+
+    <script src="https://lks.bmstu.ru/assets/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://lks.bmstu.ru/assets/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://lks.bmstu.ru/assets/popper-1.16.0.min.js"></script>
+    
+    <link href="https://lks.bmstu.ru/assets/eu-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://lks.bmstu.ru/assets/eu-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/static/css/highlight.css" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
+
+    <link href="/static/css/bootstrap-switch.min.css" rel="stylesheet">
+    <script src="/static/js/bootstrap-switch.min.js"></script>
+
+</head>
+
+<body>
+<script src="https://lks.bmstu.ru/assets/portal/1.0/color-portal3hat.js?menu&#x3D;https://lks.bmstu.ru/menu.json&amp;login&#x3D;https://lks.bmstu.ru/portal3/&amp;index&#x3D;https://lks.bmstu.ru/"></script>
+
+<div class="container-md">
+
+    <br/>
+</div>
+
+<div class="container-md">
+    
+    
+    <script>
+        function goToList() {
+            const targetRoute = '/schedule/list';
+            let prevUrl, prevPage = document.referrer;
+            if (prevPage.length > 0) {
+                prevUrl = new URL(prevPage).pathname
+            }
+            prevUrl === targetRoute ? window.history.back() : location.href = targetRoute;
+        }
+        Portal3.setTitle(`Расписание РКТ3-91`)
+    </script>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="page-header">
+                <a onclick="goToList()" ><h3 type="button" class="text-primary">← К полному расписанию</h3></a>
+                <h1>Расписание РКТ3-91
+                        <small><a href="/schedule/d2e636d2-4aee-11e9-b7fc-005056960017.ics"><span class="fa fa-calendar"></span> Сохранить в календарь</a></small>
+                </h1>
+                    <h4><i>12 неделя, знаменатель</i></h4>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    
+    
+    
+                <!--Десктопная версия -->
+                <div class="col-lg-6 d-none d-md-block">
+                    <table class="table table-bordered text-center table-responsive">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" rowspan="9" width="30px"><strong>ПН</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td width="20%">Время</td>
+                            <td class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30 - 10:05 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15 - 11:50 </td> 
+                                    <td class="text-info-bold"><i>(сем)</i> <span>Основы компьютерного проектирования</span> <i>212</i> <i>Павлюченков И. А.</i>  </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00 - 13:35 </td> 
+                                    <td colspan="2"><i>(сем)</i> <span>Основы компьютерного проектирования</span> <i>212</i> <i>Павлюченков И. А.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50 - 15:25 </td> 
+                                    <td colspan="2"><i>(лек)</i> <span>Технология инструментального производства</span> <i>121.1</i> <i>Васильев С. Г.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40 - 17:15 </td> 
+                                    <td colspan="2"><i>(лек)</i> <span>Технология инструментального производства</span> <i>121.1</i> <i>Васильев С. Г.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25 - 19:00 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10 - 20:45 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Мобильная версия (ЧС около ЗН, в две колонки)-->
+                <div class="col-md-6 d-block d-md-none">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" colspan="4"><strong>Понедельник</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td scope="col" width="20%">Время</td>
+                            <td scope="col" class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td scope="col" class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30<br />10:05</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15<br />11:50</td>
+                                    <td class="text-info-bold"><i>(сем)</i> <span>Основы компьютерного проектирования</span> <i>212</i> <i>Павлюченков И. А.</i>  </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00<br />13:35</td>
+                                    <td colspan="2"><i>(сем)</i> <span>Основы компьютерного проектирования</span> <i>212</i> <i>Павлюченков И. А.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50<br />15:25</td>
+                                    <td colspan="2"><i>(лек)</i> <span>Технология инструментального производства</span> <i>121.1</i> <i>Васильев С. Г.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40<br />17:15</td>
+                                    <td colspan="2"><i>(лек)</i> <span>Технология инструментального производства</span> <i>121.1</i> <i>Васильев С. Г.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25<br />19:00</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10<br />20:45</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Десктопная версия -->
+                <div class="col-lg-6 d-none d-md-block">
+                    <table class="table table-bordered text-center table-responsive">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" rowspan="9" width="30px"><strong>ВТ</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td width="20%">Время</td>
+                            <td class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30 - 10:05 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15 - 11:50 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00 - 13:35 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50 - 15:25 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40 - 17:15 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25 - 19:00 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10 - 20:45 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Мобильная версия (ЧС около ЗН, в две колонки)-->
+                <div class="col-md-6 d-block d-md-none">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" colspan="4"><strong>Вторник</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td scope="col" width="20%">Время</td>
+                            <td scope="col" class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td scope="col" class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30<br />10:05</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15<br />11:50</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00<br />13:35</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50<br />15:25</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40<br />17:15</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25<br />19:00</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10<br />20:45</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+    <div class="clearfix"></div>            <!--Десктопная версия -->
+                <div class="col-lg-6 d-none d-md-block">
+                    <table class="table table-bordered text-center table-responsive">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" rowspan="9" width="30px"><strong>СР</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td width="20%">Время</td>
+                            <td class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30 - 10:05 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15 - 11:50 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00 - 13:35 </td> 
+                                    <td colspan="2"><span>Практика</span> <i></i> <i></i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50 - 15:25 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40 - 17:15 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25 - 19:00 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10 - 20:45 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Мобильная версия (ЧС около ЗН, в две колонки)-->
+                <div class="col-md-6 d-block d-md-none">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" colspan="4"><strong>Среда</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td scope="col" width="20%">Время</td>
+                            <td scope="col" class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td scope="col" class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30<br />10:05</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15<br />11:50</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00<br />13:35</td>
+                                    <td colspan="2"><span>Практика</span> <i></i> <i></i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50<br />15:25</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40<br />17:15</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25<br />19:00</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10<br />20:45</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Десктопная версия -->
+                <div class="col-lg-6 d-none d-md-block">
+                    <table class="table table-bordered text-center table-responsive">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" rowspan="9" width="30px"><strong>ЧТ</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td width="20%">Время</td>
+                            <td class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30 - 10:05 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15 - 11:50 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00 - 13:35 </td> 
+                                    <td class="text-info-bold"><i>(лек)</i> <span>Сверхтвердые материалы, технология и особенности эксплуатации</span> <i></i> <i>Шуляк Я. И.</i>  </td>
+                                    <td class="text-primary"><i>(сем)</i> <span>Организация и планирование производства</span> <i></i> <i>Козлова Т. А.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50 - 15:25 </td> 
+                                    <td colspan="2"><i>(лек)</i> <span>Сверхтвердые материалы, технология и особенности эксплуатации</span> <i></i> <i>Шуляк Я. И.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40 - 17:15 </td> 
+                                    <td colspan="2"><i>(лек)</i> <span>Станки инструментального производства</span> <i></i> <i>Иванов Д. В.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25 - 19:00 </td> 
+                                    <td colspan="2"><i>(сем)</i> <span>Станки инструментального производства</span> <i></i> <i>Иванов Д. В.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10 - 20:45 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Мобильная версия (ЧС около ЗН, в две колонки)-->
+                <div class="col-md-6 d-block d-md-none">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" colspan="4"><strong>Четверг</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td scope="col" width="20%">Время</td>
+                            <td scope="col" class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td scope="col" class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30<br />10:05</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15<br />11:50</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00<br />13:35</td>
+                                    <td class="text-info-bold"><i>(лек)</i> <span>Сверхтвердые материалы, технология и особенности эксплуатации</span> <i></i> <i>Шуляк Я. И.</i>  </td>
+                                    <td class="text-primary"><i>(сем)</i> <span>Организация и планирование производства</span> <i></i> <i>Козлова Т. А.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50<br />15:25</td>
+                                    <td colspan="2"><i>(лек)</i> <span>Сверхтвердые материалы, технология и особенности эксплуатации</span> <i></i> <i>Шуляк Я. И.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40<br />17:15</td>
+                                    <td colspan="2"><i>(лек)</i> <span>Станки инструментального производства</span> <i></i> <i>Иванов Д. В.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25<br />19:00</td>
+                                    <td colspan="2"><i>(сем)</i> <span>Станки инструментального производства</span> <i></i> <i>Иванов Д. В.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10<br />20:45</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+    <div class="clearfix"></div>            <!--Десктопная версия -->
+                <div class="col-lg-6 d-none d-md-block">
+                    <table class="table table-bordered text-center table-responsive">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" rowspan="9" width="30px"><strong>ПТ</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td width="20%">Время</td>
+                            <td class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30 - 10:05 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15 - 11:50 </td> 
+                                    <td colspan="2"><i>(лек)</i> <span>Основы проектирования режущих инструментов</span> <i>121.1</i> <i>Малькова Л. Д.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00 - 13:35 </td> 
+                                    <td colspan="2"><i>(лек)</i> <span>Основы проектирования режущих инструментов</span> <i>121.1</i> <i>Малькова Л. Д.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50 - 15:25 </td> 
+                                    <td class="text-info-bold"><i>(сем)</i> <span>Основы проектирования режущих инструментов</span> <i>121.1</i> <i>Малькова Л. Д.</i>  </td>
+                                    <td class="text-primary"><i>(сем)</i> <span>Технология инструментального производства</span> <i>121.1</i> <i>Сыроегин И. А.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40 - 17:15 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25 - 19:00 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10 - 20:45 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Мобильная версия (ЧС около ЗН, в две колонки)-->
+                <div class="col-md-6 d-block d-md-none">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" colspan="4"><strong>Пятница</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td scope="col" width="20%">Время</td>
+                            <td scope="col" class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td scope="col" class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30<br />10:05</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15<br />11:50</td>
+                                    <td colspan="2"><i>(лек)</i> <span>Основы проектирования режущих инструментов</span> <i>121.1</i> <i>Малькова Л. Д.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00<br />13:35</td>
+                                    <td colspan="2"><i>(лек)</i> <span>Основы проектирования режущих инструментов</span> <i>121.1</i> <i>Малькова Л. Д.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50<br />15:25</td>
+                                    <td class="text-info-bold"><i>(сем)</i> <span>Основы проектирования режущих инструментов</span> <i>121.1</i> <i>Малькова Л. Д.</i>  </td>
+                                    <td class="text-primary"><i>(сем)</i> <span>Технология инструментального производства</span> <i>121.1</i> <i>Сыроегин И. А.</i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40<br />17:15</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25<br />19:00</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10<br />20:45</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Десктопная версия -->
+                <div class="col-lg-6 d-none d-md-block">
+                    <table class="table table-bordered text-center table-responsive">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" rowspan="9" width="30px"><strong>СБ</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td width="20%">Время</td>
+                            <td class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30 - 10:05 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15 - 11:50 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00 - 13:35 </td> 
+                                    <td colspan="2"><span>Самостоятельная работа</span> <i></i> <i></i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50 - 15:25 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40 - 17:15 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25 - 19:00 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10 - 20:45 </td> 
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!--Мобильная версия (ЧС около ЗН, в две колонки)-->
+                <div class="col-md-6 d-block d-md-none">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                        <tr>
+                            <td class="bg-grey" colspan="4"><strong>Суббота</strong></td>
+                        </tr>
+                        <tr class="bg-grey">
+                            <td scope="col" width="20%">Время</td>
+                            <td scope="col" class="bg-info-light font-weight-bold " width="40%">ЧС</td>
+                            <td scope="col" class="bg-primary-light font-weight-bold text-white" width="40%">ЗН</td>
+                        </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">08:30<br />10:05</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">10:15<br />11:50</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">12:00<br />13:35</td>
+                                    <td colspan="2"><span>Самостоятельная работа</span> <i></i> <i></i>  </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">13:50<br />15:25</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">15:40<br />17:15</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">17:25<br />19:00</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-grey text-nowrap">19:10<br />20:45</td>
+                                    <td class="text-info-bold"> </td>
+                                    <td class="text-primary"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+    <div class="clearfix"></div>    
+    </div>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-58808496e531967d"></script>
+</div>
+
+<div class="container">
+
+    <footer>
+        <hr>
+            <div class="col-lg-12">
+                <p>Разработано в НОЦ "Электронный университет"</p>
+                <p>
+                    Служба поддержки: <br />
+                    тел.: 8 499 263-62-27 <br />
+                    email: <a href="mailto:eu@bmstu.ru">eu@bmstu.ru</a>
+                </p>
+            </div>
+    </footer>
+
+</div>
+
+<script>
+    if (window.innerWidth <= 768) {
+        const hat = document.getElementById('portal3hat');
+        hat.style.position = 'absolute';
+    }
+    $('#navigation').find(".nav-link").each(function(){
+            if(this.href == $(location).attr("href")){
+            $(this).addClass("active");
+        }
+    });
+</script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-89632206-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+</body>
+
+</html>

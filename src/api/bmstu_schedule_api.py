@@ -24,7 +24,11 @@ class BmstuScheduleApi(IScheduleAPI):
         return group_name in group_names
 
     async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
-        weekday = weekday or Weekday(datetime.today().weekday())
+        if weekday is None:
+            weekday = Weekday(datetime.today().weekday())
+
+        if weekday == Weekday.SUNDAY:
+            return []
 
         schedule_soup = await self._fetch_schedule_soup(group_name)
         today_schedule = self._get_today_schedule_table(weekday, schedule_soup)
@@ -35,12 +39,18 @@ class BmstuScheduleApi(IScheduleAPI):
 
         return self._parse_schedule(rows, is_zn)
 
-    def _parse_row(self, row: Tag, is_zn: bool) -> Schedule:
+    def _parse_row(self, row: Tag, is_zn: bool) -> Schedule | None:
         cols = row.find_all("td")
         time_duration = cols[0].text
 
         if is_zn and len(cols) == 3:
+            if cols[2].span is None:
+                return None
             lesson_name = cols[2].span.text
+        elif not is_zn and len(cols) == 3:
+            if cols[1].span is None:
+                return None
+            lesson_name = cols[1].span.text
         else:
             lesson_name = cols[1].span.text
 
@@ -49,7 +59,13 @@ class BmstuScheduleApi(IScheduleAPI):
         return Schedule(lesson_name, start_time)
 
     def _parse_schedule(self, rows: list[Tag], is_zn: bool) -> list[Schedule]:
-        return [self._parse_row(row, is_zn) for row in rows]
+        res = []
+        for row in rows:
+            row_schedule = self._parse_row(row, is_zn)
+            if row_schedule is not None:
+                res.append(row_schedule)
+
+        return res
 
     def _is_zn(self, schedule_soup: BeautifulSoup) -> bool:
         page_header = schedule_soup.find(class_="page-header")
