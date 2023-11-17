@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.dto import Student
-from src.messages import ALREADY_HEADMAN_MESSAGE, MUST_BE_HEADMEN_MESSAGE
+from src.resources import ALREADY_HEADMAN_MESSAGE, MUST_BE_HEADMEN_MESSAGE
 
 HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
 

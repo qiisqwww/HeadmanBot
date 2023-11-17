@@ -6,6 +6,7 @@ from asyncpg import Pool
 from loguru import logger
 
 from src.api import ScheduleApi
+from src.buttons import load_become_headman_button
 from src.enums.university_id import UniversityId
 from src.messages import (
     GROUP_DOESNT_EXISTS_MESSAGE,
@@ -88,6 +89,6 @@ async def handling_group(message: Message, state: FSMContext, pool: Pool) -> Non
             group_name=user_data["group"],
             university_id=UniversityId.MIREA,
         )
-        await message.answer(SUCCESFULLY_REG_MESSAGE)
+        await message.answer(text=SUCCESFULLY_REG_MESSAGE, reply_markup=load_become_headman_button())
 
         await state.clear()
