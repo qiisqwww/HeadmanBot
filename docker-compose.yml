@@ -10,8 +10,10 @@ services:
     volumes:
       - /var/log/headman_bot:/app/logs
     depends_on:
-      - postgres
-      - redis
+      redis:
+        condition: service_started
+      postgres:
+          condition: service_healthy
 
   postgres:
     image: postgres
@@ -20,6 +22,11 @@ services:
       - ./.env/.database.env
     volumes:
       - /var/lib/headman_bot_db:/var/lib/posgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7.2.3
