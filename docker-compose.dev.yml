@@ -17,10 +17,13 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
+      - redis
     volumes:
       - ./logs:/app/logs
 
+  redis:
+    image: redis:7.2.3
+    restart: on-failure
+
 volumes:
   headman_bot_postgres_dev_data:
-    external: True
-    name: "headman_bot_postgres_dev_data"

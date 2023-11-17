@@ -3,6 +3,7 @@ from .command_handlers import (
     headman_registration_router,
     headman_router,
     student_registration_router,
+    void_router
 )
 
 __all__ = [
@@ -10,4 +11,5 @@ __all__ = [
     "headman_registration_router",
     "student_registration_router",
     "callback_router",
+    "void_router"
 ]

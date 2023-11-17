@@ -12,8 +12,10 @@ from src.handlers import (
     headman_registration_router,
     headman_router,
     student_registration_router,
+    void_router,
 )
 from src.jobs import SendingJob, UpdateDatabaseJob
+from src.middlewares import ThrottlingMiddleware
 from src.services import UniversityService
 
 
@@ -47,7 +49,9 @@ async def main():
         headman_registration_router,
         callback_router,
         headman_router,
+        void_router,
     )
+    dp.message.middleware(ThrottlingMiddleware())
 
     await init_database()
     await add_unis()

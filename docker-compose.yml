@@ -11,6 +11,7 @@ services:
       - /var/log/headman_bot:/app/logs
     depends_on:
       - postgres
+      - redis
 
   postgres:
     image: postgres
@@ -20,3 +21,6 @@ services:
     volumes:
       - /var/lib/headman_bot_db:/var/lib/posgresql/data
 
+  redis:
+    image: redis:7.2.3
+    restart: on-failure

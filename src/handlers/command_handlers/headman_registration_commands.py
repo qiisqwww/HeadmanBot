@@ -5,6 +5,7 @@ from aiogram.types import Message
 from asyncpg.pool import Pool
 from loguru import logger
 
+from src.buttons import load_headman_kb
 from src.config import HEADMAN_PASSWORD
 from src.dto.student import Student
 from src.messages import PASS_ASK_MESSAGE, STAROSTA_REG_MESSAGE, WRONG_PASSWORD
@@ -34,14 +35,15 @@ async def start_headmen(message: Message, state: FSMContext) -> None:
 @headman_registration_router.message(SetHeadman.get_password, F.text)
 @logger.catch
 async def get_password(message: Message, state: FSMContext, pool: Pool, student: Student) -> None:
-    async with pool.acquire() as conn:
-        logger.trace("Password for headman registration was handled.")
-        if message.text == HEADMAN_PASSWORD:
-            student_service = StudentService(conn)
+    logger.trace("Password for headman registration was handled.")
+
+    if message.text == HEADMAN_PASSWORD:
+        async with pool.acquire() as con:
+            student_service = StudentService(con)
             await student_service.make_headman(student)
 
-            await message.answer(STAROSTA_REG_MESSAGE)
-        else:
-            await message.answer(WRONG_PASSWORD)
+        await message.answer(STAROSTA_REG_MESSAGE, reply_markup=load_headman_kb())
+    else:
+        await message.answer(WRONG_PASSWORD)
 
-        await state.clear()
+    await state.clear()

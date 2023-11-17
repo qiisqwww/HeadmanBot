@@ -1,9 +1,17 @@
 from typing import Iterable
 
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.types import (InlineKeyboardButton,
+                           InlineKeyboardMarkup,
+                           ReplyKeyboardMarkup,
+                           KeyboardButton)
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
 from src.dto import Lesson
+
+__all__ = ["load_attendance_kb",
+           "load_choose_lesson_kb",
+           "load_void_kb",
+           "load_headman_kb"]
 
 
 def load_attendance_kb(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
@@ -49,3 +57,11 @@ def load_choose_lesson_kb(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
 def load_void_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     return builder.as_markup(resize_keyboard=True)
+
+
+def load_headman_kb() -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    builder.add(*[KeyboardButton(text="/getstat"), KeyboardButton(text="/faq")])
+
+    return builder.as_markup(resize_keyboard=True)
+
