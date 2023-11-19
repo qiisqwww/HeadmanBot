@@ -13,13 +13,18 @@ __all__ = [
     "DB_PORT",
     "DB_HOST",
     "REDIS_HOST",
-    "REDIS_PORT"
+    "REDIS_PORT",
+    "ADMIN_ID_1",
+    "ADMIN_ID_2"
 ]
 
 DEBUG: bool = bool(BoolEnv("DEBUG"))
 BOT_TOKEN: str = StrEnv("BOT_TOKEN")
 HEADMAN_PASSWORD: str = StrEnv("HEADMAN_PASSWORD")
 LOGGING_PATH: Path = Path(StrEnv("LOGGING_PATH"))
+
+ADMIN_ID_1 = IntEnv("ADMIN_ID_1")
+ADMIN_ID_2 = IntEnv("ADMIN_ID_2")
 
 DB_USER: str = StrEnv("DB_USER")
 DB_PASS: str = StrEnv("DB_PASS")

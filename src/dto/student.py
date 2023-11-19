@@ -15,7 +15,6 @@ class Student(DTO):
     university_id: int
     name: str
     surname: str
-    telegram_name: str | None
     is_headman: bool
 
     @classmethod
@@ -26,7 +25,6 @@ class Student(DTO):
             university_id=data["university_id"],
             name=data["name"],
             surname=data["surname"],
-            telegram_name=data["telegram_name"],
             is_headman=data["is_headman"],
         )
 

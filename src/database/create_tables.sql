@@ -21,7 +21,6 @@ create table if not exists students (
     university_id bigint references universities(id),
     name varchar(255) NOT NULL,
     surname varchar(255) NOT NULL,
-    telegram_name varchar(255) NULL,
     is_headman boolean NOT NULL DEFAULT false
 );
 

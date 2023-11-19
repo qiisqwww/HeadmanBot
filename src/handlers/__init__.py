@@ -1,15 +1,21 @@
-from .callback_handlers import callback_router
+from .callback_handlers import (
+    getstat_callback_router,
+    verification_callback_router
+)
 from .command_handlers import (
-    headman_registration_router,
     headman_router,
-    student_registration_router,
-    void_router
+    void_router,
+    registration_router,
+    verify_registration,
+    faq_router
 )
 
 __all__ = [
     "headman_router",
-    "headman_registration_router",
-    "student_registration_router",
-    "callback_router",
-    "void_router"
+    "getstat_callback_router",
+    "verification_callback_router",
+    "void_router",
+    "registration_router",
+    "verify_registration",
+    "faq_router"
 ]

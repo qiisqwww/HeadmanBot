@@ -10,18 +10,18 @@ __all__ = [
 
 class StudentService(Service):
     async def register(
-        self, telegram_id: int, telegram_name: str | None, name: str, surname: str, university_id: int, group_name: str
+        self, telegram_id: int, name: str, surname: str, university_id: int, group_name: str, is_headman: bool
     ) -> None:
         group_service = GroupService(self._con)
         student_group = await group_service.try_create_or_return(group_name)
 
         query = (
             "INSERT INTO students "
-            "(telegram_id, group_id, university_id, name, surname, telegram_name)"
+            "(telegram_id, group_id, university_id, name, surname, is_headman)"
             " VALUES ($1, $2, $3, $4, $5, $6)"
         )
 
-        await self._con.execute(query, telegram_id, student_group.id, university_id, name, surname, telegram_name)
+        await self._con.execute(query, telegram_id, student_group.id, university_id, name, surname, is_headman)
 
     async def find(self, telegram_id: int) -> Student | None:
         query = "SELECT * FROM students WHERE telegram_id = $1"
@@ -49,3 +49,7 @@ class StudentService(Service):
         records = await self._con.fetch(query, group.id)
 
         return [Student.from_mapping(record) for record in records]
+
+    async def get_headman_id_of_group(self, group: Group) -> int:
+        query = "SELECT telegram_id FROM students WHERE group_id = $1"
+

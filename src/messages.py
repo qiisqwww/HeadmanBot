@@ -6,19 +6,24 @@ from src.services import AttendanceService
 
 __all__ = [
     "START_MESSAGE",
-    "REG_MESSAGE_1_1",
-    "REG_MESSAGE_1_2",
-    "REG_MESSAGE_2",
-    "SUCCESFULLY_REG_MESSAGE",
+    "ASK_GROUP_MESSAGE",
+    "HEADMAN_OR_STUDENT_MESSAGE",
+    "YOUR_GROUP_IS_NOT_REGISTERED_MESSAGE",
+    "INCORRECT_DATA_MESSAGE",
+    "ASK_SURNAME_MESSAGE",
+    "ASK_NAME_MESSAGE",
+    "YOUR_APPLY_WAS_SENT_TO_ADMINS_MESSAGE",
+    "YOUR_APPLY_WAS_SENT_TO_HEADMAN_MESSAGE",
+    "REGISTRATION_DENIED_MESSAGE",
+    "REGISTRATION_ACCEPTED_MESSAGE",
+    "YOU_WERE_ACCEPTED_MESSAGE",
+    "YOU_WERE_DENIED_MESSAGE",
     "UNSUCCESFULLY_REG_MESSAGE",
-    "PASS_ASK_MESSAGE",
     "STAROSTA_REG_MESSAGE",
     "UNSUCCESFULL_STAROSTA_REG_MESSAGE",
-    "ALREADY_HEADMAN_MESSAGE",
     "MUST_BE_REG_MESSAGE",
     "MUST_BE_HEADMEN_MESSAGE",
     "ALREADY_REGISTERED_MESSAGE",
-    "WRONG_PASSWORD",
     "ALL_MESSAGE",
     "NONE_MESSAGE",
     "attendance_for_headmen_message",
@@ -33,34 +38,55 @@ __all__ = [
 ]
 
 START_MESSAGE = """
-Привет! Я - помощник твоей старосты"""
+Приветствую! Для начала, давай зарегестрируемся в системе бота.
+Выбери свой университет из предложенных в списке:"""
 
-REG_MESSAGE_1_1 = """
-Для начала, введи свою фамилию"""
+ASK_GROUP_MESSAGE = """
+Отлично! Теперь отправь мне название своей группы"""
 
-REG_MESSAGE_1_2 = """
-Теперь отправь мне свое имя"""
+HEADMAN_OR_STUDENT_MESSAGE = """
+Ты студент или староста?"""
 
-REG_MESSAGE_2 = """
-Из какой ты группы? (!Вводить строго в формате ХХХХ-ХХ-ХХ!)"""
+YOUR_GROUP_IS_NOT_REGISTERED_MESSAGE = """
+Ваша группа еще не зарегестрирована.
+Для регистрации попросите вашего старосту зарегестрироваться в боте,
+после чего попробуйте снова"""
 
-SUCCESFULLY_REG_MESSAGE = """
-Ты был успешно зарегестрирован в системе!
-Если вы староста, нажмите на кнопку ниже"""
+INCORRECT_DATA_MESSAGE = """
+Данные введены неверно. Введите еще раз."""
+
+ASK_SURNAME_MESSAGE = """
+Отправь свою фамилию"""
+
+ASK_NAME_MESSAGE = """
+Отправь свое имя"""
+
+YOUR_APPLY_WAS_SENT_TO_ADMINS_MESSAGE = """
+Ваше заявление на регистрацию старостой было передано администраторам."""
+
+YOUR_APPLY_WAS_SENT_TO_HEADMAN_MESSAGE = """
+Ваше заявление на регистрацию студентом было передано старосте."""
+
+REGISTRATION_DENIED_MESSAGE = """
+Вы отказали пользователю в регистрации."""
+
+REGISTRATION_ACCEPTED_MESSAGE = """
+Пользователь был успешно зарегестрирован."""
+
+YOU_WERE_ACCEPTED_MESSAGE = """
+Ваше заявление на регистрацию было одобрено."""
+
+YOU_WERE_DENIED_MESSAGE = """
+Ваше заявление на регистрацию было отклонено.
+
+Если вы считаете, что это была ошибка, обратитесь к своему старосте или
+напишите в службу обратной связи --- @noheadproblemsbot"""
 
 UNSUCCESFULLY_REG_MESSAGE = """
-Ой! Из-за какой-то ошибки я не смог внести тебя в систему, попробуй снова!"""
+Ой! Из-за какой-то ошибки я не смог внести тебя в систему, попробуй снова"""
 
 ALREADY_REGISTERED_MESSAGE = """
-Ты уже зарегестрирован в системе!"""
-
-PASS_ASK_MESSAGE = """
-Введите пароль старосты
-Чтобы узнать пароль старосты напишите администратору - @qiisqwww"""
-
-STAROSTA_REG_MESSAGE = """
-Вы были успешно зарегестрированы как староста!
-Чтобы получить информацию о функционале бота, введите команду /faq"""
+Ты уже зарегестрирован в системе"""
 
 UNSUCCESFULL_STAROSTA_REG_MESSAGE = """
 Ой! Из-за какой-то ошибки я не смог зарегестрировать тебя, как старосту!"""
@@ -68,18 +94,11 @@ UNSUCCESFULL_STAROSTA_REG_MESSAGE = """
 WHICH_PAIR_MESSAGE = """
 Какая пара вас интересует?"""
 
-ALREADY_HEADMAN_MESSAGE = """
-Вы и так зарегестрированы как староста!"""
-
 MUST_BE_REG_MESSAGE = """
 Для выполнения данной команды вы должны быть зарегестрированы! (/start)"""
 
 MUST_BE_HEADMEN_MESSAGE = """
 Для выполнения данной команды вы должны быть старостой."""
-
-WRONG_PASSWORD = """
-Вы ввели неверный пароль!
-Если вы староста, но у вас нет пароля - обратитесь к @qiisqwww"""
 
 ALL_MESSAGE = """
 Вы посетите все пары"""

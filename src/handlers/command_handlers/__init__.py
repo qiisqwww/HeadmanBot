@@ -1,11 +1,13 @@
 from .headman_commands import headman_router
-from .headman_registration_commands import headman_registration_router
-from .student_registration_command import student_registration_router
+from .registration import registration_router
 from .void_handler import void_router
+from .verification_poll import verify_registration
+from .faq_command import faq_router
 
 __all__ = [
     "headman_router",
-    "headman_registration_router",
-    "student_registration_router",
-    "void_router"
+    "void_router",
+    "registration_router",
+    "verify_registration",
+    "faq_router"
 ]

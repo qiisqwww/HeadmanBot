@@ -5,7 +5,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.dto import Student
-from src.resources import ALREADY_HEADMAN_MESSAGE, MUST_BE_HEADMEN_MESSAGE
+from src.messages import MUST_BE_HEADMEN_MESSAGE
 
 HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
 
@@ -28,11 +28,6 @@ class CheckHeadmanMiddleware(BaseMiddleware):
         if student.is_headman != self._must_be_headman and self._must_be_headman:
             await event.reply(MUST_BE_HEADMEN_MESSAGE)
             logger.trace("headmen commands middleware finished, user must me headman to use this command")
-            return
-
-        if student.is_headman != self._must_be_headman and not self._must_be_headman:
-            await event.reply(ALREADY_HEADMAN_MESSAGE)
-            logger.trace("headmen reg middleware finished, already registered as headmen")
             return
 
         logger.info("headman commands middleware finished")

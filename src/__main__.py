@@ -1,22 +1,24 @@
 import asyncio
 
-from aiogram import Bot, Dispatcher
+from aiogram import Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
-from src.config import BOT_TOKEN, DEBUG, LOGGING_PATH
+from src.config import DEBUG, LOGGING_PATH
 from src.database import get_pool, init_database
 from src.enums import UniversityId
 from src.handlers import (
-    callback_router,
-    headman_registration_router,
+    getstat_callback_router,
+    verification_callback_router,
     headman_router,
-    student_registration_router,
     void_router,
+    registration_router,
+    faq_router
 )
 from src.jobs import SendingJob, UpdateDatabaseJob
 from src.middlewares import ThrottlingMiddleware
 from src.services import UniversityService
+from src.init_bot import bot
 
 
 def init_logger() -> None:
@@ -44,21 +46,21 @@ async def main():
         storage=MemoryStorage(),
         pool=await get_pool(),
     )
+
     dp.include_routers(
-        student_registration_router,
-        headman_registration_router,
-        callback_router,
+        verification_callback_router,
+        getstat_callback_router,
+        registration_router,
         headman_router,
         void_router,
-    )
-    dp.message.middleware(ThrottlingMiddleware())
+        faq_router)
+
+    init_logger()
 
     await init_database()
     await add_unis()
-    init_logger()
 
-    bot = Bot(BOT_TOKEN)
-
+    dp.message.middleware(ThrottlingMiddleware())
     sender = SendingJob(bot)
     database_updater = UpdateDatabaseJob()
 

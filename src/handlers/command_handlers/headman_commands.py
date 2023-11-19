@@ -1,12 +1,16 @@
-from aiogram import F, Router, types
+from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types.message import Message
 from asyncpg import Pool
 from loguru import logger
 
-from src.buttons import load_choose_lesson_kb, load_headman_buttons, load_headman_kb
+from src.buttons import (choose_lesson_buttons,
+                         default_buttons, )
 from src.dto import Student
-from src.messages import FAQ_MESSAGE, LOOK_WHAT_I_FOUND_MESSAGE, NO_LESSONS_TODAY
+from src.messages import (
+                          WHICH_PAIR_MESSAGE,
+                          CHOOSE_PAIR_MESSAGE,
+                          NO_LESSONS_TODAY)
 from src.middlewares import CheckHeadmanMiddleware, CheckRegistrationMiddleware
 from src.services import LessonService
 
@@ -35,12 +39,5 @@ async def getstat_command(message: Message, pool: Pool, student: Student) -> Non
             await message.answer(NO_LESSONS_TODAY)
             return
 
-        await message.answer(LOOK_WHAT_I_FOUND_MESSAGE, reply_markup=load_headman_kb())
-        await message.answer(CHOOSE_GETSTAT_LESSON, reply_markup=load_choose_lesson_kb(lessons))
-
-
-@headman_router.message(Command("faq"))
-async def faq_command(message: types.Message) -> None:
-    logger.trace("faq command")
-
-    await message.answer(text=FAQ_MESSAGE, reply_markup=load_headman_buttons())
+        await message.answer(CHOOSE_PAIR_MESSAGE, reply_markup=default_buttons())
+        await message.answer(WHICH_PAIR_MESSAGE, reply_markup=choose_lesson_buttons(lessons))

@@ -9,7 +9,9 @@ from .config import (
     HEADMAN_PASSWORD,
     LOGGING_PATH,
     REDIS_PORT,
-    REDIS_HOST
+    REDIS_HOST,
+    ADMIN_ID_1,
+    ADMIN_ID_2
 )
 
 __all__ = [
@@ -17,6 +19,8 @@ __all__ = [
     "DEBUG",
     "HEADMAN_PASSWORD",
     "LOGGING_PATH",
+    "ADMIN_ID_1",
+    "ADMIN_ID_2",
     "DB_USER",
     "DB_PASS",
     "DB_NAME",

@@ -6,11 +6,11 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
 
-from src.resources.inline_buttons import load_attendance_buttons
+from src.buttons.inline_buttons import attendance_buttons
 from src.config import DEBUG
 from src.database import get_pool
 from src.dto.group import Group
-from src.resources.messages import POLL_MESSAGE
+from src.messages import POLL_MESSAGE
 from src.services import GroupService, LessonService, StudentService
 
 __all__ = [
@@ -58,7 +58,7 @@ class SendingJob:
 
         for user in users:
             try:
-                await bot.send_message(user.telegram_id, POLL_MESSAGE, reply_markup=load_attendance_buttons(lessons))
+                await bot.send_message(user.telegram_id, POLL_MESSAGE, reply_markup=attendance_buttons(lessons))
             except TelegramForbiddenError as e:
                 logger.error(f"Failed to send message to user {user.surname} {user.surname} id={user.telegram_id}")
                 logger.error(e)

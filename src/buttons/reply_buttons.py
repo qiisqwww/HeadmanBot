@@ -2,22 +2,45 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 __all__ = [
-    "load_headman_buttons",
-    "load_become_headman_button",
+    "default_buttons",
+    "start_button",
+    "university_list_buttons",
+    "role_buttons"
 ]
 
 
-def load_headman_buttons() -> ReplyKeyboardMarkup:
+def start_button() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
-    buttons = [KeyboardButton(text="/ask"), KeyboardButton(text="/faq")]
+    button = KeyboardButton(text='/start')
+
+    builder.add(button)
+    return builder.as_markup(resize_keyboard=True,
+                             one_time_keyboard=True)
+
+
+def default_buttons(is_headman: bool) -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    buttons = [KeyboardButton(text="/faq")]
+
+    if is_headman: buttons.append(KeyboardButton(text="/getstat"))
 
     builder.add(*buttons)
     return builder.as_markup(resize_keyboard=True)
 
 
-def load_become_headman_button() -> ReplyKeyboardMarkup:
+def university_list_buttons() -> ReplyKeyboardMarkup:
+    """we need to generate buttons list according to registrated universities, so this code is just for
+       example of work"""
     builder = ReplyKeyboardBuilder()
-    button = KeyboardButton(text="Стать старостой")
+    buttons = [KeyboardButton(text='МИРЭА'), KeyboardButton(text='Бауманка')]
 
-    builder.add(button)
-    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+    builder.add(*buttons)
+    return builder.as_markup(resize_keyboard=True)
+
+
+def role_buttons() -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    buttons = [KeyboardButton(text="Я студент"), KeyboardButton(text="Я староста")]
+
+    builder.add(*buttons)
+    return builder.as_markup(resize_keyboard=True)

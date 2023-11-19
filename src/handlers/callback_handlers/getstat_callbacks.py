@@ -3,29 +3,32 @@ from aiogram.types.callback_query import CallbackQuery
 from asyncpg import Pool
 from loguru import logger
 
-from src.resources import (load_attendance_buttons,
-                           load_choose_lesson_buttons,
-                           load_void_button)
+from src.buttons import (
+    attendance_buttons,
+    choose_lesson_buttons,
+    inline_void_button)
 from src.dto.student import Student
 from src.enums import VisitStatus
-from src.resources import (ALL_MESSAGE,
-                           NONE_MESSAGE,
-                           attendance_for_headmen_message)
+from src.messages import (
+    ALL_MESSAGE,
+    NONE_MESSAGE,
+    attendance_for_headmen_message)
 from src.middlewares import CheckRegistrationMiddleware
-from src.services import AttendanceService
-from src.services.lesson_service import LessonService
+from src.services import (
+    AttendanceService,
+    LessonService)
 
 __all__ = [
-    "callback_router",
+    "getstat_callback_router",
 ]
 
 
-callback_router = Router()
-callback_router.callback_query.middleware(CheckRegistrationMiddleware(must_be_registered=True))
+getstat_callback_router = Router()
+getstat_callback_router.callback_query.middleware(CheckRegistrationMiddleware(must_be_registered=True))
 
 
-@callback_router.callback_query(F.data.startswith("attendance"),
-                                flags={"callback": "poll"})
+@getstat_callback_router.callback_query(F.data.startswith("attendance"),
+                                        flags={"callback": "poll"})
 @logger.catch
 async def check_in_callback(callback: CallbackQuery, pool: Pool, student: Student):
     if callback.message is None:
@@ -42,12 +45,12 @@ async def check_in_callback(callback: CallbackQuery, pool: Pool, student: Studen
 
         if callback_data == "all":
             await attendance_service.update_visit_status_by_student(student, VisitStatus.VISIT)
-            await callback.message.edit_text(ALL_MESSAGE, reply_markup=load_void_button())
+            await callback.message.edit_text(ALL_MESSAGE, reply_markup=inline_void_button())
             return
 
         if callback_data == "none":
             await attendance_service.update_visit_status_by_student(student, VisitStatus.NOT_VISIT)
-            await callback.message.edit_text(NONE_MESSAGE, reply_markup=load_void_button())
+            await callback.message.edit_text(NONE_MESSAGE, reply_markup=inline_void_button())
             return
 
         choosen_lesson_id = int(callback_data)
@@ -59,10 +62,10 @@ async def check_in_callback(callback: CallbackQuery, pool: Pool, student: Studen
         non_visit_lessons = [attendance.lesson for attendance in attendances if attendance.status != VisitStatus.VISIT]
 
         if non_visit_lessons:
-            keyboard = load_attendance_buttons(non_visit_lessons)
+            keyboard = attendance_buttons(non_visit_lessons)
             text = f"Вы посетите пару {choosen_lesson.name}, которая начнётся в {choosen_lesson.str_start_time}"
         else:
-            keyboard = load_void_button()
+            keyboard = inline_void_button()
             text = ALL_MESSAGE
 
         await callback.message.edit_text(
@@ -71,7 +74,7 @@ async def check_in_callback(callback: CallbackQuery, pool: Pool, student: Studen
         )
 
 
-@callback_router.callback_query(flags={"callback": "attendance"})
+@getstat_callback_router.callback_query(flags={"callback": "attendance"})
 @logger.catch
 async def attendance_send_callback(callback: CallbackQuery, pool: Pool, student: Student):
     if callback.message is None:
@@ -93,5 +96,5 @@ async def attendance_send_callback(callback: CallbackQuery, pool: Pool, student:
         attendance_list_msg = await attendance_for_headmen_message(choosen_lesson, student, con)
         await callback.message.edit_text(
             text=f"{choosen_lesson}\n\n{attendance_list_msg}",
-            reply_markup=load_choose_lesson_buttons(lessons),
+            reply_markup=choose_lesson_buttons(lessons),
         )
