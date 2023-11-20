@@ -14,7 +14,7 @@ __all__ = [
 ]
 
 
-def accept_or_deny_buttons(user_id: int) -> InlineKeyboardMarkup:
+def accept_or_deny_buttons(user_id: str) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     buttons = [InlineKeyboardButton(text="Одобрить", callback_data=f"reg_accepted_{user_id}"),
                InlineKeyboardButton(text="Отказать", callback_data=f"reg_denied_{user_id}")]

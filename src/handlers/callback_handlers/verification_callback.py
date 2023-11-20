@@ -45,8 +45,6 @@ async def accept_or_deny_callback(callback: CallbackQuery, pool: Pool) -> None:
     else:
         is_headman = False
 
-    logger.info(user_data)
-
     async with pool.acquire() as con:
         student_service = StudentService(con)
         await student_service.register(telegram_id=int(user_data["telegram_id"]),

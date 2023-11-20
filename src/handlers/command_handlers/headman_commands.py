@@ -39,5 +39,5 @@ async def getstat_command(message: Message, pool: Pool, student: Student) -> Non
             await message.answer(NO_LESSONS_TODAY)
             return
 
-        await message.answer(CHOOSE_PAIR_MESSAGE, reply_markup=default_buttons())
+        await message.answer(CHOOSE_PAIR_MESSAGE, reply_markup=default_buttons(True))
         await message.answer(WHICH_PAIR_MESSAGE, reply_markup=choose_lesson_buttons(lessons))

@@ -49,7 +49,7 @@ async def handling_university(message: Message, state: FSMContext) -> None:
     await message.answer(text=ASK_GROUP_MESSAGE,
                          reply_markup=remove_reply_buttons())
 
-    await state.update_data(university=message.text)
+    #await state.update_data(university=message.text)
     await state.set_state(RegistrationStates.waiting_group)
 
 
@@ -63,7 +63,7 @@ async def handling_group(message: Message, state: FSMContext) -> None:
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    await state.update_data(group=message.text)
+    await state.update_data(group_name=message.text)
     await message.answer(text=HEADMAN_OR_STUDENT_MESSAGE,
                          reply_markup=role_buttons())
     await state.set_state(RegistrationStates.waiting_role)
@@ -79,7 +79,7 @@ async def handling_role(message: Message, state: FSMContext, pool: Pool) -> None
             async with pool.acquire() as con:
                 data = await state.get_data()
                 group_service = GroupService(con)
-                group = await group_service.get_by_name(data["group"])
+                group = await group_service.get_by_name(data["group_name"])
                 if group is None:
                     await message.answer(
                         text=YOUR_GROUP_IS_NOT_REGISTERED_MESSAGE,
@@ -110,6 +110,7 @@ async def handling_surname(message: Message, state: FSMContext):
 @logger.catch
 async def handling_name(message: Message, state: FSMContext, pool: Pool):
     await state.update_data(name=message.text)
+    await state.update_data(telegram_id=message.from_user.id)
     await state.set_state(RegistrationStates.on_verification)
 
     data = await state.get_data()
@@ -119,5 +120,4 @@ async def handling_name(message: Message, state: FSMContext, pool: Pool):
         return
 
     await message.answer(YOUR_APPLY_WAS_SENT_TO_HEADMAN_MESSAGE)
-
     await verify_registration(user_id=message.from_user.id, state=state, pool=pool)

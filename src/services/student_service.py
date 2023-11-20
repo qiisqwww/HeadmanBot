@@ -49,7 +49,3 @@ class StudentService(Service):
         records = await self._con.fetch(query, group.id)
 
         return [Student.from_mapping(record) for record in records]
-
-    async def get_headman_id_of_group(self, group: Group) -> int:
-        query = "SELECT telegram_id FROM students WHERE group_id = $1"
-

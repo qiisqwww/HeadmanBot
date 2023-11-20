@@ -61,6 +61,7 @@ async def main():
     await add_unis()
 
     dp.message.middleware(ThrottlingMiddleware())
+    dp.callback_query.middleware(ThrottlingMiddleware())
     sender = SendingJob(bot)
     database_updater = UpdateDatabaseJob()
 

@@ -43,7 +43,7 @@ class AttendanceService(Service):
     async def get_visit_status_for_group_students(self, group_id: int, lesson: Lesson) -> dict[Student, VisitStatus]:
         query = (
             "SELECT "
-            "st.telegram_id, st.name, st.surname, st.telegram_name, st.group_id, st.is_headman, st.university_id,"
+            "st.telegram_id, st.name, st.surname, st.group_id, st.is_headman, st.university_id,"
             " visit_status "
             " FROM students AS st "
             " JOIN attendances AS at ON st.telegram_id = at.student_id "
