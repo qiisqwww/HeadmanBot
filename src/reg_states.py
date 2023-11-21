@@ -1,5 +1,9 @@
 from aiogram.fsm.state import State, StatesGroup
 
+__all__ = [
+    "RegistrationStates",
+]
+
 
 class RegistrationStates(StatesGroup):
     waiting_university = State()

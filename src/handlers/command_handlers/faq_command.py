@@ -2,12 +2,13 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from loguru import logger
 
-from src.messages import FAQ_MESSAGE
 from src.buttons import default_buttons
+from src.messages import FAQ_MESSAGE
 from src.middlewares import CheckRegistrationMiddleware
 
-
-__all__ = ["faq_router"]
+__all__ = [
+    "faq_router",
+]
 
 faq_router = Router()
 faq_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=True))

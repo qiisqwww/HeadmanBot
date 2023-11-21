@@ -29,6 +29,12 @@ class UniversityService(Service):
             name=name,
         )
 
+    async def all(self) -> list[University]:
+        query = "SELECT * FROM universities"
+        records = await self._con.fetch(query)
+
+        return [University.from_mapping(record) for record in records]
+
     async def _create(self, name: str) -> None:
         query = "INSERT INTO universities (name) VALUES($1)"
         await self._con.execute(query, name)

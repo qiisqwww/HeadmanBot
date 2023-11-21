@@ -2,11 +2,10 @@ from aiogram.fsm.context import FSMContext
 from asyncpg.pool import Pool
 from loguru import logger
 
-from src.init_bot import bot
-from src.config import ADMIN_ID_1, ADMIN_ID_2
-from src.services import StudentService
 from src.buttons import accept_or_deny_buttons
-from src.services import GroupService, RedisService
+from src.config import ADMIN_IDS
+from src.init_bot import bot
+from src.services import GroupService, RedisService, StudentService
 
 
 @logger.catch
@@ -16,12 +15,12 @@ async def verify_registration(user_id: str, state: FSMContext, pool: Pool) -> No
         await con.insert_preregistration_user(user_data)
 
     if user_data["is_headman"] == "true":
-        await bot.send_message(ADMIN_ID_1,
-                               f"Староста {user_data['surname']} {user_data['name']} подал заявку на регистарцию в вашу группу",
-                               reply_markup=accept_or_deny_buttons(user_id))
-        await bot.send_message(ADMIN_ID_2,
-                               f"Староста {user_data['surname']} {user_data['name']} подал заявку на регистарцию в вашу группу",
-                               reply_markup=accept_or_deny_buttons(user_id))
+        for admin_id in ADMIN_IDS:
+            await bot.send_message(
+                admin_id,
+                f"Староста {user_data['surname']} {user_data['name']} подал заявку на регистарцию в вашу группу",
+                reply_markup=accept_or_deny_buttons(user_id),
+            )
         return
 
     async with pool.acquire() as con:
@@ -34,8 +33,10 @@ async def verify_registration(user_id: str, state: FSMContext, pool: Pool) -> No
     headmans = [student for student in students if student.is_headman]
 
     for headman in headmans:
-        await bot.send_message(headman.telegram_id,
-                               f"Студент {user_data['surname']} {user_data['name']} подал заявку на регистарцию в вашу группу",
-                               reply_markup=accept_or_deny_buttons(user_id))
+        await bot.send_message(
+            headman.telegram_id,
+            f"Студент {user_data['surname']} {user_data['name']} подал заявку на регистарцию в вашу группу",
+            reply_markup=accept_or_deny_buttons(user_id),
+        )
 
     await state.clear()

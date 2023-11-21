@@ -2,15 +2,13 @@ from dataclasses import dataclass
 from datetime import time
 from typing import Any, Mapping, Self
 
-from .dto import DTO
-
 __all__ = [
     "Lesson",
 ]
 
 
 @dataclass(slots=True)
-class Lesson(DTO):
+class Lesson:
     id: int
     group_id: int
     name: str

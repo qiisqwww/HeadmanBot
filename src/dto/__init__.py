@@ -1,5 +1,4 @@
 from .attendance import Attendance
-from .dto import DTO
 from .group import Group
 from .lesson import Lesson
 from .schedule import Schedule
@@ -12,6 +11,5 @@ __all__ = [
     "Group",
     "University",
     "Attendance",
-    "DTO",
     "Schedule",
 ]

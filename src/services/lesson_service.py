@@ -3,7 +3,6 @@ from datetime import datetime, time, timezone
 from src.api import ScheduleApi
 from src.config import DEBUG
 from src.dto import Group, Lesson, Student
-from src.enums.university_id import UniversityId
 from src.enums.weekday import Weekday
 
 from .group_service import GroupService
@@ -20,7 +19,7 @@ def create_time_with_timezone(time_without_tz: time) -> time:
 
 class LessonService(Service):
     async def recreate_lessons(self) -> None:
-        """Recreate lessons for current week"""
+        """Recreate lessons for current day"""
 
         await self._delete_all_lessons()
 
@@ -30,7 +29,11 @@ class LessonService(Service):
             await self._recreate_schedule_for_group(group)
 
     async def filter_by_student(self, student: Student) -> list[Lesson]:
-        return await self._filter_by_group_id(student.group_id)
+        query = (
+            "SELECT * FROM lesson as le JOIN students_group as sg ON le.group_id = sg.group_id WHERE sg.student_id = $1"
+        )
+        records = await self._con.fetch(query, student.telegram_id)
+        return [Lesson.from_mapping(record) for record in records]
 
     async def filter_by_group(self, group: Group) -> list[Lesson]:
         return await self._filter_by_group_id(group.id)

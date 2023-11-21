@@ -1,15 +1,13 @@
 from dataclasses import dataclass
 from typing import Mapping, Self
 
-from .dto import DTO
-
 __all__ = [
     "University",
 ]
 
 
 @dataclass(slots=True)
-class University(DTO):
+class University:
     id: int
     name: str
 

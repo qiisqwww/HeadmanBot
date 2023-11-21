@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from typing import Any, Mapping, Self
 
 from ..enums import VisitStatus
-from .dto import DTO
 from .lesson import Lesson
 
 __all__ = [
@@ -11,7 +10,7 @@ __all__ = [
 
 
 @dataclass(slots=True)
-class Attendance(DTO):
+class Attendance:
     student_id: int
     lesson: Lesson
     status: VisitStatus

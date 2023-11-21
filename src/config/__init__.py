@@ -1,4 +1,5 @@
 from .config import (
+    ADMIN_IDS,
     BOT_TOKEN,
     DB_HOST,
     DB_NAME,
@@ -8,10 +9,8 @@ from .config import (
     DEBUG,
     HEADMAN_PASSWORD,
     LOGGING_PATH,
-    REDIS_PORT,
     REDIS_HOST,
-    ADMIN_ID_1,
-    ADMIN_ID_2
+    REDIS_PORT,
 )
 
 __all__ = [
@@ -19,13 +18,12 @@ __all__ = [
     "DEBUG",
     "HEADMAN_PASSWORD",
     "LOGGING_PATH",
-    "ADMIN_ID_1",
-    "ADMIN_ID_2",
+    "ADMIN_IDS",
     "DB_USER",
     "DB_PASS",
     "DB_NAME",
     "DB_PORT",
     "DB_HOST",
     "REDIS_PORT",
-    "REDIS_HOST"
+    "REDIS_HOST",
 ]

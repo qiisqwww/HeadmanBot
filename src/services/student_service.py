@@ -1,6 +1,5 @@
 from src.dto import Group, Student
 
-from .group_service import GroupService
 from .service import Service
 
 __all__ = [
@@ -10,18 +9,10 @@ __all__ = [
 
 class StudentService(Service):
     async def register(
-        self, telegram_id: int, name: str, surname: str, university_id: int, group_name: str, is_headman: bool
+        self, telegram_id: int, name: str, surname: str, birthday: int | None, birthmonth: int | None
     ) -> None:
-        group_service = GroupService(self._con)
-        student_group = await group_service.try_create_or_return(group_name)
-
-        query = (
-            "INSERT INTO students "
-            "(telegram_id, group_id, university_id, name, surname, is_headman)"
-            " VALUES ($1, $2, $3, $4, $5, $6)"
-        )
-
-        await self._con.execute(query, telegram_id, student_group.id, university_id, name, surname, is_headman)
+        query = "INSERT INTO students (telegram_id, name, surname, birthday, birthmonth) VALUES ($1, $2, $3, $4, $5)"
+        await self._con.execute(query, telegram_id, name, surname, birthday, birthmonth)
 
     async def find(self, telegram_id: int) -> Student | None:
         query = "SELECT * FROM students WHERE telegram_id = $1"
@@ -32,12 +23,6 @@ class StudentService(Service):
 
         return Student.from_mapping(record)
 
-    async def make_headman(self, student: Student) -> None:
-        query = "UPDATE students SET is_headman=true WHERE telegram_id=$1"
-        await self._con.execute(query, student.telegram_id)
-
-        student.is_headman = True
-
     async def all(self) -> list[Student]:
         query = "SELECT * FROM students"
         records = await self._con.fetch(query)
@@ -45,7 +30,7 @@ class StudentService(Service):
         return [Student.from_mapping(record) for record in records]
 
     async def filter_by_group(self, group: Group) -> list[Student]:
-        query = "SELECT * FROM students WHERE group_id = $1"
+        query = "SELECT * FROM students_group JOIN students ON student_id = telegram_id WHERE group_id = $1"
         records = await self._con.fetch(query, group.id)
 
         return [Student.from_mapping(record) for record in records]

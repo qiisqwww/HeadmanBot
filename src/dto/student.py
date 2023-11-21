@@ -1,31 +1,27 @@
 from dataclasses import dataclass
 from typing import Mapping, Self
 
-from .dto import DTO
-
 __all__ = [
     "Student",
 ]
 
 
 @dataclass(slots=True, unsafe_hash=True)
-class Student(DTO):
+class Student:
     telegram_id: int
-    group_id: int
-    university_id: int
     name: str
     surname: str
-    is_headman: bool
+    birthday: int
+    birthmonth: int
 
     @classmethod
     def from_mapping(cls, data: Mapping) -> Self:
         return cls(
             telegram_id=data["telegram_id"],
-            group_id=data["group_id"],
-            university_id=data["university_id"],
             name=data["name"],
             surname=data["surname"],
-            is_headman=data["is_headman"],
+            birthday=data["birthday"],
+            birthmonth=data["birthmonth"],
         )
 
     @property

@@ -5,6 +5,7 @@ __all__ = [
     "StrEnv",
     "BoolEnv",
     "IntEnv",
+    "IntListEnv",
 ]
 
 
@@ -40,3 +41,12 @@ class IntEnv(int):
             raise UndefinedEnvError(env_name)
         obj = super().__new__(cls, int(env))
         return obj
+
+
+class IntListEnv(list):
+    def __init__(self, env_name: str) -> None:
+        env = getenv(env_name, None)
+        if env is None:
+            raise UndefinedEnvError(env_name)
+
+        super().__init__((map(int, env.split())))
