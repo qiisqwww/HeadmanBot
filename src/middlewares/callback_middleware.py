@@ -6,9 +6,9 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import CallbackQuery, TelegramObject
 from loguru import logger
 
+from src.bot.services import LessonService
 from src.database import get_pool
 from src.dto import Student
-from src.services import LessonService
 
 __all__ = [
     "CallbackMiddleware",

@@ -1,32 +1,30 @@
 import asyncpg
-from asyncpg.connection import Connection
 from asyncpg.pool import Pool
+
+from src.bot.services import UniversityService
 
 from .config import DATABASE_URL
 
 __all__ = [
-    "get_db_connection",
     "init_database",
     "get_pool",
 ]
 
 
-async def get_db_connection() -> Connection:
-    conn = await asyncpg.connect(DATABASE_URL)
-    return conn
+async def get_pool() -> Pool:
+    if not hasattr(get_pool, "pool"):
+        get_pool.pool = await asyncpg.create_pool(DATABASE_URL)  # type: ignore
+    return get_pool.pool  # type: ignore
 
 
 async def init_database() -> None:
-    conn = await get_db_connection()
+    pool = await get_pool()
 
     with open("src/database/create_tables.sql") as query_file:
         query = query_file.read()
-    await conn.execute(query)
 
-    await conn.close()
+    async with pool.acquire() as con:
+        await con.execute(query)
 
-
-async def get_pool() -> Pool:
-    if not hasattr(get_pool, "pool"):
-        get_pool.pool = await asyncpg.create_pool(DATABASE_URL)
-    return get_pool.pool
+        university_service = UniversityService(con)
+        await university_service.add_universities()

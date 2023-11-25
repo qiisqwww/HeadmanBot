@@ -1,6 +1,5 @@
 from src.dto import Schedule
-from src.enums import UniversityId
-from src.enums.weekday import Weekday
+from src.enums import UniversityAlias, Weekday
 
 from .bmstu_schedule_api import BmstuScheduleApi
 from .mirea_schedule_api import MireaScheduleApi
@@ -14,11 +13,11 @@ __all__ = [
 class ScheduleApi:
     _api_impl: IScheduleAPI
 
-    def __init__(self, university: UniversityId) -> None:
+    def __init__(self, university: UniversityAlias) -> None:
         match university:
-            case UniversityId.MIREA:
+            case UniversityAlias.MIREA:
                 self._api_impl = MireaScheduleApi()
-            case UniversityId.BMSTU:
+            case UniversityAlias.BMSTU:
                 self._api_impl = BmstuScheduleApi()
 
     async def group_exists(self, group_name: str) -> bool:

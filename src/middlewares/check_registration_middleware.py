@@ -4,9 +4,10 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message
 from loguru import logger
 
+from src.bot.services import StudentService
 from src.database import get_pool
-from src.messages import ALREADY_REGISTERED_MESSAGE, MUST_BE_REG_MESSAGE
-from src.services import StudentService
+
+from .templates import ALREADY_REGISTERED_TEMPLATE, MUST_BE_REG_TEMPLATE
 
 __all__ = [
     "CheckRegistrationMiddleware",
@@ -39,12 +40,12 @@ class CheckRegistrationMiddleware(BaseMiddleware):
         is_registered = student is not None
 
         if is_registered != self._must_be_registered and not self._must_be_registered:
-            await event.reply(ALREADY_REGISTERED_MESSAGE)
+            await event.reply(ALREADY_REGISTERED_TEMPLATE)
             logger.trace("middleware finished, already registered")
             return
 
         if is_registered != self._must_be_registered and self._must_be_registered:
-            await event.reply(MUST_BE_REG_MESSAGE)
+            await event.reply(MUST_BE_REG_TEMPLATE)
             logger.trace("middleware finished, must be registered")
             return
 

@@ -12,6 +12,7 @@ from .config import (
     REDIS_HOST,
     REDIS_PORT,
 )
+from .logger_config import configurate_logger
 
 __all__ = [
     "BOT_TOKEN",
@@ -26,4 +27,5 @@ __all__ = [
     "DB_HOST",
     "REDIS_PORT",
     "REDIS_HOST",
+    "configurate_logger",
 ]

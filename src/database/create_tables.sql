@@ -1,6 +1,7 @@
 create table if not exists universities (
     id bigserial primary key,
-    name varchar(255) NOT NULL UNIQUE
+    name varchar(255) NOT NULL UNIQUE,
+    alias varchar(255) NOT NULL UNIQUE
 );
 
 create table if not exists students (
@@ -8,17 +9,18 @@ create table if not exists students (
     name varchar(255) NOT NULL,
     surname varchar(255) NOT NULL,
     birthday smallint,
-    birthmonth smallint,
+    birthmonth smallint
 );
 
 create table if not exists groups (
     id bigserial primary key,
-    headman_id bigint references students(telegram_id)
+    headman_id bigint references students(telegram_id),
     university_id bigint references universities(id),
-    name varchar(255) NOT NULL
+    name varchar(255) NOT NULL,
+    payment_expired date NOT NULL
 );
 
-create table if not exists students_group (
+create table if not exists students_groups (
     student_id bigint references students(telegram_id),
     group_id bigint references groups(id)
 );

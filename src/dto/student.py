@@ -11,8 +11,8 @@ class Student:
     telegram_id: int
     name: str
     surname: str
-    birthday: int
-    birthmonth: int
+    birthday: int | None
+    birthmonth: int | None
 
     @classmethod
     def from_mapping(cls, data: Mapping) -> Self:
