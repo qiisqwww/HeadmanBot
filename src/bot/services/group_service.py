@@ -1,7 +1,9 @@
 from datetime import date
 
+from src.bot.services import UniversityService
 from src.common.services import CorruptedDatabaseError, Service
 from src.dto import Group, Student
+from src.enums import UniversityAlias
 
 __all__ = [
     "GroupService",
@@ -12,6 +14,18 @@ class GroupService(Service):
     async def get_by_name(self, name: str) -> Group | None:
         query = "SELECT * FROM groups WHERE name LIKE $1"
         record = await self._con.fetchrow(query, name)
+
+        if record is None:
+            return None
+
+        return Group.from_mapping(record)
+
+    async def get_by_name_and_uni(self, name: str, university_alias: UniversityAlias) -> Group | None:
+        university_service = UniversityService(self._con)
+        uni = await university_service.find_by_alias(university_alias)
+
+        query = "SELECT * FROM groups WHERE name LIKE $1 AND university_id = $2"
+        record = await self._con.fetchrow(query, name, uni.id)
 
         if record is None:
             return None
@@ -52,15 +66,16 @@ class GroupService(Service):
 
         return [Group.from_mapping(record) for record in records]
 
-    async def append_student_to_group(self, group: Group, student: Student) -> None:
-        query = "INSERT INTO students_groups (student_id, group_id) VALUES($1, $2)"
-        await self._con.execute(query, student.telegram_id, group.id)
-
     async def update_payment_expired_date(self, group: Group, new_payment_expired: date) -> None:
         query = "UPDATE groups SET payment_expired=$1 WHERE id=$2"
         await self._con.execute(query, new_payment_expired, group.id)
 
-    async def create(self, name: str, headman_id: int, university_id: int, payment_expired: date) -> Group:
+    async def create_or_return(self, name: str, headman_id: int, university_id: int, payment_expired: date) -> Group:
+        found_group = await self.get_by_name(name)
+
+        if found_group is not None:
+            return found_group
+
         query = (
             "INSERT INTO groups (name, headman_id, university_id, payment_expired) VALUES ($1, $2, $3, $4) RETURNING id"
         )
@@ -73,3 +88,7 @@ class GroupService(Service):
             university_id=university_id,
             payment_expired=payment_expired,
         )
+
+    async def append_student_into_group(self, group: Group, student: Student) -> None:
+        query = "INSERT INTO students_groups (student_id, group_id) VALUES($1, $2)"
+        await self._con.execute(query, student.telegram_id, group.id)

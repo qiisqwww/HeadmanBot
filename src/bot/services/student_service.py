@@ -9,7 +9,7 @@ __all__ = [
 
 
 class StudentService(Service):
-    async def register(
+    async def create(
         self, telegram_id: int, name: str, surname: str, birthday: int | None, birthmonth: int | None
     ) -> Student:
         query = "INSERT INTO students (telegram_id, name, surname, birthday, birthmonth) VALUES ($1, $2, $3, $4, $5)"

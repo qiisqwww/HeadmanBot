@@ -5,7 +5,11 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
-from src.auth.handlers import registration_commands_router
+from src.auth.handlers import (
+    registration_callbacks_router,
+    registration_commands_router,
+    registration_finite_state_router,
+)
 from src.config import BOT_TOKEN, configurate_logger
 from src.database import get_pool, init_database
 
@@ -23,7 +27,8 @@ async def main():
 
     dp.include_routers(
         registration_commands_router,
-        # registration_callbacks_router,
+        registration_callbacks_router,
+        registration_finite_state_router,
         # verification_callback_router,
         # getstat_callback_router,
         # registration_router,

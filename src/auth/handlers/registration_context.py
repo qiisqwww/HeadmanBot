@@ -1,3 +1,5 @@
+from typing import Any
+
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
@@ -58,9 +60,26 @@ class RegistrationContext:
     async def set_university_alias(self, university_alias: UniversityAlias) -> None:
         await self._context.update_data(university_alias=university_alias)
 
+    @property
+    async def birthday(self) -> int:
+        return (await self._context.get_data())["birthday"]
+
+    async def set_birthday(self, birthday: int) -> None:
+        await self._context.update_data(birthday=birthday)
+
+    @property
+    async def birthmonth(self) -> int:
+        return (await self._context.get_data())["birthmonth"]
+
+    async def set_birthmonth(self, birthmonth: int) -> None:
+        await self._context.update_data(birthmonth=birthmonth)
+
     async def set_state(self, state: StateType = None) -> None:
         await self._context.set_state(state)
 
     async def clear(self) -> None:
         await self._context.set_state(state=None)
         await self._context.set_data({})
+
+    async def get_data(self) -> dict[str, Any]:
+        return await self._context.get_data()

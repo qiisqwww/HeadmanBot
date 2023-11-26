@@ -5,7 +5,7 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
 from loguru import logger
 
-from src.bot.services import RedisService
+from src.common.services import ThrottlingService
 
 HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
 
@@ -26,14 +26,14 @@ class ThrottlingMiddleware(BaseMiddleware):
         if void:
             return
 
-        async with RedisService() as storage:
-            user_activity = await storage.get_user_throttling(user_id)
+        async with ThrottlingService() as throttling_service:
+            user_activity = await throttling_service.get_user_throttling(user_id)
             if not user_activity:
-                await storage.set_user_throttling(user_id)
+                await throttling_service.set_user_throttling(user_id)
                 return await handler(event, data)
 
             if int(user_activity) >= 10:
                 return
 
-            await storage.increase_user_throttling(user_id)
+            await throttling_service.increase_user_throttling(user_id)
         return await handler(event, data)

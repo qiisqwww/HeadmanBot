@@ -4,24 +4,11 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.dto import Lesson
-from src.handlers.callback_data import AccessCallbackFactory
 
 __all__ = [
     "attendance_buttons",
     "choose_lesson_buttons",
-    "accept_or_deny_buttons",
-    "university_list_buttons",
-    "role_buttons",
 ]
-
-
-def accept_or_deny_buttons(student_id: int) -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-
-    builder.button(text="Одобрить", callback_data=AccessCallbackFactory(student_id=student_id, accepted=True))
-    builder.button(text="Отказать", callback_data=AccessCallbackFactory(student_id=student_id, accepted=False))
-
-    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
 def attendance_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:

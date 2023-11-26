@@ -2,22 +2,11 @@ from asyncpg.pool import PoolConnectionProxy
 
 from src.dto import Lesson, Student
 from src.enums import VisitStatus
-from src.services import AttendanceService
 
 __all__ = [
-    "RESTART_MESSAGE",
-    "ASK_GROUP_MESSAGE",
     "HEADMAN_OR_STUDENT_MESSAGE",
     "YOUR_GROUP_IS_NOT_REGISTERED_MESSAGE",
     "INCORRECT_DATA_MESSAGE",
-    "ASK_SURNAME_MESSAGE",
-    "ASK_NAME_MESSAGE",
-    "YOUR_APPLY_WAS_SENT_TO_ADMINS_MESSAGE",
-    "YOUR_APPLY_WAS_SENT_TO_HEADMAN_MESSAGE",
-    "REGISTRATION_DENIED_MESSAGE",
-    "REGISTRATION_ACCEPTED_MESSAGE",
-    "YOU_WERE_ACCEPTED_MESSAGE",
-    "YOU_WERE_DENIED_MESSAGE",
     "UNSUCCESFULLY_REG_MESSAGE",
     "UNSUCCESFULL_STAROSTA_REG_MESSAGE",
     "ALL_MESSAGE",
@@ -28,21 +17,9 @@ __all__ = [
     "POLL_MESSAGE",
     "HEADMAN_SEND_MSG_MISTAKE",
     "FAQ_MESSAGE",
-    "GROUP_DOESNT_EXISTS_MESSAGE",
-    "LOOK_WHAT_I_FOUND_MESSAGE",
     "WHICH_PAIR_MESSAGE",
-    "ASK_UNIVERSITY",
-    "CHOOSE_STUDENT_ROLE",
-    "INCORRECT_STUDENT_ROLE",
-    "INCORRECT_UNIVERSITY",
 ]
 
-
-RESTART_MESSAGE = """
-Приветствую! Давай зарегестрируемся в системе бота снова."""
-
-ASK_GROUP_MESSAGE = """
-Отлично! Теперь отправь мне название своей группы"""
 
 HEADMAN_OR_STUDENT_MESSAGE = """
 Ты студент или староста?"""
@@ -55,34 +32,6 @@ YOUR_GROUP_IS_NOT_REGISTERED_MESSAGE = """
 INCORRECT_DATA_MESSAGE = """
 Данные введены неверно. Введите еще раз."""
 
-ASK_SURNAME_MESSAGE = """
-Отправь свою фамилию"""
-
-ASK_UNIVERSITY = "Выберите свой университет."
-
-ASK_NAME_MESSAGE = """
-Отправь свое имя"""
-
-YOUR_APPLY_WAS_SENT_TO_ADMINS_MESSAGE = """
-Ваше заявление на регистрацию старостой было передано администраторам."""
-
-YOUR_APPLY_WAS_SENT_TO_HEADMAN_MESSAGE = """
-Ваше заявление на регистрацию студентом было передано старосте."""
-
-REGISTRATION_DENIED_MESSAGE = """
-Вы отказали пользователю в регистрации."""
-
-REGISTRATION_ACCEPTED_MESSAGE = """
-Пользователь был успешно зарегестрирован."""
-
-YOU_WERE_ACCEPTED_MESSAGE = """
-Ваше заявление на регистрацию было одобрено."""
-
-YOU_WERE_DENIED_MESSAGE = """
-Ваше заявление на регистрацию было отклонено.
-
-Если вы считаете, что это была ошибка, обратитесь к своему старосте или
-напишите в службу обратной связи --- @noheadproblemsbot"""
 
 UNSUCCESFULLY_REG_MESSAGE = """
 Ой! Из-за какой-то ошибки я не смог внести тебя в систему, попробуй снова"""
@@ -136,19 +85,6 @@ FAQ_MESSAGE = """
 Благодарим за понимание
 """
 
-GROUP_DOESNT_EXISTS_MESSAGE = "Такой группы нет!"
-
-LOOK_WHAT_I_FOUND_MESSAGE = "Смотри что я нашел по твоему запросу:"
-
-
-INCORRECT_STUDENT_ROLE = "Пожалуйста, нажмите на одну из кнопок выше, чтобы выбрать вашу роль."
-
-SUCCESFULL_ROLE_CHOOSE = "Отлично, роль выбрана, вы теперь - <b>{role}</b>."
-
-SUCCESFULL_UNIVERSITY_CHOOSE = "Отлично, выбран университет - <b>{uni}</b>."
-
-INCORRECT_UNIVERSITY = "Пожалуйста, нажмите на одну из кнопок выше, чтобы выбрать ваш университет."
-
 
 async def attendance_for_headmen_message(lesson: Lesson, headman: Student, con: PoolConnectionProxy) -> str:
     visit_text = "Придут:\n"
@@ -171,13 +107,13 @@ async def attendance_for_headmen_message(lesson: Lesson, headman: Student, con: 
             case VisitStatus.NOT_VISIT:
                 not_visit.append(student)
 
-    for student in sorted(not_checked, key=lambda student: student.fullname):
+    for student in sorted(not_checked, key=lambda student: student.fullname.lower()):
         none_text += student.telegram_link
 
-    for student in sorted(visit, key=lambda student: student.fullname):
+    for student in sorted(visit, key=lambda student: student.fullname.lower()):
         visit_text += student.telegram_link
 
-    for student in sorted(not_visit, key=lambda student: student.fullname):
+    for student in sorted(not_visit, key=lambda student: student.fullname.lower()):
         no_text += student.telegram_link
 
     return none_text + "\n" + visit_text + "\n" + no_text + "\n" + "Что-то еще?"
