@@ -3,13 +3,13 @@ from datetime import date
 from aiogram import Bot, F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
-from asyncpg import Pool
+from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
 
 from src.api.schedule_api import ScheduleApi
-from src.auth.handlers.registration_context import RegistrationContext
-from src.auth.handlers.registration_states import RegistrationStates
-from src.auth.handlers.validation import is_number
+from src.auth.controllers.registration_context import RegistrationContext
+from src.auth.controllers.registration_states import RegistrationStates
+from src.auth.controllers.validation import is_number
 from src.auth.resources.inline_buttons import accept_or_deny_buttons
 from src.auth.resources.templates import (
     ASK_BIRTHDAY_TEMPLATE,
@@ -29,15 +29,19 @@ from src.auth.resources.templates import (
 )
 from src.auth.services import CacheStudentService
 from src.bot import AuthContractService
+from src.common.middlewares import (
+    CheckRegistrationMiddleware,
+    InjectDBConnectionMiddleware,
+)
 from src.config import ADMIN_IDS
 from src.enums import Role
-from src.middlewares import CheckRegistrationMiddleware
 
 __all__ = [
     "registration_finite_state_router",
 ]
 
 registration_finite_state_router = Router()
+registration_finite_state_router.message.outer_middleware(InjectDBConnectionMiddleware())
 registration_finite_state_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
 
 
@@ -55,7 +59,7 @@ async def incorrect_university(message: Message) -> None:
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_group)
 @logger.catch
-async def handling_group(message: Message, state: FSMContext, pool: Pool) -> None:
+async def handling_group(message: Message, state: FSMContext, con: PoolConnectionProxy) -> None:
     registration_ctx = RegistrationContext(state)
 
     if message.text is None:
@@ -68,11 +72,10 @@ async def handling_group(message: Message, state: FSMContext, pool: Pool) -> Non
         await registration_ctx.set_state(RegistrationStates.waiting_group)
         return
 
-    async with pool.acquire() as con:
-        auth_contract_service = AuthContractService(con)
-        group = await auth_contract_service.find_group_by_name_and_uni(
-            message.text, await registration_ctx.university_alias
-        )
+    auth_contract_service = AuthContractService(con)
+    group = await auth_contract_service.find_group_by_name_and_uni(
+        message.text, await registration_ctx.university_alias
+    )
 
     if await registration_ctx.role == Role.HEADMAN and group is not None:
         await message.answer(GROUP_ALREADY_EXISTS_TEMPLATE)

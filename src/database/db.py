@@ -13,7 +13,7 @@ __all__ = [
 
 async def get_pool() -> Pool:
     if not hasattr(get_pool, "pool"):
-        get_pool.pool = await asyncpg.create_pool(DATABASE_URL)  # type: ignore
+        get_pool.pool = await asyncpg.create_pool(DATABASE_URL, min_size=1)  # type: ignore
     return get_pool.pool  # type: ignore
 
 

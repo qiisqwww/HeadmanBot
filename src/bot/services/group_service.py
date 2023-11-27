@@ -1,9 +1,10 @@
 from datetime import date
 
-from src.bot.services import UniversityService
 from src.common.services import CorruptedDatabaseError, Service
 from src.dto import Group, Student
 from src.enums import UniversityAlias
+
+from .university_service import UniversityService
 
 __all__ = [
     "GroupService",

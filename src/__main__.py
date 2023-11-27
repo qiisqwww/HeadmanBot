@@ -1,27 +1,38 @@
 import asyncio
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, Router
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
-from src.auth.handlers import (
+from src.auth.controllers import (
     registration_callbacks_router,
     registration_commands_router,
     registration_finite_state_router,
 )
-from src.config import BOT_TOKEN, configurate_logger
-from src.database import get_pool, init_database
+from src.common.middlewares import ThrottlingMiddleware
 
 # from src.jobs import SendingJob, UpdateDatabaseJob
-from src.middlewares import ThrottlingMiddleware
+from src.config import BOT_TOKEN, configurate_logger
+from src.database import init_database
+
+__all__ = [
+    "void_router",
+]
+
+
+void_router = Router()
+
+
+@void_router.message(flags={"void": "void"})
+async def handles_everything() -> None:
+    pass
 
 
 async def main():
     bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
     dp = Dispatcher(
         storage=MemoryStorage(),
-        pool=await get_pool(),
         bot=bot,
     )
 

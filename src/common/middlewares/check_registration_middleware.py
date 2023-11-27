@@ -5,7 +5,6 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.bot.services import StudentService
-from src.database import get_pool
 
 from .templates import ALREADY_REGISTERED_TEMPLATE, MUST_BE_REG_TEMPLATE
 
@@ -30,12 +29,8 @@ class CheckRegistrationMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        telegram_id = event.from_user.id
-        pool = await get_pool()
-
-        async with pool.acquire() as con:
-            student_service = StudentService(con)
-            student = await student_service.find(telegram_id)
+        student_service = StudentService(data["con"])
+        student = await student_service.find(event.from_user.id)
 
         is_registered = student is not None
 
