@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
+from redis.asyncio import Redis
 
 from src.api.schedule_api import ScheduleApi
 from src.auth.controllers.registration_context import RegistrationContext
@@ -29,10 +30,7 @@ from src.auth.resources.templates import (
 )
 from src.auth.services import CacheStudentService
 from src.bot import AuthContractService
-from src.common.middlewares import (
-    CheckRegistrationMiddleware,
-    InjectDBConnectionMiddleware,
-)
+from src.common.middlewares import CheckRegistrationMiddleware
 from src.config import ADMIN_IDS
 from src.enums import Role
 
@@ -41,7 +39,6 @@ __all__ = [
 ]
 
 registration_finite_state_router = Router()
-registration_finite_state_router.message.outer_middleware(InjectDBConnectionMiddleware())
 registration_finite_state_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
 
 
@@ -155,7 +152,7 @@ async def handling_surname(message: Message, state: FSMContext) -> None:
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_name)
 @logger.catch
-async def handling_name(message: Message, state: FSMContext, bot: Bot) -> None:
+async def handling_name(message: Message, state: FSMContext, bot: Bot, redis_con: Redis) -> None:
     registration_ctx = RegistrationContext(state)
 
     if message.from_user is None:
@@ -175,8 +172,8 @@ async def handling_name(message: Message, state: FSMContext, bot: Bot) -> None:
             await message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE)
 
     student_data = await registration_ctx.get_data()
-    async with CacheStudentService() as cache_student_service:
-        await cache_student_service.cache_student(student_data)
+    cache_student_service = CacheStudentService(redis_con)
+    await cache_student_service.cache_student(student_data)
 
     if await registration_ctx.role == Role.HEADMAN:
         surname = await registration_ctx.surname

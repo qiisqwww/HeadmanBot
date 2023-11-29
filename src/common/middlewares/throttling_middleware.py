@@ -26,14 +26,14 @@ class ThrottlingMiddleware(BaseMiddleware):
         if void:
             return
 
-        async with ThrottlingService() as throttling_service:
-            user_activity = await throttling_service.get_user_throttling(user_id)
-            if not user_activity:
-                await throttling_service.set_user_throttling(user_id)
-                return await handler(event, data)
+        throttling_service = ThrottlingService(data["redis_con"])
+        user_activity = await throttling_service.get_user_throttling(user_id)
+        if not user_activity:
+            await throttling_service.set_user_throttling(user_id)
+            return await handler(event, data)
 
-            if int(user_activity) >= 10:
-                return
+        if int(user_activity) >= 10:
+            return
 
-            await throttling_service.increase_user_throttling(user_id)
+        await throttling_service.increase_user_throttling(user_id)
         return await handler(event, data)

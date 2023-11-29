@@ -3,6 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types.callback_query import CallbackQuery
 from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
+from redis.asyncio import Redis
 
 from src.auth.callback_data import (
     AccessCallbackData,
@@ -25,10 +26,7 @@ from src.auth.resources.templates import (
 )
 from src.auth.services import CacheStudentService, RegistrationService
 from src.bot import AuthContractService
-from src.common.middlewares import (
-    CheckRegistrationMiddleware,
-    InjectDBConnectionMiddleware,
-)
+from src.common.middlewares import CheckRegistrationMiddleware
 from src.common.resources.inline_buttons import inline_void_button
 
 __all__ = [
@@ -37,20 +35,19 @@ __all__ = [
 
 
 registration_callbacks_router = Router()
-registration_callbacks_router.callback_query.outer_middleware(InjectDBConnectionMiddleware())
 registration_callbacks_router.callback_query.middleware(CheckRegistrationMiddleware(must_be_registered=False))
 
 
 @registration_callbacks_router.callback_query(AccessCallbackData.filter())
 @logger.catch
 async def accept_or_deny_callback(
-    callback: CallbackQuery, callback_data: AccessCallbackData, bot: Bot, con: PoolConnectionProxy
+    callback: CallbackQuery, callback_data: AccessCallbackData, bot: Bot, con: PoolConnectionProxy, redis_con: Redis
 ) -> None:
     if callback.message is None:
         return
 
-    async with CacheStudentService() as cache_student_service:
-        student_data = await cache_student_service.pop_student_cache(callback_data.student_id)
+    cache_student_service = CacheStudentService(redis_con)
+    student_data = await cache_student_service.pop_student_cache(callback_data.student_id)
 
     if not callback_data.accepted:
         await callback.message.edit_text(REGISTRATION_DENIED_TEMPLATE, reply_markup=inline_void_button())

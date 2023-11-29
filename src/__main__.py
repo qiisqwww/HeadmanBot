@@ -10,7 +10,11 @@ from src.auth.controllers import (
     registration_commands_router,
     registration_finite_state_router,
 )
-from src.common.middlewares import ThrottlingMiddleware
+from src.common.middlewares import (
+    InjectDBConnectionMiddleware,
+    InjectRedisConnectionMiddleware,
+    ThrottlingMiddleware,
+)
 
 # from src.jobs import SendingJob, UpdateDatabaseJob
 from src.config import BOT_TOKEN, configurate_logger
@@ -51,6 +55,12 @@ async def main():
     configurate_logger()
 
     await init_database()
+
+    dp.message.outer_middleware(InjectRedisConnectionMiddleware())
+    dp.message.outer_middleware(InjectDBConnectionMiddleware())
+
+    dp.callback_query.outer_middleware(InjectRedisConnectionMiddleware())
+    dp.callback_query.outer_middleware(InjectDBConnectionMiddleware())
 
     dp.message.middleware(ThrottlingMiddleware())
     dp.callback_query.middleware(ThrottlingMiddleware())

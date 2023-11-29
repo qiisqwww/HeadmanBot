@@ -9,16 +9,12 @@ from src.auth.resources.templates import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
     start_message_template,
 )
-from src.common.middlewares import (
-    CheckRegistrationMiddleware,
-    InjectDBConnectionMiddleware,
-)
+from src.common.middlewares import CheckRegistrationMiddleware
 
 from .registration_context import RegistrationContext
 from .registration_states import RegistrationStates
 
 registration_commands_router = Router()
-registration_commands_router.message.outer_middleware(InjectDBConnectionMiddleware())
 registration_commands_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
 
 
