@@ -1,36 +1,24 @@
 import asyncio
 
-from aiogram import Bot, Dispatcher, Router
+from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
-from src.auth.controllers import (
-    registration_callbacks_router,
-    registration_commands_router,
-    registration_finite_state_router,
-)
-from src.common.middlewares import (
+# from src.jobs import SendingJob, UpdateDatabaseJob
+from src.config import BOT_TOKEN, configurate_logger
+from src.database import init_postgres_database
+from src.modules.core.controllers import void_router
+from src.modules.core.middlewares import (
     InjectDBConnectionMiddleware,
     InjectRedisConnectionMiddleware,
     ThrottlingMiddleware,
 )
-
-# from src.jobs import SendingJob, UpdateDatabaseJob
-from src.config import BOT_TOKEN, configurate_logger
-from src.database import init_database
-
-__all__ = [
-    "void_router",
-]
-
-
-void_router = Router()
-
-
-@void_router.message(flags={"void": "void"})
-async def handles_everything() -> None:
-    pass
+from src.modules.student.controllers import (
+    registration_callbacks_router,
+    registration_commands_router,
+    registration_finite_state_router,
+)
 
 
 async def main():
@@ -48,13 +36,13 @@ async def main():
         # getstat_callback_router,
         # registration_router,
         # headman_router,
-        # void_router,
         # faq_router,
+        void_router,
     )
 
     configurate_logger()
 
-    await init_database()
+    await init_postgres_database()
 
     dp.message.outer_middleware(InjectRedisConnectionMiddleware())
     dp.message.outer_middleware(InjectDBConnectionMiddleware())
