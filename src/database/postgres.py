@@ -1,10 +1,9 @@
 import asyncpg
 from asyncpg.pool import Pool
 
+from src.modules.university.api.contract import UniversityContract
+
 from .config import DATABASE_URL
-
-# from src.bot.services import UniversityService
-
 
 __all__ = [
     "init_postgres_database",
@@ -26,6 +25,6 @@ async def init_postgres_database() -> None:
 
     async with pool.acquire() as con:
         await con.execute(query)
-    #
-    #     university_service = UniversityService(con)
-    #     await university_service.add_universities()
+
+        university_service = UniversityContract(con)
+        await university_service.add_universities()

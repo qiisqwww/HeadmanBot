@@ -1,4 +1,7 @@
-from src.dto import Group, Student
+from src.modules.group.api.dto import Group
+from src.modules.group.internal.gateways import UniversityGateway
+from src.modules.university.api.enums import UniversityAlias
+from src.shared.abstract_dto import AbstractStudent
 from src.shared.services import CorruptedDatabaseError, PostgresService
 
 __all__ = [
@@ -8,7 +11,7 @@ __all__ = [
 
 class GroupService(PostgresService):
     async def find_by_name(self, name: str) -> Group | None:
-        query = "SELECT * FROM groups WHERE name LIKE $1"
+        query = "SELECT * FROM groups.groups WHERE name LIKE $1"
         record = await self._con.fetchrow(query, name)
 
         if record is None:
@@ -16,17 +19,20 @@ class GroupService(PostgresService):
 
         return Group.from_mapping(record)
 
-    async def find_by_name_and_uni(self, name: str, university_id: int) -> Group | None:
-        query = "SELECT * FROM groups WHERE name LIKE $1 AND university_id = $2"
-        record = await self._con.fetchrow(query, name, university_id)
+    async def find_by_name_and_uni(self, name: str, university_alias: UniversityAlias) -> Group | None:
+        university_gateway = UniversityGateway(self._con)
+        university = await university_gateway.find_university_by_alias(university_alias)
+
+        query = "SELECT * FROM groups.groups WHERE name LIKE $1 AND university_id = $2"
+        record = await self._con.fetchrow(query, name, university.id)
 
         if record is None:
             return None
 
         return Group.from_mapping(record)
 
-    async def get_by_student(self, student: Student) -> Group:
-        query = "SELECT group_id FROM students_groups WHERE student_id = $1"
+    async def get_by_student(self, student: AbstractStudent) -> Group:
+        query = "SELECT group_id FROM groups.students_groups WHERE student_id = $1"
         group_id = await self._con.fetchval(query, student.telegram_id)
 
         if group_id is None:
@@ -45,7 +51,7 @@ class GroupService(PostgresService):
         return Group.from_mapping(record)
 
     async def all(self) -> list[Group]:
-        query = "SELECT * FROM groups"
+        query = "SELECT * FROM groups.groups"
         records = await self._con.fetch(query)
 
         return [Group.from_mapping(record) for record in records]
@@ -56,7 +62,7 @@ class GroupService(PostgresService):
         if found_group is not None:
             return found_group
 
-        query = "INSERT INTO groups (name, headman_id, university_id) VALUES ($1, $2, $3,) RETURNING id"
+        query = "INSERT INTO groups.groups (name, headman_id, university_id) VALUES ($1, $2, $3) RETURNING id"
         pk = await self._con.fetchval(query, name, headman_id, university_id)
 
         return Group(
@@ -66,6 +72,6 @@ class GroupService(PostgresService):
             university_id=university_id,
         )
 
-    async def append_student_into_group(self, student: Student, group: Group) -> None:
-        query = "INSERT INTO students_groups (student_id, group_id) VALUES($1, $2)"
+    async def append_student_into_group(self, student: AbstractStudent, group: Group) -> None:
+        query = "INSERT INTO groups.students_groups (student_id, group_id) VALUES($1, $2)"
         await self._con.execute(query, student.telegram_id, group.id)

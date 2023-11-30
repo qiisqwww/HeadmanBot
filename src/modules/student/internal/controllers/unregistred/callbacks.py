@@ -5,15 +5,18 @@ from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
 from redis.asyncio import Redis
 
-from src.auth.callback_data import (
-    AccessCallbackData,
-    RoleCallbackData,
-    UniversityCallbackData,
+from src.modules.student.api.contracts import PermissionsServiceContract
+from src.modules.student.internal.controllers.unregistred.registration_context import (
+    RegistrationContext,
 )
-from src.auth.controllers.registration_context import RegistrationContext
-from src.auth.controllers.registration_states import RegistrationStates
-from src.auth.resources.inline_buttons import university_list_buttons
-from src.auth.resources.templates import (
+from src.modules.student.internal.controllers.unregistred.registration_states import (
+    RegistrationStates,
+)
+from src.modules.student.internal.gateways import UniversityGatewate
+from src.modules.student.internal.resources.inline_buttons import (
+    university_list_buttons,
+)
+from src.modules.student.internal.resources.templates import (
     ASK_GROUP_TEMPLATE,
     ASK_UNIVERSITY_TEMPLATE,
     CHOOSE_STUDENT_ROLE_TEMPLATE,
@@ -24,10 +27,11 @@ from src.auth.resources.templates import (
     succesfull_role_choose_template,
     succesfull_university_choose_template,
 )
-from src.auth.services import CacheStudentService, RegistrationService
-from src.bot import AuthContractService
-from src.common.middlewares import CheckRegistrationMiddleware
-from src.common.resources.inline_buttons import inline_void_button
+from src.modules.student.internal.services import CacheStudentService, StudentService
+from src.shared.middlewares import InjectStudentMiddleware
+from src.shared.resources.inline_buttons import inline_void_button
+
+from .callback_data import AccessCallbackData, RoleCallbackData, UniversityCallbackData
 
 __all__ = [
     "registration_callbacks_router",
@@ -35,7 +39,9 @@ __all__ = [
 
 
 registration_callbacks_router = Router()
-registration_callbacks_router.callback_query.middleware(CheckRegistrationMiddleware(must_be_registered=False))
+registration_callbacks_router.callback_query.middleware(
+    InjectStudentMiddleware(must_be_registered=False, service=PermissionsServiceContract)
+)
 
 
 @registration_callbacks_router.callback_query(AccessCallbackData.filter())
@@ -54,7 +60,7 @@ async def accept_or_deny_callback(
         await bot.send_message(student_data.telegram_id, YOU_WERE_DENIED_TEMPLATE)
         return
 
-    registration_service = RegistrationService(con)
+    registration_service = StudentService(con)
     await registration_service.register_student(student_data)
 
     # await bot.send_message(
@@ -82,8 +88,8 @@ async def get_role_from_user(
     await callback.message.edit_text(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=inline_void_button())
     await callback.message.answer(succesfull_role_choose_template(await registration_ctx.role))
 
-    auth_contract_service = AuthContractService(con)
-    universities = await auth_contract_service.get_all_universities()
+    university_gateway = UniversityGatewate(con)
+    universities = await university_gateway.get_all_universities()
 
     await callback.message.answer(text=ASK_UNIVERSITY_TEMPLATE, reply_markup=university_list_buttons(universities))
     await registration_ctx.set_state(RegistrationStates.waiting_university)
@@ -99,8 +105,8 @@ async def get_university_from_user(
     if callback.message is None:
         return
 
-    auth_contract_service = AuthContractService(con)
-    choosen_uni = await auth_contract_service.find_university_by_alias(callback_data.university_alias)
+    university_gateway = UniversityGatewate(con)
+    choosen_uni = await university_gateway.find_university_by_alias(callback_data.university_alias)
 
     await registration_ctx.set_university_alias(callback_data.university_alias)
 

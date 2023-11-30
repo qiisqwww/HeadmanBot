@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from src.enums import UniversityAlias
-
 from .env import BoolEnv, IntEnv, IntListEnv, StrEnv
 
 __all__ = [
@@ -17,7 +15,6 @@ __all__ = [
     "REDIS_HOST",
     "REDIS_PORT",
     "ADMIN_IDS",
-    "UNIVERSITIES_LIST",
 ]
 
 DEBUG: bool = bool(BoolEnv("DEBUG"))
@@ -36,8 +33,3 @@ REDIS_HOST: str = StrEnv("REDIS_HOST")
 REDIS_PORT: int = IntEnv("REDIS_PORT")
 
 ADMIN_IDS: list[int] = IntListEnv("ADMIN_IDS")
-
-UNIVERSITIES_LIST: list[tuple[str, UniversityAlias]] = [
-    ("РТУ МИРЭА", UniversityAlias.MIREA),
-    ("МГТУ им. Н.Э. Баумана", UniversityAlias.BMSTU),
-]

@@ -1,8 +1,8 @@
-CREATE SCHEMA students;
-CREATE SCHEMA groups;
-CREATE SCHEMA payments;
-CREATE SCHEMA universities;
-CREATE SCHEMA attendances;
+CREATE SCHEMA IF NOT EXISTS students;
+CREATE SCHEMA IF NOT EXISTS groups;
+CREATE SCHEMA IF NOT EXISTS payments;
+CREATE SCHEMA IF NOT EXISTS universities;
+CREATE SCHEMA IF NOT EXISTS attendances;
 
 create table if not exists universities.universities (
     id bigserial primary key,

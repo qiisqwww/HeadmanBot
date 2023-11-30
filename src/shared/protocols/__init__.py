@@ -1,7 +1,5 @@
-from .abstract_student import AbstractStudent
-from .permissions_service import PermissionsService
+from .permissions_service_protocol import PermissionsServiceProtocol
 
 __all__ = [
-    "AbstractStudent",
-    "PermissionsService",
+    "PermissionsServiceProtocol",
 ]

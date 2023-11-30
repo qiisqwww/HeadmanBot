@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Mapping, Self
 
-from src.enums import Role, UniversityAlias
+from src.modules.student.internal.enums import Role
+from src.modules.university.api.enums import UniversityAlias
 
 __all__ = [
     "StudentRaw",

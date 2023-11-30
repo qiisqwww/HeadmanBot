@@ -1,13 +1,15 @@
 from dataclasses import dataclass
 from typing import Mapping, Self
 
+from src.shared.abstract_dto import AbstractStudent
+
 __all__ = [
     "Student",
 ]
 
 
 @dataclass(slots=True, unsafe_hash=True, frozen=True)
-class Student:
+class Student(AbstractStudent):
     telegram_id: int
     name: str
     surname: str

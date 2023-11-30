@@ -1,9 +1,11 @@
-from src.dto import Schedule
-from src.enums import UniversityAlias, Weekday
-
-from .bmstu_schedule_api import BmstuScheduleApi
-from .mirea_schedule_api import MireaScheduleApi
-from .schedule_api_interface import IScheduleAPI
+from src.modules.schedule_api.internal.dto import Schedule
+from src.modules.schedule_api.internal.enums import Weekday
+from src.modules.schedule_api.internal.services import (
+    BmstuScheduleApi,
+    IScheduleAPI,
+    MireaScheduleApi,
+)
+from src.modules.university.api.enums import UniversityAlias
 
 __all__ = [
     "ScheduleApi",

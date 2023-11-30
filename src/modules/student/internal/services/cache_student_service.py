@@ -1,5 +1,5 @@
-from src.common.services import RedisService
-from src.dto import StudentRaw
+from src.modules.student.internal.dto import StudentRaw
+from src.shared.services import RedisService
 
 __all__ = [
     "CacheStudentService",

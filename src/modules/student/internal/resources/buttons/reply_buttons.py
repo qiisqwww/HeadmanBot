@@ -1,7 +1,7 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from src.enums import Role
+from src.modules.student.internal.enums import Role
 
 __all__ = [
     "default_buttons",

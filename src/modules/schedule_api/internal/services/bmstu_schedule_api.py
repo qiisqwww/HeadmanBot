@@ -4,8 +4,8 @@ from datetime import datetime, time
 from bs4 import BeautifulSoup, Tag
 from httpx import AsyncClient
 
-from src.dto import Schedule
-from src.enums.weekday import Weekday
+from src.modules.schedule_api.internal.dto import Schedule
+from src.modules.schedule_api.internal.enums import Weekday
 
 from .schedule_api_interface import IScheduleAPI
 
@@ -69,8 +69,8 @@ class BmstuScheduleApi(IScheduleAPI):
 
     def _is_zn(self, schedule_soup: BeautifulSoup) -> bool:
         page_header = schedule_soup.find(class_="page-header")
-        tag_with_zn_value = page_header.h4.i
-        *_, zn_value = tag_with_zn_value.text.split()
+        tag_with_zn_value = page_header.h4.i  # type: ignore
+        *_, zn_value = tag_with_zn_value.text.split()  # type: ignore
         return zn_value == "знаменатель"
 
     def _filter_empty_rows(self, schedule_table: list[Tag]) -> list[Tag]:

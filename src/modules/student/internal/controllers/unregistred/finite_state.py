@@ -7,12 +7,20 @@ from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
 from redis.asyncio import Redis
 
-from src.api.schedule_api import ScheduleApi
-from src.auth.controllers.registration_context import RegistrationContext
-from src.auth.controllers.registration_states import RegistrationStates
-from src.auth.controllers.validation import is_number
-from src.auth.resources.inline_buttons import accept_or_deny_buttons
-from src.auth.resources.templates import (
+from src.config import ADMIN_IDS
+from src.modules.schedule_api.api import ScheduleApi
+from src.modules.student.api.contracts import PermissionsServiceContract
+from src.modules.student.internal.controllers.unregistred.registration_context import (
+    RegistrationContext,
+)
+from src.modules.student.internal.controllers.unregistred.registration_states import (
+    RegistrationStates,
+)
+from src.modules.student.internal.controllers.unregistred.validation import is_number
+from src.modules.student.internal.enums import Role
+from src.modules.student.internal.gateways.group_gateway import GroupGateway
+from src.modules.student.internal.resources.inline_buttons import accept_or_deny_buttons
+from src.modules.student.internal.resources.templates import (
     ASK_BIRTHDAY_TEMPLATE,
     ASK_BIRTHMONTH_TEMPLATE,
     ASK_NAME_TEMPLATE,
@@ -28,18 +36,17 @@ from src.auth.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
 )
-from src.auth.services import CacheStudentService
-from src.bot import AuthContractService
-from src.common.middlewares import CheckRegistrationMiddleware
-from src.config import ADMIN_IDS
-from src.enums import Role
+from src.modules.student.internal.services import CacheStudentService
+from src.shared.middlewares import InjectStudentMiddleware
 
 __all__ = [
     "registration_finite_state_router",
 ]
 
 registration_finite_state_router = Router()
-registration_finite_state_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
+registration_finite_state_router.message.middleware(
+    InjectStudentMiddleware(must_be_registered=False, service=PermissionsServiceContract)
+)
 
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_role)
@@ -69,10 +76,8 @@ async def handling_group(message: Message, state: FSMContext, con: PoolConnectio
         await registration_ctx.set_state(RegistrationStates.waiting_group)
         return
 
-    auth_contract_service = AuthContractService(con)
-    group = await auth_contract_service.find_group_by_name_and_uni(
-        message.text, await registration_ctx.university_alias
-    )
+    group_gateway = GroupGateway(con)
+    group = await group_gateway.find_group_by_name_and_uni(message.text, await registration_ctx.university_alias)
 
     if await registration_ctx.role == Role.HEADMAN and group is not None:
         await message.answer(GROUP_ALREADY_EXISTS_TEMPLATE)

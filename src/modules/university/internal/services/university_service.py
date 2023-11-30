@@ -1,6 +1,6 @@
-from src.config.config import UNIVERSITIES_LIST
-from src.dto import University
-from src.enums import UniversityAlias
+from src.modules.university.api.dto import University
+from src.modules.university.api.enums import UniversityAlias
+from src.modules.university.internal.config import UNIVERSITIES_LIST
 from src.shared.services import CorruptedDatabaseError, PostgresService
 
 __all__ = [

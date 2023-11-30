@@ -3,13 +3,13 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.auth.callback_data import (
+from src.modules.student.internal.controllers.unregistred.callback_data import (
     AccessCallbackData,
     RoleCallbackData,
     UniversityCallbackData,
 )
-from src.dto import University
-from src.enums import Role
+from src.modules.student.internal.enums import Role
+from src.modules.university.api.dto import University
 
 __all__ = [
     "university_list_buttons",

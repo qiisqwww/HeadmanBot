@@ -32,9 +32,9 @@ async def main():
         # faq_router,
     )
 
-    @dp.message(flags={"void": "void"})
-    async def handles_everything() -> None:
-        pass
+    # @dp.message(flags={"void": "void"})
+    # async def handles_everything() -> None:
+    #     pass
 
     configurate_logger()
 

@@ -4,12 +4,13 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types.message import Message
 from loguru import logger
 
-from src.auth.resources.inline_buttons import role_buttons
-from src.auth.resources.templates import (
+from src.modules.student.api.contracts import PermissionsServiceContract
+from src.modules.student.internal.resources.inline_buttons import role_buttons
+from src.modules.student.internal.resources.templates import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
     start_message_template,
 )
-from src.common.middlewares import CheckRegistrationMiddleware
+from src.shared.middlewares import InjectStudentMiddleware
 
 from .registration_context import RegistrationContext
 from .registration_states import RegistrationStates
@@ -19,7 +20,9 @@ __all__ = [
 ]
 
 registration_commands_router = Router()
-registration_commands_router.message.middleware(CheckRegistrationMiddleware(must_be_registered=False))
+registration_commands_router.message.middleware(
+    InjectStudentMiddleware(must_be_registered=False, service=PermissionsServiceContract),
+)
 
 
 @registration_commands_router.message(CommandStart())

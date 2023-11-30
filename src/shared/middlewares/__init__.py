@@ -1,7 +1,7 @@
 from .check_headman_middleware import CheckHeadmanMiddleware
-from .check_registration_middleware import CheckRegistrationMiddleware
 from .inject_db_connection_middleware import InjectDBConnectionMiddleware
 from .inject_redis_connection import InjectRedisConnectionMiddleware
+from .inject_student_middleware import InjectStudentMiddleware
 from .throttling_middleware import ThrottlingMiddleware
 
 __all__ = [
@@ -9,5 +9,5 @@ __all__ = [
     "InjectRedisConnectionMiddleware",
     "ThrottlingMiddleware",
     "CheckHeadmanMiddleware",
-    "CheckRegistrationMiddleware",
+    "InjectStudentMiddleware",
 ]

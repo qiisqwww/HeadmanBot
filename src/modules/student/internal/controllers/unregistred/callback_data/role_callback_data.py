@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
-from src.enums import Role
+from src.modules.student.internal.enums import Role
 
 __all__ = [
     "RoleCallbackData",
