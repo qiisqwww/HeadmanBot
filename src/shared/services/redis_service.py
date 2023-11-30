@@ -1,4 +1,4 @@
-from redis.asyncio import Redis
+from redis.asyncio import Redis  # type: ignore
 
 __all__ = [
     "RedisService",

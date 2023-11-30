@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message
 from loguru import logger
 
-from src.modules.student.services import StudentService
+from src.shared.protocols import PermissionsService
 
 from .templates import ALREADY_REGISTERED_TEMPLATE, MUST_BE_REG_TEMPLATE
 
@@ -17,9 +17,11 @@ HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
 
 class CheckRegistrationMiddleware(BaseMiddleware):
     _must_be_registered: bool
+    _service: type[PermissionsService]
 
-    def __init__(self, must_be_registered: bool) -> None:
+    def __init__(self, must_be_registered: bool, service: type[PermissionsService]) -> None:
         self._must_be_registered = must_be_registered
+        self._service = service
         super().__init__()
 
     @logger.catch
@@ -29,8 +31,8 @@ class CheckRegistrationMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        student_service = StudentService(data["con"])
-        student = await student_service.find(event.from_user.id)
+        student_service = self._service(data["con"])
+        student = await student_service.find_student(event.from_user.id)
 
         is_registered = student is not None
 

@@ -8,16 +8,11 @@ from loguru import logger
 # from src.jobs import SendingJob, UpdateDatabaseJob
 from src.config import BOT_TOKEN, configurate_logger
 from src.database import init_postgres_database
-from src.modules.core.controllers import void_router
-from src.modules.core.middlewares import (
+from src.modules.student.api.controller import student_router
+from src.shared.middlewares import (
     InjectDBConnectionMiddleware,
     InjectRedisConnectionMiddleware,
     ThrottlingMiddleware,
-)
-from src.modules.student.controllers import (
-    registration_callbacks_router,
-    registration_commands_router,
-    registration_finite_state_router,
 )
 
 
@@ -29,16 +24,17 @@ async def main():
     )
 
     dp.include_routers(
-        registration_commands_router,
-        registration_callbacks_router,
-        registration_finite_state_router,
+        student_router,
         # verification_callback_router,
         # getstat_callback_router,
         # registration_router,
         # headman_router,
         # faq_router,
-        void_router,
     )
+
+    @dp.message(flags={"void": "void"})
+    async def handles_everything() -> None:
+        pass
 
     configurate_logger()
 
