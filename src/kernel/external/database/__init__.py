@@ -1,4 +1,4 @@
-from .postgres import get_postgres_pool, init_postgres_database
+from .postgres import get_postgres_pool
 from .redis import get_redis_pool
 
 __all__ = [

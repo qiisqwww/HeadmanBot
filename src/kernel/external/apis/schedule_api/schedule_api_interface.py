@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from src.modules.schedule_api.internal.dto import Schedule
-from src.modules.schedule_api.internal.enums import Weekday
+from .dto import Schedule
+from .enums import Weekday
 
 __all__ = [
     "IScheduleAPI",

@@ -10,6 +10,8 @@ __all__ = [
     "get_postgres_pool",
 ]
 
+DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
+
 
 async def get_postgres_pool() -> Pool:
     if not hasattr(get_postgres_pool, "pool"):
