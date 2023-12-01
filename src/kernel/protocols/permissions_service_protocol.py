@@ -2,7 +2,7 @@ from typing import Protocol
 
 from asyncpg.pool import PoolConnectionProxy
 
-from src.shared.abstract_dto import AbstractStudent
+from src.kernel.abstracts import AbstractStudent
 
 __all__ = [
     "PermissionsServiceProtocol",

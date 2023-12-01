@@ -1,8 +1,8 @@
+from src.kernel.abstracts import AbstractStudent
+from src.kernel.services import PostgresService
 from src.modules.group.api.dto import Group
 from src.modules.group.internal.services import GroupService
 from src.modules.university.api.enums import UniversityAlias
-from src.shared.abstract_dto import AbstractStudent
-from src.shared.services import PostgresService
 
 __all__ = [
     "PostgresService",

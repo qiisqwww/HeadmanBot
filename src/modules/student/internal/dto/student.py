@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Mapping, Self
 
-from src.shared.abstract_dto import AbstractStudent
+from src.kernel.abstracts import AbstractStudent
 
 __all__ = [
     "Student",

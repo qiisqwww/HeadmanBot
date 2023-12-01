@@ -1,6 +1,6 @@
+from src.kernel.abstracts import AbstractStudent
+from src.kernel.services import PostgresService
 from src.modules.student.internal.services import StudentService
-from src.shared.abstract_dto import AbstractStudent
-from src.shared.services import PostgresService
 
 __all__ = [
     "PermissionsServiceContract",

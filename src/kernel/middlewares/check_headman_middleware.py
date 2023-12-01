@@ -1,15 +1,15 @@
 from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
 from src.database import get_postgres_pool
-from src.shared.protocols import PermissionsServiceProtocol
+from src.kernel.protocols import PermissionsServiceProtocol
 
 from .templates import MUST_BE_HEADMEN_TEMPLATE
 
-HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
+HandlerType: TypeAlias = Callable[[Message | CallbackQuery, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
     "CheckHeadmanMiddleware",
@@ -26,7 +26,7 @@ class CheckHeadmanMiddleware(BaseMiddleware):
         super().__init__()
 
     @logger.catch
-    async def __call__(self, handler: HandlerType, event: Message, data: dict[str, Any]) -> Any:
+    async def __call__(self, handler: HandlerType, event: Message | CallbackQuery, data: dict[str, Any]) -> Any:
         pool = await get_postgres_pool()
 
         async with pool.acquire() as con:
@@ -34,7 +34,7 @@ class CheckHeadmanMiddleware(BaseMiddleware):
             is_headman = await student_service.check_is_headman(data["student"])
 
         if is_headman != self._must_be_headman and self._must_be_headman:
-            await event.reply(MUST_BE_HEADMEN_TEMPLATE)
+            await event.answer(MUST_BE_HEADMEN_TEMPLATE)
             logger.trace("headmen commands middleware finished, user must me headman to use this command")
             return
 

@@ -1,7 +1,7 @@
+from src.kernel.abstracts import AbstractStudent
+from src.kernel.services import PostgresService
 from src.modules.student.internal.dto import Student, StudentRaw
 from src.modules.student.internal.gateways import GroupGateway, UniversityGatewate
-from src.shared.abstract_dto import AbstractStudent
-from src.shared.services import PostgresService
 
 __all__ = [
     "StudentService",

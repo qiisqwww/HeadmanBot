@@ -1,7 +1,7 @@
+from src.kernel.services import PostgresService
 from src.modules.university.api.contract import UniversityContract
 from src.modules.university.api.dto import University
 from src.modules.university.api.enums import UniversityAlias
-from src.shared.services import PostgresService
 
 __all__ = [
     "UniversityGateway",

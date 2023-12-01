@@ -4,13 +4,13 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types.message import Message
 from loguru import logger
 
+from src.kernel.middlewares import InjectStudentMiddleware
 from src.modules.student.api.contracts import PermissionsServiceContract
 from src.modules.student.internal.resources.inline_buttons import role_buttons
 from src.modules.student.internal.resources.templates import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
     start_message_template,
 )
-from src.shared.middlewares import InjectStudentMiddleware
 
 from .registration_context import RegistrationContext
 from .registration_states import RegistrationStates

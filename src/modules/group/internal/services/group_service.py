@@ -1,8 +1,8 @@
+from src.kernel.abstracts import AbstractStudent
+from src.kernel.services import CorruptedDatabaseError, PostgresService
 from src.modules.group.api.dto import Group
 from src.modules.group.internal.gateways import UniversityGateway
 from src.modules.university.api.enums import UniversityAlias
-from src.shared.abstract_dto import AbstractStudent
-from src.shared.services import CorruptedDatabaseError, PostgresService
 
 __all__ = [
     "GroupService",

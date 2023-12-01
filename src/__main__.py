@@ -8,12 +8,12 @@ from loguru import logger
 # from src.jobs import SendingJob, UpdateDatabaseJob
 from src.config import BOT_TOKEN, configurate_logger
 from src.database import init_postgres_database
-from src.modules.student.api.controller import student_router
-from src.shared.middlewares import (
+from src.kernel.middlewares import (
     InjectDBConnectionMiddleware,
     InjectRedisConnectionMiddleware,
     ThrottlingMiddleware,
 )
+from src.modules.student.api.controller import student_router
 
 
 async def main():

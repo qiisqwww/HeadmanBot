@@ -8,6 +8,7 @@ from loguru import logger
 from redis.asyncio import Redis
 
 from src.config import ADMIN_IDS
+from src.kernel.middlewares import InjectStudentMiddleware
 from src.modules.schedule_api.api import ScheduleApi
 from src.modules.student.api.contracts import PermissionsServiceContract
 from src.modules.student.internal.controllers.unregistred.registration_context import (
@@ -37,7 +38,6 @@ from src.modules.student.internal.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
 )
 from src.modules.student.internal.services import CacheStudentService
-from src.shared.middlewares import InjectStudentMiddleware
 
 __all__ = [
     "registration_finite_state_router",
