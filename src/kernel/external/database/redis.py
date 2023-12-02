@@ -1,6 +1,6 @@
 from redis.asyncio import ConnectionPool
 
-from src.config import REDIS_HOST, REDIS_PORT
+from ...config import NKernelConfig
 
 __all__ = [
     "get_redis_pool",
@@ -8,7 +8,11 @@ __all__ = [
 
 
 def get_redis_pool() -> ConnectionPool:
-    redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}?decode_responses=True"
+    config = NKernelConfig()
+    host = config.REDIS_HOST
+    port = config.POSTGRES_PORT
+
+    redis_url = f"redis://{host}:{port}?decode_responses=True"
     if not hasattr(get_redis_pool, "pool"):
         get_redis_pool.pool = ConnectionPool().from_url(redis_url)  # type: ignore
     return get_redis_pool.pool  # type: ignore

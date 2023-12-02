@@ -4,10 +4,9 @@ from datetime import datetime, time
 from bs4 import BeautifulSoup, Tag
 from httpx import AsyncClient
 
-from src.modules.schedule_api.internal.dto import Schedule
-from src.modules.schedule_api.internal.enums import Weekday
-
-from .schedule_api_interface import IScheduleAPI
+from ..dto import Schedule
+from ..enums import Weekday
+from ..schedule_api_interface import IScheduleAPI
 
 __all__ = [
     "BmstuScheduleApi",
