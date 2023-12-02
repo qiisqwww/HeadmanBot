@@ -7,7 +7,6 @@ from .config import (
     DB_PORT,
     DB_USER,
     DEBUG,
-    HEADMAN_PASSWORD,
     LOGGING_PATH,
     REDIS_HOST,
     REDIS_PORT,
@@ -17,7 +16,6 @@ from .logger_config import configurate_logger
 __all__ = [
     "BOT_TOKEN",
     "DEBUG",
-    "HEADMAN_PASSWORD",
     "LOGGING_PATH",
     "ADMIN_IDS",
     "DB_USER",

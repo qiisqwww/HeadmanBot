@@ -5,7 +5,7 @@ from aiogram.types import Update
 from loguru import logger
 from redis.asyncio import Redis
 
-from src.database import get_redis_pool
+from ...external.database import get_redis_pool
 
 __all__ = [
     "InjectRedisConnectionMiddleware",

@@ -1,8 +1,15 @@
+/* CREATE SCHEMAS START */
+
 CREATE SCHEMA IF NOT EXISTS students;
 CREATE SCHEMA IF NOT EXISTS groups;
 CREATE SCHEMA IF NOT EXISTS payments;
 CREATE SCHEMA IF NOT EXISTS universities;
 CREATE SCHEMA IF NOT EXISTS attendances;
+
+/* CREATE SCHEMAS END */
+
+
+/* CREATE TABLES START */
 
 create table if not exists universities.universities (
     id bigserial primary key,
@@ -43,3 +50,5 @@ create table if not exists attendances.attendances (
     lesson_id bigint NOT NULL,
     visit_status varchar(255) NOT NULL
 );
+
+/* CREATE TABLES END */

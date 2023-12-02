@@ -26,6 +26,7 @@ __all__ = [
     "BIRTHDAY_INCORRECT_TEMPLATE",
     "GROUP_ALREADY_EXISTS_TEMPLATE",
     "FAQ_TEMPLATE",
+    "GROUP_DOESNT_REGISTERED_TEMPLATE",
 ]
 
 
@@ -64,7 +65,7 @@ def succesfull_university_choose_template(university_name: str) -> str:
 
 ASK_GROUP_TEMPLATE = "Отлично! Теперь отправь мне название своей группы"
 
-GROUP_DOESNT_EXISTS_TEMPLATE = "Такой группы нет!"
+GROUP_DOESNT_EXISTS_TEMPLATE = "Такой группы в университете нет!"
 
 
 ASK_SURNAME_TEMPLATE = "Отправь свою фамилию"
@@ -107,6 +108,8 @@ FAQ_TEMPLATE = """
 Если есть вопросы или предложения - вы можете написать их <b>сюда --->>> @noheadproblemsbot</b>
 Благодарим за понимание
 """
+
+GROUP_DOESNT_REGISTERED_TEMPLATE = "Группа не зарегистрированна в боте, попросите свою старосту ее зерегистрировать."
 # from asyncpg.pool import PoolConnectionProxy
 #
 # from src.dto import Lesson, Student

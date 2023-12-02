@@ -1,11 +1,9 @@
-from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types.message import Message
 from loguru import logger
 
-from src.kernel.middlewares import InjectStudentMiddleware
-from src.modules.student.api.contracts import PermissionsServiceContract
+from src.kernel import NRouter
 from src.modules.student.internal.resources.inline_buttons import role_buttons
 from src.modules.student.internal.resources.templates import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
@@ -19,10 +17,7 @@ __all__ = [
     "registration_commands_router",
 ]
 
-registration_commands_router = Router()
-registration_commands_router.message.middleware(
-    InjectStudentMiddleware(must_be_registered=False, service=PermissionsServiceContract),
-)
+registration_commands_router = NRouter()
 
 
 @registration_commands_router.message(CommandStart())

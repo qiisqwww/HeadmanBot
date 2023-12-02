@@ -25,3 +25,7 @@ class GroupContract(PostgresService):
     async def find_by_name_and_uni(self, name: str, university_alias: UniversityAlias) -> Group | None:
         group_service = GroupService(self._con)
         return await group_service.find_by_name_and_uni(name, university_alias)
+
+    async def get_headman_id_by_group_name(self, group_name: str) -> int:
+        group_service = GroupService(self._con)
+        return await group_service.get_headman_id(group_name)

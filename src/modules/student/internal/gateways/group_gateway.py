@@ -27,3 +27,7 @@ class GroupGateway(PostgresService):
     async def find_group_by_name_and_uni(self, group_name: str, university_alias: UniversityAlias) -> Group | None:
         group_contract = GroupContract(self._con)
         return await group_contract.find_by_name_and_uni(group_name, university_alias)
+
+    async def get_headman_id_by_group_name(self, group_name: str) -> int:
+        group_contract = GroupContract(self._con)
+        return await group_contract.get_headman_id_by_group_name(group_name)

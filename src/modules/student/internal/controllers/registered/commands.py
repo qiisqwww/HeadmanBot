@@ -1,16 +1,11 @@
-from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from loguru import logger
 
-from src.kernel.middlewares import InjectStudentMiddleware
-from src.modules.student.api.contracts import PermissionsServiceContract
+from src.kernel import NRouter
 from src.modules.student.internal.resources.templates import FAQ_TEMPLATE
 
-registered_commands_router = Router()
-registered_commands_router.message.middleware(
-    InjectStudentMiddleware(must_be_registered=True, service=PermissionsServiceContract)
-)
+registered_commands_router = NRouter()
 
 
 __all__ = [

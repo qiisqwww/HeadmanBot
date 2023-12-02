@@ -1,16 +1,13 @@
 from datetime import date
 
-from aiogram import Bot, F, Router
+from aiogram import Bot, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
-from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
-from redis.asyncio import Redis
 
 from src.config import ADMIN_IDS
-from src.kernel.middlewares import InjectStudentMiddleware
-from src.modules.schedule_api.api import ScheduleApi
-from src.modules.student.api.contracts import PermissionsServiceContract
+from src.external.apis import ScheduleApi
+from src.kernel.router.router import NRouter
 from src.modules.student.internal.controllers.unregistred.registration_context import (
     RegistrationContext,
 )
@@ -32,6 +29,7 @@ from src.modules.student.internal.resources.templates import (
     BIRTHMONTH_MUST_BE_DIGIT_TEMPLATE,
     GROUP_ALREADY_EXISTS_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
+    GROUP_DOESNT_REGISTERED_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
@@ -43,9 +41,11 @@ __all__ = [
     "registration_finite_state_router",
 ]
 
-registration_finite_state_router = Router()
-registration_finite_state_router.message.middleware(
-    InjectStudentMiddleware(must_be_registered=False, service=PermissionsServiceContract)
+registration_finite_state_router = NRouter(
+    services={
+        "group_gateway": GroupGateway,
+        "cache_student_service": CacheStudentService,
+    }
 )
 
 
@@ -63,7 +63,7 @@ async def incorrect_university(message: Message) -> None:
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_group)
 @logger.catch
-async def handling_group(message: Message, state: FSMContext, con: PoolConnectionProxy) -> None:
+async def handling_group(message: Message, state: FSMContext, group_gateway: GroupGateway) -> None:
     registration_ctx = RegistrationContext(state)
 
     if message.text is None:
@@ -76,11 +76,15 @@ async def handling_group(message: Message, state: FSMContext, con: PoolConnectio
         await registration_ctx.set_state(RegistrationStates.waiting_group)
         return
 
-    group_gateway = GroupGateway(con)
     group = await group_gateway.find_group_by_name_and_uni(message.text, await registration_ctx.university_alias)
 
     if await registration_ctx.role == Role.HEADMAN and group is not None:
         await message.answer(GROUP_ALREADY_EXISTS_TEMPLATE)
+        await registration_ctx.set_state(RegistrationStates.waiting_group)
+        return
+
+    if await registration_ctx.role == Role.STUDENT and group is not None:
+        await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
         await registration_ctx.set_state(RegistrationStates.waiting_group)
         return
 
@@ -157,7 +161,13 @@ async def handling_surname(message: Message, state: FSMContext) -> None:
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_name)
 @logger.catch
-async def handling_name(message: Message, state: FSMContext, bot: Bot, redis_con: Redis) -> None:
+async def handling_name(
+    message: Message,
+    state: FSMContext,
+    bot: Bot,
+    cache_student_service: CacheStudentService,
+    group_gateway: GroupGateway,
+) -> None:
     registration_ctx = RegistrationContext(state)
 
     if message.from_user is None:
@@ -177,13 +187,12 @@ async def handling_name(message: Message, state: FSMContext, bot: Bot, redis_con
             await message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE)
 
     student_data = await registration_ctx.get_data()
-    cache_student_service = CacheStudentService(redis_con)
+    student_id = await registration_ctx.telegram_id
     await cache_student_service.cache_student(student_data)
 
     if await registration_ctx.role == Role.HEADMAN:
         surname = await registration_ctx.surname
         name = await registration_ctx.name
-        student_id = await registration_ctx.telegram_id
 
         for admin_id in ADMIN_IDS:
             await bot.send_message(
@@ -193,20 +202,11 @@ async def handling_name(message: Message, state: FSMContext, bot: Bot, redis_con
             )
         return
 
-    # async with pool.acquire() as con:
-    #     group_service = GroupService(con)
-    #     group = await group_service.get_by_name(user_data["group_name"])
-    #
-    #     students_service = StudentService(con)
-    #     students = await students_service.filter_by_group(group)
-    #
-    # headmans = [student for student in students if student.is_headman]
-    #
-    # for headman in headmans:
-    #     await bot.send_message(
-    #         headman.telegram_id,
-    #         f"Студент {user_data['surname']} {user_data['name']} подал заявку на регистарцию в вашу группу",
-    #         reply_markup=accept_or_deny_buttons(user_id),
-    #     )
+    headman_id = await group_gateway.get_headman_id_by_group_name(await registration_ctx.group_name)
+    await bot.send_message(
+        headman_id,
+        f"Студент {student_data['surname']} {student_data['name']} подал заявку на регистарцию в вашу группу",
+        reply_markup=accept_or_deny_buttons(student_id),
+    )
 
     await state.clear()

@@ -10,7 +10,7 @@ __all__ = [
 def get_redis_pool() -> ConnectionPool:
     config = NKernelConfig()
     host = config.REDIS_HOST
-    port = config.POSTGRES_PORT
+    port = config.REDIS_PORT
 
     redis_url = f"redis://{host}:{port}?decode_responses=True"
     if not hasattr(get_redis_pool, "pool"):

@@ -75,3 +75,8 @@ class GroupService(PostgresService):
     async def append_student_into_group(self, student: AbstractStudent, group: Group) -> None:
         query = "INSERT INTO groups.students_groups (student_id, group_id) VALUES($1, $2)"
         await self._con.execute(query, student.telegram_id, group.id)
+
+    async def get_headman_id(self, name: str) -> int:
+        query = "SELECT headman_id FROM groups.groups WHERE name LIKE $1"
+
+        return await self._con.fetchval(query, name)

@@ -7,6 +7,7 @@ services:
       - ./.env/.database.dev.env
     volumes:
       - headman_bot_postgres_dev_data:/var/lib/posgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
     healthcheck:
