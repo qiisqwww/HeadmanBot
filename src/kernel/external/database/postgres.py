@@ -1,7 +1,7 @@
 import asyncpg
 from asyncpg.pool import Pool
 
-from ...config import NKernelConfig
+from ...config import KernelConfig
 
 __all__ = [
     "get_postgres_pool",
@@ -9,7 +9,7 @@ __all__ = [
 
 
 async def get_postgres_pool() -> Pool:
-    config = NKernelConfig()
+    config = KernelConfig()
 
     user = config.POSTGRES_USER
     password = config.POSTGRES_PASS

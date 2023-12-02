@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
-from src.kernel.protocols import PermissionsServiceProtocol
+from src.kernel.protocols import FindStudentServiceProtocol
 
 from .templates import ALREADY_REGISTERED_TEMPLATE, MUST_BE_REG_TEMPLATE
 
@@ -17,9 +17,9 @@ HandlerType: TypeAlias = Callable[[Message | CallbackQuery, dict[str, Any]], Awa
 
 class InjectStudentMiddleware(BaseMiddleware):
     _must_be_registered: bool
-    _service: type[PermissionsServiceProtocol]
+    _service: type[FindStudentServiceProtocol]
 
-    def __init__(self, must_be_registered: bool, service: type[PermissionsServiceProtocol]) -> None:
+    def __init__(self, must_be_registered: bool, service: type[FindStudentServiceProtocol]) -> None:
         self._must_be_registered = must_be_registered
         self._service = service
         super().__init__()
@@ -31,8 +31,8 @@ class InjectStudentMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        student_service = self._service(data["con"])
-        student = await student_service.check_is_student_registered_and_return(event.from_user.id)
+        student_service = self._service(data["postgres_con"])
+        student = await student_service.find_student(event.from_user.id)
 
         is_registered = student is not None
 
@@ -47,6 +47,6 @@ class InjectStudentMiddleware(BaseMiddleware):
             return
 
         logger.trace("Check is user registred middleware finished.")
-        data["student"] = student
+        data["user"] = student
 
         return await handler(event, data)

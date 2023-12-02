@@ -1,4 +1,4 @@
-from src.modules.student.internal.enums import Role
+from src.kernel.role import Role
 
 __all__ = [
     "start_message_template",

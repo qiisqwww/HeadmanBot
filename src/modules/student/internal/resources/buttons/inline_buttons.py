@@ -1,51 +1,51 @@
 from typing import Iterable
 
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.dto import Lesson
+from src.kernel.role import Role
+from src.modules.student.internal.controllers.unregistred.callback_data import (
+    AccessCallbackData,
+    RoleCallbackData,
+    UniversityCallbackData,
+)
+from src.modules.university.api.dto import UniversityDTO
 
 __all__ = [
-    "attendance_buttons",
-    "choose_lesson_buttons",
+    "university_list_buttons",
+    "accept_or_deny_buttons",
+    "role_buttons",
+    "inline_void_button",
 ]
 
 
-def attendance_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
+def inline_void_button() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    return builder.as_markup(resize_keyboard=True)
+
+
+def university_list_buttons(universities: Iterable[UniversityDTO]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    buttons = [
-        InlineKeyboardButton(text="Буду на всех", callback_data="attendance_all"),
-        InlineKeyboardButton(text="Меня сегодня не будет", callback_data="attendance_none"),
-    ]
-
-    for lesson in lessons:
-        buttons.append(
-            InlineKeyboardButton(
-                text=f"Буду на {lesson.start_time.strftime('%H:%M')} {lesson.name}",
-                callback_data=f"attendance_{lesson.id}",
-            )
-        )
-
-    builder.add(*buttons)
-    builder.adjust(2)
+    for uni in universities:
+        builder.button(text=uni.name, callback_data=UniversityCallbackData(university_alias=uni.alias))
 
     return builder.as_markup(resize_keyboard=True)
 
 
-def choose_lesson_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
+def role_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    buttons = []
 
-    for idx, lesson in enumerate(lessons):
-        buttons.append(
-            InlineKeyboardButton(
-                text=f"({idx + 1}) {lesson.name} {lesson.start_time.strftime('%H:%M')}",
-                callback_data=str(lesson.id),
-            )
-        )
-
-    builder.add(*buttons)
-    builder.adjust(1)
+    builder.button(text="Я студент", callback_data=RoleCallbackData(role=Role.STUDENT))
+    builder.button(text="Я староста", callback_data=RoleCallbackData(role=Role.HEADMAN))
 
     return builder.as_markup(resize_keyboard=True)
+
+
+def accept_or_deny_buttons(student_id: int) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(text="Одобрить", callback_data=AccessCallbackData(student_id=student_id, accepted=True))
+    builder.button(text="Отказать", callback_data=AccessCallbackData(student_id=student_id, accepted=False))
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

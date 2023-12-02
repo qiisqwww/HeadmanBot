@@ -1,6 +1,7 @@
 /* CREATE SCHEMAS START */
 
 CREATE SCHEMA IF NOT EXISTS students;
+CREATE SCHEMA IF NOT EXISTS birthdates;
 CREATE SCHEMA IF NOT EXISTS groups;
 CREATE SCHEMA IF NOT EXISTS payments;
 CREATE SCHEMA IF NOT EXISTS universities;
@@ -21,13 +22,16 @@ create table if not exists students.students (
     telegram_id bigint primary key,
     name varchar(255) NOT NULL,
     surname varchar(255) NOT NULL,
-    birthday smallint,
-    birthmonth smallint
+    role varchar(255) NOT NULL
+);
+
+create table if not exists birthdates.birthdates (
+    student_id bigint NOT NULL,
+    birthdate date NOT NULL
 );
 
 create table if not exists groups.groups (
     id bigserial primary key,
-    headman_id bigint NOT NULL,
     university_id bigint NOT NULL,
     name varchar(255) NOT NULL
 );

@@ -1,5 +1,5 @@
-from src.kernel.services import PostgresService
-from src.modules.university.api.dto import University
+from src.kernel.base import PostgresService
+from src.modules.university.api.dto import UniversityDTO
 from src.modules.university.api.enums import UniversityAlias
 from src.modules.university.internal.services import UniversityService
 
@@ -9,11 +9,11 @@ __all__ = [
 
 
 class UniversityContract(PostgresService):
-    async def find_university_by_alias(self, alias: UniversityAlias) -> University:
+    async def find_university_by_alias(self, alias: UniversityAlias) -> UniversityDTO:
         university_service = UniversityService(self._con)
         return await university_service.find_by_alias(alias)
 
-    async def get_all_universities(self) -> list[University]:
+    async def get_all_universities(self) -> list[UniversityDTO]:
         university_service = UniversityService(self._con)
         return await university_service.all()
 

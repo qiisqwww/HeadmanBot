@@ -3,8 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from src.kernel import NRouter
-from src.kernel.resources.inline_buttons import inline_void_button
+from src.kernel import Router
 from src.modules.student.internal.controllers.unregistred.callback_data import (
     AccessCallbackData,
 )
@@ -15,7 +14,8 @@ from src.modules.student.internal.controllers.unregistred.registration_states im
     RegistrationStates,
 )
 from src.modules.student.internal.gateways import UniversityGatewate
-from src.modules.student.internal.resources.inline_buttons import (
+from src.modules.student.internal.resources.buttons.inline_buttons import (
+    inline_void_button,
     university_list_buttons,
 )
 from src.modules.student.internal.resources.templates import (
@@ -38,12 +38,13 @@ __all__ = [
 ]
 
 
-registration_callbacks_router = NRouter(
+registration_callbacks_router = Router(
+    throttling=True,
     services={
         "university_gateway": UniversityGatewate,
         "cache_student_service": CacheStudentService,
         "student_service": StudentService,
-    }
+    },
 )
 
 

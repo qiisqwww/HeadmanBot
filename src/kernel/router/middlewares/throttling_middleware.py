@@ -5,7 +5,7 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
 from loguru import logger
 
-from src.kernel.services import ThrottlingService
+from ..throttling_service import ThrottlingService
 
 HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
 

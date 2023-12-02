@@ -1,33 +1,31 @@
-from typing import Protocol, TypeVar
+from typing import Iterable
 
-from aiogram import Router
+from aiogram import Router as AiogramRouter
 
+from src.kernel.role import Role
+
+from ..config import KernelConfig
 from .middlewares import (
     InjectPostgresMiddleware,
     InjectRedisConnectionMiddleware,
     InjectServices,
+    InjectStudentMiddleware,
     ServiceClass,
     ThrottlingMiddleware,
 )
 
 __all__ = [
-    "NRouter",
+    "Router",
 ]
 
-PermissionEnum = TypeVar("PermissionEnum", covariant=True)
 
-
-class PermissionsManagerProtocol(Protocol[PermissionEnum]):
-    def check_permission(self) -> PermissionEnum:
-        ...
-
-
-class NRouter(Router):
+class Router(AiogramRouter):
     def __init__(
         self,
         name: str | None = None,
         throttling: bool = False,
-        # permissions_manager: tuple[PermissionsManagerProtocol[PermissionEnum], PermissionEnum] | None = None,
+        inject_user: bool = False,
+        roles: Iterable[Role] | None = None,
         services: dict[str, ServiceClass] | None = None,
     ) -> None:
         super().__init__(name=name)
@@ -38,9 +36,15 @@ class NRouter(Router):
             self._inject_throttling_middleware()
 
         self._inject_postgres_middleware()
+        self._inject_user(inject_user)
 
         if services is not None:
             self._inject_services(services)
+
+    def _inject_user(self, inject_user: bool) -> None:
+        config = KernelConfig()
+        self.message.middleware(InjectStudentMiddleware(inject_user, config.find_student_service))
+        self.callback_query.middleware(InjectStudentMiddleware(inject_user, config.find_student_service))
 
     def _inject_redis_middleware(self) -> None:
         self.message.middleware(InjectRedisConnectionMiddleware())

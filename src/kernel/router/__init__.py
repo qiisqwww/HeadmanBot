@@ -1,5 +1,5 @@
-from .router import NRouter
+from .router import Router
 
 __all__ = [
-    "NRouter",
+    "Router",
 ]

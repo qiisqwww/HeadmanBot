@@ -1,11 +1,3 @@
-import asyncio
-
-from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
-from aiogram.fsm.storage.memory import MemoryStorage
-from loguru import logger
-
-# from src.jobs import SendingJob, UpdateDatabaseJob
 from src.config import (
     BOT_TOKEN,
     DB_HOST,
@@ -18,24 +10,35 @@ from src.config import (
     REDIS_PORT,
     configurate_logger,
 )
-from src.kernel import NKernelConfig
+from src.kernel import KernelConfig
+from src.modules.student.api.contracts import FindStudentContract
+
+KernelConfig.initialize(
+    postgres_user=DB_USER,
+    postgres_pass=DB_PASS,
+    postgres_name=DB_NAME,
+    postgres_host=DB_HOST,
+    postgres_port=DB_PORT,
+    redis_host=REDIS_HOST,
+    redis_port=REDIS_PORT,
+    debug=DEBUG,
+    find_student_service=FindStudentContract,
+)
+
+import asyncio
+
+from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
+from loguru import logger
+
+# from src.jobs import SendingJob, UpdateDatabaseJob
 from src.kernel.external.database import get_postgres_pool
 from src.modules.student.api.controller import student_router
 from src.modules.university.api.contract import UniversityContract
 
 
 async def main():
-    NKernelConfig.initialize(
-        postgres_user=DB_USER,
-        postgres_pass=DB_PASS,
-        postgres_name=DB_NAME,
-        postgres_host=DB_HOST,
-        postgres_port=DB_PORT,
-        redis_host=REDIS_HOST,
-        redis_port=REDIS_PORT,
-        debug=DEBUG,
-    )
-
     pool = await get_postgres_pool()
     async with pool.acquire() as con:
         await UniversityContract(con).add_universities()

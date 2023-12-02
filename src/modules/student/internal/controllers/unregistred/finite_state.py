@@ -1,5 +1,3 @@
-from datetime import date
-
 from aiogram import Bot, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
@@ -7,26 +5,22 @@ from loguru import logger
 
 from src.config import ADMIN_IDS
 from src.external.apis import ScheduleApi
-from src.kernel.router.router import NRouter
+from src.kernel import Router
+from src.kernel.role import Role
 from src.modules.student.internal.controllers.unregistred.registration_context import (
     RegistrationContext,
 )
 from src.modules.student.internal.controllers.unregistred.registration_states import (
     RegistrationStates,
 )
-from src.modules.student.internal.controllers.unregistred.validation import is_number
-from src.modules.student.internal.enums import Role
 from src.modules.student.internal.gateways.group_gateway import GroupGateway
-from src.modules.student.internal.resources.inline_buttons import accept_or_deny_buttons
+from src.modules.student.internal.resources.buttons.inline_buttons import (
+    accept_or_deny_buttons,
+)
 from src.modules.student.internal.resources.templates import (
-    ASK_BIRTHDAY_TEMPLATE,
     ASK_BIRTHMONTH_TEMPLATE,
     ASK_NAME_TEMPLATE,
     ASK_SURNAME_TEMPLATE,
-    BIRTHDAY_INCORRECT_TEMPLATE,
-    BIRTHDAY_MUST_BE_DIGIT_TEMPLATE,
-    BIRTHMONTH_INCORRECT_TEMPLATE,
-    BIRTHMONTH_MUST_BE_DIGIT_TEMPLATE,
     GROUP_ALREADY_EXISTS_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
@@ -35,17 +29,19 @@ from src.modules.student.internal.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
 )
-from src.modules.student.internal.services import CacheStudentService
+from src.modules.student.internal.services import CacheStudentService, StudentService
 
 __all__ = [
     "registration_finite_state_router",
 ]
 
-registration_finite_state_router = NRouter(
+registration_finite_state_router = Router(
+    throttling=True,
     services={
         "group_gateway": GroupGateway,
         "cache_student_service": CacheStudentService,
-    }
+        "student_service": StudentService,
+    },
 )
 
 
@@ -90,10 +86,10 @@ async def handling_group(message: Message, state: FSMContext, group_gateway: Gro
 
     await registration_ctx.set_group_name(message.text)
     await message.answer(ASK_BIRTHMONTH_TEMPLATE)
-    await registration_ctx.set_state(RegistrationStates.waiting_birthmonth)
+    await registration_ctx.set_state(RegistrationStates.waiting_birthdate)
 
 
-@registration_finite_state_router.message(F.text, RegistrationStates.waiting_birthmonth)
+@registration_finite_state_router.message(F.text, RegistrationStates.waiting_birthdate)
 @logger.catch
 async def handling_birthmonth(message: Message, state: FSMContext) -> None:
     registration_ctx = RegistrationContext(state)
@@ -101,47 +97,21 @@ async def handling_birthmonth(message: Message, state: FSMContext) -> None:
     if message.text is None:
         return
 
-    if not is_number(message.text):
-        await message.answer(BIRTHMONTH_MUST_BE_DIGIT_TEMPLATE)
-        return
+    await registration_ctx.set_birthday(None)
 
-    birthmonth = int(message.text)
+    # if 1 <= birthmonth <= 12:
+    #     await registration_ctx.set_birthmonth(birthmonth)
+    #     await message.answer(ASK_BIRTHDAY_TEMPLATE)
+    #     await registration_ctx.set_state(RegistrationStates.waiting_birthday)
+    # elif birthmonth == 0:
+    #     await registration_ctx.set_birthmonth(0)
+    #     await registration_ctx.set_birthday(0)
+    #     await registration_ctx.set_state(RegistrationStates.waiting_surname)
+    #     await message.answer(ASK_SURNAME_TEMPLATE)
+    # else:
+    #     await message.answer(BIRTHMONTH_INCORRECT_TEMPLATE)
+    #     await registration_ctx.set_state(RegistrationStates.waiting_birthmonth)
 
-    if 1 <= birthmonth <= 12:
-        await registration_ctx.set_birthmonth(birthmonth)
-        await message.answer(ASK_BIRTHDAY_TEMPLATE)
-        await registration_ctx.set_state(RegistrationStates.waiting_birthday)
-    elif birthmonth == 0:
-        await registration_ctx.set_birthmonth(0)
-        await registration_ctx.set_birthday(0)
-        await registration_ctx.set_state(RegistrationStates.waiting_surname)
-        await message.answer(ASK_SURNAME_TEMPLATE)
-    else:
-        await message.answer(BIRTHMONTH_INCORRECT_TEMPLATE)
-        await registration_ctx.set_state(RegistrationStates.waiting_birthmonth)
-
-
-@registration_finite_state_router.message(F.text, RegistrationStates.waiting_birthday)
-@logger.catch
-async def handling_birthday(message: Message, state: FSMContext) -> None:
-    registration_ctx = RegistrationContext(state)
-
-    if message.text is None:
-        return
-
-    if not is_number(message.text):
-        await message.answer(BIRTHDAY_MUST_BE_DIGIT_TEMPLATE)
-        return
-
-    birthday = int(message.text)
-
-    try:
-        date(year=2023, month=await registration_ctx.birthmonth, day=birthday)
-    except ValueError:
-        await message.answer(BIRTHDAY_INCORRECT_TEMPLATE)
-        return
-
-    await registration_ctx.set_birthday(birthday)
     await registration_ctx.set_state(RegistrationStates.waiting_surname)
     await message.answer(ASK_SURNAME_TEMPLATE)
 
@@ -167,6 +137,7 @@ async def handling_name(
     bot: Bot,
     cache_student_service: CacheStudentService,
     group_gateway: GroupGateway,
+    student_service: StudentService,
 ) -> None:
     registration_ctx = RegistrationContext(state)
 
@@ -202,9 +173,14 @@ async def handling_name(
             )
         return
 
-    headman_id = await group_gateway.get_headman_id_by_group_name(await registration_ctx.group_name)
+    headman = [
+        student
+        for student in await student_service.filter_by_group_name(await registration_ctx.group_name)
+        if student.is_headman()
+    ][0]
+
     await bot.send_message(
-        headman_id,
+        headman.telegram_id,
         f"Студент {student_data['surname']} {student_data['name']} подал заявку на регистарцию в вашу группу",
         reply_markup=accept_or_deny_buttons(student_id),
     )

@@ -1,7 +1,5 @@
-from .student import Student
-from .student_raw import StudentRaw
+from .student_raw_dto import StudentRawDTO
 
 __all__ = [
-    "Student",
-    "StudentRaw",
+    "StudentRawDTO",
 ]

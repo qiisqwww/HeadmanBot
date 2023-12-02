@@ -1,5 +1,5 @@
-from .university import University
+from .university_dto import UniversityDTO
 
 __all__ = [
-    "University",
+    "UniversityDTO",
 ]

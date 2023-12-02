@@ -1,9 +1,10 @@
+from datetime import date
 from typing import Any
 
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
-from src.modules.student.internal.enums import Role
+from src.kernel.role import Role
 from src.modules.university.api.enums import UniversityAlias
 
 __all__ = [
@@ -62,18 +63,11 @@ class RegistrationContext:
         await self._context.update_data(university_alias=university_alias)
 
     @property
-    async def birthday(self) -> int:
-        return (await self._context.get_data())["birthday"]
+    async def birthdate(self) -> date | None:
+        return (await self._context.get_data())["birthdate"]
 
-    async def set_birthday(self, birthday: int) -> None:
-        await self._context.update_data(birthday=birthday)
-
-    @property
-    async def birthmonth(self) -> int:
-        return (await self._context.get_data())["birthmonth"]
-
-    async def set_birthmonth(self, birthmonth: int) -> None:
-        await self._context.update_data(birthmonth=birthmonth)
+    async def set_birthday(self, birthdate: date | None) -> None:
+        await self._context.update_data(birthdate=birthdate)
 
     async def set_state(self, state: StateType = None) -> None:
         await self._context.set_state(state)

@@ -1,5 +1,5 @@
-from .permissions_service_contract import PermissionsServiceContract
+from .find_user_contract import FindStudentContract
 
 __all__ = [
-    "PermissionsServiceContract",
+    "FindStudentContract",
 ]

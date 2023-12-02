@@ -1,7 +1,7 @@
-from .config import NKernelConfig
-from .router import NRouter
+from .config import KernelConfig
+from .router import Router
 
 __all__ = [
-    "NKernelConfig",
-    "NRouter",
+    "KernelConfig",
+    "Router",
 ]

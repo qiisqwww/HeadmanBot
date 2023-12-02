@@ -1,12 +1,19 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from src.modules.student.internal.enums import Role
+from src.kernel.role import Role
 
 __all__ = [
     "default_buttons",
     "start_button",
+    "remove_reply_buttons",
 ]
+
+
+def remove_reply_buttons() -> ReplyKeyboardRemove:
+    remove_markup = ReplyKeyboardRemove()
+
+    return remove_markup
 
 
 def start_button() -> ReplyKeyboardMarkup:

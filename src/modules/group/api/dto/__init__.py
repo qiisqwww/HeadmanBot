@@ -1,5 +1,5 @@
-from .group import Group
+from .group_dto import GroupDTO
 
 __all__ = [
-    "Group",
+    "GroupDTO",
 ]

@@ -3,7 +3,7 @@ from typing import Any, Awaitable, Callable, TypeAlias
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 
-from src.kernel.services import PostgresService, RedisService
+from src.kernel.base import PostgresService, RedisService
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 

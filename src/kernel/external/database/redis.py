@@ -1,6 +1,6 @@
 from redis.asyncio import ConnectionPool
 
-from ...config import NKernelConfig
+from ...config import KernelConfig
 
 __all__ = [
     "get_redis_pool",
@@ -8,7 +8,7 @@ __all__ = [
 
 
 def get_redis_pool() -> ConnectionPool:
-    config = NKernelConfig()
+    config = KernelConfig()
     host = config.REDIS_HOST
     port = config.REDIS_PORT
 
