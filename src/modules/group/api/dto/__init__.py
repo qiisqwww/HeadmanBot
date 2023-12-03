@@ -1,5 +1,6 @@
-from .group_dto import GroupDTO
+from .group_dto import GroupDTO, GroupId
 
 __all__ = [
     "GroupDTO",
+    "GroupId",
 ]

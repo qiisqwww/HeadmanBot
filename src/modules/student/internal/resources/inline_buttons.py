@@ -4,6 +4,7 @@ from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.kernel.role import Role
+from src.kernel.student_dto import StudentId
 from src.modules.student.internal.controllers.unregistred.callback_data import (
     AccessCallbackData,
     RoleCallbackData,
@@ -15,13 +16,7 @@ __all__ = [
     "university_list_buttons",
     "accept_or_deny_buttons",
     "role_buttons",
-    "inline_void_button",
 ]
-
-
-def inline_void_button() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-    return builder.as_markup(resize_keyboard=True)
 
 
 def university_list_buttons(universities: Iterable[UniversityDTO]) -> InlineKeyboardMarkup:
@@ -42,7 +37,7 @@ def role_buttons() -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-def accept_or_deny_buttons(student_id: int) -> InlineKeyboardMarkup:
+def accept_or_deny_buttons(student_id: StudentId) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(text="Одобрить", callback_data=AccessCallbackData(student_id=student_id, accepted=True))

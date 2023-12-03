@@ -1,3 +1,4 @@
+from datetime import date, time
 from types import NoneType, UnionType
 from typing import Mapping, Self
 
@@ -23,12 +24,25 @@ class DTO:
 
                 if data[attr_name] is None:
                     attr_value = None
+                elif attr_type is date:
+                    attr_value = cls._cast_date(data[attr_name])
                 else:
                     attr_value = attr_type(data[attr_name])
 
             else:
-                attr_value = attr_type(data[attr_name])
+                if attr_type is date:
+                    attr_value = cls._cast_date(data[attr_name])
+                elif attr_type is time:
+                    attr_value = data[attr_name]
+                else:
+                    attr_value = attr_type(data[attr_name])
 
             valid_attrs[attr_name] = attr_value
 
         return cls(**valid_attrs)
+
+    @staticmethod
+    def _cast_date(date_value: str | date) -> date:
+        if isinstance(date_value, str):
+            return date.fromisoformat(date_value)
+        return date_value

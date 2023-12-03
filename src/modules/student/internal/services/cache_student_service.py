@@ -1,4 +1,7 @@
+from datetime import date
+
 from src.kernel.base import RedisService
+from src.kernel.student_dto import StudentId
 from src.modules.student.internal.dto import StudentRawDTO
 
 __all__ = [
@@ -8,13 +11,16 @@ __all__ = [
 
 class CacheStudentService(RedisService):
     async def cache_student(self, student_data: dict):
-        if student_data["birthdate"] is None:
+        birthdate: None | date = student_data["birthdate"]
+        if birthdate is None:
             student_data["birthdate"] = "0"
+        else:
+            student_data["birthdate"] = str(birthdate)
 
         await self._con.hmset(student_data["telegram_id"], student_data)
         await self._con.expire(student_data["telegram_id"], 86400)
 
-    async def pop_student_cache(self, student_id: int) -> StudentRawDTO:
+    async def pop_student_cache(self, student_id: StudentId) -> StudentRawDTO:
         student_data = await self._con.hgetall(str(student_id))
         student_data["telegram_id"] = student_id
 

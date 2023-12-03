@@ -1,3 +1,5 @@
+from asyncpg.pool import PoolConnectionProxy
+
 from src.kernel.base import PostgresService
 from src.modules.university.api.contract import UniversityContract
 from src.modules.university.api.dto import UniversityDTO
@@ -9,6 +11,11 @@ __all__ = [
 
 
 class UniversityGateway(PostgresService):
-    async def find_university_by_alias(self, alias: UniversityAlias) -> UniversityDTO:
-        university_contract = UniversityContract(self._con)
-        return await university_contract.find_university_by_alias(alias)
+    _university_contract: UniversityContract
+
+    def __init__(self, con: PoolConnectionProxy) -> None:
+        super().__init__(con)
+        self._university_contract = UniversityContract(con)
+
+    async def get_university_by_alias(self, alias: UniversityAlias) -> UniversityDTO:
+        return await self._university_contract.get_university_by_alias(alias)

@@ -1,3 +1,4 @@
+from .access_callback import access_callback_router
 from .registered import registered_commands_router
 from .unregistred import (
     registration_callbacks_router,
@@ -10,4 +11,5 @@ __all__ = [
     "registration_callbacks_router",
     "registration_commands_router",
     "registration_finite_state_router",
+    "access_callback_router",
 ]

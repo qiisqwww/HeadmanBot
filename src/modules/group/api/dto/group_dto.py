@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
 from src.kernel.base import DTO
+from src.kernel.student_dto import GroupId
+from src.modules.university.api.dto import UniversityId
 
 __all__ = [
     "GroupDTO",
@@ -9,6 +11,6 @@ __all__ = [
 
 @dataclass(slots=True, frozen=True)
 class GroupDTO(DTO):
-    id: int
+    id: GroupId
     name: str
-    university_id: int
+    university_id: UniversityId

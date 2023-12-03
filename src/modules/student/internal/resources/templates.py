@@ -18,15 +18,11 @@ __all__ = [
     "ASK_SURNAME_TEMPLATE",
     "YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE",
     "YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE",
-    "ASK_BIRTHMONTH_TEMPLATE",
-    "ASK_BIRTHDAY_TEMPLATE",
-    "BIRTHMONTH_MUST_BE_DIGIT_TEMPLATE",
-    "BIRTHMONTH_INCORRECT_TEMPLATE",
-    "BIRTHDAY_MUST_BE_DIGIT_TEMPLATE",
-    "BIRTHDAY_INCORRECT_TEMPLATE",
-    "GROUP_ALREADY_EXISTS_TEMPLATE",
+    "GROUP_ALREADY_HAS_A_HEADMAN",
     "FAQ_TEMPLATE",
     "GROUP_DOESNT_REGISTERED_TEMPLATE",
+    "BIRTHDATE_INCORRECT_TEMPLATE",
+    "ASK_BIRTHDATE_TEMPLATE",
 ]
 
 
@@ -74,19 +70,13 @@ ASK_NAME_TEMPLATE = "Отправь свое имя"
 YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = "Ваше заявление на регистрацию старостой было передано администраторам."
 YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE = "Ваше заявление на регистрацию студентом было передано старосте."
 
-ASK_BIRTHMONTH_TEMPLATE = """Введите номер месяца, в котором вы родились (1-12).
+ASK_BIRTHDATE_TEMPLATE = """Введите дату рождения в формате дд.мм.гггг
 Это сделает бота еще удобнее для старосты. Если не хотите вводить свою дату рождения, то введите 0"""
 
-ASK_BIRTHDAY_TEMPLATE = "Введите номер дня, в котором вы родились (1-31). Это сделает бота еще удобнее для старосты."
-BIRTHMONTH_MUST_BE_DIGIT_TEMPLATE = "Номер месяца должен быть числом."
-BIRTHMONTH_INCORRECT_TEMPLATE = "Номер месяца должен быть от 1 до 12 или 0."
+BIRTHDATE_INCORRECT_TEMPLATE = "Такой даты нет, введите дату рождения в формате дд.мм.гггг"
 
-BIRTHDAY_MUST_BE_DIGIT_TEMPLATE = "Номер дня должен быть числом."
-BIRTHDAY_INCORRECT_TEMPLATE = "Неверная дата, введите снова."
 
-GROUP_ALREADY_EXISTS_TEMPLATE = (
-    "Данная группа уже существует. Может вы хотели добавить другую или зайти в существующую как студент?"
-)
+GROUP_ALREADY_HAS_A_HEADMAN = "У этой группы уже есть староста."
 
 FAQ_TEMPLATE = """
 <b>Grand Headman MIREA был разработан как инструмент-помощник для старост.</b>

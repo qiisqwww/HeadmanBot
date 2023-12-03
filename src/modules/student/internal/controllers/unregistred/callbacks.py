@@ -1,12 +1,9 @@
-from aiogram import Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
 
 from src.kernel import Router
-from src.modules.student.internal.controllers.unregistred.callback_data import (
-    AccessCallbackData,
-)
+from src.kernel.resources.buttons import inline_void_button
 from src.modules.student.internal.controllers.unregistred.registration_context import (
     RegistrationContext,
 )
@@ -14,18 +11,13 @@ from src.modules.student.internal.controllers.unregistred.registration_states im
     RegistrationStates,
 )
 from src.modules.student.internal.gateways import UniversityGatewate
-from src.modules.student.internal.resources.buttons.inline_buttons import (
-    inline_void_button,
+from src.modules.student.internal.resources.inline_buttons import (
     university_list_buttons,
 )
 from src.modules.student.internal.resources.templates import (
     ASK_GROUP_TEMPLATE,
     ASK_UNIVERSITY_TEMPLATE,
     CHOOSE_STUDENT_ROLE_TEMPLATE,
-    REGISTRATION_ACCEPTED_TEMPLATE,
-    REGISTRATION_DENIED_TEMPLATE,
-    YOU_WERE_ACCEPTED_TEMPLATE,
-    YOU_WERE_DENIED_TEMPLATE,
     succesfull_role_choose_template,
     succesfull_university_choose_template,
 )
@@ -85,7 +77,7 @@ async def get_university_from_user(
     if callback.message is None:
         return
 
-    choosen_uni = await university_gateway.find_university_by_alias(callback_data.university_alias)
+    choosen_uni = await university_gateway.get_university_by_alias(callback_data.university_alias)
 
     await registration_ctx.set_university_alias(callback_data.university_alias)
 
@@ -94,31 +86,3 @@ async def get_university_from_user(
     await callback.message.answer(ASK_GROUP_TEMPLATE)
 
     await registration_ctx.set_state(RegistrationStates.waiting_group)
-
-
-@registration_callbacks_router.callback_query(AccessCallbackData.filter())
-@logger.catch
-async def accept_or_deny_callback(
-    callback: CallbackQuery,
-    callback_data: AccessCallbackData,
-    bot: Bot,
-    student_service: StudentService,
-    cache_student_service: CacheStudentService,
-) -> None:
-    if callback.message is None:
-        return
-
-    student_data = await cache_student_service.pop_student_cache(callback_data.student_id)
-
-    if not callback_data.accepted:
-        await callback.message.edit_text(REGISTRATION_DENIED_TEMPLATE, reply_markup=inline_void_button())
-        await bot.send_message(student_data.telegram_id, YOU_WERE_DENIED_TEMPLATE)
-        return
-
-    await student_service.register_student(student_data)
-
-    # await bot.send_message(
-    #     user_data["telegram_id"], YOU_WERE_ACCEPTED_TEMPLATE, reply_markup=default_buttons(user_data["role"])
-    # )
-    await bot.send_message(callback_data.student_id, YOU_WERE_ACCEPTED_TEMPLATE)
-    await callback.message.edit_text(REGISTRATION_ACCEPTED_TEMPLATE, reply_markup=inline_void_button())

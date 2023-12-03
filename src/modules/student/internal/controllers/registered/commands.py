@@ -1,4 +1,4 @@
-from aiogram.filters import Command
+from aiogram import F
 from aiogram.types import Message
 from loguru import logger
 
@@ -15,7 +15,7 @@ __all__ = [
 ]
 
 
-@registered_commands_router.message(Command("faq"))
+@registered_commands_router.message(F.text == "Помощь")
 async def faq_command(message: Message) -> None:
     logger.trace("faq command")
 

@@ -20,6 +20,7 @@ create table if not exists universities.universities (
 
 create table if not exists students.students (
     telegram_id bigint primary key,
+    group_id bigint NOT NULL,
     name varchar(255) NOT NULL,
     surname varchar(255) NOT NULL,
     role varchar(255) NOT NULL
@@ -27,7 +28,7 @@ create table if not exists students.students (
 
 create table if not exists birthdates.birthdates (
     student_id bigint NOT NULL,
-    birthdate date NOT NULL
+    birthdate date NULL
 );
 
 create table if not exists groups.groups (
@@ -36,18 +37,12 @@ create table if not exists groups.groups (
     name varchar(255) NOT NULL
 );
 
-create table if not exists groups.students_groups (
-    student_id bigint NOT NULL,
-    group_id bigint NOT NULL
-);
-
 create table if not exists attendances.lessons (
     id bigserial primary key,
     group_id bigint NOT NULL,
     name varchar(255) NOT NULL,
     start_time time with time zone NOT NULL
 );
-
 
 create table if not exists attendances.attendances (
     student_id bigint NOT NULL,

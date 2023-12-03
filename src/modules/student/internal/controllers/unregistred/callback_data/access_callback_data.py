@@ -1,5 +1,7 @@
 from aiogram.filters.callback_data import CallbackData
 
+from src.kernel.student_dto import StudentId
+
 __all__ = [
     "AccessCallbackData",
 ]
@@ -7,4 +9,4 @@ __all__ = [
 
 class AccessCallbackData(CallbackData, prefix="confirm_access"):  # type: ignore
     accepted: bool
-    student_id: int
+    student_id: StudentId

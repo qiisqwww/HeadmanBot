@@ -1,5 +1,7 @@
+from asyncpg.pool import PoolConnectionProxy
+
 from src.kernel.base import PostgresService
-from src.modules.university.api.dto import UniversityDTO
+from src.modules.university.api.dto import UniversityDTO, UniversityId
 from src.modules.university.api.enums import UniversityAlias
 from src.modules.university.internal.services import UniversityService
 
@@ -9,18 +11,20 @@ __all__ = [
 
 
 class UniversityContract(PostgresService):
-    async def find_university_by_alias(self, alias: UniversityAlias) -> UniversityDTO:
-        university_service = UniversityService(self._con)
-        return await university_service.find_by_alias(alias)
+    _university_service: UniversityService
 
-    async def get_university_by_id(self, university_id: int) -> UniversityDTO:
-        university_service = UniversityService(self._con)
-        return await university_service.find_by_id(university_id)
+    def __init__(self, con: PoolConnectionProxy) -> None:
+        super().__init__(con)
+        self._university_service = UniversityService(con)
+
+    async def get_university_by_alias(self, alias: UniversityAlias) -> UniversityDTO:
+        return await self._university_service.get_by_alias(alias)
+
+    async def get_university_by_id(self, university_id: UniversityId) -> UniversityDTO:
+        return await self._university_service.get_by_id(university_id)
 
     async def get_all_universities(self) -> list[UniversityDTO]:
-        university_service = UniversityService(self._con)
-        return await university_service.all()
+        return await self._university_service.all()
 
     async def add_universities(self) -> None:
-        university_service = UniversityService(self._con)
-        return await university_service.add_universities()
+        return await self._university_service.add_universities()

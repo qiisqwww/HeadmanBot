@@ -1,16 +1,23 @@
 from dataclasses import dataclass
+from typing import NewType
 
 from .base.dto import DTO
 from .role import Role
 
 __all__ = [
     "StudentDTO",
+    "GroupId",
+    "StudentId",
 ]
+
+StudentId = NewType("StudentId", int)
+GroupId = NewType("GroupId", int)
 
 
 @dataclass(slots=True, frozen=True, unsafe_hash=True)
 class StudentDTO(DTO):
-    telegram_id: int
+    telegram_id: StudentId
+    group_id: GroupId
     name: str
     surname: str
     role: Role

@@ -4,7 +4,7 @@ from aiogram.types.message import Message
 from loguru import logger
 
 from src.kernel import Router
-from src.modules.student.internal.resources.buttons.inline_buttons import role_buttons
+from src.modules.student.internal.resources.inline_buttons import role_buttons
 from src.modules.student.internal.resources.templates import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
     start_message_template,
