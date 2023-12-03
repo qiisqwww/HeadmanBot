@@ -3,9 +3,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from loguru import logger
 
-from src.config import ADMIN_IDS
-from src.external.apis import ScheduleApi
 from src.kernel import Router
+from src.kernel.config import ADMIN_IDS
+from src.kernel.external.apis import ScheduleApi
 from src.kernel.role import Role
 from src.modules.student.internal.controllers.unregistred.registration_context import (
     RegistrationContext,
@@ -36,7 +36,7 @@ __all__ = [
 ]
 
 registration_finite_state_router = Router(
-    throttling=True,
+    must_be_registered=False,
     services={
         "group_gateway": GroupGateway,
         "cache_student_service": CacheStudentService,
@@ -136,7 +136,6 @@ async def handling_name(
     state: FSMContext,
     bot: Bot,
     cache_student_service: CacheStudentService,
-    group_gateway: GroupGateway,
     student_service: StudentService,
 ) -> None:
     registration_ctx = RegistrationContext(state)

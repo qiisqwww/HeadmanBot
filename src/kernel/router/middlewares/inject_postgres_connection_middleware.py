@@ -18,6 +18,10 @@ class InjectPostgresMiddleware(BaseMiddleware):
     async def __call__(self, handler: HandlerType, event: Update, data: dict[str, Any]) -> Any:
         logger.trace("Inject database connection middleware started.")
 
+        if data.get("postgres_con", None) is not None:
+            logger.trace("Inject redis connection middleware finished.")
+            return await handler(event, data)
+
         pool = await get_postgres_pool()
         async with pool.acquire() as con:
             data["postgres_con"] = con

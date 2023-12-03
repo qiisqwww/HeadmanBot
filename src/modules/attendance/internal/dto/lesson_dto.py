@@ -1,30 +1,23 @@
 from dataclasses import dataclass
 from datetime import time
-from typing import Any, Mapping, Self
+from typing import Any
+
+from src.kernel.base import DTO
 
 __all__ = [
-    "Lesson",
+    "LessonDTO",
 ]
 
 
 @dataclass(slots=True, frozen=True)
-class Lesson:
+class LessonDTO(DTO):
     id: int
     group_id: int
     name: str
     start_time: time
 
-    @classmethod
-    def from_mapping(cls, data: Mapping) -> Self:
-        return cls(
-            id=data["id"],
-            group_id=data["group_id"],
-            name=data["name"],
-            start_time=data["start_time"],
-        )
-
     def __gt__(self, other: Any) -> bool:
-        if not isinstance(other, Lesson):
+        if not isinstance(other, LessonDTO):
             return NotImplemented
 
         return self.start_time > other.start_time

@@ -1,5 +1,4 @@
-from aiogram import Router
-
+from src.kernel import Router
 from src.modules.student.internal.controllers import (
     registered_commands_router,
     registration_callbacks_router,

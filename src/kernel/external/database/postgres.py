@@ -1,7 +1,7 @@
 import asyncpg
 from asyncpg.pool import Pool
 
-from ...config import KernelConfig
+from src.kernel.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 
 __all__ = [
     "get_postgres_pool",
@@ -9,16 +9,8 @@ __all__ = [
 
 
 async def get_postgres_pool() -> Pool:
-    config = KernelConfig()
-
-    user = config.POSTGRES_USER
-    password = config.POSTGRES_PASS
-    host = config.POSTGRES_HOST
-    name = config.POSTGRES_NAME
-    port = config.POSTGRES_PORT
-
-    DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{name}"
+    DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
     if not hasattr(get_postgres_pool, "pool"):
-        get_postgres_pool.pool = await asyncpg.create_pool(DATABASE_URL, min_size=1)  # type: ignore
+        get_postgres_pool.pool = await asyncpg.create_pool(DATABASE_URL)  # type: ignore
     return get_postgres_pool.pool  # type: ignore

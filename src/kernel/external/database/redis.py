@@ -1,6 +1,6 @@
 from redis.asyncio import ConnectionPool
 
-from ...config import KernelConfig
+from src.kernel.config import REDIS_HOST, REDIS_PORT
 
 __all__ = [
     "get_redis_pool",
@@ -8,11 +8,8 @@ __all__ = [
 
 
 def get_redis_pool() -> ConnectionPool:
-    config = KernelConfig()
-    host = config.REDIS_HOST
-    port = config.REDIS_PORT
+    REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}?decode_responses=True"
 
-    redis_url = f"redis://{host}:{port}?decode_responses=True"
     if not hasattr(get_redis_pool, "pool"):
-        get_redis_pool.pool = ConnectionPool().from_url(redis_url)  # type: ignore
+        get_redis_pool.pool = ConnectionPool().from_url(REDIS_URL)  # type: ignore
     return get_redis_pool.pool  # type: ignore

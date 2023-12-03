@@ -1,29 +1,7 @@
-from src.config import (
-    BOT_TOKEN,
-    DB_HOST,
-    DB_NAME,
-    DB_PASS,
-    DB_PORT,
-    DB_USER,
-    DEBUG,
-    REDIS_HOST,
-    REDIS_PORT,
-    configurate_logger,
-)
-from src.kernel import KernelConfig
+from src.kernel import init_kernel
 from src.modules.student.api.contracts import FindStudentContract
 
-KernelConfig.initialize(
-    postgres_user=DB_USER,
-    postgres_pass=DB_PASS,
-    postgres_name=DB_NAME,
-    postgres_host=DB_HOST,
-    postgres_port=DB_PORT,
-    redis_host=REDIS_HOST,
-    redis_port=REDIS_PORT,
-    debug=DEBUG,
-    find_student_service=FindStudentContract,
-)
+init_kernel(FindStudentContract)
 
 import asyncio
 
@@ -32,39 +10,35 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
+from src.kernel.config import BOT_TOKEN, configurate_logger
+
 # from src.jobs import SendingJob, UpdateDatabaseJob
 from src.kernel.external.database import get_postgres_pool
+from src.kernel.router import Router
 from src.modules.student.api.controller import student_router
 from src.modules.university.api.contract import UniversityContract
 
 
-async def main():
+async def init_postgres_database() -> None:
     pool = await get_postgres_pool()
     async with pool.acquire() as con:
         await UniversityContract(con).add_universities()
 
+
+async def main():
     bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
     dp = Dispatcher(
         storage=MemoryStorage(),
         bot=bot,
     )
 
-    dp.include_routers(
-        student_router,
-        # verification_callback_router,
-        # getstat_callback_router,
-        # registration_router,
-        # headman_router,
-        # faq_router,
-    )
+    root_router = Router(throttling=True)
+    root_router.include_routers(student_router)
 
-    # @dp.message(flags={"void": "void"})
-    # async def handles_everything() -> None:
-    #     pass
+    dp.include_router(root_router)
 
     configurate_logger()
-
-    # await init_postgres_database()
+    await init_postgres_database()
 
     # sender = SendingJob(bot)
     # database_updater = UpdateDatabaseJob()
@@ -74,7 +48,7 @@ async def main():
 
     logger.info("Bot is starting.")
 
-    await bot.delete_webhook(drop_pending_updates=True)  # Игнорируем все команды, отправленные до запуска бота
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
     logger.info("Bot was turned off.")

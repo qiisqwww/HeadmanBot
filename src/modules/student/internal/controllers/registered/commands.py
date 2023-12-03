@@ -6,8 +6,7 @@ from src.kernel import Router
 from src.modules.student.internal.resources.templates import FAQ_TEMPLATE
 
 registered_commands_router = Router(
-    throttling=True,
-    inject_user=True,
+    must_be_registered=True,
 )
 
 

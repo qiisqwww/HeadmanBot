@@ -18,7 +18,7 @@ __all__ = [
 ]
 
 registration_commands_router = Router(
-    throttling=True,
+    must_be_registered=False,
 )
 
 

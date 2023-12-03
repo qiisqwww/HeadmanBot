@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import Any, Mapping, Self
+from typing import Any
 
 from src.modules.attendance.internal.enums import VisitStatus
 
-from .lesson import Lesson
+from .lesson_dto import LessonDTO
 
 __all__ = [
     "Attendance",
@@ -13,7 +13,7 @@ __all__ = [
 @dataclass(slots=True, frozen=True)
 class Attendance:
     student_id: int
-    lesson: Lesson
+    lesson: LessonDTO
     status: VisitStatus
 
     def __gt__(self, other: Any) -> bool:
@@ -21,11 +21,3 @@ class Attendance:
             return NotImplemented
 
         return self.lesson > other.lesson
-
-    @classmethod
-    def from_mapping(cls, data: Mapping) -> Self:
-        return cls(
-            lesson=Lesson.from_mapping(data),
-            status=VisitStatus(data["visit_status"]),
-            student_id=data["student_id"],
-        )

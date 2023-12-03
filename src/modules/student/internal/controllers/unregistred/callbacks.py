@@ -39,7 +39,7 @@ __all__ = [
 
 
 registration_callbacks_router = Router(
-    throttling=True,
+    must_be_registered=False,
     services={
         "university_gateway": UniversityGatewate,
         "cache_student_service": CacheStudentService,

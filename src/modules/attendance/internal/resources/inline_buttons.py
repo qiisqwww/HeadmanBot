@@ -3,7 +3,7 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.dto import Lesson
+from src.modules.attendance.internal.dto import LessonDTO
 
 __all__ = [
     "attendance_buttons",
@@ -11,7 +11,7 @@ __all__ = [
 ]
 
 
-def attendance_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
+def attendance_buttons(lessons: Iterable[LessonDTO]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     buttons = [
@@ -33,7 +33,7 @@ def attendance_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-def choose_lesson_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
+def choose_lesson_buttons(lessons: Iterable[LessonDTO]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     buttons = []
 

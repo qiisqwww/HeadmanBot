@@ -31,8 +31,11 @@ class InjectStudentMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        student_service = self._service(data["postgres_con"])
-        student = await student_service.find_student(event.from_user.id)
+        if data.get("student", None) is None:
+            student_service = self._service(data["postgres_con"])
+            student = await student_service.find_student(event.from_user.id)
+        else:
+            student = data["student"]
 
         is_registered = student is not None
 
@@ -47,6 +50,6 @@ class InjectStudentMiddleware(BaseMiddleware):
             return
 
         logger.trace("Check is user registred middleware finished.")
-        data["user"] = student
+        data["student"] = student
 
         return await handler(event, data)

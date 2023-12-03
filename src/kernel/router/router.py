@@ -1,10 +1,7 @@
-from typing import Iterable
-
 from aiogram import Router as AiogramRouter
 
 from src.kernel.role import Role
 
-from ..config import KernelConfig
 from .middlewares import (
     InjectPostgresMiddleware,
     InjectRedisConnectionMiddleware,
@@ -20,31 +17,51 @@ __all__ = [
 
 
 class Router(AiogramRouter):
+    _use_throttling: bool
+
     def __init__(
         self,
         name: str | None = None,
         throttling: bool = False,
-        inject_user: bool = False,
-        roles: Iterable[Role] | None = None,
+        must_be_registered: bool | None = None,
+        minimum_role: Role | None = None,
         services: dict[str, ServiceClass] | None = None,
     ) -> None:
         super().__init__(name=name)
 
-        self._inject_redis_middleware()
+        if throttling and self.parent_router is not None:
+            if isinstance(self.parent_router, AiogramRouter):
+                raise TypeError("Router cannot be children of AiogramRouter.")
+
+            if self.parent_router._use_throttling:
+                raise ValueError(
+                    "Parent router already using throttling, please set 'throttling=False' or"
+                    "don't use throttling in parent router."
+                )
+
+        if services is not None or throttling:
+            self._inject_redis_middleware()
 
         if throttling:
             self._inject_throttling_middleware()
 
-        self._inject_postgres_middleware()
-        self._inject_user(inject_user)
+        if services is not None or must_be_registered is not None:
+            self._inject_postgres_middleware()
+
+        if must_be_registered is not None:
+            self._inject_user(must_be_registered)
 
         if services is not None:
             self._inject_services(services)
 
-    def _inject_user(self, inject_user: bool) -> None:
-        config = KernelConfig()
-        self.message.middleware(InjectStudentMiddleware(inject_user, config.find_student_service))
-        self.callback_query.middleware(InjectStudentMiddleware(inject_user, config.find_student_service))
+    def _inject_user(self, must_be_registered: bool) -> None:
+        from src.kernel.config.config import FIND_USER_SERVICE
+
+        if FIND_USER_SERVICE is None:
+            raise TypeError("Find user service is None.")
+
+        self.message.middleware(InjectStudentMiddleware(must_be_registered, FIND_USER_SERVICE))
+        self.callback_query.middleware(InjectStudentMiddleware(must_be_registered, FIND_USER_SERVICE))
 
     def _inject_redis_middleware(self) -> None:
         self.message.middleware(InjectRedisConnectionMiddleware())

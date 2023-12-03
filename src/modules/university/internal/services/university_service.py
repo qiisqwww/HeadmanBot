@@ -29,6 +29,15 @@ class UniversityService(PostgresService):
 
         return UniversityDTO.from_mapping(record)
 
+    async def find_by_id(self, university_id: int) -> UniversityDTO:
+        query = "SELECT * FROM universities.universities WHERE university_id = $1"
+        record = await self._con.fetchrow(query, university_id)
+
+        if record is None:
+            raise CorruptedDatabaseError(f"Not found university with {university_id=}")
+
+        return UniversityDTO.from_mapping(record)
+
     async def _find_by_name(self, name: str) -> UniversityDTO | None:
         query = "SELECT * FROM universities.universities WHERE name LIKE $1"
         record = await self._con.fetchrow(query, name)

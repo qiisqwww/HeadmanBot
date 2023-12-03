@@ -13,6 +13,10 @@ class UniversityContract(PostgresService):
         university_service = UniversityService(self._con)
         return await university_service.find_by_alias(alias)
 
+    async def get_university_by_id(self, university_id: int) -> UniversityDTO:
+        university_service = UniversityService(self._con)
+        return await university_service.find_by_id(university_id)
+
     async def get_all_universities(self) -> list[UniversityDTO]:
         university_service = UniversityService(self._con)
         return await university_service.all()
