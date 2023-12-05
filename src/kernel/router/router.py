@@ -1,6 +1,6 @@
 from aiogram import Router as AiogramRouter
 
-from src.kernel.role import Role
+from src.enums import Role
 
 from .middlewares import (
     InjectPostgresMiddleware,
@@ -55,13 +55,8 @@ class Router(AiogramRouter):
             self._inject_services(services)
 
     def _inject_user(self, must_be_registered: bool) -> None:
-        from src.kernel.config.config import FIND_USER_SERVICE
-
-        if FIND_USER_SERVICE is None:
-            raise TypeError("Find user service is None.")
-
-        self.message.middleware(InjectStudentMiddleware(must_be_registered, FIND_USER_SERVICE))
-        self.callback_query.middleware(InjectStudentMiddleware(must_be_registered, FIND_USER_SERVICE))
+        self.message.middleware(InjectStudentMiddleware(must_be_registered))
+        self.callback_query.middleware(InjectStudentMiddleware(must_be_registered))
 
     def _inject_redis_middleware(self) -> None:
         self.message.middleware(InjectRedisConnectionMiddleware())

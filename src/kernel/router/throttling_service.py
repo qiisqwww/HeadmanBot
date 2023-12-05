@@ -1,4 +1,4 @@
-from src.kernel.base import RedisService
+from src.services.impls.redis_service import RedisService
 
 __all__ = [
     "ThrottlingService",

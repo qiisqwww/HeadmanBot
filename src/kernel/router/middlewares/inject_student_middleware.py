@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
-from src.kernel.protocols import FindStudentServiceProtocol
+from src.services import StudentService
 
 from .templates import ALREADY_REGISTERED_TEMPLATE, MUST_BE_REG_TEMPLATE
 
@@ -17,11 +17,9 @@ HandlerType: TypeAlias = Callable[[Message | CallbackQuery, dict[str, Any]], Awa
 
 class InjectStudentMiddleware(BaseMiddleware):
     _must_be_registered: bool
-    _service: type[FindStudentServiceProtocol]
 
-    def __init__(self, must_be_registered: bool, service: type[FindStudentServiceProtocol]) -> None:
+    def __init__(self, must_be_registered: bool) -> None:
         self._must_be_registered = must_be_registered
-        self._service = service
         super().__init__()
 
     @logger.catch
@@ -32,7 +30,7 @@ class InjectStudentMiddleware(BaseMiddleware):
             return
 
         if data.get("student", None) is None:
-            student_service = self._service(data["postgres_con"])
+            student_service = StudentService(data["postgres_con"])
             student = await student_service.find_student(event.from_user.id)
         else:
             student = data["student"]
