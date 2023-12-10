@@ -1,22 +1,50 @@
-@registration_callbacks_router.callback_query(RoleCallbackData.filter())
+from aiogram.types import CallbackQuery
+from loguru import logger
+
+from src.handlers.callback_data import ChooseRoleCallbackData
+from src.handlers.finite_state.registration.registration_context import (
+    RegistrationContext,
+)
+from src.handlers.finite_state.registration.registration_states import (
+    RegistrationStates,
+)
+from src.kernel import Router
+from src.resources.buttons.inline_buttons import university_list_buttons
+from src.resources.buttons.void_inline_buttons import inline_void_button
+from src.resources.templates.templates import (
+    ASK_UNIVERSITY_TEMPLATE,
+    CHOOSE_STUDENT_ROLE_TEMPLATE,
+    succesfull_role_choose_template,
+)
+from src.services import UniversityService
+
+__all__ = [
+    "choose_role_router",
+]
+
+choose_role_router = Router()
+
+
+@choose_role_router.callback_query(ChooseRoleCallbackData.filter())
 @logger.catch
 async def get_role_from_user(
-    callback: CallbackQuery, callback_data: RoleCallbackData, state: FSMContext, university_gateway: UniversityGatewate
+    callback: CallbackQuery,
+    callback_data: ChooseRoleCallbackData,
+    state: RegistrationContext,
+    university_service: UniversityService,
 ) -> None:
-    registration_ctx = RegistrationContext(state)
-
     if callback.message is None:
         return
 
     if callback.message.from_user is None:
         return
 
-    await registration_ctx.set_role(callback_data.role)
+    await state.set_role(callback_data.role)
 
     await callback.message.edit_text(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=inline_void_button())
-    await callback.message.answer(succesfull_role_choose_template(await registration_ctx.role))
+    await callback.message.answer(succesfull_role_choose_template(await state.role))
 
-    universities = await university_gateway.get_all_universities()
+    universities = await university_service.all()
 
     await callback.message.answer(text=ASK_UNIVERSITY_TEMPLATE, reply_markup=university_list_buttons(universities))
-    await registration_ctx.set_state(RegistrationStates.waiting_university)
+    await state.set_state(RegistrationStates.waiting_university)

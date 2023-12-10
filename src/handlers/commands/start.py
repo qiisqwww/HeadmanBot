@@ -1,5 +1,4 @@
 from aiogram.filters import CommandStart
-from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from loguru import logger
 
@@ -24,9 +23,7 @@ start_command_router = Router(
 
 @start_command_router.message(CommandStart())
 @logger.catch
-async def start_command(message: Message, state: FSMContext) -> None:
-    registration_ctx = RegistrationContext(state)
-
+async def start_command(message: Message, state: RegistrationContext) -> None:
     if message.from_user is None:
         return
 
@@ -34,4 +31,4 @@ async def start_command(message: Message, state: FSMContext) -> None:
     await message.answer(start_message)
 
     await message.answer(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=role_buttons())
-    await registration_ctx.set_state(RegistrationStates.waiting_role)
+    await state.set_state(RegistrationStates.waiting_role)

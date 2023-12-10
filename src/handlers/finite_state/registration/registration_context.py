@@ -4,8 +4,7 @@ from typing import Any
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
-from src.kernel.role import Role
-from src.modules.university.api.enums import UniversityAlias
+from src.enums import Role, UniversityAlias
 
 __all__ = [
     "RegistrationContext",

@@ -40,11 +40,6 @@ ServiceClass: TypeAlias = type[Service]
 
 
 class InjectServices(BaseMiddleware):
-    _deps: dict[str, ServiceClass]
-
-    def __init__(self, **deps: ServiceClass) -> None:
-        self._deps = deps
-
     async def __call__(self, handler: HandlerType, event: TelegramObject, data: dict[str, Any]) -> Any:
         con = data["postgres_con"]
 
@@ -63,7 +58,11 @@ class InjectServices(BaseMiddleware):
             student_repository, attendance_service, group_service, university_service
         )
 
-        for service_obj_name, service_class in self._deps.items():
+        annotations = data["handler"].spec.annotations
+        for service_obj_name, service_class in annotations.items():
+            if service_obj_name == "return":
+                continue
+
             if issubclass(service_class, RedisService):
                 data[service_obj_name] = service_class(data["redis_con"])
 
@@ -73,7 +72,7 @@ class InjectServices(BaseMiddleware):
             elif issubclass(service_class, LessonService):
                 data[service_obj_name] = lesson_service
 
-            elif issubclass(service_class, UniversityService):
+            elif service_class == UniversityService:
                 data[service_obj_name] = university_service
 
             elif issubclass(service_class, StudentService):
@@ -84,8 +83,5 @@ class InjectServices(BaseMiddleware):
 
             elif issubclass(service_class, AttendanceService):
                 data[service_obj_name] = attendance_service
-
-            else:
-                raise TypeError("Unknown service type, may be you want register it?")
 
         return await handler(event, data)

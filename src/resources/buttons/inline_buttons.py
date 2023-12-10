@@ -8,7 +8,7 @@ from src.enums import Role
 from src.handlers.callback_data import (
     AccessCallbackData,
     ChooseLessonCallbackData,
-    RoleCallbackData,
+    ChooseRoleCallbackData,
     UniversityCallbackData,
     UpdateAttendanceCallbackData,
 )
@@ -32,8 +32,8 @@ def university_list_buttons(universities: Iterable[University]) -> InlineKeyboar
 def role_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    builder.button(text="Я студент", callback_data=RoleCallbackData(role=Role.STUDENT))
-    builder.button(text="Я староста", callback_data=RoleCallbackData(role=Role.HEADMAN))
+    builder.button(text="Я студент", callback_data=ChooseRoleCallbackData(role=Role.STUDENT))
+    builder.button(text="Я староста", callback_data=ChooseRoleCallbackData(role=Role.HEADMAN))
 
     return builder.as_markup(resize_keyboard=True)
 

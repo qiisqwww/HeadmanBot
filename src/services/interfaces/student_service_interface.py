@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
 from src.dto import Student
+from src.dto.group import GroupId
 from src.repositories import StudentRepository
 
 from .service import Service
@@ -24,4 +25,8 @@ class StudentService(Service):
 
     @abstractmethod
     async def all(self) -> list[Student]:
+        ...
+
+    @abstractmethod
+    async def group_has_headman(self, group_id: GroupId) -> bool:
         ...

@@ -1,4 +1,4 @@
-from redis.asyncio import Redis
+from redis.asyncio import Redis  # type: ignore
 
 from src.services.interfaces import Service
 
