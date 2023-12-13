@@ -15,8 +15,8 @@ from src.handlers.finite_state.registration.registration_states import (
     RegistrationStates,
 )
 from src.kernel import Router
-from src.resources.buttons.inline_buttons import accept_or_deny_buttons
-from src.resources.templates.templates import (
+from src.resources import accept_or_deny_buttons
+from src.resources import (
     ASK_BIRTHDATE_TEMPLATE,
     ASK_NAME_TEMPLATE,
     ASK_SURNAME_TEMPLATE,
@@ -29,8 +29,8 @@ from src.resources.templates.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
 )
-from src.services.interfaces.group_service_interface import GroupService
-from src.services.interfaces.student_service_interface import StudentService
+from src.services import GroupService
+from src.services import StudentService
 
 __all__ = [
     "registration_finite_state_router",

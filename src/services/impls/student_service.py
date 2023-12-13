@@ -1,6 +1,8 @@
 from src.dto import Student
 from src.repositories import StudentRepository
 from src.services.interfaces import StudentService
+from src.repositories.exceptions import CorruptedDatabaseError
+from src.dto import GroupId
 
 __all__ = [
     "StudentServiceImpl",
@@ -47,13 +49,8 @@ class StudentServiceImpl(StudentService):
     #
     #     return record is not None
 
-    # async def filter_by_group_name(self, group_name: str) -> list[Student]:
-    #     group = await self._group_gateway.find_group_by_name(group_name)
-    #
-    #     if group is None:
-    #         raise CorruptedDatabaseError(f"Not found group with {group_name=}")
-    #
-    #     query = "SELECT * FROM students.students WHERE group_id = $1"
-    #     records = await self._con.fetch(query, group.id)
-    #
-    #     return [Student.from_mapping(record) for record in records]
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Student]:
+        if group_id is None:
+            raise CorruptedDatabaseError(f"Not found group with {group_id=}")
+
+        return await self._student_repository.filter_group_by_id(group_id)

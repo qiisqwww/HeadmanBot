@@ -8,8 +8,8 @@ __all__ = [
     "YOU_WERE_DENIED_TEMPLATE",
     "YOU_WERE_ACCEPTED_TEMPLATE",
     "ASK_UNIVERSITY_TEMPLATE",
-    "succesfull_role_choose_template",
-    "succesfull_university_choose_template",
+    "successful_role_choose_template",
+    "successful_university_choose_template",
     "ASK_GROUP_TEMPLATE",
     "INCORRECT_UNIVERSITY_TEMPLATE",
     "INCORRECT_STUDENT_ROLE_TEMPLATE",
@@ -22,7 +22,7 @@ __all__ = [
     "FAQ_TEMPLATE",
     "GROUP_DOESNT_REGISTERED_TEMPLATE",
     "BIRTHDATE_INCORRECT_TEMPLATE",
-    "ASK_BIRTHDATE_TEMPLATE",
+    "ASK_BIRTHDATE_TEMPLATE"
 ]
 
 
@@ -51,11 +51,11 @@ ASK_UNIVERSITY_TEMPLATE = "Выберите свой университет."
 INCORRECT_UNIVERSITY_TEMPLATE = "Пожалуйста, нажмите на одну из кнопок выше, чтобы выбрать ваш университет."
 
 
-def succesfull_role_choose_template(role: Role) -> str:
+def successful_role_choose_template(role: Role) -> str:
     return f"Отлично, роль выбрана, вы теперь - <b>{role}</b>."
 
 
-def succesfull_university_choose_template(university_name: str) -> str:
+def successful_university_choose_template(university_name: str) -> str:
     return f"Отлично, выбран университет - <b>{university_name}</b>."
 
 
@@ -88,9 +88,11 @@ FAQ_TEMPLATE = """
 <b>Доступно несколько вариантов ответа:</b>
 1. Студент отмечает, что придет на все пары.
 2. Студент отмечает, что сегодня его в университете не будет
-3. Студент указывает конкретные пары, которые он обещает посетить. На все остальные пары он автоматически будет записан, как отсутствующий.
+3. Студент указывает конкретные пары, которые он обещает посетить. На все остальные пары он автоматически будет записан, 
+как отсутствующий.
 
-<b>Опрос ограничен по времени.</b> Отметиться можно с в промежутке между 7 утра и концом первой <b>(по счету)</b> пары вашей группы.
+<b>Опрос ограничен по времени.</b> Отметиться можно с в промежутке между 7 утра и концом первой <b>(по счету)</b>
+ пары вашей группы.
 
 Старостам доступна команда, отправляющая информацию о посещаемости группы на текущий момент - <b>/getstat</b>.
 

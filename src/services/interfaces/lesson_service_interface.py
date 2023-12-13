@@ -15,7 +15,10 @@ __all__ = [
 class LessonService(Service):
     @abstractmethod
     def __init__(
-        self, lesson_repository: LessonRepository, group_service: GroupService, university_service: UniversityService
+            self,
+            lesson_repository: LessonRepository,
+            group_service: GroupService,
+            university_service: UniversityService
     ) -> None:
         ...
 

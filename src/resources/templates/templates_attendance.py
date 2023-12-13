@@ -1,5 +1,5 @@
 from src.enums import VisitStatus
-from src.modules.attendance.internal.dto import StudentMetaDTO
+from src.dto.student_read_fullname import StudentMetaDTO
 
 __all__ = [
     "ALL_MESSAGE",
@@ -8,7 +8,7 @@ __all__ = [
     "CHOOSE_PAIR_MESSAGE",
     "POLL_MESSAGE",
     "WHICH_PAIR_MESSAGE",
-    "attendance_for_headmen_message",
+    "attendance_for_headmen_message"
 ]
 
 

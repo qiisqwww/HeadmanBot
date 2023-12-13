@@ -3,8 +3,8 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.kernel import Router
-from src.resources.buttons.inline_buttons import role_buttons
-from src.resources.templates.templates import (
+from src.resources import role_buttons
+from src.resources import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
     start_message_template,
 )

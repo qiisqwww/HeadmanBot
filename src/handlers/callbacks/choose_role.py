@@ -14,7 +14,7 @@ from src.resources.buttons.void_inline_buttons import inline_void_button
 from src.resources.templates.templates import (
     ASK_UNIVERSITY_TEMPLATE,
     CHOOSE_STUDENT_ROLE_TEMPLATE,
-    succesfull_role_choose_template,
+    successful_role_choose_template,
 )
 from src.services import UniversityService
 
@@ -42,7 +42,7 @@ async def get_role_from_user(
     await state.set_role(callback_data.role)
 
     await callback.message.edit_text(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=inline_void_button())
-    await callback.message.answer(succesfull_role_choose_template(await state.role))
+    await callback.message.answer(successful_role_choose_template(await state.role))
 
     universities = await university_service.all()
 

@@ -17,6 +17,8 @@ __all__ = [
     "university_list_buttons",
     "accept_or_deny_buttons",
     "role_buttons",
+    "attendance_buttons",
+    "choose_lesson_buttons"
 ]
 
 

@@ -6,8 +6,8 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import CallbackQuery, TelegramObject
 from loguru import logger
 
-from src.bot.services import LessonService
-from src.database import get_postgres_pool
+from src.services import LessonService
+from src.external.database import get_postgres_pool
 from src.dto import Student
 
 __all__ = [

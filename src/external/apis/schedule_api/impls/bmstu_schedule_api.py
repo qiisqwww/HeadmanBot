@@ -108,7 +108,7 @@ class BmstuScheduleApi(IScheduleAPI):
         return BeautifulSoup(response.text, "html.parser")
 
     def _parse_group_tags_soup(self, soup: BeautifulSoup) -> list[Tag]:
-        group_pat = re.compile("/schedule/*+")
+        group_pat = re.compile("/schedule/*")
         return soup.find_all(href=group_pat)
 
     def _get_today_schedule_table(self, weekday: Weekday, schedule_soup: BeautifulSoup) -> Tag:

@@ -52,3 +52,9 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         records = await self._con.fetch(query)
 
         return [Student.from_mapping(record) for record in records]
+
+    async def filter_group_by_id(self, group_id: GroupId):
+        query = "SELECT * FROM students.students WHERE group_id = $1"
+
+        records = await self._con.fetch(query, group_id)
+        return [Student.from_mapping(record) for record in records]

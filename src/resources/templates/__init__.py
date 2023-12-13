@@ -1,0 +1,34 @@
+from templates import *
+from templates_attendance import *
+
+__all__ = [
+    "ALL_MESSAGE",
+    "NONE_MESSAGE",
+    "NO_LESSONS_TODAY",
+    "CHOOSE_PAIR_MESSAGE",
+    "POLL_MESSAGE",
+    "WHICH_PAIR_MESSAGE",
+    "attendance_for_headmen_message",
+    "start_message_template",
+    "CHOOSE_STUDENT_ROLE_TEMPLATE",
+    "REGISTRATION_DENIED_TEMPLATE",
+    "REGISTRATION_ACCEPTED_TEMPLATE",
+    "YOU_WERE_DENIED_TEMPLATE",
+    "YOU_WERE_ACCEPTED_TEMPLATE",
+    "ASK_UNIVERSITY_TEMPLATE",
+    "successful_role_choose_template",
+    "successful_university_choose_template",
+    "ASK_GROUP_TEMPLATE",
+    "INCORRECT_UNIVERSITY_TEMPLATE",
+    "INCORRECT_STUDENT_ROLE_TEMPLATE",
+    "GROUP_DOESNT_EXISTS_TEMPLATE",
+    "ASK_NAME_TEMPLATE",
+    "ASK_SURNAME_TEMPLATE",
+    "YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE",
+    "YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE",
+    "GROUP_ALREADY_HAS_A_HEADMAN",
+    "FAQ_TEMPLATE",
+    "GROUP_DOESNT_REGISTERED_TEMPLATE",
+    "BIRTHDATE_INCORRECT_TEMPLATE",
+    "ASK_BIRTHDATE_TEMPLATE"
+]

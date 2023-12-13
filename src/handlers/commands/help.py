@@ -3,7 +3,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.kernel import Router
-from src.modules.student.internal.resources.templates import FAQ_TEMPLATE
+from src.resources import FAQ_TEMPLATE
 
 registered_commands_router = Router(
     must_be_registered=True,

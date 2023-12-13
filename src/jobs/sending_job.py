@@ -3,15 +3,17 @@ import asyncio
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from asyncpg.pool import PoolConnectionProxy
 from loguru import logger
 
-from src.kernel.config import DEBUG
-from src.kernel.external.database import get_postgres_pool
-from src.modules.attendance.internal.resources.inline_buttons import attendance_buttons
-from src.modules.attendance.internal.resources.templates import POLL_MESSAGE
-from src.modules.group.api.dto import GroupDTO
-from src.services import GroupService, LessonService, StudentService
+from src.config import DEBUG
+from src.resources import attendance_buttons
+from src.resources import POLL_MESSAGE
+from src.dto import Group
+from src.services import (
+    GroupService,
+    LessonService,
+    StudentService
+)
 
 __all__ = [
     "SendingJob",
@@ -23,38 +25,55 @@ class SendingJob:
 
     _scheduler: AsyncIOScheduler
 
-    def __init__(self, bot: Bot):
+    def __init__(
+            self,
+            bot: Bot,
+            lesson_service: LessonService,
+            student_service: StudentService,
+            group_service: GroupService
+    ) -> None:
+
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
         if DEBUG:
             self._scheduler.add_job(
                 self._send,
-                args=(bot,),
+                args=(bot,),  # IDK what should i add in args here, cuz i dont know how do we debug
             )
         else:
+
             self._scheduler.add_job(
                 self._send,
                 "cron",
                 day_of_week="mon-sat",
                 hour=7,
                 minute=00,
-                args=(bot,),
+                args=(
+                    bot,
+                    lesson_service,
+                    student_service,
+                    group_service
+                    )
             )
 
     def start(self):
         self._scheduler.start()
 
     @logger.catch
-    async def _send_to_group(self, bot: Bot, con: PoolConnectionProxy, group: GroupDTO) -> None:
-        lesson_service = LessonService(con)
-        student_service = StudentService(con)
+    async def _send_to_group(
+            self,
+            bot: Bot,
+            lesson_service: LessonService,
+            student_service: StudentService,
+            group: Group
+    ) -> None:
 
-        lessons = await lesson_service.filter_by_group(group)
+        lessons = await lesson_service.filter_by_group_id(group.id)
 
         if not lessons:
             return
 
-        users = await student_service.filter_by_group(group)
+        users = await student_service.filter_by_group_id(group.id)
 
         for user in users:
             try:
@@ -64,19 +83,27 @@ class SendingJob:
                 logger.error(e)
 
     @logger.catch
-    async def _send(self, bot: Bot) -> None:
+    async def _send(
+            self,
+            bot: Bot,
+            lesson_service: LessonService,
+            student_service: StudentService,
+            group_service: GroupService
+    ) -> None:
+
         logger.info("Sending job started.")
 
         if DEBUG:
             await asyncio.sleep(5)
 
-        pool = await get_postgres_pool()
-        async with pool.acquire() as con:
-            group_service = GroupService(con)
+        groups = await group_service.all()
 
-            groups = await group_service.all()
-
-            for group in groups:
-                await self._send_to_group(bot, con, group)
+        for group in groups:
+            await self._send_to_group(
+                bot,
+                lesson_service,
+                student_service,
+                group
+            )
 
         logger.info("Sending job finished.")

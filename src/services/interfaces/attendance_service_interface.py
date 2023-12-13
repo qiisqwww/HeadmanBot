@@ -21,7 +21,10 @@ __all__ = [
 
 class AttendanceService(Service):
     @abstractmethod
-    def __init__(self, attendance_repository: AttendanceRepository, lesson_service: LessonService) -> None:
+    def __init__(
+            self,
+            attendance_repository: AttendanceRepository,
+            lesson_service: LessonService) -> None:
         ...
 
     @abstractmethod

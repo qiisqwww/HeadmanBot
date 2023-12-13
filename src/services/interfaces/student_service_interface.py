@@ -30,3 +30,7 @@ class StudentService(Service):
     @abstractmethod
     async def group_has_headman(self, group_id: GroupId) -> bool:
         ...
+
+    @abstractmethod
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Student]:
+        ...

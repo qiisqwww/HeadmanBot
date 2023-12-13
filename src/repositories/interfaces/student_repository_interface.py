@@ -23,5 +23,9 @@ class StudentRepository(PostgresRepository):
         ...
 
     @abstractmethod
-    async def all(self) -> list[Student]:
+    async def all(self, group_id: GroupId) -> list[Student]:
+        ...
+
+    @abstractmethod
+    async def filter_group_by_id(self, group_id: GroupId) -> list[Student]:
         ...

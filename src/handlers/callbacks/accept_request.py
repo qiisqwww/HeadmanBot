@@ -3,18 +3,16 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from src.kernel import Router
-from src.kernel.resources.buttons import inline_void_button
-from src.kernel.resources.buttons.main_menu import main_menu
-from src.modules.student.internal.controllers.unregistred.callback_data import (
-    AccessCallbackData,
-)
-from src.modules.student.internal.resources.templates import (
+from src.resources.buttons import inline_void_button
+from src.resources.buttons.main_menu import main_menu
+from src.handlers.callback_data import AccessCallbackData
+from src.resources import (
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
 )
-from src.modules.student.internal.services import CacheStudentService, StudentService
+from src.services import CacheStudentService, StudentService
 
 __all__ = [
     "access_callback_router",
