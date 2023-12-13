@@ -17,7 +17,7 @@ __all__ = [
 
 
 class Router(AiogramRouter):
-    _use_throttling: bool
+    _user_throttling: bool
 
     def __init__(
         self,
@@ -32,7 +32,7 @@ class Router(AiogramRouter):
             if isinstance(self.parent_router, AiogramRouter):
                 raise TypeError("Router cannot be children of AiogramRouter.")
 
-            if self.parent_router._use_throttling:
+            if self.parent_router._user_throttling:
                 raise ValueError(
                     "Parent router already using throttling, please set 'throttling=False' or"
                     "don't use throttling in parent router."

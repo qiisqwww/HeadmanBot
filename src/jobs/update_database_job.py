@@ -42,6 +42,9 @@ class UpdateDatabaseJob:
 
     @staticmethod
     @logger.catch
-    async def _update(lesson_service: LessonService, attendance_service: AttendanceService) -> None:
+    async def _update(
+            lesson_service: LessonService,
+            attendance_service: AttendanceService
+    ) -> None:
         await lesson_service.recreate_lessons()
         await attendance_service.recreate_attendances()

@@ -1,4 +1,9 @@
-from src.dto import GroupId, Student, StudentId, StudentRaw
+from src.dto import (
+    GroupId,
+    Student,
+    StudentId,
+    StudentRaw
+)
 
 from ..interfaces import StudentRepository
 from .postgres_repository import PostgresRepositoryImpl
