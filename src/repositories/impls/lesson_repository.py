@@ -15,7 +15,7 @@ class LessonRepositoryImpl(PostgresRepositoryImpl, LessonRepository):
         query = "INSERT INTO lessons (name, group_id, start_time) VALUES($1, $2, $3)"
         await self._con.execute(query, name, group_id, start_time)
 
-    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson]:
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson] | None:
         query = "SELECT * FROM lessons WHERE group_id = $1 ORDER BY start_time"
         records = await self._con.fetch(query, group_id)
 

@@ -27,7 +27,7 @@ class LessonService(Service):
         ...
 
     @abstractmethod
-    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson]:
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson] | None:
         ...
 
     @abstractmethod

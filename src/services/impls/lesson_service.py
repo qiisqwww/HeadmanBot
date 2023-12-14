@@ -17,7 +17,10 @@ class LessonServiceImpl(LessonService):
     _university_service: UniversityService
 
     def __init__(
-        self, lesson_repository: LessonRepository, group_service: GroupService, university_service: UniversityService
+            self,
+            lesson_repository: LessonRepository,
+            group_service: GroupService,
+            university_service: UniversityService
     ) -> None:
         self._lesson_repository = lesson_repository
         self._group_service = group_service
@@ -31,7 +34,7 @@ class LessonServiceImpl(LessonService):
         for group in groups:
             await self.try_fetch_schedule_for_group(group)
 
-    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson]:
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson] | None:
         return await self._lesson_repository.filter_by_group_id(group_id)
 
     async def try_fetch_schedule_for_group(self, group: Group) -> None:
@@ -56,7 +59,11 @@ class LessonServiceImpl(LessonService):
 
     @staticmethod
     def _create_time_with_timezone(time_without_tz: time) -> time:
-        return time(hour=time_without_tz.hour, minute=time_without_tz.minute, tzinfo=timezone.utc)
+        return time(
+            hour=time_without_tz.hour,
+            minute=time_without_tz.minute,
+            tzinfo=timezone.utc
+        )
 
     async def _group_has_schedule(self, group_id: GroupId) -> bool:
         lessons = await self._lesson_repository.filter_by_group_id(group_id)

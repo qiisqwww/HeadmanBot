@@ -49,7 +49,7 @@ class StudentServiceImpl(StudentService):
     #
     #     return record is not None
 
-    async def filter_by_group_id(self, group_id: GroupId) -> list[Student]:
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Student] | None:
         if group_id is None:
             raise CorruptedDatabaseError(f"Not found group with {group_id=}")
 

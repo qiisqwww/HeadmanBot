@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from src.enums import VisitStatus
 
 from .dto import DTO
-from .lesson import LessonId
+from .lesson import Lesson
 from .student import StudentId
 
 __all__ = [
@@ -14,5 +14,5 @@ __all__ = [
 @dataclass(slots=True, frozen=True)
 class Attendance(DTO):
     student_id: StudentId
-    lesson_id: LessonId
+    lesson: Lesson
     status: VisitStatus

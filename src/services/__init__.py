@@ -5,7 +5,7 @@ from .interfaces import (
     RegistrationService,
     Service,
     StudentService,
-    UniversityService,
+    UniversityService
 )
 
 __all__ = [

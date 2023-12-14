@@ -18,6 +18,7 @@ __all__ = [
     "access_callback_router",
 ]
 
+
 access_callback_router = Router(
     services={
         "student_service": StudentService,

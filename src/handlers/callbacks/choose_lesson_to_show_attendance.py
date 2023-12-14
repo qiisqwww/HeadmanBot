@@ -1,9 +1,26 @@
-@callbacks_router.callback_query(ChooseLessonCallbackData.filter())
+from aiogram.types import CallbackQuery
+from loguru import logger
+
+from src.kernel import Router
+from src.handlers.callback_data import ChooseLessonCallbackData
+from src.dto import Student
+from src.resources import attendance_for_headmen_message, choose_lesson_buttons
+from src.services import LessonService, AttendanceService
+
+__all__ = [
+    "choose_lesson_callback_router"
+]
+
+
+choose_lesson_callback_router = Router()
+
+
+@choose_lesson_callback_router.callback_query(ChooseLessonCallbackData.filter())
 @logger.catch
 async def attendance_send_callback(
     callback: CallbackQuery,
     callback_data: ChooseLessonCallbackData,
-    student: StudentDTO,
+    student: Student,
     lesson_service: LessonService,
     attendance_service: AttendanceService,
 ):

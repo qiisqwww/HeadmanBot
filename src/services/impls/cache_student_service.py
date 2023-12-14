@@ -1,8 +1,8 @@
 from datetime import date
 
-from src.kernel.base import RedisService
-from src.kernel.student_dto import StudentId
-from src.modules.student.internal.dto import StudentRawDTO
+from src.services import RedisService
+from src.dto import StudentId
+from src.dto import StudentRaw
 
 __all__ = [
     "CacheStudentService",

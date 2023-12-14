@@ -32,5 +32,5 @@ class StudentService(Service):
         ...
 
     @abstractmethod
-    async def filter_by_group_id(self, group_id: GroupId) -> list[Student]:
+    async def filter_by_group_id(self, group_id: GroupId) -> list[Student] | None:
         ...
