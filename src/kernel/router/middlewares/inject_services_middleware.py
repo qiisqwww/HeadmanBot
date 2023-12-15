@@ -51,11 +51,22 @@ class InjectServices(BaseMiddleware):
 
         group_service = GroupServiceImpl(group_repository)
         university_service = UniversityServiceImpl(university_repository)
-        lesson_service = LessonServiceImpl(lesson_repository, group_service, university_service)
+        lesson_service = LessonServiceImpl(
+            lesson_repository,
+            group_service,
+            university_service
+            )
         student_service = StudentServiceImpl(student_repository)
-        attendance_service = AttendanceServiceImpl(attendance_repository, lesson_service, student_service)
+        attendance_service = AttendanceServiceImpl(
+            attendance_repository,
+            lesson_service,
+            student_service
+        )
         registration_service = RegistrationServiceImpl(
-            student_repository, attendance_service, group_service, university_service
+            student_repository,
+            attendance_service,
+            group_service,
+            university_service
         )
 
         annotations = data["handler"].spec.annotations

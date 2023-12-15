@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 start_command_router = Router(
-    must_be_registered=False,
+    must_be_registered=False
 )
 
 

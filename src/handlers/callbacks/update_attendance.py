@@ -1,5 +1,4 @@
 from aiogram.types import CallbackQuery
-from aiogram.fsm.context import FSMContext
 from loguru import logger
 
 from src.kernel import Router
@@ -21,6 +20,7 @@ __all__ = [
 
 
 update_attendance_router = Router()
+
 
 @update_attendance_router.callback_query(UpdateAttendanceCallbackData.filter())
 @logger.catch

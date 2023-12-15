@@ -20,7 +20,7 @@ class CacheStudentService(RedisService):
         await self._con.hmset(student_data["telegram_id"], student_data)
         await self._con.expire(student_data["telegram_id"], 86400)
 
-    async def pop_student_cache(self, student_id: StudentId) -> StudentRawDTO:
+    async def pop_student_cache(self, student_id: StudentId) -> StudentRaw:
         student_data = await self._con.hgetall(str(student_id))
         student_data["telegram_id"] = student_id
 
@@ -29,4 +29,4 @@ class CacheStudentService(RedisService):
         if student_data["birthdate"] == "0":
             student_data["birthdate"] = None
 
-        return StudentRawDTO.from_mapping(student_data)
+        return StudentRaw.from_mapping(student_data)

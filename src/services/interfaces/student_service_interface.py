@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto import Student
+from src.dto import Student, StudentRaw
 from src.dto.group import GroupId
 from src.repositories import StudentRepository
 
@@ -33,4 +33,8 @@ class StudentService(Service):
 
     @abstractmethod
     async def filter_by_group_id(self, group_id: GroupId) -> list[Student] | None:
+        ...
+
+    @abstractmethod
+    async def register_student(self, student: StudentRaw) -> None:
         ...

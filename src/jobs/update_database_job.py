@@ -2,7 +2,6 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
 
 from src.config import DEBUG
-from src.external.database import get_postgres_pool
 from src.services import AttendanceService, LessonService
 
 __all__ = [

@@ -5,6 +5,7 @@ from .registration_serice import RegistrationServiceImpl
 from .student_service import StudentServiceImpl
 from .university_service import UniversityServiceImpl
 from .cache_student_service import CacheStudentService
+from .redis_service import RedisService
 
 __all__ = [
     "UniversityServiceImpl",
@@ -14,4 +15,5 @@ __all__ = [
     "AttendanceServiceImpl",
     "StudentServiceImpl",
     "RegistrationServiceImpl",
+    "RedisService"
 ]

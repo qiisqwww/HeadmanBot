@@ -1,6 +1,6 @@
-from src.dto import Student
+from src.dto import Student, StudentRaw
 from src.repositories import StudentRepository
-from src.services.interfaces import StudentService
+from src.services import StudentService, GroupService
 from src.repositories.exceptions import CorruptedDatabaseError
 from src.dto import GroupId
 
@@ -11,6 +11,7 @@ __all__ = [
 
 class StudentServiceImpl(StudentService):
     _student_repository: StudentRepository
+    _group_service: GroupService
 
     def __init__(
         self,
@@ -54,3 +55,11 @@ class StudentServiceImpl(StudentService):
             raise CorruptedDatabaseError(f"Not found group with {group_id=}")
 
         return await self._student_repository.filter_group_by_id(group_id)
+
+    async def register_student(self, student: StudentRaw) -> None:
+        group = await self._group_service.find_by_name(student.group_name)
+        new_student = await self._student_repository.create_and_return(student, group.id)
+
+        if new_student is None:
+            raise CorruptedDatabaseError(f"Got some mistakes while registratig user {student.telegram_id}")
+

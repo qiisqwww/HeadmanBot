@@ -20,7 +20,8 @@ __all__ = [
 
 
 commands_router = Router(
-    must_be_registered=True, minimum_role=Role.VICE_HEADMAN, services={"lesson_service": LessonService}
+    must_be_registered=True,
+    minimum_role=Role.VICE_HEADMAN
 )
 
 

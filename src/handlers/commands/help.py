@@ -6,7 +6,7 @@ from src.kernel import Router
 from src.resources import FAQ_TEMPLATE
 
 registered_commands_router = Router(
-    must_be_registered=True,
+    must_be_registered=True
 )
 
 

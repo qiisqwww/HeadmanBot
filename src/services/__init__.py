@@ -8,6 +8,8 @@ from .interfaces import (
     UniversityService
 )
 
+from .impls import CacheStudentService, RedisService
+
 __all__ = [
     "StudentService",
     "AttendanceService",
@@ -16,4 +18,6 @@ __all__ = [
     "UniversityService",
     "Service",
     "RegistrationService",
+    "CacheStudentService",
+    "RedisService"
 ]

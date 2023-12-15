@@ -19,12 +19,7 @@ __all__ = [
 ]
 
 
-access_callback_router = Router(
-    services={
-        "student_service": StudentService,
-        "cache_student_service": CacheStudentService,
-    }
-)
+access_callback_router = Router()
 
 
 @access_callback_router.callback_query(AccessCallbackData.filter())

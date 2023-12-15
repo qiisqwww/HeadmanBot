@@ -37,8 +37,8 @@ class CallbackMiddleware(BaseMiddleware):
 
             pool = await get_postgres_pool()
             async with pool.acquire() as con:
-                lesson_service = LessonService(con)
-                today_lessons = await lesson_service.filter_by_student(student)
+                lesson_service = LessonService()
+                today_lessons = await lesson_service.filter_by_student_id(student)
 
             first_lesson_time = datetime.combine(datetime.today(), today_lessons[0].start_time)
 
