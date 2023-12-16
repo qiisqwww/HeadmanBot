@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from loguru import logger
 
-from src.handlers.finite_state.registration.registration_context import (
+from src.registration_context import (
     RegistrationContext,
 )
 

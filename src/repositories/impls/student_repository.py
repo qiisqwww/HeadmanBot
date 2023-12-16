@@ -4,7 +4,7 @@ from src.dto import (
     StudentId,
     StudentRaw
 )
-
+from src.enums import Role
 from ..interfaces import StudentRepository
 from .postgres_repository import PostgresRepositoryImpl
 
@@ -43,12 +43,18 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
             birthdate=student_raw.birthdate,
         )
 
-    async def find(self, telegram_id: int) -> Student | None:
+    async def find_by_id(self, telegram_id: int) -> Student | None:
         query = "SELECT * FROM students WHERE telegram_id = $1"
         record = await self._con.fetchrow(query, telegram_id)
 
         if record is None:
             return None
+
+        return Student.from_mapping(record)
+
+    async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
+        query = "SELECT * FROM students.students WHERE group_id = $1 AND role LIKE $2"
+        record = await self._con.fetchrow(query, group_id, role)
 
         return Student.from_mapping(record)
 

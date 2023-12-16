@@ -3,6 +3,7 @@ from src.repositories import StudentRepository
 from src.services import StudentService, GroupService
 from src.repositories.exceptions import CorruptedDatabaseError
 from src.dto import GroupId
+from src.enums import Role
 
 __all__ = [
     "StudentServiceImpl",
@@ -20,35 +21,23 @@ class StudentServiceImpl(StudentService):
         self._student_repository = student_repository
 
     async def find(self, telegram_id: int) -> Student | None:
-        return await self._student_repository.find(telegram_id)
+        return await self._student_repository.find_by_id(telegram_id)
 
     async def all(self) -> list[Student]:
         return await self._student_repository.all()
 
-    # async def get_headman_by_group_name(self, group_name: str) -> Student:
-    #     group = await self._group_gateway.find_group_by_name(group_name)
-    #
-    #     if group is None:
-    #         raise CorruptedDatabaseError(f"Not found group with {group_name=}")
-    #
-    #     query = "SELECT * FROM students.students WHERE group_id = $1 AND role LIKE $2"
-    #     record = await self._con.fetchrow(query, group.id, Role.HEADMAN)
-    #
-    #     if record is None:
-    #         raise CorruptedDatabaseError(f"Not found headman for group with {group_name=}")
-    #
-    #     return Student.from_mapping(record)
+    async def get_headman_by_group_name(self, group_name: str) -> Student | None:
+        group = await self._group_service.find_by_name(group_name)
 
-    # async def group_has_headman(self, group_name) -> bool:
-    #     group = await self._group_gateway.find_group_by_name(group_name)
-    #
-    #     if group is None:
-    #         return False
-    #
-    #     query = "SELECT * FROM students.students WHERE group_id = $1 AND role LIKE $2"
-    #     record = await self._con.fetchrow(query, group.id, Role.HEADMAN)
-    #
-    #     return record is not None
+        if group is None:
+            raise CorruptedDatabaseError(f"Not found group with {group_name=}")
+
+        headman = await self._student_repository.find_by_group_id_and_role(group.id, Role.HEADMAN)
+
+        if headman is None:
+            raise CorruptedDatabaseError(f"Not found headman for group with {group_name=}")
+
+        return headman
 
     async def filter_by_group_id(self, group_id: GroupId) -> list[Student] | None:
         if group_id is None:
@@ -62,4 +51,3 @@ class StudentServiceImpl(StudentService):
 
         if new_student is None:
             raise CorruptedDatabaseError(f"Got some mistakes while registratig user {student.telegram_id}")
-

@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from src.callback_data import ChooseRoleCallbackData
-from src.handlers.finite_state.registration.registration_context import RegistrationContext
+from src.registration_context import RegistrationContext
 from src.handlers.finite_state.registration import RegistrationStates
 from src.kernel import Router
 from src.resources import university_list_buttons

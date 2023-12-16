@@ -12,8 +12,8 @@ from src.resources import (
 )
 from src.handlers.finite_state.registration import (
     RegistrationStates,
-    RegistrationContext
 )
+from src.registration_context import RegistrationContext
 from src.services import UniversityService
 
 

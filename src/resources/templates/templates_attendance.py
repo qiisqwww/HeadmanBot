@@ -35,7 +35,7 @@ POLL_MESSAGE = """
 
 
 def telegram_link_template(student_meta: Student) -> str:
-    return f'<a href="tg://user?id={student_meta.student_id}">{student_meta.surname} {student_meta.name}</a>\n'
+    return f'<a href="tg://user?id={student_meta.telegram_id}">{student_meta.surname} {student_meta.name}</a>\n'
 
 
 def attendance_for_headmen_message(group_attendance: dict[Student, VisitStatus]) -> str:

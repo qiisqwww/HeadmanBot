@@ -27,14 +27,14 @@ class StudentService(Service):
     async def all(self) -> list[Student]:
         ...
 
-    #@abstractmethod
-    #async def group_has_headman(self, group_id: GroupId) -> bool:
-     #   ...
-
     @abstractmethod
     async def filter_by_group_id(self, group_id: GroupId) -> list[Student] | None:
         ...
 
     @abstractmethod
     async def register_student(self, student: StudentRaw) -> None:
+        ...
+
+    @abstractmethod
+    async def get_headman_by_group_name(self, group_name: str) -> Student | None:
         ...

@@ -23,6 +23,7 @@ class GroupRepositoryImpl(PostgresRepositoryImpl, GroupRepository):
     async def find_by_name_and_uni(self, name: str, university_alias: UniversityAlias) -> Group | None:
         query = (
             "SELECT gr.id, gr.name, gr.university_id "
+            "FROM groups gr "
             "JOIN universities AS un "
             "ON gr.university_id = un.id "
             "WHERE gr.name LIKE $1 AND un.alias LIKE $2"

@@ -6,10 +6,10 @@ from src.kernel import Router
 from src.resources import role_buttons
 from src.resources import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
-    start_message_template,
+    start_message_template
 )
 
-from ..finite_state.registration.registration_context import RegistrationContext
+from src.registration_context import RegistrationContext
 from ..finite_state.registration.registration_states import RegistrationStates
 
 __all__ = [

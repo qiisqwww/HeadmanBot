@@ -2,6 +2,7 @@ from src.kernel import Router
 
 from .callbacks import *
 from .commands import *
+from .finite_state import registration_finite_state_router
 
 root_router = Router(throttling=True)
 root_router.include_routers(
@@ -12,7 +13,8 @@ root_router.include_routers(
     update_attendance_router,
     start_command_router,
     help_router,
-    commands_router
+    commands_router,
+    registration_finite_state_router
 )
 
 __all__ = [

@@ -8,14 +8,11 @@ from src.config import ADMIN_IDS
 from src.dto import StudentId
 from src.enums import Role
 from src.external.apis import ScheduleApi
-from src.handlers.finite_state.registration.registration_context import (
-    RegistrationContext,
-)
-from src.handlers.finite_state.registration.registration_states import (
+from src.registration_context import RegistrationContext
+from ..registration.registration_states import (
     RegistrationStates,
 )
 from src.kernel import Router
-from src.resources import accept_or_deny_buttons
 from src.resources import (
     ASK_BIRTHDATE_TEMPLATE,
     ASK_NAME_TEMPLATE,
@@ -28,9 +25,13 @@ from src.resources import (
     INCORRECT_UNIVERSITY_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
+    accept_or_deny_buttons
 )
-from src.services import GroupService
-from src.services import StudentService
+from src.services import (
+    GroupService,
+    StudentService,
+    CacheStudentService
+)
 
 __all__ = [
     "registration_finite_state_router",
@@ -75,7 +76,8 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    if group is not None and await state.role == Role.HEADMAN and await student_service.group_has_headman(group.id):
+    if (group is not None and await state.role == Role.HEADMAN and
+            await student_service.get_headman_by_group_name(group.name) is not None):
         await message.answer(GROUP_ALREADY_HAS_A_HEADMAN)
         await state.set_state(RegistrationStates.waiting_group)
         return

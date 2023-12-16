@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
 from src.dto import GroupId, Student, StudentRaw
+from src.enums import Role
 
 from .postgres_repository_interface import PostgresRepository
 
@@ -19,7 +20,7 @@ class StudentRepository(PostgresRepository):
         ...
 
     @abstractmethod
-    async def find(self, telegram_id: int) -> Student | None:
+    async def find_by_id(self, telegram_id: int) -> Student | None:
         ...
 
     @abstractmethod
@@ -28,4 +29,8 @@ class StudentRepository(PostgresRepository):
 
     @abstractmethod
     async def filter_group_by_id(self, group_id: GroupId) -> list[Student] | None:
+        ...
+
+    @abstractmethod
+    async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
         ...
