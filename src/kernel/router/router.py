@@ -9,6 +9,7 @@ from .middlewares import (
     InjectServices,
     InjectStudentMiddleware,
     ThrottlingMiddleware,
+    CheckInMiddleware
 )
 
 __all__ = [
@@ -50,6 +51,7 @@ class Router(AiogramRouter):
             self._inject_user(must_be_registered)
 
         self._inject_state()
+        self._inject_check_in_middleware()
 
     def _inject_user(self, must_be_registered: bool) -> None:
         self.message.middleware(InjectStudentMiddleware(must_be_registered))
@@ -74,3 +76,6 @@ class Router(AiogramRouter):
     def _inject_services(self) -> None:
         self.message.middleware(InjectServices())
         self.callback_query.middleware(InjectServices())
+
+    def _inject_check_in_middleware(self) -> None:
+        self.callback_query.middleware(CheckInMiddleware)

@@ -6,19 +6,19 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import CallbackQuery, TelegramObject
 from loguru import logger
 
-from src.services import LessonService
-from src.external.database import get_postgres_pool
+from src.services import LessonService, GroupService, UniversityService
+from src.repositories import LessonRepository, GroupRepository, UniversityRepository
 from src.dto import Student
 
 __all__ = [
-    "CallbackMiddleware",
+    "CheckInMiddleware"
 ]
 
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 
-class CallbackMiddleware(BaseMiddleware):
+class CheckInMiddleware(BaseMiddleware):
     @logger.catch
     async def __call__(self, handler: HandlerType, event: CallbackQuery, data: dict[str, Any]) -> Any:
         logger.info("callback middleware started")
@@ -35,10 +35,10 @@ class CallbackMiddleware(BaseMiddleware):
             lesson_len = timedelta(hours=1, minutes=30)
             now = datetime.now(tz=timezone.utc)
 
-            pool = await get_postgres_pool()
-            async with pool.acquire() as con:
-                lesson_service = LessonService()
-                today_lessons = await lesson_service.filter_by_student_id(student)
+            lesson_service = LessonService(LessonRepository(data["postgres_con"]),
+                                           GroupService(GroupRepository(data["postgres_con"])),
+                                           UniversityService(UniversityRepository(data["postgres_con"])))
+            today_lessons = await lesson_service.filter_by_group_id(student.group_id)
 
             first_lesson_time = datetime.combine(datetime.today(), today_lessons[0].start_time)
 

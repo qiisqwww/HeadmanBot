@@ -4,6 +4,7 @@ from .inject_services_middleware import InjectServices, ServiceClass
 from .inject_state_middleware import InjectStateMiddleware
 from .inject_student_middleware import InjectStudentMiddleware
 from .throttling_middleware import ThrottlingMiddleware
+from .inject_check_in_middleware import CheckInMiddleware
 
 __all__ = [
     "InjectPostgresMiddleware",
@@ -13,4 +14,5 @@ __all__ = [
     "ThrottlingMiddleware",
     "InjectServices",
     "ServiceClass",
+    "CheckInMiddleware"
 ]
