@@ -4,15 +4,26 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
+from asyncpg.pool import Pool
 
 from src.config import DEBUG
-from src.resources import attendance_buttons
-from src.resources import POLL_MESSAGE
+from src.resources import attendance_buttons, POLL_MESSAGE
 from src.dto import Group
 from src.services import (
-    GroupService,
     LessonService,
     StudentService
+)
+from src.services.impls import (
+    StudentServiceImpl,
+    GroupServiceImpl,
+    LessonServiceImpl,
+    UniversityServiceImpl
+)
+from src.repositories.impls import (
+    StudentRepositoryImpl,
+    GroupRepositoryImpl,
+    LessonRepositoryImpl,
+    UniversityRepositoryImpl
 )
 
 __all__ = [
@@ -28,11 +39,8 @@ class SendingJob:
     def __init__(
             self,
             bot: Bot,
-            lesson_service: LessonService,
-            student_service: StudentService,
-            group_service: GroupService
+            pool: Pool
     ) -> None:
-
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
         if DEBUG:
@@ -40,12 +48,7 @@ class SendingJob:
                 self._send,
                 "interval",
                 seconds=20,
-                args=(
-                    bot,
-                    lesson_service,
-                    student_service,
-                    group_service
-                )
+                args=(bot, pool)
             )
         else:
 
@@ -55,12 +58,7 @@ class SendingJob:
                 day_of_week="mon-sat",
                 hour=7,
                 minute=00,
-                args=(
-                    bot,
-                    lesson_service,
-                    student_service,
-                    group_service
-                    )
+                args=(bot, pool)
             )
 
     async def start(self):
@@ -74,7 +72,6 @@ class SendingJob:
             student_service: StudentService,
             group: Group
     ) -> None:
-
         lessons = await lesson_service.filter_by_group_id(group.id)
 
         if not lessons:
@@ -97,24 +94,34 @@ class SendingJob:
     async def _send(
             self,
             bot: Bot,
-            lesson_service: LessonService,
-            student_service: StudentService,
-            group_service: GroupService
+            pool: Pool
     ) -> None:
 
-        logger.info("Sending job started.")
-
-        if DEBUG:
-            await asyncio.sleep(5)
-
-        groups = await group_service.all()
-
-        for group in groups:
-            await self._send_to_group(
-                bot,
-                lesson_service,
-                student_service,
-                group
+        async with pool.acquire() as con:
+            group_service = GroupServiceImpl(GroupRepositoryImpl(con))
+            student_service = StudentServiceImpl(
+                StudentRepositoryImpl(con),
+                group_service,
+                UniversityServiceImpl(UniversityRepositoryImpl(con))
             )
+            lesson_service = LessonServiceImpl(
+                LessonRepositoryImpl(con),
+                group_service,
+                UniversityServiceImpl(UniversityRepositoryImpl(con))
+            )
+            logger.info("Sending job started.")
+
+            if DEBUG:
+                await asyncio.sleep(5)
+
+            groups = await group_service.all()
+
+            for group in groups:
+                await self._send_to_group(
+                    bot,
+                    lesson_service,
+                    student_service,
+                    group
+                )
 
         logger.info("Sending job finished.")
