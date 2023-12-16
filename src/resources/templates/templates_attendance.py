@@ -1,5 +1,5 @@
 from src.enums import VisitStatus
-from src.dto import Student
+from src.dto import StudentReadFullname
 
 __all__ = [
     "ALL_MESSAGE",
@@ -34,18 +34,18 @@ POLL_MESSAGE = """
 Если возникли проблемы - напишите о них в @noheadproblemsbot"""
 
 
-def telegram_link_template(student_meta: Student) -> str:
+def telegram_link_template(student_meta: StudentReadFullname) -> str:
     return f'<a href="tg://user?id={student_meta.telegram_id}">{student_meta.surname} {student_meta.name}</a>\n'
 
 
-def attendance_for_headmen_message(group_attendance: dict[Student, VisitStatus]) -> str:
+def attendance_for_headmen_message(group_attendance: dict[StudentReadFullname, VisitStatus]) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
 
-    not_visit: list[Student] = []
-    visit: list[Student] = []
-    not_checked: list[Student] = []
+    not_visit: list[StudentReadFullname] = []
+    visit: list[StudentReadFullname] = []
+    not_checked: list[StudentReadFullname] = []
 
     for student, visit_status in group_attendance.items():
         match visit_status:
@@ -56,13 +56,13 @@ def attendance_for_headmen_message(group_attendance: dict[Student, VisitStatus])
             case VisitStatus.NOT_VISIT:
                 not_visit.append(student)
 
-    for student in sorted(not_checked, key=lambda student: student.fullname.lower()):
+    for student in sorted(not_checked, key=lambda student: student.surname.lower()):
         none_text += telegram_link_template(student)
 
-    for student in sorted(visit, key=lambda student: student.fullname.lower()):
+    for student in sorted(visit, key=lambda student: student.surname.lower()):
         visit_text += telegram_link_template(student)
 
-    for student in sorted(not_visit, key=lambda student: student.fullname.lower()):
+    for student in sorted(not_visit, key=lambda student: student.surname.lower()):
         no_text += telegram_link_template(student)
 
     return f"{none_text}\n{visit_text}\n{no_text}\nЧто-то еще?"

@@ -49,7 +49,7 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
     ) -> dict[StudentReadFullname, VisitStatus]:
         query = (
             "SELECT "
-            "st.student_id, st.name, st.surname, at.visit_status"
+            "st.telegram_id, st.name, st.surname, at.visit_status"
             " FROM attendances AS at "
             " JOIN students AS st "
             " ON st.telegram_id = at.student_id "

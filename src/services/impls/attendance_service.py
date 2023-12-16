@@ -65,7 +65,7 @@ class AttendanceServiceImpl(AttendanceService):
         for attendance in attendances:
             if attendance.status == VisitStatus.NOT_CHECKED:
                 await self._attendance_repository.update_status_for_lesson(
-                    student_id, attendance.lesson_id, VisitStatus.NOT_VISIT
+                    student_id, attendance.lesson.id, VisitStatus.NOT_VISIT
                 )
 
         await self._attendance_repository.update_status_for_lesson(student_id, lesson_id, new_status)

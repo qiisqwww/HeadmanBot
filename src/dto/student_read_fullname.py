@@ -7,6 +7,6 @@ from .dto import DTO
 
 @dataclass(slots=True, frozen=True, unsafe_hash=True)
 class StudentReadFullname(DTO):
-    student_id: StudentId
+    telegram_id: StudentId
     name: str
     surname: str

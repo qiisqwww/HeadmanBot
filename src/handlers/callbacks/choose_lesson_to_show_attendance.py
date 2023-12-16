@@ -3,9 +3,8 @@ from loguru import logger
 
 from src.kernel import Router
 from src.callback_data import ChooseLessonCallbackData
-from src.dto import Student
 from src.resources import attendance_for_headmen_message, choose_lesson_buttons
-from src.services import LessonService, AttendanceService
+from src.services import LessonService, AttendanceService, StudentService
 
 __all__ = [
     "choose_lesson_callback_router"
@@ -20,14 +19,16 @@ choose_lesson_callback_router = Router()
 async def attendance_send_callback(
     callback: CallbackQuery,
     callback_data: ChooseLessonCallbackData,
-    student: Student,
     lesson_service: LessonService,
     attendance_service: AttendanceService,
+    student_service: StudentService
 ):
     if callback.message is None:
         return
 
     logger.trace("attendance callback handled")
+
+    student = await student_service.find(int(callback.from_user.id))
 
     lessons = await lesson_service.filter_by_group_id(student.group_id)
     choosen_lesson = next(filter(lambda lesson: lesson.id == callback_data.lesson_id, lessons))
