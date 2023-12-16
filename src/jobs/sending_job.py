@@ -35,10 +35,17 @@ class SendingJob:
 
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
-        if not DEBUG:
+        if DEBUG:
             self._scheduler.add_job(
                 self._send,
-                args=(bot,),  # IDK what should i add in args here, cuz i dont know how do we debug
+                "interval",
+                seconds=20,
+                args=(
+                    bot,
+                    lesson_service,
+                    student_service,
+                    group_service
+                )
             )
         else:
 
@@ -56,7 +63,7 @@ class SendingJob:
                     )
             )
 
-    def start(self):
+    async def start(self):
         self._scheduler.start()
 
     @logger.catch

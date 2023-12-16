@@ -1,10 +1,21 @@
 from datetime import datetime, time, timezone
 from logging import DEBUG
 
-from src.dto import Group, GroupId, Lesson
-from src.external.apis import ScheduleApi, Weekday
+from src.dto import (
+    Group,
+    GroupId,
+    Lesson
+)
+from src.external.apis import (
+    ScheduleApi,
+    Weekday
+)
 from src.repositories import LessonRepository
-from src.services.interfaces import GroupService, LessonService, UniversityService
+from src.services.interfaces import (
+    GroupService,
+    LessonService,
+    UniversityService
+)
 
 __all__ = [
     "LessonServiceImpl",

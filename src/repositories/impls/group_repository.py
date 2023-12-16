@@ -45,9 +45,12 @@ class GroupRepositoryImpl(PostgresRepositoryImpl, GroupRepository):
 
         return Group.from_mapping(record)
 
-    async def all(self) -> list[Group]:
+    async def all(self) -> list[Group] | None:
         query = "SELECT * FROM groups"
         records = await self._con.fetch(query)
+
+        if records is None:
+            raise CorruptedDatabaseError(f"There are no groups in table")
 
         return [Group.from_mapping(record) for record in records]
 

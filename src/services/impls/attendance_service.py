@@ -8,7 +8,11 @@ from src.dto import (
 )
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
-from src.services.interfaces import AttendanceService, LessonService, StudentService
+from src.services.interfaces import (
+    AttendanceService,
+    LessonService,
+    StudentService
+)
 
 __all__ = [
     "AttendanceServiceImpl",

@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
+from asyncpg.pool import Pool
 
 from src.config import BOT_TOKEN, configurate_logger
 
@@ -26,15 +27,14 @@ from src.services.impls import (
 )
 
 
-async def init_postgres_database() -> None:
-    pool = await get_postgres_pool()
+async def init_postgres_database(pool: Pool) -> None:
     async with pool.acquire() as con:
         await UniversityServiceImpl(UniversityRepositoryImpl(con)).add_universities()
 
+    logger.info("unis initialized")
 
-async def init_jobs(bot: Bot) -> None:
-    pool = await get_postgres_pool()
 
+async def init_jobs(bot: Bot, pool: Pool) -> None:
     async with pool.acquire() as con:
         group_service = GroupServiceImpl(GroupRepositoryImpl(con))
         student_service = StudentServiceImpl(
@@ -64,8 +64,8 @@ async def init_jobs(bot: Bot) -> None:
         attendance_service
     )
 
-    database_updater.start()
-    sender.start()
+    await database_updater.start()
+    await sender.start()
 
 
 async def main():
@@ -78,8 +78,10 @@ async def main():
     dp.include_router(root_router)
 
     configurate_logger()
-    await init_postgres_database()
-    await init_jobs(bot)
+
+    pool = await get_postgres_pool()
+    await init_postgres_database(pool)
+    # await init_jobs(bot, pool)
 
     logger.info("Bot is starting.")
 

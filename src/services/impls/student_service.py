@@ -1,6 +1,13 @@
-from src.dto import Student, StudentRaw
+from src.dto import (
+    Student,
+    StudentRaw
+)
 from src.repositories import StudentRepository
-from src.services import StudentService, GroupService, UniversityService
+from src.services import (
+    StudentService,
+    GroupService,
+    UniversityService
+)
 from src.repositories.exceptions import CorruptedDatabaseError
 from src.dto import GroupId, University
 from src.enums import Role

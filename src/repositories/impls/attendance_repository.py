@@ -13,7 +13,7 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
     async def get_visit_status_by_student_id_and_lesson(
         self, student_id: StudentId, lesson_id: LessonId
     ) -> VisitStatus:
-        query = "SELECT visit_status FROM attendances.attendances WHERE student_id = $1 AND lesson_id = $2"
+        query = "SELECT visit_status FROM attendances WHERE student_id = $1 AND lesson_id = $2"
         status = await self._con.fetchval(query, student_id, lesson_id)
         return VisitStatus(status)
 
@@ -24,11 +24,11 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
     async def update_status_for_lesson(
         self, student_id: StudentId, lesson_id: LessonId, new_status: VisitStatus
     ) -> None:
-        query = "UPDATE attendances.attendances SET visit_status = $1 WHERE student_id = $2 AND lesson_id = $3"
+        query = "UPDATE attendances SET visit_status = $1 WHERE student_id = $2 AND lesson_id = $3"
         await self._con.execute(query, new_status, student_id, lesson_id)
 
     async def delete_all_attendances(self) -> None:
-        query = "TRUNCATE TABLE attendances.attendances"
+        query = "TRUNCATE TABLE attendances"
         await self._con.execute(query)
 
     async def create(self, student_id: StudentId, lesson_ids: list[LessonId]) -> None:

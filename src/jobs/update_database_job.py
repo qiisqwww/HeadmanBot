@@ -21,8 +21,16 @@ class UpdateDatabaseJob:
     ):
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
-        if not DEBUG:
-            self._scheduler.add_job(self._update)
+        if DEBUG:
+            self._scheduler.add_job(
+                self._update,
+                trigger="interval",
+                seconds=20,
+                args=(
+                    lesson_service,
+                    attendance_service
+                )
+            )
         else:
             self._scheduler.add_job(
                 self._update,
@@ -36,7 +44,7 @@ class UpdateDatabaseJob:
                 )
             )
 
-    def start(self) -> None:
+    async def start(self) -> None:
         self._scheduler.start()
 
     @staticmethod
