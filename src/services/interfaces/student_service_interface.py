@@ -3,6 +3,7 @@ from abc import abstractmethod
 from src.dto import Student, StudentRaw
 from src.dto.group import GroupId
 from src.repositories import StudentRepository
+from .group_service_interface import GroupService
 
 from .service import Service
 
@@ -16,6 +17,7 @@ class StudentService(Service):
     def __init__(
         self,
         student_repository: StudentRepository,
+        group_service: GroupService
     ) -> None:
         ...
 

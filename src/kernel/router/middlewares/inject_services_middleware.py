@@ -56,7 +56,7 @@ class InjectServices(BaseMiddleware):
             group_service,
             university_service
             )
-        student_service = StudentServiceImpl(student_repository)
+        student_service = StudentServiceImpl(student_repository, group_service, university_service)
         attendance_service = AttendanceServiceImpl(
             attendance_repository,
             lesson_service,

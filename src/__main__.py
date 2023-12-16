@@ -36,8 +36,12 @@ async def init_jobs(bot: Bot) -> None:
     pool = await get_postgres_pool()
 
     async with pool.acquire() as con:
-        student_service = StudentServiceImpl(StudentRepositoryImpl(con))
         group_service = GroupServiceImpl(GroupRepositoryImpl(con))
+        student_service = StudentServiceImpl(
+            StudentRepositoryImpl(con),
+            group_service,
+            UniversityServiceImpl(UniversityRepositoryImpl(con))
+        )
         lesson_service = LessonServiceImpl(
             LessonRepositoryImpl(con),
             group_service,

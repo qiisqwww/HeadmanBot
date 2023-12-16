@@ -1,8 +1,8 @@
 from src.dto import Student, StudentRaw
 from src.repositories import StudentRepository
-from src.services import StudentService, GroupService
+from src.services import StudentService, GroupService, UniversityService
 from src.repositories.exceptions import CorruptedDatabaseError
-from src.dto import GroupId
+from src.dto import GroupId, University
 from src.enums import Role
 
 __all__ = [
@@ -13,12 +13,17 @@ __all__ = [
 class StudentServiceImpl(StudentService):
     _student_repository: StudentRepository
     _group_service: GroupService
+    _university_service: UniversityService
 
     def __init__(
         self,
         student_repository: StudentRepository,
+        group_service: GroupService,
+        university_service: UniversityService
     ) -> None:
         self._student_repository = student_repository
+        self._group_service = group_service
+        self._university_service = university_service
 
     async def find(self, telegram_id: int) -> Student | None:
         return await self._student_repository.find_by_id(telegram_id)
@@ -46,7 +51,13 @@ class StudentServiceImpl(StudentService):
         return await self._student_repository.filter_group_by_id(group_id)
 
     async def register_student(self, student: StudentRaw) -> None:
-        group = await self._group_service.find_by_name(student.group_name)
+        university: University = await self._university_service.get_by_alias(student.university_alias)
+
+        group = await self._group_service.create_or_return(student.group_name, university.id)
+
+        if group is None:
+            raise CorruptedDatabaseError(f"Group {student.group_name} does not exists and was not created")
+
         new_student = await self._student_repository.create_and_return(student, group.id)
 
         if new_student is None:

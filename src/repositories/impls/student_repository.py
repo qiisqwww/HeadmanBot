@@ -53,7 +53,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         return Student.from_mapping(record)
 
     async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
-        query = "SELECT * FROM students.students WHERE group_id = $1 AND role LIKE $2"
+        query = "SELECT * FROM students WHERE group_id = $1 AND role LIKE $2"
         record = await self._con.fetchrow(query, group_id, role)
 
         return Student.from_mapping(record)
@@ -65,7 +65,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         return [Student.from_mapping(record) for record in records]
 
     async def filter_group_by_id(self, group_id: GroupId) -> list[Student] | None:
-        query = "SELECT * FROM students.students WHERE group_id = $1"
+        query = "SELECT * FROM students WHERE group_id = $1"
 
         records = await self._con.fetch(query, group_id)
         return [Student.from_mapping(record) for record in records]

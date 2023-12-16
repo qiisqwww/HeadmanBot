@@ -4,8 +4,8 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
-from src.repositories.impls.student_repository import StudentRepositoryImpl
-from src.services.impls import StudentServiceImpl
+from src.repositories.impls import StudentRepositoryImpl, GroupRepositoryImpl, UniversityRepositoryImpl
+from src.services.impls import StudentServiceImpl, GroupServiceImpl, UniversityServiceImpl
 
 from .templates import ALREADY_REGISTERED_TEMPLATE, MUST_BE_REG_TEMPLATE
 
@@ -31,7 +31,11 @@ class InjectStudentMiddleware(BaseMiddleware):
             return
 
         if data.get("student", None) is None:
-            student_service = StudentServiceImpl(StudentRepositoryImpl(data["postgres_con"]))
+            student_service = StudentServiceImpl(
+                StudentRepositoryImpl(data["postgres_con"]),
+                GroupServiceImpl(GroupRepositoryImpl(data["postgres_con"])),
+                UniversityServiceImpl(UniversityRepositoryImpl(data["postgres_con"]))
+            )
             student = await student_service.find(event.from_user.id)
         else:
             student = data["student"]
