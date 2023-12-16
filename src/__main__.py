@@ -19,8 +19,6 @@ async def init_postgres_database(pool: Pool) -> None:
     async with pool.acquire() as con:
         await UniversityServiceImpl(UniversityRepositoryImpl(con)).add_universities()
 
-    logger.info("unis initialized")
-
 
 async def init_jobs(bot: Bot, pool: Pool) -> None:
     sender = SendingJob(bot, pool)
