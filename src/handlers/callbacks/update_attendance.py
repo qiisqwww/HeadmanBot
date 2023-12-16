@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from src.kernel import Router
-from src.handlers.callback_data import UpdateAttendanceCallbackData
+from src.callback_data import UpdateAttendanceCallbackData
 from src.resources import (
     inline_void_button,
     ALL_MESSAGE,
@@ -19,7 +19,9 @@ __all__ = [
 ]
 
 
-update_attendance_router = Router()
+update_attendance_router = Router(
+    attendance_updater=True
+)
 
 
 @update_attendance_router.callback_query(UpdateAttendanceCallbackData.filter())

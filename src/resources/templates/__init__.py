@@ -1,5 +1,5 @@
-from templates import *
-from templates_attendance import *
+from .templates import *
+from .templates_attendance import *
 
 __all__ = [
     "ALL_MESSAGE",

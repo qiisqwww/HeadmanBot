@@ -5,7 +5,7 @@ from loguru import logger
 from src.kernel import Router
 from src.resources.buttons import inline_void_button
 from src.resources.buttons.main_menu import main_menu
-from src.handlers.callback_data import AccessCallbackData
+from src.callback_data import AccessCallbackData
 from src.resources import (
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,

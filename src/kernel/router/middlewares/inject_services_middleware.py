@@ -27,7 +27,7 @@ from src.services.impls import (
     StudentServiceImpl,
     UniversityServiceImpl,
 )
-from src.services.impls.redis_service import RedisService
+from src.services.interfaces.redis_service import RedisService
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 

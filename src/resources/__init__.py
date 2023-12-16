@@ -1,5 +1,5 @@
-from buttons import *
-from templates import *
+from .buttons import *
+from .templates import *
 
 __all__ = [
     "inline_void_button",

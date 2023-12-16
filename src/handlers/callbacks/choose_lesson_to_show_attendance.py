@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from src.kernel import Router
-from src.handlers.callback_data import ChooseLessonCallbackData
+from src.callback_data import ChooseLessonCallbackData
 from src.dto import Student
 from src.resources import attendance_for_headmen_message, choose_lesson_buttons
 from src.services import LessonService, AttendanceService

@@ -35,7 +35,7 @@ class SendingJob:
 
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
-        if DEBUG:
+        if not DEBUG:
             self._scheduler.add_job(
                 self._send,
                 args=(bot,),  # IDK what should i add in args here, cuz i dont know how do we debug

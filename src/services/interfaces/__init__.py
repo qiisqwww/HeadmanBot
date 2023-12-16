@@ -5,6 +5,7 @@ from .registration_service_interface import RegistrationService
 from .service import Service
 from .student_service_interface import StudentService
 from .university_service_interface import UniversityService
+from .redis_service import RedisService
 
 __all__ = [
     "Service",
@@ -14,4 +15,5 @@ __all__ = [
     "GroupService",
     "StudentService",
     "RegistrationService",
+    "RedisService"
 ]

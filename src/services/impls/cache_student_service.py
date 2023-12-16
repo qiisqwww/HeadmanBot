@@ -1,6 +1,6 @@
 from datetime import date
 
-from src.services import RedisService
+from src.services.interfaces import RedisService
 from src.dto import StudentId
 from src.dto import StudentRaw
 

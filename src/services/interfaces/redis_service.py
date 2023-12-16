@@ -7,7 +7,7 @@ __all__ = [
 ]
 
 
-class   RedisService(Service):
+class RedisService(Service):
     _con: Redis
 
     def __init__(self, con: Redis) -> None:

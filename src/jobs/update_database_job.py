@@ -21,7 +21,7 @@ class UpdateDatabaseJob:
     ):
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
-        if DEBUG:
+        if not DEBUG:
             self._scheduler.add_job(self._update)
         else:
             self._scheduler.add_job(

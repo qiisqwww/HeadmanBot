@@ -1,17 +1,13 @@
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from src.handlers.callback_data import ChooseRoleCallbackData
-from src.handlers.finite_state.registration.registration_context import (
-    RegistrationContext,
-)
-from src.handlers.finite_state.registration.registration_states import (
-    RegistrationStates,
-)
+from src.callback_data import ChooseRoleCallbackData
+from src.handlers.finite_state.registration.registration_context import RegistrationContext
+from src.handlers.finite_state.registration import RegistrationStates
 from src.kernel import Router
-from src.resources.buttons.inline_buttons import university_list_buttons
-from src.resources.buttons.void_inline_buttons import inline_void_button
-from src.resources.templates.templates import (
+from src.resources import university_list_buttons
+from src.resources import inline_void_button
+from src.resources import (
     ASK_UNIVERSITY_TEMPLATE,
     CHOOSE_STUDENT_ROLE_TEMPLATE,
     successful_role_choose_template,

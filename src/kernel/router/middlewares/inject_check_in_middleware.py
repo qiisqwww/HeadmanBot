@@ -6,8 +6,16 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import CallbackQuery, TelegramObject
 from loguru import logger
 
-from src.services import LessonService, GroupService, UniversityService
-from src.repositories import LessonRepository, GroupRepository, UniversityRepository
+from src.services import (
+    LessonService,
+    GroupService,
+    UniversityService
+)
+from src.repositories import (
+    LessonRepository,
+    GroupRepository,
+    UniversityRepository
+)
 from src.dto import Student
 
 __all__ = [

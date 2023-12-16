@@ -26,6 +26,7 @@ class Router(AiogramRouter):
         throttling: bool = False,
         must_be_registered: bool | None = None,
         minimum_role: Role | None = None,
+        attendance_updater: bool | None = None
     ) -> None:
         super().__init__(name=name)
 
@@ -51,7 +52,9 @@ class Router(AiogramRouter):
             self._inject_user(must_be_registered)
 
         self._inject_state()
-        self._inject_check_in_middleware()
+
+        if attendance_updater:
+            self._inject_check_in_middleware()
 
     def _inject_user(self, must_be_registered: bool) -> None:
         self.message.middleware(InjectStudentMiddleware(must_be_registered))
@@ -78,4 +81,4 @@ class Router(AiogramRouter):
         self.callback_query.middleware(InjectServices())
 
     def _inject_check_in_middleware(self) -> None:
-        self.callback_query.middleware(CheckInMiddleware)
+        self.callback_query.middleware(CheckInMiddleware())

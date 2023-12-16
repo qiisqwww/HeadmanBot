@@ -1,2 +1,2 @@
-from registration_context import RegistrationContext
-from registration_states import RegistrationStates
+from .registration_context import RegistrationContext
+from .registration_states import RegistrationStates

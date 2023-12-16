@@ -5,17 +5,17 @@ from loguru import logger
 from src.kernel import Router
 from src.resources import FAQ_TEMPLATE
 
-registered_commands_router = Router(
+help_router = Router(
     must_be_registered=True
 )
 
 
 __all__ = [
-    "registered_commands_router",
+    "help_router",
 ]
 
 
-@registered_commands_router.message(F.text == "Помощь")
+@help_router.message(F.text == "Помощь")
 async def faq_command(message: Message) -> None:
     logger.trace("faq command")
 

@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from loguru import logger
 
 from src.kernel import Router
-from src.handlers.callback_data import UniversityCallbackData
+from src.callback_data import UniversityCallbackData
 from src.resources import (
     ASK_UNIVERSITY_TEMPLATE,
     ASK_GROUP_TEMPLATE,

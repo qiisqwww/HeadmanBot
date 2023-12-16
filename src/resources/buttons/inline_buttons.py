@@ -5,7 +5,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.dto import Lesson, StudentId, University
 from src.enums import Role
-from src.handlers.callback_data import (
+from src.callback_data import (
     AccessCallbackData,
     ChooseLessonCallbackData,
     ChooseRoleCallbackData,
