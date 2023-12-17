@@ -37,7 +37,12 @@ class SendingJob:
         self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
 
         if DEBUG:
-            self._scheduler.add_job(self._send, args=(bot, pool))
+            self._scheduler.add_job(
+                self._send,
+                trigger="interval",
+                seconds=20,
+                args=(bot, pool)
+            )
         else:
             self._scheduler.add_job(self._send, "cron", day_of_week="mon-sat", hour=7, minute=00, args=(bot, pool))
 
