@@ -6,9 +6,9 @@ from src.dto.models import Student
 from src.enums import Role
 from src.kernel import Router
 from src.resources import (
-    CHOOSE_PAIR_MESSAGE,
-    NO_LESSONS_TODAY,
-    WHICH_PAIR_MESSAGE,
+    CHOOSE_PAIR_TEMPLATE,
+    NO_LESSONS_TODAY_TEMPLATE,
+    WHICH_PAIR_TEMPLATE,
     choose_lesson_buttons,
     main_menu,
 )
@@ -30,8 +30,8 @@ async def getstat_command(message: Message, student: Student, lesson_service: Le
     lessons = await lesson_service.filter_by_group_id(student.group_id)
 
     if not lessons:
-        await message.answer(NO_LESSONS_TODAY)
+        await message.answer(NO_LESSONS_TODAY_TEMPLATE)
         return
 
-    await message.answer(CHOOSE_PAIR_MESSAGE, reply_markup=main_menu(student.role))
-    await message.answer(WHICH_PAIR_MESSAGE, reply_markup=choose_lesson_buttons(lessons))
+    await message.answer(CHOOSE_PAIR_TEMPLATE, reply_markup=main_menu(student.role))
+    await message.answer(WHICH_PAIR_TEMPLATE, reply_markup=choose_lesson_buttons(lessons))

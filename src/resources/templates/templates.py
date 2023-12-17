@@ -18,7 +18,7 @@ __all__ = [
     "ASK_SURNAME_TEMPLATE",
     "YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE",
     "YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE",
-    "GROUP_ALREADY_HAS_A_HEADMAN",
+    "HEADMAN_ALREADY_EXISTS_TEMPLATE",
     "FAQ_TEMPLATE",
     "GROUP_DOESNT_REGISTERED_TEMPLATE",
     "BIRTHDATE_INCORRECT_TEMPLATE",
@@ -76,7 +76,7 @@ ASK_BIRTHDATE_TEMPLATE = """Введите дату рождения в форм
 BIRTHDATE_INCORRECT_TEMPLATE = "Такой даты нет, введите дату рождения в формате дд.мм.гггг"
 
 
-GROUP_ALREADY_HAS_A_HEADMAN = "У этой группы уже есть староста."
+HEADMAN_ALREADY_EXISTS_TEMPLATE = "У этой группы уже есть староста."
 
 FAQ_TEMPLATE = """
 <b>Grand Headman MIREA был разработан как инструмент-помощник для старост.</b>

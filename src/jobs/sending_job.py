@@ -14,7 +14,7 @@ from src.repositories.impls import (
     StudentRepositoryImpl,
     UniversityRepositoryImpl,
 )
-from src.resources import POLL_MESSAGE, attendance_buttons
+from src.resources import POLL_TEMPLATE, attendance_buttons
 from src.services import LessonService, StudentService
 from src.services.impls import (
     GroupServiceImpl,
@@ -62,7 +62,7 @@ class SendingJob:
 
         for user in users:
             try:
-                await bot.send_message(user.telegram_id, POLL_MESSAGE, reply_markup=attendance_buttons(lessons))
+                await bot.send_message(user.telegram_id, POLL_TEMPLATE, reply_markup=attendance_buttons(lessons))
             except TelegramForbiddenError as e:
                 logger.error(f"Failed to send message to user {user.surname} {user.surname} id={user.telegram_id}")
                 logger.error(e)

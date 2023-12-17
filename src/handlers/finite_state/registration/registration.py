@@ -15,7 +15,7 @@ from src.resources import (
     ASK_NAME_TEMPLATE,
     ASK_SURNAME_TEMPLATE,
     BIRTHDATE_INCORRECT_TEMPLATE,
-    GROUP_ALREADY_HAS_A_HEADMAN,
+    HEADMAN_ALREADY_EXISTS_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
@@ -78,7 +78,7 @@ async def handling_group(
         and await state.role == Role.HEADMAN
         and await student_service.get_headman_by_group_name(group.name) is not None
     ):
-        await message.answer(GROUP_ALREADY_HAS_A_HEADMAN)
+        await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
         return
 

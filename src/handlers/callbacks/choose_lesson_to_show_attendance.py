@@ -4,7 +4,7 @@ from loguru import logger
 from src.dto.callback_data import ChooseLessonCallbackData
 from src.dto.models import Student
 from src.kernel import Router
-from src.resources import attendance_for_headmen_message, choose_lesson_buttons
+from src.resources import attendance_for_headmen_template, choose_lesson_buttons
 from src.services import AttendanceService, LessonService
 
 __all__ = [
@@ -33,7 +33,7 @@ async def attendance_send_callback(
     choosen_lesson = next(filter(lambda lesson: lesson.id == callback_data.lesson_id, lessons))
 
     group_attendance = await attendance_service.get_visit_status_for_group_students(student.group_id, choosen_lesson.id)
-    attendance_list_msg = attendance_for_headmen_message(group_attendance)
+    attendance_list_msg = attendance_for_headmen_template(group_attendance)
 
     await callback.message.edit_text(
         text=f"{choosen_lesson}\n\n{attendance_list_msg}",

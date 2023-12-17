@@ -7,8 +7,8 @@ from src.enums import VisitStatus
 from src.kernel import Router
 from src.middlewares.check_in_middleware import CheckInMiddleware
 from src.resources import (
-    ALL_MESSAGE,
-    NONE_MESSAGE,
+    ALL_PAIRS_TEMPLATE,
+    NO_PAIRS_TEMPLATE,
     attendance_buttons,
     inline_void_button,
 )
@@ -37,12 +37,12 @@ async def update_attendance(
 
     if callback_data.all is not None and callback_data.all:
         await attendance_service.update_visit_status_all(student.telegram_id, VisitStatus.VISIT)
-        await callback.message.edit_text(ALL_MESSAGE, reply_markup=inline_void_button())
+        await callback.message.edit_text(ALL_PAIRS_TEMPLATE, reply_markup=inline_void_button())
         return
 
     if callback_data.all is not None and not callback_data.all:
         await attendance_service.update_visit_status_all(student.telegram_id, VisitStatus.NOT_VISIT)
-        await callback.message.edit_text(NONE_MESSAGE, reply_markup=inline_void_button())
+        await callback.message.edit_text(NO_PAIRS_TEMPLATE, reply_markup=inline_void_button())
         return
 
     if callback_data.all is None and callback_data.lesson_id is None:
@@ -63,7 +63,7 @@ async def update_attendance(
         text = f"Вы посетите пару {choosen_lesson.name}, которая начнётся в {choosen_lesson.str_start_time}"
     else:
         keyboard = inline_void_button()
-        text = ALL_MESSAGE
+        text = ALL_PAIRS_TEMPLATE
 
     await callback.message.edit_text(
         text,

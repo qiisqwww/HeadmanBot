@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
@@ -15,6 +15,10 @@ from src.services.impls import (
     GroupServiceImpl,
     LessonServiceImpl,
     UniversityServiceImpl,
+)
+from src.resources import (
+    YOU_CAN_NOT_ANSWER_DAY_TEMPLATE,
+    YOU_CAN_NOT_ANSWER_TIME_TEMPLATE
 )
 
 __all__ = [
@@ -38,6 +42,9 @@ class CheckInMiddleware(BaseMiddleware):
         lesson_len = timedelta(hours=1, minutes=30)
         now = datetime.now(tz=timezone.utc)
 
+        if data["callback_data"].day_of_poll != date.today():
+            await event.message.edit_text(YOU_CAN_NOT_ANSWER_DAY_TEMPLATE)
+
         lesson_service = LessonServiceImpl(
             LessonRepositoryImpl(data["postgres_con"]),
             GroupServiceImpl(GroupRepositoryImpl(data["postgres_con"])),
@@ -49,7 +56,7 @@ class CheckInMiddleware(BaseMiddleware):
 
         if now > first_lesson_time + lesson_len:
             logger.info("(poll) callback middleware finished, lesson was already started")
-            await event.message.edit_text("Вы не можете отметиться! Занятия уже начались!")
+            await event.message.edit_text(YOU_CAN_NOT_ANSWER_TIME_TEMPLATE)
             return
 
         return await handler(event, data)

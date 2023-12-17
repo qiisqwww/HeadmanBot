@@ -2,33 +2,40 @@ from src.dto.models import StudentReadFullname
 from src.enums import VisitStatus
 
 __all__ = [
-    "ALL_MESSAGE",
-    "NONE_MESSAGE",
-    "NO_LESSONS_TODAY",
-    "CHOOSE_PAIR_MESSAGE",
-    "POLL_MESSAGE",
-    "WHICH_PAIR_MESSAGE",
-    "attendance_for_headmen_message",
+    "ALL_PAIRS_TEMPLATE",
+    "NO_PAIRS_TEMPLATE",
+    "NO_LESSONS_TODAY_TEMPLATE",
+    "CHOOSE_PAIR_TEMPLATE",
+    "POLL_TEMPLATE",
+    "WHICH_PAIR_TEMPLATE",
+    "YOU_CAN_NOT_ANSWER_TIME_TEMPLATE",
+    "YOU_CAN_NOT_ANSWER_DAY_TEMPLATE",
+    "attendance_for_headmen_template",
 ]
 
 
-WHICH_PAIR_MESSAGE = """
+WHICH_PAIR_TEMPLATE = """
 Какая пара вас интересует?"""
 
+YOU_CAN_NOT_ANSWER_TIME_TEMPLATE = """
+Вы не можете отметиться! Занятия уже начались!"""
 
-ALL_MESSAGE = """
+YOU_CAN_NOT_ANSWER_DAY_TEMPLATE = """
+Вы не можете отметиться за другой день!"""
+
+ALL_PAIRS_TEMPLATE = """
 Вы посетите все пары"""
 
-NONE_MESSAGE = """
+NO_PAIRS_TEMPLATE = """
 Вы не посетите пары """
 
-NO_LESSONS_TODAY = """
+NO_LESSONS_TODAY_TEMPLATE = """
 Сегодня нет пар!"""
 
-CHOOSE_PAIR_MESSAGE = """
+CHOOSE_PAIR_TEMPLATE = """
 Выберите пару из списка:"""
 
-POLL_MESSAGE = """
+POLL_TEMPLATE = """
 На какие сегодняшие пары ты придешь?
 
 Если возникли проблемы - напишите о них в @noheadproblemsbot"""
@@ -38,7 +45,7 @@ def telegram_link_template(student_meta: StudentReadFullname) -> str:
     return f'<a href="tg://user?id={student_meta.telegram_id}">{student_meta.surname} {student_meta.name}</a>\n'
 
 
-def attendance_for_headmen_message(group_attendance: dict[StudentReadFullname, VisitStatus]) -> str:
+def attendance_for_headmen_template(group_attendance: dict[StudentReadFullname, VisitStatus]) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
