@@ -7,6 +7,6 @@ __all__ = [
 ]
 
 
-class UpdateAttendanceCallbackData(CallbackData, prefix="update_attendace"):  # type: ignore
-    all: bool | None
-    lesson_id: LessonId | None
+class UpdateAttendanceCallbackData(CallbackData, prefix="update_attendace_prefix"):  # type: ignore
+    all: bool | None = None
+    lesson_id: LessonId | None = None

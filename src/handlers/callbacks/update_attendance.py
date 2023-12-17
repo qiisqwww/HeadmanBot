@@ -14,7 +14,9 @@ from src.resources import (
 )
 from src.services import AttendanceService
 
-__all__ = ["update_attendance_router"]
+__all__ = [
+    "update_attendance_router",
+]
 
 
 update_attendance_router = Router(must_be_registered=True)
@@ -29,6 +31,7 @@ async def update_attendance(
     student: Student,
     attendance_service: AttendanceService,
 ):
+    logger.error("Inside middleware.")
     if callback.message is None:
         return
 
@@ -42,7 +45,7 @@ async def update_attendance(
         await callback.message.edit_text(NONE_MESSAGE, reply_markup=inline_void_button())
         return
 
-    if callback_data.all is None or callback_data.lesson_id is None:
+    if callback_data.all is None and callback_data.lesson_id is None:
         raise TypeError("Incorrect buttons usage")
 
     await attendance_service.update_visit_status_for_lesson(

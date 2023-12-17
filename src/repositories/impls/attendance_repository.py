@@ -1,4 +1,11 @@
-from src.dto.models import Attendance, GroupId, LessonId, StudentId, StudentReadFullname
+from src.dto.models import (
+    AttendanceWithLesson,
+    GroupId,
+    Lesson,
+    LessonId,
+    StudentId,
+    StudentReadFullname,
+)
 from src.enums import VisitStatus
 
 from ..interfaces import AttendanceRepository
@@ -37,12 +44,19 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
             query, ((student_id, lesson_id, VisitStatus.NOT_CHECKED) for lesson_id in lesson_ids)
         )
 
-    async def filter_by_student_id(self, student_id: StudentId) -> list[Attendance]:
-        query = "SELECT * FROM attendances WHERE student_id = $1"
+    async def filter_by_student_id(self, student_id: StudentId) -> list[AttendanceWithLesson]:
+        query = "SELECT * FROM attendances AS at JOIN lessons AS le ON at.lesson_id = le.id  WHERE student_id = $1"
 
         records = await self._con.fetch(query, student_id)
 
-        return [Attendance.from_mapping(record) for record in records]
+        return [
+            AttendanceWithLesson(
+                student_id=student_id,
+                status=VisitStatus(record["visit_status"]),
+                lesson=Lesson.from_mapping(record),
+            )
+            for record in records
+        ]
 
     async def get_visit_status_for_group_students(
         self, group_id: GroupId, lesson_id: LessonId

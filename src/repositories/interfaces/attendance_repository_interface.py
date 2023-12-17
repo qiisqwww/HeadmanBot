@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
-from src.dto.models import Attendance, GroupId, LessonId, StudentId, StudentReadFullname
+from src.dto.models import GroupId, LessonId, StudentId, StudentReadFullname
+from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 
 from .postgres_repository_interface import PostgresRepository
@@ -36,7 +37,7 @@ class AttendanceRepository(PostgresRepository):
         ...
 
     @abstractmethod
-    async def filter_by_student_id(self, student_id: StudentId) -> list[Attendance]:
+    async def filter_by_student_id(self, student_id: StudentId) -> list[AttendanceWithLesson]:
         ...
 
     @abstractmethod

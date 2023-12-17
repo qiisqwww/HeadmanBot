@@ -1,13 +1,7 @@
 from abc import abstractmethod
 
-from src.dto.models import (
-    Attendance,
-    GroupId,
-    LessonId,
-    Student,
-    StudentId,
-    StudentReadFullname,
-)
+from src.dto.models import GroupId, LessonId, Student, StudentId, StudentReadFullname
+from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
 
@@ -45,7 +39,7 @@ class AttendanceService(Service):
         ...
 
     @abstractmethod
-    async def filter_by_student_id(self, student_id: StudentId) -> list[Attendance]:
+    async def filter_by_student_id(self, student_id: StudentId) -> list[AttendanceWithLesson]:
         ...
 
     @abstractmethod

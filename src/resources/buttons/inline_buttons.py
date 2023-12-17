@@ -2,6 +2,7 @@ from typing import Iterable
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from loguru import logger
 
 from src.dto.callback_data import (
     AccessCallbackData,
@@ -50,21 +51,22 @@ def accept_or_deny_buttons(student_id: StudentId) -> InlineKeyboardMarkup:
 
 
 def attendance_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
+    logger.error("Generate buttons")
     builder = InlineKeyboardBuilder()
 
     builder.button(
         text="Буду на всех",
-        callback_data=UpdateAttendanceCallbackData(all=True, lesson_id=None),
+        callback_data=UpdateAttendanceCallbackData(all=True),
     )
     builder.button(
         text="Меня сегодня не будет",
-        callback_data=UpdateAttendanceCallbackData(all=False, lesson_id=None),
+        callback_data=UpdateAttendanceCallbackData(all=False),
     )
 
     for lesson in lessons:
         builder.button(
             text=f"Буду на {lesson.start_time.strftime('%H:%M')} {lesson.name}",
-            callback_data=UpdateAttendanceCallbackData(all=None, lesson_id=lesson.id),
+            callback_data=UpdateAttendanceCallbackData(lesson_id=lesson.id),
         )
 
     builder.adjust(2)

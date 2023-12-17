@@ -1,11 +1,5 @@
-from src.dto.models import (
-    Attendance,
-    GroupId,
-    LessonId,
-    Student,
-    StudentId,
-    StudentReadFullname,
-)
+from src.dto.models import GroupId, LessonId, Student, StudentId, StudentReadFullname
+from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
 from src.services.interfaces import AttendanceService, LessonService, StudentService
@@ -50,7 +44,7 @@ class AttendanceServiceImpl(AttendanceService):
     async def update_visit_status_all(self, student_id: StudentId, new_status: VisitStatus) -> None:
         await self._attendance_repository.update_visit_status_all(student_id, new_status)
 
-    async def filter_by_student_id(self, student_id: StudentId) -> list[Attendance]:
+    async def filter_by_student_id(self, student_id: StudentId) -> list[AttendanceWithLesson]:
         return await self._attendance_repository.filter_by_student_id(student_id)
 
     async def update_visit_status_for_lesson(

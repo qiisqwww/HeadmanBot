@@ -15,14 +15,14 @@ from src.resources import (
 from src.services import LessonService
 
 __all__ = [
-    "commands_router",
+    "get_stat_command_router",
 ]
 
 
-commands_router = Router(must_be_registered=True, minimum_role=Role.VICE_HEADMAN)
+get_stat_command_router = Router(must_be_registered=True, minimum_role=Role.VICE_HEADMAN)
 
 
-@commands_router.message(F.text == "Узнать посещаемость")
+@get_stat_command_router.message(F.text == "Узнать посещаемость")
 @logger.catch
 async def getstat_command(message: Message, student: Student, lesson_service: LessonService) -> None:
     logger.trace("'/getstat' command started.")

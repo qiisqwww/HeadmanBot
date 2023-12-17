@@ -7,7 +7,9 @@ from src.kernel import Router
 from src.resources import attendance_for_headmen_message, choose_lesson_buttons
 from src.services import AttendanceService, LessonService
 
-__all__ = ["choose_lesson_callback_router"]
+__all__ = [
+    "choose_lesson_callback_router",
+]
 
 
 choose_lesson_callback_router = Router(must_be_registered=True)
