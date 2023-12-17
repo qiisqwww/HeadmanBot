@@ -2,23 +2,21 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 from loguru import logger
 
+from src.dto.contexts import RegistrationContext
 from src.kernel import Router
-from src.resources import role_buttons
 from src.resources import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
-    start_message_template
+    role_buttons,
+    start_message_template,
 )
 
-from src.registration_context import RegistrationContext
 from ..finite_state.registration.registration_states import RegistrationStates
 
 __all__ = [
     "start_command_router",
 ]
 
-start_command_router = Router(
-    must_be_registered=False
-)
+start_command_router = Router(must_be_registered=False)
 
 
 @start_command_router.message(CommandStart())

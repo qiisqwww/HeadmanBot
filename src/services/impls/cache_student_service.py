@@ -1,7 +1,7 @@
 from datetime import date
 
+from src.dto.models import StudentId, StudentRaw
 from src.services.interfaces import RedisService
-from src.dto import StudentId, StudentRaw
 
 __all__ = [
     "CacheStudentService",

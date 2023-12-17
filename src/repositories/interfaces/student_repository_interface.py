@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto import GroupId, Student, StudentRaw
+from src.dto.models import GroupId, Student, StudentRaw
 from src.enums import Role
 
 from .postgres_repository_interface import PostgresRepository

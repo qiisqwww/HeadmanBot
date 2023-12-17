@@ -1,15 +1,14 @@
 from aiogram import Router as AiogramRouter
 
 from src.enums import Role
-from src.kernel.router.middlewares.inject_state_middleware import InjectStateMiddleware
 
 from .middlewares import (
+    InjectContextMiddleware,
     InjectPostgresMiddleware,
     InjectRedisConnectionMiddleware,
-    InjectServices,
+    InjectServicesMiddleware,
     InjectStudentMiddleware,
     ThrottlingMiddleware,
-    InjectCheckInMiddleware
 )
 
 __all__ = [
@@ -26,7 +25,6 @@ class Router(AiogramRouter):
         throttling: bool = False,
         must_be_registered: bool | None = None,
         minimum_role: Role | None = None,
-        attendance_updater: bool | None = None
     ) -> None:
         super().__init__(name=name)
 
@@ -46,23 +44,16 @@ class Router(AiogramRouter):
             self._inject_throttling_middleware()
 
         self._inject_postgres_middleware()
-        self._inject_services()
+        self._inject_services_middleware()
 
         if must_be_registered is not None:
-            self._inject_user(must_be_registered)
+            self._inject_user_middleware(must_be_registered)
 
-        self._inject_state()
+        self._inject_context_middleware()
 
-        if attendance_updater:
-            self._inject_check_in_middleware()
-
-    def _inject_user(self, must_be_registered: bool) -> None:
+    def _inject_user_middleware(self, must_be_registered: bool) -> None:
         self.message.middleware(InjectStudentMiddleware(must_be_registered))
         self.callback_query.middleware(InjectStudentMiddleware(must_be_registered))
-
-    def _inject_state(self) -> None:
-        self.message.middleware(InjectStateMiddleware())
-        self.callback_query.middleware(InjectStateMiddleware())
 
     def _inject_redis_middleware(self) -> None:
         self.message.middleware(InjectRedisConnectionMiddleware())
@@ -76,9 +67,10 @@ class Router(AiogramRouter):
         self.message.middleware(ThrottlingMiddleware())
         self.callback_query.middleware(ThrottlingMiddleware())
 
-    def _inject_services(self) -> None:
-        self.message.middleware(InjectServices())
-        self.callback_query.middleware(InjectServices())
+    def _inject_services_middleware(self) -> None:
+        self.message.middleware(InjectServicesMiddleware())
+        self.callback_query.middleware(InjectServicesMiddleware())
 
-    def _inject_check_in_middleware(self) -> None:
-        self.callback_query.middleware(InjectCheckInMiddleware())
+    def _inject_context_middleware(self) -> None:
+        self.message.middleware(InjectContextMiddleware())
+        self.callback_query.middleware(InjectContextMiddleware())

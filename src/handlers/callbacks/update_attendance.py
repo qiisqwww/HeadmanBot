@@ -1,27 +1,24 @@
 from aiogram.types import CallbackQuery
 from loguru import logger
 
+from src.dto.callback_data import UpdateAttendanceCallbackData
+from src.dto.models import Student
+from src.enums import VisitStatus
 from src.kernel import Router
-from src.callback_data import UpdateAttendanceCallbackData
+from src.middlewares.check_in_middleware import CheckInMiddleware
 from src.resources import (
-    inline_void_button,
     ALL_MESSAGE,
     NONE_MESSAGE,
-    attendance_buttons
+    attendance_buttons,
+    inline_void_button,
 )
-from src.dto import Student
 from src.services import AttendanceService
-from src.enums import VisitStatus
+
+__all__ = ["update_attendance_router"]
 
 
-__all__ = [
-    "update_attendance_router"
-]
-
-
-update_attendance_router = Router(
-    attendance_updater=True
-)
+update_attendance_router = Router(must_be_registered=True)
+update_attendance_router.callback_query.middleware(CheckInMiddleware())
 
 
 @update_attendance_router.callback_query(UpdateAttendanceCallbackData.filter())
@@ -48,7 +45,9 @@ async def update_attendance(
     if callback_data.all is None or callback_data.lesson_id is None:
         raise TypeError("Incorrect buttons usage")
 
-    await attendance_service.update_visit_status_for_lesson(student.telegram_id, callback_data.lesson_id, VisitStatus.VISIT)
+    await attendance_service.update_visit_status_for_lesson(
+        student.telegram_id, callback_data.lesson_id, VisitStatus.VISIT
+    )
     attendances = await attendance_service.filter_by_student_id(student.telegram_id)
 
     choosen_lesson = next(

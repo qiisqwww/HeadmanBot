@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto import University, UniversityId
+from src.dto.models import University, UniversityId
 from src.enums import UniversityAlias
 from src.repositories import UniversityRepository
 

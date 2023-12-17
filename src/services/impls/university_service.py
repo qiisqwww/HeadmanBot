@@ -1,5 +1,5 @@
 from src.config import UNIVERSITIES_LIST
-from src.dto import University, UniversityId
+from src.dto.models import University, UniversityId
 from src.enums import UniversityAlias
 from src.repositories import UniversityRepository
 

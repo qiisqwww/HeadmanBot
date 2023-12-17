@@ -1,6 +1,6 @@
 from datetime import time
 
-from src.dto import GroupId, Lesson
+from src.dto.models import GroupId, Lesson
 
 from ..interfaces import LessonRepository
 from .postgres_repository import PostgresRepositoryImpl

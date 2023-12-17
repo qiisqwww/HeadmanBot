@@ -2,16 +2,16 @@ from aiogram import Bot
 from aiogram.types import CallbackQuery
 from loguru import logger
 
+from src.dto.callback_data import AccessCallbackData
 from src.kernel import Router
-from src.resources.buttons import inline_void_button
-from src.resources.buttons.main_menu import main_menu
-from src.callback_data import AccessCallbackData
 from src.resources import (
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
 )
+from src.resources.buttons import inline_void_button
+from src.resources.buttons.main_menu import main_menu
 from src.services import CacheStudentService, StudentService
 
 __all__ = [

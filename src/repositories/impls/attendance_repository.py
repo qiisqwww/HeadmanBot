@@ -1,4 +1,4 @@
-from src.dto import Attendance, GroupId, LessonId, StudentId, StudentReadFullname
+from src.dto.models import Attendance, GroupId, LessonId, StudentId, StudentReadFullname
 from src.enums import VisitStatus
 
 from ..interfaces import AttendanceRepository

@@ -1,16 +1,8 @@
-from src.dto import (
-    Student,
-    StudentRaw
-)
-from src.repositories import StudentRepository
-from src.services import (
-    StudentService,
-    GroupService,
-    UniversityService
-)
-from src.repositories.exceptions import CorruptedDatabaseError
-from src.dto import GroupId, University
+from src.dto.models import GroupId, Student, StudentRaw, University
 from src.enums import Role
+from src.repositories import StudentRepository
+from src.repositories.exceptions import CorruptedDatabaseError
+from src.services import GroupService, StudentService, UniversityService
 
 __all__ = [
     "StudentServiceImpl",
@@ -23,10 +15,7 @@ class StudentServiceImpl(StudentService):
     _university_service: UniversityService
 
     def __init__(
-        self,
-        student_repository: StudentRepository,
-        group_service: GroupService,
-        university_service: UniversityService
+        self, student_repository: StudentRepository, group_service: GroupService, university_service: UniversityService
     ) -> None:
         self._student_repository = student_repository
         self._group_service = group_service

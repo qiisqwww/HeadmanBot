@@ -2,15 +2,15 @@ from aiogram import F
 from aiogram.types import Message
 from loguru import logger
 
-from src.kernel import Router
-from src.resources import main_menu
+from src.dto.models import Student
 from src.enums import Role
-from src.dto import Student
-from src.resources import choose_lesson_buttons
+from src.kernel import Router
 from src.resources import (
     CHOOSE_PAIR_MESSAGE,
     NO_LESSONS_TODAY,
     WHICH_PAIR_MESSAGE,
+    choose_lesson_buttons,
+    main_menu,
 )
 from src.services import LessonService
 
@@ -19,10 +19,7 @@ __all__ = [
 ]
 
 
-commands_router = Router(
-    must_be_registered=True,
-    minimum_role=Role.VICE_HEADMAN
-)
+commands_router = Router(must_be_registered=True, minimum_role=Role.VICE_HEADMAN)
 
 
 @commands_router.message(F.text == "Узнать посещаемость")

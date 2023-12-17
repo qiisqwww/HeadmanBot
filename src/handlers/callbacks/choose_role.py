@@ -1,16 +1,16 @@
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from src.callback_data import ChooseRoleCallbackData
-from src.registration_context import RegistrationContext
+from src.dto.callback_data import ChooseRoleCallbackData
+from src.dto.contexts.registration_context import RegistrationContext
 from src.handlers.finite_state.registration import RegistrationStates
 from src.kernel import Router
-from src.resources import university_list_buttons
-from src.resources import inline_void_button
 from src.resources import (
     ASK_UNIVERSITY_TEMPLATE,
     CHOOSE_STUDENT_ROLE_TEMPLATE,
+    inline_void_button,
     successful_role_choose_template,
+    university_list_buttons,
 )
 from src.services import UniversityService
 
@@ -18,7 +18,7 @@ __all__ = [
     "choose_role_router",
 ]
 
-choose_role_router = Router()
+choose_role_router = Router(must_be_registered=False)
 
 
 @choose_role_router.callback_query(ChooseRoleCallbackData.filter())

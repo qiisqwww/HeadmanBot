@@ -1,28 +1,23 @@
-from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery
 from loguru import logger
 
+from src.dto.callback_data import UniversityCallbackData
+from src.dto.contexts import RegistrationContext
+from src.handlers.finite_state.registration import RegistrationStates
 from src.kernel import Router
-from src.callback_data import UniversityCallbackData
 from src.resources import (
-    ASK_UNIVERSITY_TEMPLATE,
     ASK_GROUP_TEMPLATE,
+    ASK_UNIVERSITY_TEMPLATE,
+    inline_void_button,
     successful_university_choose_template,
-    inline_void_button
 )
-from src.handlers.finite_state.registration import (
-    RegistrationStates,
-)
-from src.registration_context import RegistrationContext
 from src.services import UniversityService
 
-
-__all__ = [
-    "choose_university_router"
-]
+__all__ = ["choose_university_router"]
 
 
-choose_university_router = Router()
+choose_university_router = Router(must_be_registered=False)
 
 
 @choose_university_router.callback_query(UniversityCallbackData.filter())

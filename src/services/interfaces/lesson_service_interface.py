@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto import Group, GroupId, Lesson
+from src.dto.models import Group, GroupId, Lesson
 from src.repositories import LessonRepository
 
 from .group_service_interface import GroupService
@@ -15,10 +15,7 @@ __all__ = [
 class LessonService(Service):
     @abstractmethod
     def __init__(
-            self,
-            lesson_repository: LessonRepository,
-            group_service: GroupService,
-            university_service: UniversityService
+        self, lesson_repository: LessonRepository, group_service: GroupService, university_service: UniversityService
     ) -> None:
         ...
 

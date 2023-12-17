@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from datetime import time
 
-from src.dto import GroupId, Lesson
+from src.dto.models import GroupId, Lesson
 
 from .postgres_repository_interface import PostgresRepository
 

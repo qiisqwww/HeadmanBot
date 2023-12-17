@@ -1,10 +1,6 @@
-from src.dto import (
-    GroupId,
-    Student,
-    StudentId,
-    StudentRaw
-)
+from src.dto.models import GroupId, Student, StudentId, StudentRaw
 from src.enums import Role
+
 from ..interfaces import StudentRepository
 from .postgres_repository import PostgresRepositoryImpl
 
@@ -55,6 +51,9 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
         query = "SELECT * FROM students WHERE group_id = $1 AND role LIKE $2"
         record = await self._con.fetchrow(query, group_id, role)
+
+        if record is None:
+            return None
 
         return Student.from_mapping(record)
 

@@ -1,21 +1,10 @@
 from datetime import datetime, time, timezone
 from logging import DEBUG
 
-from src.dto import (
-    Group,
-    GroupId,
-    Lesson
-)
-from src.external.apis import (
-    ScheduleApi,
-    Weekday
-)
+from src.dto.models import Group, GroupId, Lesson
+from src.external.apis import ScheduleApi, Weekday
 from src.repositories import LessonRepository
-from src.services.interfaces import (
-    GroupService,
-    LessonService,
-    UniversityService
-)
+from src.services.interfaces import GroupService, LessonService, UniversityService
 
 __all__ = [
     "LessonServiceImpl",
@@ -28,10 +17,7 @@ class LessonServiceImpl(LessonService):
     _university_service: UniversityService
 
     def __init__(
-            self,
-            lesson_repository: LessonRepository,
-            group_service: GroupService,
-            university_service: UniversityService
+        self, lesson_repository: LessonRepository, group_service: GroupService, university_service: UniversityService
     ) -> None:
         self._lesson_repository = lesson_repository
         self._group_service = group_service
@@ -70,11 +56,7 @@ class LessonServiceImpl(LessonService):
 
     @staticmethod
     def _create_time_with_timezone(time_without_tz: time) -> time:
-        return time(
-            hour=time_without_tz.hour,
-            minute=time_without_tz.minute,
-            tzinfo=timezone.utc
-        )
+        return time(hour=time_without_tz.hour, minute=time_without_tz.minute, tzinfo=timezone.utc)
 
     async def _group_has_schedule(self, group_id: GroupId) -> bool:
         lessons = await self._lesson_repository.filter_by_group_id(group_id)

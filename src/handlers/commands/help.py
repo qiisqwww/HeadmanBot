@@ -5,9 +5,7 @@ from loguru import logger
 from src.kernel import Router
 from src.resources import FAQ_TEMPLATE
 
-help_router = Router(
-    must_be_registered=True
-)
+help_router = Router(must_be_registered=True)
 
 
 __all__ = [

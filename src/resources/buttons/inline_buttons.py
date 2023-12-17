@@ -3,22 +3,22 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.dto import Lesson, StudentId, University
-from src.enums import Role
-from src.callback_data import (
+from src.dto.callback_data import (
     AccessCallbackData,
     ChooseLessonCallbackData,
     ChooseRoleCallbackData,
     UniversityCallbackData,
     UpdateAttendanceCallbackData,
 )
+from src.dto.models import Lesson, StudentId, University
+from src.enums import Role
 
 __all__ = [
     "university_list_buttons",
     "accept_or_deny_buttons",
     "role_buttons",
     "attendance_buttons",
-    "choose_lesson_buttons"
+    "choose_lesson_buttons",
 ]
 
 

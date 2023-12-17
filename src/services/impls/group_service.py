@@ -1,8 +1,4 @@
-from src.dto import (
-    Group,
-    GroupId,
-    UniversityId
-)
+from src.dto.models import Group, GroupId, UniversityId
 from src.enums import UniversityAlias
 from src.repositories import GroupRepository
 from src.services.interfaces import GroupService

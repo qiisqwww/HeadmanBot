@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 
-from src.dto import StudentId
-
 from .dto import DTO
+from .student import StudentId
 
 
 @dataclass(slots=True, frozen=True, unsafe_hash=True)

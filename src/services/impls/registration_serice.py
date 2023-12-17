@@ -1,4 +1,4 @@
-from src.dto import StudentRaw
+from src.dto.models import StudentRaw
 from src.repositories import StudentRepository
 from src.services.interfaces import (
     AttendanceService,

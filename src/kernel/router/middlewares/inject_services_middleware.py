@@ -32,14 +32,14 @@ from src.services.interfaces.redis_service import RedisService
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
-    "InjectServices",
+    "InjectServicesMiddleware",
     "ServiceClass",
 ]
 
 ServiceClass: TypeAlias = type[Service]
 
 
-class InjectServices(BaseMiddleware):
+class InjectServicesMiddleware(BaseMiddleware):
     async def __call__(self, handler: HandlerType, event: TelegramObject, data: dict[str, Any]) -> Any:
         con = data["postgres_con"]
 
@@ -51,22 +51,11 @@ class InjectServices(BaseMiddleware):
 
         group_service = GroupServiceImpl(group_repository)
         university_service = UniversityServiceImpl(university_repository)
-        lesson_service = LessonServiceImpl(
-            lesson_repository,
-            group_service,
-            university_service
-            )
+        lesson_service = LessonServiceImpl(lesson_repository, group_service, university_service)
         student_service = StudentServiceImpl(student_repository, group_service, university_service)
-        attendance_service = AttendanceServiceImpl(
-            attendance_repository,
-            lesson_service,
-            student_service
-        )
+        attendance_service = AttendanceServiceImpl(attendance_repository, lesson_service, student_service)
         registration_service = RegistrationServiceImpl(
-            student_repository,
-            attendance_service,
-            group_service,
-            university_service
+            student_repository, attendance_service, group_service, university_service
         )
 
         annotations = data["handler"].spec.annotations

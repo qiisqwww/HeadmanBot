@@ -1,4 +1,4 @@
-from src.dto import Group, GroupId, UniversityId
+from src.dto.models import Group, GroupId, UniversityId
 from src.enums import UniversityAlias
 
 from ..exceptions import CorruptedDatabaseError
@@ -45,12 +45,12 @@ class GroupRepositoryImpl(PostgresRepositoryImpl, GroupRepository):
 
         return Group.from_mapping(record)
 
-    async def all(self) -> list[Group] | None:
+    async def all(self) -> list[Group]:
         query = "SELECT * FROM groups"
         records = await self._con.fetch(query)
 
         if records is None:
-            raise CorruptedDatabaseError(f"There are no groups in table")
+            raise CorruptedDatabaseError("There are no groups in table")
 
         return [Group.from_mapping(record) for record in records]
 

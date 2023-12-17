@@ -4,18 +4,16 @@ from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from loguru import logger
 
-from src.registration_context import (
-    RegistrationContext,
-)
+from src.dto.contexts import RegistrationContext
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
-    "InjectStateMiddleware",
+    "InjectContextMiddleware",
 ]
 
 
-class InjectStateMiddleware(BaseMiddleware):
+class InjectContextMiddleware(BaseMiddleware):
     @logger.catch
     async def __call__(self, handler: HandlerType, event: TelegramObject, data: dict[str, Any]) -> Any:
         annotations = data["handler"].spec.annotations

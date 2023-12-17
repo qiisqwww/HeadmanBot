@@ -5,13 +5,10 @@ from aiogram.types import Message
 from loguru import logger
 
 from src.config import ADMIN_IDS
-from src.dto import StudentId
+from src.dto.contexts import RegistrationContext
+from src.dto.models import StudentId
 from src.enums import Role
 from src.external.apis import ScheduleApi
-from src.registration_context import RegistrationContext
-from ..registration.registration_states import (
-    RegistrationStates,
-)
 from src.kernel import Router
 from src.resources import (
     ASK_BIRTHDATE_TEMPLATE,
@@ -25,19 +22,19 @@ from src.resources import (
     INCORRECT_UNIVERSITY_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-    accept_or_deny_buttons
+    accept_or_deny_buttons,
 )
-from src.services import (
-    GroupService,
-    StudentService,
-    CacheStudentService
-)
+from src.services import CacheStudentService, GroupService, StudentService
+
+from .registration_states import RegistrationStates
 
 __all__ = [
     "registration_finite_state_router",
 ]
 
-registration_finite_state_router = Router()
+registration_finite_state_router = Router(
+    must_be_registered=False,
+)
 
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_role)
@@ -76,8 +73,11 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    if (group is not None and await state.role == Role.HEADMAN and
-            await student_service.get_headman_by_group_name(group.name) is not None):
+    if (
+        group is not None
+        and await state.role == Role.HEADMAN
+        and await student_service.get_headman_by_group_name(group.name) is not None
+    ):
         await message.answer(GROUP_ALREADY_HAS_A_HEADMAN)
         await state.set_state(RegistrationStates.waiting_group)
         return
@@ -149,10 +149,9 @@ async def handling_name(
     student_id = await state.telegram_id
     await cache_student_service.cache_student(student_data)
 
+    surname = await state.surname
+    name = await state.name
     if await state.role == Role.HEADMAN:
-        surname = await state.surname
-        name = await state.name
-
         for admin_id in ADMIN_IDS:
             await bot.send_message(
                 admin_id,
@@ -165,7 +164,7 @@ async def handling_name(
 
     await bot.send_message(
         headman.telegram_id,
-        f"Студент {student_data['surname']} {student_data['name']} подал заявку на регистарцию в вашу группу",
+        f"Студент {surname} {name} подал заявку на регистарцию в вашу группу",
         reply_markup=accept_or_deny_buttons(StudentId(student_id)),
     )
 

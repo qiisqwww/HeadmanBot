@@ -5,27 +5,27 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, TelegramObject
 from loguru import logger
 
-from src.services import (
-    LessonService,
-    GroupService,
-    UniversityService
+from src.dto.models import Student
+from src.repositories.impls import (
+    GroupRepositoryImpl,
+    LessonRepositoryImpl,
+    UniversityRepositoryImpl,
 )
-from src.repositories import (
-    LessonRepository,
-    GroupRepository,
-    UniversityRepository
+from src.services.impls import (
+    GroupServiceImpl,
+    LessonServiceImpl,
+    UniversityServiceImpl,
 )
-from src.dto import Student
 
 __all__ = [
-    "InjectCheckInMiddleware"
+    "CheckInMiddleware",
 ]
 
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 
-class InjectCheckInMiddleware(BaseMiddleware):
+class CheckInMiddleware(BaseMiddleware):
     @logger.catch
     async def __call__(self, handler: HandlerType, event: CallbackQuery, data: dict[str, Any]) -> Any:
         logger.info("callback middleware started")
@@ -38,9 +38,11 @@ class InjectCheckInMiddleware(BaseMiddleware):
         lesson_len = timedelta(hours=1, minutes=30)
         now = datetime.now(tz=timezone.utc)
 
-        lesson_service = LessonService(LessonRepository(data["postgres_con"]),
-                                       GroupService(GroupRepository(data["postgres_con"])),
-                                       UniversityService(UniversityRepository(data["postgres_con"])))
+        lesson_service = LessonServiceImpl(
+            LessonRepositoryImpl(data["postgres_con"]),
+            GroupServiceImpl(GroupRepositoryImpl(data["postgres_con"])),
+            UniversityServiceImpl(UniversityRepositoryImpl(data["postgres_con"])),
+        )
         today_lessons = await lesson_service.filter_by_group_id(student.group_id)
 
         first_lesson_time = datetime.combine(datetime.today(), today_lessons[0].start_time)
