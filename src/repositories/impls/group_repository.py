@@ -1,4 +1,8 @@
-from src.dto.models import Group, GroupId, UniversityId
+from src.dto.models import (
+    Group,
+    GroupId,
+    UniversityId
+)
 from src.enums import UniversityAlias
 
 from ..exceptions import CorruptedDatabaseError

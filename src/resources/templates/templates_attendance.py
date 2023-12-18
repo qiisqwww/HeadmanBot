@@ -63,13 +63,13 @@ def attendance_for_headmen_template(group_attendance: dict[StudentReadFullname, 
             case VisitStatus.NOT_VISIT:
                 not_visit.append(student)
 
-    for student in sorted(not_checked, key=lambda student: student.surname.lower()):
+    for student in sorted(not_checked, key=lambda sorted_student: student.surname.lower()):
         none_text += telegram_link_template(student)
 
-    for student in sorted(visit, key=lambda student: student.surname.lower()):
+    for student in sorted(visit, key=lambda sorted_student: student.surname.lower()):
         visit_text += telegram_link_template(student)
 
-    for student in sorted(not_visit, key=lambda student: student.surname.lower()):
+    for student in sorted(not_visit, key=lambda sorted_student: student.surname.lower()):
         no_text += telegram_link_template(student)
 
     return f"{none_text}\n{visit_text}\n{no_text}\nЧто-то еще?"

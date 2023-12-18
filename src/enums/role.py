@@ -1,4 +1,9 @@
-from enum import UNIQUE, EnumMeta, StrEnum, verify
+from enum import (
+    UNIQUE,
+    EnumMeta,
+    StrEnum,
+    verify
+)
 from typing import Self
 
 __all__ = [

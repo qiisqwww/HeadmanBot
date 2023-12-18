@@ -1,4 +1,9 @@
-from src.dto.models import GroupId, Student, StudentId, StudentRaw
+from src.dto.models import (
+    GroupId,
+    Student,
+    StudentId,
+    StudentRaw
+)
 from src.enums import Role
 
 from ..interfaces import StudentRepository

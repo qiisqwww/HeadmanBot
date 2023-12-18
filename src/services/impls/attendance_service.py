@@ -1,8 +1,18 @@
-from src.dto.models import GroupId, LessonId, Student, StudentId, StudentReadFullname
+from src.dto.models import (
+    GroupId,
+    LessonId,
+    Student,
+    StudentId,
+    StudentReadFullname
+)
 from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
-from src.services.interfaces import AttendanceService, LessonService, StudentService
+from src.services.interfaces import (
+    AttendanceService,
+    LessonService,
+    StudentService
+)
 
 __all__ = [
     "AttendanceServiceImpl",

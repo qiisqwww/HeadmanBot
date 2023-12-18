@@ -1,8 +1,17 @@
-from src.dto.models import GroupId, Student, StudentRaw, University
+from src.dto.models import (
+    GroupId,
+    Student,
+    StudentRaw,
+    University
+)
 from src.enums import Role
 from src.repositories import StudentRepository
 from src.repositories.exceptions import CorruptedDatabaseError
-from src.services import GroupService, StudentService, UniversityService
+from src.services import (
+    GroupService,
+    StudentService,
+    UniversityService
+)
 
 __all__ = [
     "StudentServiceImpl",

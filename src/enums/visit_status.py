@@ -1,4 +1,8 @@
-from enum import UNIQUE, Enum, verify
+from enum import (
+    UNIQUE,
+    Enum,
+    verify
+)
 
 __all__ = [
     "VisitStatus",

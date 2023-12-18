@@ -4,7 +4,10 @@ from loguru import logger
 from src.dto.callback_data import ChooseLessonCallbackData
 from src.dto.models import Student
 from src.kernel import Router
-from src.resources import attendance_for_headmen_template, choose_lesson_buttons
+from src.resources import (
+    attendance_for_headmen_template,
+    choose_lesson_buttons
+)
 from src.services import AttendanceService, LessonService
 
 __all__ = [

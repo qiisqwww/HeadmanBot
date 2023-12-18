@@ -1,7 +1,13 @@
 import asyncpg
 from asyncpg.pool import Pool
 
-from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
+from src.config import (
+    DB_HOST,
+    DB_NAME,
+    DB_PASS,
+    DB_PORT,
+    DB_USER
+)
 
 __all__ = [
     "get_postgres_pool",
