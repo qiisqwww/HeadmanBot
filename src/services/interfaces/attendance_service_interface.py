@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import GroupId, LessonId, Student, StudentId, StudentReadFullname
+from src.dto.models import GroupId, LessonId, Student, StudentId, StudentFullnameView
 from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
@@ -25,7 +25,7 @@ class AttendanceService(Service):
     @abstractmethod
     async def get_visit_status_for_group_students(
         self, group_id: GroupId, lesson_id: LessonId
-    ) -> dict[StudentReadFullname, VisitStatus]:
+    ) -> dict[StudentFullnameView, VisitStatus]:
         ...
 
     @abstractmethod

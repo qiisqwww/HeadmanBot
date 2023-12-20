@@ -1,4 +1,4 @@
-from src.dto.models import StudentRaw
+from src.dto.models import StudentLoginData
 from src.repositories import StudentRepository
 from src.services.interfaces import (
     AttendanceService,
@@ -30,7 +30,7 @@ class RegistrationServiceImpl(RegistrationService):
         self._group_service = group_service
         self._university_service = university_service
 
-    async def register_student(self, student_raw: StudentRaw) -> None:
+    async def register_student(self, student_raw: StudentLoginData) -> None:
         university = await self._university_service.get_by_alias(student_raw.university_alias)
         new_group = await self._group_service.create_or_return(
             student_raw.group_name,

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import GroupId, Student, StudentRaw
+from src.dto.models import GroupId, Student, StudentLoginData
 from src.enums import Role
 
 from .postgres_repository_interface import PostgresRepository
@@ -14,7 +14,7 @@ class StudentRepository(PostgresRepository):
     @abstractmethod
     async def create_and_return(
         self,
-        student_raw: StudentRaw,
+        student_raw: StudentLoginData,
         group_id: GroupId,
     ) -> Student:
         ...

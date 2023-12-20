@@ -8,6 +8,8 @@ __all__ = [
 
 
 class DTO:
+    def __init__(self, **kwargs): ...
+
     @classmethod
     def from_mapping(cls, data: Mapping) -> Self:
         valid_attrs = {}

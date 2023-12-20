@@ -1,4 +1,4 @@
-from src.dto.models import StudentReadFullname
+from src.dto.models import StudentFullnameView
 from src.enums import VisitStatus
 
 __all__ = [
@@ -41,18 +41,18 @@ POLL_TEMPLATE = """
 Если возникли проблемы - напишите о них в @noheadproblemsbot"""
 
 
-def telegram_link_template(student_meta: StudentReadFullname) -> str:
+def telegram_link_template(student_meta: StudentFullnameView) -> str:
     return f'<a href="tg://user?id={student_meta.telegram_id}">{student_meta.surname} {student_meta.name}</a>\n'
 
 
-def attendance_for_headmen_template(group_attendance: dict[StudentReadFullname, VisitStatus]) -> str:
+def attendance_for_headmen_template(group_attendance: dict[StudentFullnameView, VisitStatus]) -> str:
     visit_text = "Придут:\n"
     none_text = "Не отметились:\n"
     no_text = "Не придут:\n"
 
-    not_visit: list[StudentReadFullname] = []
-    visit: list[StudentReadFullname] = []
-    not_checked: list[StudentReadFullname] = []
+    not_visit: list[StudentFullnameView] = []
+    visit: list[StudentFullnameView] = []
+    not_checked: list[StudentFullnameView] = []
 
     for student, visit_status in group_attendance.items():
         match visit_status:

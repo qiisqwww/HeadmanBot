@@ -1,7 +1,7 @@
 from src.dto.models import (
     GroupId,
     Student,
-    StudentRaw,
+    StudentLoginData,
     University
 )
 from src.enums import Role
@@ -55,7 +55,7 @@ class StudentServiceImpl(StudentService):
 
         return await self._student_repository.filter_group_by_id(group_id)
 
-    async def register_student(self, student: StudentRaw) -> None:
+    async def register_student(self, student: StudentLoginData) -> None:
         university: University = await self._university_service.get_by_alias(student.university_alias)
 
         group = await self._group_service.create_or_return(student.group_name, university.id)

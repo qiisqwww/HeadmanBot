@@ -4,7 +4,7 @@ from src.dto.models import (
     Lesson,
     LessonId,
     StudentId,
-    StudentReadFullname,
+    StudentFullnameView,
 )
 from src.enums import VisitStatus
 
@@ -60,7 +60,7 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
 
     async def get_visit_status_for_group_students(
         self, group_id: GroupId, lesson_id: LessonId
-    ) -> dict[StudentReadFullname, VisitStatus]:
+    ) -> dict[StudentFullnameView, VisitStatus]:
         query = (
             "SELECT "
             "st.telegram_id, st.name, st.surname, at.visit_status"
@@ -72,4 +72,4 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
 
         records = await self._con.fetch(query, lesson_id, group_id)
 
-        return {StudentReadFullname.from_mapping(record): VisitStatus(record["visit_status"]) for record in records}
+        return {StudentFullnameView.from_mapping(record): VisitStatus(record["visit_status"]) for record in records}

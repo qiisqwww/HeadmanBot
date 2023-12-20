@@ -6,12 +6,12 @@ from src.enums import Role, UniversityAlias
 from .dto import DTO
 
 __all__ = [
-    "StudentRaw",
+    "StudentLoginData",
 ]
 
 
 @dataclass(slots=True, frozen=True)
-class StudentRaw(DTO):
+class StudentLoginData(DTO):
     telegram_id: int
     name: str
     surname: str

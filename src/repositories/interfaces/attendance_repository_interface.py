@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import GroupId, LessonId, StudentId, StudentReadFullname
+from src.dto.models import GroupId, LessonId, StudentId, StudentFullnameView
 from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 
@@ -43,5 +43,5 @@ class AttendanceRepository(PostgresRepository):
     @abstractmethod
     async def get_visit_status_for_group_students(
         self, group_id: GroupId, lesson_id: LessonId
-    ) -> dict[StudentReadFullname, VisitStatus]:
+    ) -> dict[StudentFullnameView, VisitStatus]:
         ...

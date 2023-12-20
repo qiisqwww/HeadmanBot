@@ -3,7 +3,7 @@ from src.dto.models import (
     LessonId,
     Student,
     StudentId,
-    StudentReadFullname
+    StudentFullnameView
 )
 from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
@@ -43,7 +43,7 @@ class AttendanceServiceImpl(AttendanceService):
 
     async def get_visit_status_for_group_students(
         self, group_id: GroupId, lesson_id: LessonId
-    ) -> dict[StudentReadFullname, VisitStatus]:
+    ) -> dict[StudentFullnameView, VisitStatus]:
         return await self._attendance_repository.get_visit_status_for_group_students(group_id, lesson_id)
 
     async def get_visit_status_by_student_id_and_lesson(

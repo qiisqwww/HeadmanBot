@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import StudentRaw
+from src.dto.models import StudentLoginData
 from src.repositories import StudentRepository
 
 from .attendance_service_interface import AttendanceService
@@ -25,5 +25,5 @@ class RegistrationService(Service):
         ...
 
     @abstractmethod
-    async def register_student(self, student_raw: StudentRaw) -> None:
+    async def register_student(self, student_raw: StudentLoginData) -> None:
         ...

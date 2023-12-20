@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import GroupId, Student, StudentRaw
+from src.dto.models import GroupId, Student, StudentLoginData
 from src.repositories import StudentRepository
 
 from .group_service_interface import GroupService
@@ -29,7 +29,7 @@ class StudentService(Service):
         ...
 
     @abstractmethod
-    async def register_student(self, student: StudentRaw) -> None:
+    async def register_student(self, student: StudentLoginData) -> None:
         ...
 
     @abstractmethod

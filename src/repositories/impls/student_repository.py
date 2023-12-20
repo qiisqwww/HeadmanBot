@@ -2,7 +2,7 @@ from src.dto.models import (
     GroupId,
     Student,
     StudentId,
-    StudentRaw
+    StudentLoginData
 )
 from src.enums import Role
 
@@ -17,7 +17,7 @@ __all__ = [
 class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def create_and_return(
         self,
-        student_raw: StudentRaw,
+        student_raw: StudentLoginData,
         group_id: GroupId,
     ) -> Student:
         query = (
