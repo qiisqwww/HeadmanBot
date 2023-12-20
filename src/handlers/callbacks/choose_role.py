@@ -7,7 +7,6 @@ from src.handlers.finite_state.registration import RegistrationStates
 from src.kernel import Router
 from src.resources import (
     ASK_UNIVERSITY_TEMPLATE,
-    CHOOSE_STUDENT_ROLE_TEMPLATE,
     inline_void_button,
     successful_role_choose_template,
     university_list_buttons,
@@ -37,10 +36,16 @@ async def get_role_from_user(
 
     await state.set_role(callback_data.role)
 
-    await callback.message.edit_text(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=inline_void_button())
-    await callback.message.answer(successful_role_choose_template(await state.role))
+    await callback.message.answer(
+        successful_role_choose_template(await state.role),
+        reply_markup=inline_void_button()
+    )
 
     universities = await university_service.all()
 
-    await callback.message.answer(text=ASK_UNIVERSITY_TEMPLATE, reply_markup=university_list_buttons(universities))
+    await callback.message.delete()
+    await callback.message.answer(
+        text=ASK_UNIVERSITY_TEMPLATE,
+        reply_markup=university_list_buttons(universities)
+    )
     await state.set_state(RegistrationStates.waiting_university)

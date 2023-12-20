@@ -8,7 +8,6 @@ from src.handlers.finite_state.registration import RegistrationStates
 from src.kernel import Router
 from src.resources import (
     ASK_GROUP_TEMPLATE,
-    ASK_UNIVERSITY_TEMPLATE,
     inline_void_button,
     successful_university_choose_template,
 )
@@ -36,9 +35,11 @@ async def get_university_from_user(
     choosen_uni = await university_service.get_by_alias(callback_data.university_alias)
 
     await registration_ctx.set_university_alias(callback_data.university_alias)
-
-    await callback.message.edit_text(ASK_UNIVERSITY_TEMPLATE, reply_markup=inline_void_button())
-    await callback.message.answer(successful_university_choose_template(choosen_uni.name))
+    await callback.message.delete()
+    await callback.message.answer(
+        successful_university_choose_template(choosen_uni.name),
+        reply_markup=inline_void_button()
+    )
     await callback.message.answer(ASK_GROUP_TEMPLATE)
 
     await registration_ctx.set_state(RegistrationStates.waiting_group)
