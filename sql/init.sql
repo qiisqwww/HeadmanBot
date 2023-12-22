@@ -2,13 +2,13 @@
 
 create table if not exists universities (
     id bigserial primary key,
-    name varchar(255) NOT NULL UNIQUE,
+    name varchar(255) NOT NULL,
     alias varchar(255) NOT NULL UNIQUE
 );
 
 create table if not exists groups (
     id bigserial primary key,
-    university_id bigint NOT NULL,
+    university_id bigint references universities(id) ON DELETE CASCADE,
     name varchar(255) NOT NULL
 );
 

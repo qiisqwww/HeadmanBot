@@ -6,12 +6,9 @@ from src.dto.models import Student
 from src.enums import VisitStatus
 from src.kernel import Router
 from src.middlewares.check_in_middleware import CheckInMiddleware
-from src.resources import (
-    ALL_PAIRS_TEMPLATE,
-    NO_PAIRS_TEMPLATE,
-    attendance_buttons,
-    inline_void_button,
-)
+from src.resources import ALL_PAIRS_TEMPLATE, NO_PAIRS_TEMPLATE, inline_void_button
+from src.resources.buttons.inline_buttons import attendance_buttons
+from src.resources.templates.templates import choosen_lesson_template
 from src.services import AttendanceService
 
 __all__ = [
@@ -31,7 +28,6 @@ async def update_attendance(
     student: Student,
     attendance_service: AttendanceService,
 ):
-    logger.error("Inside middleware.")
     if callback.message is None:
         return
 
@@ -60,7 +56,7 @@ async def update_attendance(
 
     if non_visit_lessons:
         keyboard = attendance_buttons(non_visit_lessons)
-        text = f"Вы посетите пару {choosen_lesson.name}, которая начнётся в {choosen_lesson.str_start_time}"
+        text = choosen_lesson_template(choosen_lesson.name, choosen_lesson.str_start_time)
     else:
         keyboard = inline_void_button()
         text = ALL_PAIRS_TEMPLATE

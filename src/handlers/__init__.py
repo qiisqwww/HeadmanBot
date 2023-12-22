@@ -7,7 +7,12 @@ from .callbacks import (
     choose_university_router,
     update_attendance_router,
 )
-from .commands import get_stat_command_router, help_router, start_command_router
+from .commands import (
+    get_stat_command_router,
+    help_router,
+    restart_command_router,
+    start_command_router,
+)
 from .finite_state import registration_finite_state_router
 
 __all__ = [
@@ -16,6 +21,7 @@ __all__ = [
 
 root_router = Router(throttling=True)
 root_router.include_routers(
+    restart_command_router,
     update_attendance_router,
     choose_role_router,
     access_callback_router,

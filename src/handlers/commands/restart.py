@@ -1,4 +1,4 @@
-from aiogram.filters import CommandStart
+from aiogram import F
 from aiogram.types import Message
 from loguru import logger
 
@@ -14,18 +14,19 @@ from src.resources.buttons.reply_buttons import restart_button
 from ..finite_state.registration.registration_states import RegistrationStates
 
 __all__ = [
-    "start_command_router",
+    "restart_command_router",
 ]
 
-start_command_router = Router(must_be_registered=False)
+restart_command_router = Router(must_be_registered=False)
 
 
-@start_command_router.message(CommandStart())
+@restart_command_router.message(F.text == "Начать регистрацию заново")
 @logger.catch
-async def start_command(message: Message, state: RegistrationContext) -> None:
+async def restart_command(message: Message, state: RegistrationContext) -> None:
     if message.from_user is None:
         return
 
+    await state.clear()
     start_message = start_message_template(message.from_user.last_name, message.from_user.first_name)
     await message.answer(start_message, reply_markup=restart_button())
 

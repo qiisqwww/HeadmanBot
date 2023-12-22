@@ -1,6 +1,8 @@
 from src.enums import Role
 
 __all__ = [
+    "headman_send_registration_request_template",
+    "student_send_registration_request_template",
     "start_message_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
@@ -22,7 +24,10 @@ __all__ = [
     "FAQ_TEMPLATE",
     "GROUP_DOESNT_REGISTERED_TEMPLATE",
     "BIRTHDATE_INCORRECT_TEMPLATE",
-    "ASK_BIRTHDATE_TEMPLATE"
+    "ASK_BIRTHDATE_TEMPLATE",
+    "choosen_lesson_template",
+    "TOO_MUCH_NAME_LENGTH_TEMPLATE",
+    "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
 ]
 
 
@@ -30,6 +35,10 @@ def start_message_template(surname: str | None, name: str) -> str:
     if surname is None:
         return f"Приветствую {name}! Для начала, давай зарегистрируемся в системе бота."
     return f"Приветствую {surname} {name}! Для начала, давай зарегистрируемся в системе бота."
+
+
+def choosen_lesson_template(lesson_name: str, start_time: str) -> str:
+    return f"Вы посетите пару {lesson_name}, которая начнётся в {start_time}"
 
 
 CHOOSE_STUDENT_ROLE_TEMPLATE = "Нажмите на кнопку 'Я студент' или 'Я староста', чтобы выбрать свою роль."
@@ -61,7 +70,15 @@ def successful_university_choose_template(university_name: str) -> str:
     return f"Вы успешно выбрали университет <b>{university_name}</b>."
 
 
-ASK_GROUP_TEMPLATE = "Отправь название своей группы"
+def headman_send_registration_request_template(name: str, surname: str) -> str:
+    return f"Староста {surname} {name} подал заявку на регистарцию в боте."
+
+
+def student_send_registration_request_template(name: str, surname: str) -> str:
+    return f"Студент {surname} {name} подал заявку на регистарцию в боте."
+
+
+ASK_GROUP_TEMPLATE = "Отправь название вашей группы"
 
 GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет"
 
@@ -105,4 +122,8 @@ FAQ_TEMPLATE = """
 Благодарим за понимание
 """
 
-GROUP_DOESNT_REGISTERED_TEMPLATE = "Группа не зарегистрированна в боте, попросите свою старосту ее зерегистрировать."
+GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа не зарегистрирована в боте, попросите своего старосту ее зарегистрировать.
+Попробуйте ввести название группы заново."""
+
+TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длинной не более 255 символов. Попробуйте снова."
+TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть длинной не более 255 символов. Попробуйте снова."

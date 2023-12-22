@@ -9,20 +9,30 @@ from src.dto.contexts import RegistrationContext
 from src.dto.models import StudentId
 from src.enums import Role
 from src.external.apis import ScheduleApi
+from src.handlers.finite_state.registration.validation import (
+    is_valid_name_len,
+    is_valid_surname_len,
+)
 from src.kernel import Router
 from src.resources import (
     ASK_BIRTHDATE_TEMPLATE,
     ASK_NAME_TEMPLATE,
     ASK_SURNAME_TEMPLATE,
     BIRTHDATE_INCORRECT_TEMPLATE,
-    HEADMAN_ALREADY_EXISTS_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
+    HEADMAN_ALREADY_EXISTS_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     accept_or_deny_buttons,
+)
+from src.resources.templates.templates import (
+    TOO_MUCH_NAME_LENGTH_TEMPLATE,
+    TOO_MUCH_SURNAME_LENGTH_TEMPLATE,
+    headman_send_registration_request_template,
+    student_send_registration_request_template,
 )
 from src.services import CacheStudentService, GroupService, StudentService
 
@@ -115,6 +125,11 @@ async def handling_surname(message: Message, state: RegistrationContext) -> None
     if message.text is None:
         return
 
+    if not is_valid_surname_len(message.text):
+        await message.answer(TOO_MUCH_SURNAME_LENGTH_TEMPLATE)
+        await state.set_state(RegistrationStates.waiting_surname)
+        return
+
     await state.set_surname(message.text)
     await state.set_state(RegistrationStates.waiting_name)
     await message.answer(ASK_NAME_TEMPLATE)
@@ -133,6 +148,11 @@ async def handling_name(
         return
 
     if message.text is None:
+        return
+
+    if not is_valid_name_len(message.text):
+        await message.answer(TOO_MUCH_NAME_LENGTH_TEMPLATE)
+        await state.set_state(RegistrationStates.waiting_name)
         return
 
     await state.set_name(message.text)
@@ -155,7 +175,7 @@ async def handling_name(
         for admin_id in ADMIN_IDS:
             await bot.send_message(
                 admin_id,
-                f"Староста {surname} {name} подал заявку на регистарцию в боте.",
+                headman_send_registration_request_template(name, surname),
                 reply_markup=accept_or_deny_buttons(StudentId(student_id)),
             )
         return
@@ -164,7 +184,7 @@ async def handling_name(
 
     await bot.send_message(
         headman.telegram_id,
-        f"Студент {surname} {name} подал заявку на регистарцию в вашу группу",
+        student_send_registration_request_template(name, surname),
         reply_markup=accept_or_deny_buttons(StudentId(student_id)),
     )
 

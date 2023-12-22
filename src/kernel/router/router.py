@@ -1,6 +1,9 @@
 from aiogram import Router as AiogramRouter
 
 from src.enums import Role
+from src.kernel.router.middlewares.permission_manager_middleware import (
+    PermissionManagerMiddleware,
+)
 
 from .middlewares import (
     InjectContextMiddleware,
@@ -51,9 +54,16 @@ class Router(AiogramRouter):
 
         self._inject_context_middleware()
 
+        if minimum_role is not None:
+            self._inject_permission_manager_middleware(minimum_role)
+
     def _inject_user_middleware(self, must_be_registered: bool) -> None:
         self.message.middleware(InjectStudentMiddleware(must_be_registered))
         self.callback_query.middleware(InjectStudentMiddleware(must_be_registered))
+
+    def _inject_permission_manager_middleware(self, min_role: Role) -> None:
+        self.message.middleware(PermissionManagerMiddleware(min_role))
+        self.callback_query.middleware(PermissionManagerMiddleware(min_role))
 
     def _inject_redis_middleware(self) -> None:
         self.message.middleware(InjectRedisConnectionMiddleware())

@@ -1,6 +1,7 @@
-from .void_inline_buttons import inline_void_button
 from .inline_buttons import *
 from .main_menu import main_menu
+from .reply_buttons import restart_button, start_button
+from .void_inline_buttons import inline_void_button
 
 __all__ = [
     "inline_void_button",
@@ -9,5 +10,7 @@ __all__ = [
     "role_buttons",
     "attendance_buttons",
     "choose_lesson_buttons",
-    "main_menu"
+    "main_menu",
+    "start_button",
+    "restart_button",
 ]
