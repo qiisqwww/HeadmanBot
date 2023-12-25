@@ -1,7 +1,7 @@
 from aiogram import F
 from aiogram.types import Message
-from loguru import logger
 
+from src.enums import TelegramCommand
 from src.kernel import Router
 from src.resources import FAQ_TEMPLATE
 
@@ -13,8 +13,6 @@ __all__ = [
 ]
 
 
-@help_router.message(F.text == "Помощь")
+@help_router.message(F.text == TelegramCommand.HELP)
 async def faq_command(message: Message) -> None:
-    logger.trace("faq command")
-
     await message.answer(text=FAQ_TEMPLATE)

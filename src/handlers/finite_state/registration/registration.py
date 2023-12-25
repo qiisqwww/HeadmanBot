@@ -1,12 +1,10 @@
 from datetime import date
 
-from aiogram import Bot, F
+from aiogram import F
 from aiogram.types import Message
 from loguru import logger
 
-from src.config import ADMIN_IDS
 from src.dto.contexts import RegistrationContext
-from src.dto.models import StudentId
 from src.enums import Role
 from src.external.apis import ScheduleApi
 from src.handlers.finite_state.registration.validation import (
@@ -24,17 +22,13 @@ from src.resources import (
     HEADMAN_ALREADY_EXISTS_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
-    YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
-    YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-    accept_or_deny_buttons,
 )
+from src.resources.buttons.inline_buttons import ask_fullname_validity_buttons
 from src.resources.templates.templates import (
     TOO_MUCH_NAME_LENGTH_TEMPLATE,
     TOO_MUCH_SURNAME_LENGTH_TEMPLATE,
-    headman_send_registration_request_template,
-    student_send_registration_request_template,
 )
-from src.services import CacheStudentService, GroupService, StudentService
+from src.services import GroupService, StudentService
 
 from .registration_states import RegistrationStates
 
@@ -140,9 +134,6 @@ async def handling_surname(message: Message, state: RegistrationContext) -> None
 async def handling_name(
     message: Message,
     state: RegistrationContext,
-    bot: Bot,
-    student_service: StudentService,
-    cache_student_service: CacheStudentService,
 ) -> None:
     if message.from_user is None:
         return
@@ -156,36 +147,8 @@ async def handling_name(
         return
 
     await state.set_name(message.text)
-    await state.set_telegram_id(message.from_user.id)
-    await state.set_state(RegistrationStates.on_verification)
 
-    match await state.role:
-        case Role.STUDENT:
-            await message.answer(YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE)
-        case Role.HEADMAN:
-            await message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE)
-
-    student_data = await state.get_data()
-    student_id = await state.telegram_id
-    await cache_student_service.cache_student(student_data)
-
-    surname = await state.surname
-    name = await state.name
-    if await state.role == Role.HEADMAN:
-        for admin_id in ADMIN_IDS:
-            await bot.send_message(
-                admin_id,
-                headman_send_registration_request_template(name, surname),
-                reply_markup=accept_or_deny_buttons(StudentId(student_id)),
-            )
-        return
-
-    headman = await student_service.get_headman_by_group_name(await state.group_name)
-
-    await bot.send_message(
-        headman.telegram_id,
-        student_send_registration_request_template(name, surname),
-        reply_markup=accept_or_deny_buttons(StudentId(student_id)),
+    await message.answer(
+        f"{await state.surname} {await state.name}\nДанные верны?", reply_markup=ask_fullname_validity_buttons()
     )
-
-    await state.clear()
+    await state.set_state(RegistrationStates.ask_fullname_validity)

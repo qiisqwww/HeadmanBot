@@ -19,7 +19,9 @@ __all__ = [
 ]
 
 
-access_callback_router = Router()
+access_callback_router = Router(
+    must_be_registered=False,
+)
 
 
 @access_callback_router.callback_query(AccessCallbackData.filter())

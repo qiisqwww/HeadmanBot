@@ -11,6 +11,9 @@ from src.dto.callback_data import (
     UniversityCallbackData,
     UpdateAttendanceCallbackData,
 )
+from src.dto.callback_data.ask_fullname_validity_callback_data import (
+    AskFullnameValidityCallbackData,
+)
 from src.dto.models import Lesson, StudentId, University
 from src.enums import Role
 
@@ -20,6 +23,7 @@ __all__ = [
     "role_buttons",
     "attendance_buttons",
     "choose_lesson_buttons",
+    "ask_fullname_validity_buttons",
 ]
 
 
@@ -82,6 +86,16 @@ def choose_lesson_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
             callback_data=ChooseLessonCallbackData(lesson_id=lesson.id),
         )
 
+    builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True)
+
+
+def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(text="Да", callback_data=AskFullnameValidityCallbackData(is_fullname_correct=True))
+    builder.button(text="Нет", callback_data=AskFullnameValidityCallbackData(is_fullname_correct=False))
     builder.adjust(1)
 
     return builder.as_markup(resize_keyboard=True)

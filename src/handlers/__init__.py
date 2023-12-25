@@ -2,6 +2,7 @@ from src.kernel import Router
 
 from .callbacks import (
     access_callback_router,
+    ask_fullname_validity_router,
     choose_lesson_callback_router,
     choose_role_router,
     choose_university_router,
@@ -31,4 +32,5 @@ root_router.include_routers(
     help_router,
     get_stat_command_router,
     registration_finite_state_router,
+    ask_fullname_validity_router,
 )

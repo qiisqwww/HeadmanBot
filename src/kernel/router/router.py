@@ -24,6 +24,7 @@ class Router(AiogramRouter):
 
     def __init__(
         self,
+        *,
         name: str | None = None,
         throttling: bool = False,
         must_be_registered: bool | None = None,

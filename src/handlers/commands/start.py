@@ -1,8 +1,9 @@
-from aiogram.filters import CommandStart
+from aiogram import F
 from aiogram.types import Message
 from loguru import logger
 
 from src.dto.contexts import RegistrationContext
+from src.enums import TelegramCommand
 from src.kernel import Router
 from src.resources import (
     CHOOSE_STUDENT_ROLE_TEMPLATE,
@@ -20,7 +21,7 @@ __all__ = [
 start_command_router = Router(must_be_registered=False)
 
 
-@start_command_router.message(CommandStart())
+@start_command_router.message(F.text == TelegramCommand.START)
 @logger.catch
 async def start_command(message: Message, state: RegistrationContext) -> None:
     if message.from_user is None:
