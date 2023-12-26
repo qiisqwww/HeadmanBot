@@ -1,9 +1,0 @@
--r requirements.txt
-pytest-asyncio
-pytest
-pytest-cov
-pytest-randomly
-types-requests
-redis==5.0.1
-asyncpg-stubs==0.29.0
-types-redis==4.6.0.10
