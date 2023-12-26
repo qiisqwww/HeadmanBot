@@ -58,7 +58,7 @@ class InjectServicesMiddleware(BaseMiddleware):
             student_repository, attendance_service, group_service, university_service
         )
 
-        annotations = data["handler"].spec.annotations
+        annotations = data["handler"].callback.__annotations__
         for service_obj_name, service_class in annotations.items():
             if service_obj_name == "return":
                 continue

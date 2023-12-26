@@ -16,7 +16,7 @@ __all__ = [
 class InjectContextMiddleware(BaseMiddleware):
     @logger.catch
     async def __call__(self, handler: HandlerType, event: TelegramObject, data: dict[str, Any]) -> Any:
-        annotations = data["handler"].spec.annotations
+        annotations = data["handler"].callback.__annotations__
 
         if "state" in annotations:
             if annotations["state"] == RegistrationContext and not isinstance(data["state"], RegistrationContext):

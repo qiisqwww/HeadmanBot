@@ -1,18 +1,28 @@
 # Choose image for project. It will be downloaded from https://hub.docker.com/
 FROM python:3.11-alpine
 
-# Set work directory for container
-WORKDIR /app
 
-# Copy file with requirements into docker container
-COPY ./requirements.txt /app
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONHASHSEED=random \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100 \
+    POETRY_VERSION=1.5.1
+
+# Install poetry.
+RUN pip install "poetry==$POETRY_VERSION"
+
+# Copy only requirements to cache them in docker layer
+WORKDIR /app
+COPY poetry.lock pyproject.toml /app/
 
 # Set correct timezone.
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install dependencies:
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Configurate poetry and install requirement dependencies.
+RUN poetry config virtualenvs.create false \
+    && poetry install $([ "$DEBUG" = false ] && echo "--no-dev") --no-interaction --no-ansi
 
 # Copy project into container.
 COPY . /app
