@@ -8,7 +8,7 @@ from src.kernel import Router
 from src.middlewares.check_in_middleware import CheckInMiddleware
 from src.resources import ALL_PAIRS_TEMPLATE, NO_PAIRS_TEMPLATE, inline_void_button
 from src.resources.buttons.inline_buttons import attendance_buttons
-from src.resources.templates.templates import choosen_lesson_template
+from src.resources.templates.templates import chosen_lesson_template
 from src.services import AttendanceService
 
 __all__ = [
@@ -56,7 +56,7 @@ async def update_attendance(
 
     if non_visit_lessons:
         keyboard = attendance_buttons(non_visit_lessons)
-        text = choosen_lesson_template(choosen_lesson.name, choosen_lesson.str_start_time)
+        text = chosen_lesson_template(choosen_lesson.name, choosen_lesson.str_start_time)
     else:
         keyboard = inline_void_button()
         text = ALL_PAIRS_TEMPLATE

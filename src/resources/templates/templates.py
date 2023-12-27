@@ -4,6 +4,7 @@ __all__ = [
     "headman_send_registration_request_template",
     "student_send_registration_request_template",
     "start_message_template",
+    "asking_data_validation_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
     "REGISTRATION_ACCEPTED_TEMPLATE",
@@ -25,7 +26,7 @@ __all__ = [
     "GROUP_DOESNT_REGISTERED_TEMPLATE",
     "BIRTHDATE_INCORRECT_TEMPLATE",
     "ASK_BIRTHDATE_TEMPLATE",
-    "choosen_lesson_template",
+    "chosen_lesson_template",
     "TOO_MUCH_NAME_LENGTH_TEMPLATE",
     "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
 ]
@@ -37,8 +38,12 @@ def start_message_template(surname: str | None, name: str) -> str:
     return f"Приветствую {surname} {name}! Для начала, давай зарегистрируемся в системе бота."
 
 
-def choosen_lesson_template(lesson_name: str, start_time: str) -> str:
+def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
     return f"Вы посетите пару {lesson_name}, которая начнётся в {start_time}"
+
+
+def asking_data_validation_template(surname: str, name: str) -> str:
+    return f"{surname} {name}\n\nДанные верны?"
 
 
 CHOOSE_STUDENT_ROLE_TEMPLATE = "Нажмите на кнопку 'Я студент' или 'Я староста', чтобы выбрать свою роль."
@@ -74,7 +79,7 @@ def headman_send_registration_request_template(name: str, surname: str) -> str:
     return f"Староста {surname} {name} подал заявку на регистарцию в боте."
 
 
-def student_send_registration_request_template(name: str, surname: str) -> str:
+def student_send_registration_request_template(surname: str, name: str) -> str:
     return f"Студент {surname} {name} подал заявку на регистарцию в боте."
 
 
@@ -126,4 +131,5 @@ GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа не зарегистриро
 Попробуйте ввести название группы заново."""
 
 TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длинной не более 255 символов. Попробуйте снова."
+
 TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть длинной не более 255 символов. Попробуйте снова."

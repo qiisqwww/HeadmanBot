@@ -18,6 +18,7 @@ __all__ = [
     "ASK_UNIVERSITY_TEMPLATE",
     "successful_role_choose_template",
     "successful_university_choose_template",
+    "asking_data_validation_template",
     "ASK_GROUP_TEMPLATE",
     "INCORRECT_UNIVERSITY_TEMPLATE",
     "INCORRECT_STUDENT_ROLE_TEMPLATE",

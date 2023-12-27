@@ -23,6 +23,7 @@ from src.resources import (
     HEADMAN_ALREADY_EXISTS_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
+    asking_data_validation_template
 )
 from src.resources.buttons.inline_buttons import ask_fullname_validity_buttons
 from src.resources.templates.templates import (
@@ -157,6 +158,7 @@ async def handling_name(
     await state.set_name(message.text)
 
     await message.answer(
-        f"{await state.surname} {await state.name}\nДанные верны?", reply_markup=ask_fullname_validity_buttons()
+        asking_data_validation_template(await state.surname, await state.name),
+        reply_markup=ask_fullname_validity_buttons()
     )
     await state.set_state(RegistrationStates.ask_fullname_validity)

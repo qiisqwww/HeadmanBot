@@ -16,6 +16,7 @@ __all__ = [
     "POLL_TEMPLATE",
     "WHICH_PAIR_TEMPLATE",
     "attendance_for_headmen_template",
+    "asking_data_validation_template",
     "start_message_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
