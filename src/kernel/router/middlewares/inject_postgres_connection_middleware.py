@@ -24,6 +24,7 @@ class InjectPostgresMiddleware(BaseMiddleware):
 
         pool = await get_postgres_pool()
         async with pool.acquire() as con:
-            data["postgres_con"] = con
-            logger.trace("Inject database connection middleware finished.")
-            return await handler(event, data)
+            async with con.transaction():
+                data["postgres_con"] = con
+                logger.trace("Inject database connection middleware finished.")
+                return await handler(event, data)

@@ -31,4 +31,5 @@ async def start_command(message: Message, state: RegistrationContext) -> None:
     await message.answer(start_message, reply_markup=restart_button())
 
     await message.answer(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=role_buttons())
+    await state.set_telegram_id(message.from_user.id)
     await state.set_state(RegistrationStates.waiting_role)

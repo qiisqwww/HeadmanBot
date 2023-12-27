@@ -7,6 +7,7 @@ from loguru import logger
 from src.dto.contexts import RegistrationContext
 from src.enums import Role
 from src.external.apis import ScheduleApi
+from src.external.apis.schedule_api.exceptions import FailedToCheckGroupExistence
 from src.handlers.finite_state.registration.validation import (
     is_valid_name_len,
     is_valid_surname_len,
@@ -66,8 +67,15 @@ async def handling_group(
 
     api = ScheduleApi(await state.university_alias)
 
-    if not await api.group_exists(message.text):
-        await message.answer(GROUP_DOESNT_EXISTS_TEMPLATE)
+    try:
+        if not await api.group_exists(message.text):
+            await message.answer(GROUP_DOESNT_EXISTS_TEMPLATE)
+            await state.set_state(RegistrationStates.waiting_group)
+            return
+    except FailedToCheckGroupExistence:
+        await message.answer(
+            "Не удалось проверить наличие группы в университете, попробуйте снова или напишите в @noheadproblemsbot"
+        )
         await state.set_state(RegistrationStates.waiting_group)
         return
 

@@ -1,7 +1,11 @@
+import httpx
+from loguru import logger
+
 from src.enums import UniversityAlias
 
 from .dto import Schedule
 from .enums import Weekday
+from .exceptions import FailedToCheckGroupExistence, FailedToFetchScheduleException
 from .impls import BmstuScheduleApi, MireaScheduleApi
 from .schedule_api_interface import IScheduleAPI
 
@@ -21,7 +25,15 @@ class ScheduleApi:
                 self._api_impl = BmstuScheduleApi()
 
     async def group_exists(self, group_name: str) -> bool:
-        return await self._api_impl.group_exists(group_name)
+        try:
+            return await self._api_impl.group_exists(group_name)
+        except httpx.ConnectTimeout as e:
+            logger.error(e)
+            raise FailedToCheckGroupExistence from e
 
     async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
-        return await self._api_impl.fetch_schedule(group_name, weekday)
+        try:
+            return await self._api_impl.fetch_schedule(group_name, weekday)
+        except httpx.ConnectTimeout as e:
+            logger.error(e)
+            raise FailedToFetchScheduleException from e

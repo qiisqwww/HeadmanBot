@@ -96,6 +96,6 @@ def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
 
     builder.button(text="Да", callback_data=AskFullnameValidityCallbackData(is_fullname_correct=True))
     builder.button(text="Нет", callback_data=AskFullnameValidityCallbackData(is_fullname_correct=False))
-    builder.adjust(1)
+    builder.adjust(2)
 
-    return builder.as_markup(resize_keyboard=True)
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
