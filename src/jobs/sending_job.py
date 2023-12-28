@@ -42,7 +42,9 @@ class SendingJob:
             self._scheduler.add_job(self._send, "cron", day_of_week="mon-sat", hour=7, minute=00, args=(bot, pool))
 
     async def start(self):
+        logger.info("Sending job started.")
         self._scheduler.start()
+        logger.info("Sending job finished.")
 
     @logger.catch
     async def _send_to_group(
@@ -72,7 +74,6 @@ class SendingJob:
             lesson_service = LessonServiceImpl(
                 LessonRepositoryImpl(con), group_service, UniversityServiceImpl(UniversityRepositoryImpl(con))
             )
-            logger.info("Sending job started.")
 
             if DEBUG:
                 await asyncio.sleep(5)
@@ -81,5 +82,3 @@ class SendingJob:
 
             for group in groups:
                 await self._send_to_group(bot, lesson_service, student_service, group)
-
-        logger.info("Sending job finished.")

@@ -3,6 +3,8 @@ from typing import Any, Iterable
 
 from httpx import AsyncClient
 
+from src.retry_decorator import retry
+
 from ..dto import Schedule
 from ..enums import Weekday
 from ..schedule_api_interface import IScheduleAPI
@@ -28,11 +30,13 @@ class MireaScheduleApi(IScheduleAPI):
 
         return [Schedule(name, time.fromisoformat(start_time)) for name, start_time in parsed_schedule]
 
+    @retry(attempts=3)
     async def group_exists(self, group_name: str) -> bool:
         async with AsyncClient() as client:
             response = await client.get(self._URL.format(group_name=group_name))
             return "errors" not in response.json()
 
+    @retry(attempts=3)
     async def _get_json(self, group_name: str) -> dict[str, Any]:
         async with AsyncClient() as client:
             response = await client.get(self._URL.format(group_name=group_name))

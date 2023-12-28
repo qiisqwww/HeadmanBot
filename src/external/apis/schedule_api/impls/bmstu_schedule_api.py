@@ -4,6 +4,8 @@ from datetime import datetime, time
 from bs4 import BeautifulSoup, Tag
 from httpx import AsyncClient
 
+from src.retry_decorator import retry
+
 from ..dto import Schedule
 from ..enums import Weekday
 from ..schedule_api_interface import IScheduleAPI
@@ -87,12 +89,14 @@ class BmstuScheduleApi(IScheduleAPI):
 
         return result
 
+    @retry(attempts=3)
     async def _fetch_all_schedule_soup(self) -> BeautifulSoup:
         async with AsyncClient() as client:
             response = await client.get(self._ALL_SCHEDULE_URL)
 
         return BeautifulSoup(response.text, "html.parser")
 
+    @retry(attempts=3)
     async def _fetch_schedule_soup(self, group_name: str) -> BeautifulSoup:
         soup = await self._fetch_all_schedule_soup()
         group_tags = self._parse_group_tags_soup(soup)

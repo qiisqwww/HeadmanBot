@@ -19,14 +19,12 @@ from src.services import (
     StudentService,
     UniversityService,
 )
-from src.services.impls import (
-    AttendanceServiceImpl,
-    GroupServiceImpl,
-    LessonServiceImpl,
-    RegistrationServiceImpl,
-    StudentServiceImpl,
-    UniversityServiceImpl,
-)
+from src.services.impls.attendance_service import AttendanceServiceImpl
+from src.services.impls.group_service import GroupServiceImpl
+from src.services.impls.lesson_service import LessonServiceImpl
+from src.services.impls.registration_serice import RegistrationServiceImpl
+from src.services.impls.student_service import StudentServiceImpl
+from src.services.impls.university_service import UniversityServiceImpl
 from src.services.interfaces.redis_service import RedisService
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
