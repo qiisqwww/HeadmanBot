@@ -4,8 +4,8 @@ from typing import NewType
 
 from src.enums import Role
 
-from .dto import DTO
 from .group import GroupId
+from .model import Model
 
 __all__ = [
     "Student",
@@ -16,7 +16,7 @@ StudentId = NewType("StudentId", int)
 
 
 @dataclass(slots=True, frozen=True, unsafe_hash=True)
-class Student(DTO):
+class Student(Model):
     telegram_id: StudentId
     group_id: GroupId
     name: str

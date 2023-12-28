@@ -3,7 +3,7 @@ from typing import NewType
 
 from src.enums import UniversityAlias
 
-from .dto import DTO
+from .model import Model
 
 __all__ = [
     "University",
@@ -14,7 +14,7 @@ UniversityId = NewType("UniversityId", int)
 
 
 @dataclass(slots=True, frozen=True)
-class University(DTO):
+class University(Model):
     id: UniversityId
     name: str
     alias: UniversityAlias

@@ -61,7 +61,7 @@ INCORRECT_UNIVERSITY_TEMPLATE = "Нажмите только на одну из 
 
 ASK_GROUP_TEMPLATE = "Введите название вашей группы"
 
-GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет"
+GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет. Попробуйте ввести группу заново."
 
 ASK_SURNAME_TEMPLATE = "Введите свою фамилию"
 

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from datetime import time
 from typing import Any, NewType
 
-from .dto import DTO
 from .group import GroupId
+from .model import Model
 
 __all__ = [
     "Lesson",
@@ -15,7 +15,7 @@ LessonId = NewType("LessonId", int)
 
 
 @dataclass(slots=True, frozen=True)
-class Lesson(DTO):
+class Lesson(Model):
     id: LessonId
     group_id: GroupId
     name: str

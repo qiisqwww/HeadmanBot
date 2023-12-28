@@ -3,7 +3,7 @@ from datetime import date
 
 from src.enums import Role, UniversityAlias
 
-from .dto import DTO
+from .model import Model
 
 __all__ = [
     "StudentLoginData",
@@ -11,7 +11,7 @@ __all__ = [
 
 
 @dataclass(slots=True, frozen=True)
-class StudentLoginData(DTO):
+class StudentLoginData(Model):
     telegram_id: int
     name: str
     surname: str

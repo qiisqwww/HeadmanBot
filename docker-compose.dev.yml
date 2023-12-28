@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   postgres:
+    command: postgres -c log_min_duration_statement=1000
     image: postgres
     env_file:
       - ./.env/.database.dev.env

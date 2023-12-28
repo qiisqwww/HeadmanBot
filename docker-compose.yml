@@ -16,6 +16,7 @@ services:
           condition: service_healthy
 
   postgres:
+    command: postgres -c log_min_duration_statement=1000
     image: postgres
     restart: always
     env_file:

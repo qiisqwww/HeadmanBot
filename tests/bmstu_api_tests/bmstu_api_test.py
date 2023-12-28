@@ -1,7 +1,7 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from src.api.bmstu_schedule_api import BmstuScheduleApi
+from src.external.apis.schedule_api.impls import BmstuScheduleApi
 
 
 @pytest.mark.asyncio
