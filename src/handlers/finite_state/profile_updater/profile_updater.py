@@ -38,6 +38,7 @@ edit_profile_router = Router(
 @logger.catch
 async def edit_profile_command(message: Message, state: EditingContext) -> None:
     await message.answer(ASK_SURNAME_TEMPLATE)
+    await state.set_telegram_id(int(message.from_user.id))
     await state.set_state(UpdaterStates.waiting_surname)
 
 

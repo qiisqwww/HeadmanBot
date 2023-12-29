@@ -157,6 +157,5 @@ async def handling_name(
 
     await message.answer(
         asking_data_validation_template(await state.surname, await state.name),
-        reply_markup=ask_fullname_validity_buttons()
+        reply_markup=ask_fullname_validity_buttons(is_editing=False)
     )
-    await state.set_state(RegistrationStates.ask_fullname_validity)

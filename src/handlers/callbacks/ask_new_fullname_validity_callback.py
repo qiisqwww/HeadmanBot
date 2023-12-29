@@ -61,7 +61,7 @@ async def ask_new_fullname_validity_callback(
             await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE, reply_markup=inline_void_button())
 
     student_data = await state.get_data()
-    student_id = await state.telegram_id
+    student_id = int(callback.from_user.id)
     await cache_student_service.cache_student(student_data)
 
     surname = await state.surname
