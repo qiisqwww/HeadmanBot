@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import GroupId, Student, StudentLoginData
+from src.dto.models import GroupId, Student, StudentLoginData, StudentId
 from src.repositories import StudentRepository
 
 from .group_service_interface import GroupService
@@ -34,4 +34,8 @@ class StudentService(Service):
 
     @abstractmethod
     async def get_headman_by_group_name(self, group_name: str) -> Student | None:
+        ...
+
+    @abstractmethod
+    async def update_fullname_by_id(self, surname: str, name: str, student_id: StudentId) -> None:
         ...

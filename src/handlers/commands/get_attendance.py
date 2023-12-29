@@ -27,7 +27,7 @@ get_stat_command_router = Router(
 
 @get_stat_command_router.message(F.text == TelegramCommand.GET_ATTENDANCE)
 @logger.catch
-async def getstat_command(message: Message, student: Student, lesson_service: LessonService) -> None:
+async def get_stat_command(message: Message, student: Student, lesson_service: LessonService) -> None:
     lessons = await lesson_service.filter_by_group_id(student.group_id)
 
     if not lessons:

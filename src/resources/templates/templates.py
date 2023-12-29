@@ -83,13 +83,13 @@ def student_send_registration_request_template(surname: str, name: str) -> str:
     return f"Студент {surname} {name} подал заявку на регистарцию в боте."
 
 
-ASK_GROUP_TEMPLATE = "Отправь название вашей группы"
+ASK_GROUP_TEMPLATE = "Отправьте название вашей группы"
 
 GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет"
 
-ASK_SURNAME_TEMPLATE = "Отправь свою фамилию"
+ASK_SURNAME_TEMPLATE = "Отправьте свою фамилию"
 
-ASK_NAME_TEMPLATE = "Отправь свое имя"
+ASK_NAME_TEMPLATE = "Отправьте свое имя"
 
 YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = "Ваше заявление на регистрацию старостой было передано администраторам."
 

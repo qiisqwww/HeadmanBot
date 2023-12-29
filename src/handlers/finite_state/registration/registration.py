@@ -8,7 +8,7 @@ from src.dto.contexts import RegistrationContext
 from src.enums import Role
 from src.external.apis import ScheduleApi
 from src.external.apis.schedule_api.exceptions import FailedToCheckGroupExistence
-from src.handlers.finite_state.registration.validation import (
+from ..validation import (
     is_valid_name_len,
     is_valid_surname_len,
 )
@@ -23,12 +23,10 @@ from src.resources import (
     HEADMAN_ALREADY_EXISTS_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
-    asking_data_validation_template
-)
-from src.resources.buttons.inline_buttons import ask_fullname_validity_buttons
-from src.resources.templates.templates import (
+    asking_data_validation_template,
     TOO_MUCH_NAME_LENGTH_TEMPLATE,
     TOO_MUCH_SURNAME_LENGTH_TEMPLATE,
+    ask_fullname_validity_buttons
 )
 from src.services import GroupService, StudentService
 

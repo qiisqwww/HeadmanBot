@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from src.dto.models import GroupId, Student, StudentLoginData
+from src.dto.models import GroupId, Student, StudentLoginData, StudentId
 from src.enums import Role
 
 from .postgres_repository_interface import PostgresRepository
@@ -33,4 +33,8 @@ class StudentRepository(PostgresRepository):
 
     @abstractmethod
     async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
+        ...
+
+    @abstractmethod
+    async def update_fullname_by_id(self, surname: str, name: str, student_id: StudentId) -> None:
         ...

@@ -3,10 +3,8 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from src.config.config import ADMIN_IDS
-from src.dto.callback_data.ask_fullname_validity_callback_data import (
-    AskFullnameValidityCallbackData,
-)
-from src.dto.contexts.registration_context import RegistrationContext
+from src.dto.callback_data import AskNewFullnameValidityCallbackData
+from src.dto.contexts import RegistrationContext
 from src.dto.models import StudentId
 from src.enums import Role
 from src.handlers.finite_state.registration.registration_states import (
@@ -19,23 +17,23 @@ from src.resources.templates.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     headman_send_registration_request_template,
-    student_send_registration_request_template,
+    student_send_registration_request_template
 )
 from src.services import CacheStudentService, StudentService
 
 __all__ = [
-    "ask_fullname_validity_router",
+    "ask_new_fullname_validity_router",
 ]
 
 
-ask_fullname_validity_router = Router(must_be_registered=False)
+ask_new_fullname_validity_router = Router(must_be_registered=False)
 
 
-@ask_fullname_validity_router.callback_query(AskFullnameValidityCallbackData.filter())
+@ask_new_fullname_validity_router.callback_query(AskNewFullnameValidityCallbackData.filter())
 @logger.catch
-async def ask_fullname_validity_callback(
+async def ask_new_fullname_validity_callback(
     callback: CallbackQuery,
-    callback_data: AskFullnameValidityCallbackData,
+    callback_data: AskNewFullnameValidityCallbackData,
     state: RegistrationContext,
     bot: Bot,
     cache_student_service: CacheStudentService,

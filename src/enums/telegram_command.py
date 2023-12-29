@@ -10,3 +10,4 @@ class TelegramCommand(StrEnum):
     HELP = "Помощь"
     GET_ATTENDANCE = "Узнать посещаемость"
     RESTART = "Начать регистрацию заново"
+    EDIT_PROFILE = "Редактировать профиль"

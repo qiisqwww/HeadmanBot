@@ -1,5 +1,6 @@
 from datetime import date
 from typing import Iterable
+from loguru import logger
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -10,9 +11,8 @@ from src.dto.callback_data import (
     ChooseRoleCallbackData,
     UniversityCallbackData,
     UpdateAttendanceCallbackData,
-)
-from src.dto.callback_data.ask_fullname_validity_callback_data import (
-    AskFullnameValidityCallbackData,
+    AskNewFullnameValidityCallbackData,
+    AskEditedFullnameValidityCallbackData
 )
 from src.dto.models import Lesson, StudentId, University
 from src.enums import Role
@@ -91,11 +91,18 @@ def choose_lesson_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
+def ask_fullname_validity_buttons(is_editing: bool = False) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    builder.button(text="Да", callback_data=AskFullnameValidityCallbackData(is_fullname_correct=True))
-    builder.button(text="Нет", callback_data=AskFullnameValidityCallbackData(is_fullname_correct=False))
+    if is_editing:
+        builder.button(text="Да", callback_data=AskEditedFullnameValidityCallbackData(is_fullname_correct=True))
+        builder.button(text="Нет", callback_data=AskEditedFullnameValidityCallbackData(is_fullname_correct=False))
+        builder.adjust(2)
+
+        return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+    builder.button(text="Да", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=True))
+    builder.button(text="Нет", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=False))
     builder.adjust(2)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

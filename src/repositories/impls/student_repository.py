@@ -73,3 +73,10 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
 
         records = await self._con.fetch(query, group_id)
         return [Student.from_mapping(record) for record in records]
+
+    async def update_fullname_by_id(self, surname: str, name: str, student_id: StudentId) -> None:
+        query = ("UPDATE students "
+                 "SET name = $1, surname = $2 "
+                 "WHERE telegram_id = $3")
+
+        await self._con.execute(query, surname, name, student_id)

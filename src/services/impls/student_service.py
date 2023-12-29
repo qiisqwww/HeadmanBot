@@ -1,6 +1,7 @@
 from src.dto.models import (
     GroupId,
     Student,
+    StudentId,
     StudentLoginData,
     University
 )
@@ -67,3 +68,6 @@ class StudentServiceImpl(StudentService):
 
         if new_student is None:
             raise CorruptedDatabaseError(f"Got some mistakes while registratig user {student.telegram_id}")
+
+    async def update_fullname_by_id(self, surname: str, name: str, student_id: StudentId) -> None:
+        await self._student_repository.update_fullname_by_id(surname, name, student_id)

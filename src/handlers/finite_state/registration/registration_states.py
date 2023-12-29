@@ -12,5 +12,4 @@ class RegistrationStates(StatesGroup):
     waiting_birthdate = State()
     waiting_surname = State()
     waiting_name = State()
-    ask_fullname_validity = State()
-    on_verification = State()
+    ask_fullame_validity = State()
