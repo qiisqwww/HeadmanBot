@@ -3,10 +3,10 @@ version: '3.9'
 services:
   headman_bot:
     env_file:
-      - ./.env/.env
+      - ../.env/.env
     build: 
-      dockerfile: Dockerfile
-      context: ./
+      dockerfile: ./docker/Dockerfile
+      context: ../
     volumes:
       - /var/log/headman_bot:/app/logs
     depends_on:
@@ -16,13 +16,14 @@ services:
           condition: service_healthy
 
   postgres:
-    command: postgres -c log_min_duration_statement=1000
-    image: postgres
+    image: postgres:16.1-alpine3.19
     restart: always
     env_file:
-      - ./.env/.database.env
+      - ../.env/.database.env
     volumes:
-      - /var/lib/headman_bot_db:/var/lib/posgresql/data
+      - /var/lib/headman_bot_db:/var/lib/postgresql/data
+      - ../sql:/docker-entrypoint-initdb.d
+      - ../postgresql.conf:/etc/postgresql.conf
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s

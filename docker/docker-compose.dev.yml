@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  headman_bot:
+    env_file:
+      - ../.env/.dev.env
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: ..
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+          condition: service_healthy
+    volumes:
+      - ../logs:/app/logs
+
+  postgres:
+    image: postgres:16.1-alpine3.19
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    restart: always
+    env_file:
+      - ../.env/.database.dev.env
+    volumes:
+      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
+      - ../sql:/docker-entrypoint-initdb.d
+      - ../postgresql.conf:/etc/postgresql/postgresql.conf
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+
+  redis:
+    image: redis:7.2.3
+    restart: on-failure
+
+volumes:
+  headman_bot_postgres_dev_data:
