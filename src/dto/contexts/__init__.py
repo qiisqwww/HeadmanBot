@@ -1,7 +1,7 @@
 from .registration_context import RegistrationContext
-from .editing_context import EditingContext
+from .profile_update_context import ProfileUpdateContext
 
 __all__ = [
     "RegistrationContext",
-    "EditingContext"
+    "ProfileUpdateContext"
 ]

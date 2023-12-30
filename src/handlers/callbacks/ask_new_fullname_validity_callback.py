@@ -7,7 +7,7 @@ from src.dto.callback_data import AskNewFullnameValidityCallbackData
 from src.dto.contexts import RegistrationContext
 from src.dto.models import StudentId
 from src.enums import Role
-from src.handlers.finite_state.registration.registration_states import (
+from src.handlers.states.registration_states import (
     RegistrationStates,
 )
 from src.kernel import Router

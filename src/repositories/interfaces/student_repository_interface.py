@@ -36,5 +36,9 @@ class StudentRepository(PostgresRepository):
         ...
 
     @abstractmethod
-    async def update_fullname_by_id(self, surname: str, name: str, student_id: StudentId) -> None:
+    async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:
+        ...
+
+    @abstractmethod
+    async def update_name_by_id(self, new_name: str, student_id: StudentId) -> None:
         ...

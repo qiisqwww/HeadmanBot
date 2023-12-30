@@ -7,15 +7,17 @@ from .callbacks import (
     choose_role_router,
     choose_university_router,
     update_attendance_router,
-    ask_updated_fullname_validity_router
+    ask_updated_fullname_validity_router,
+    profile_update_choice_callback_router
 )
 from .commands import (
     get_stat_command_router,
     help_router,
     restart_command_router,
     start_command_router,
+    profile_router
 )
-from .finite_state import registration_finite_state_router, edit_profile_router
+from .finite_state import registration_finite_state_router, profile_update_router
 
 __all__ = [
     "root_router",
@@ -31,9 +33,11 @@ root_router.include_routers(
     choose_lesson_callback_router,
     start_command_router,
     help_router,
+    profile_router,
     get_stat_command_router,
     registration_finite_state_router,
+    ask_updated_fullname_validity_router,
     ask_new_fullname_validity_router,
-    edit_profile_router,
-    ask_updated_fullname_validity_router
+    profile_update_choice_callback_router,
+    profile_update_router
 )

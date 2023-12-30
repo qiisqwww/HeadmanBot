@@ -23,14 +23,14 @@ from src.resources import (
     HEADMAN_ALREADY_EXISTS_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
-    asking_data_validation_template,
+    asking_fullname_validation_template,
     TOO_MUCH_NAME_LENGTH_TEMPLATE,
     TOO_MUCH_SURNAME_LENGTH_TEMPLATE,
     ask_fullname_validity_buttons
 )
 from src.services import GroupService, StudentService
 
-from .registration_states import RegistrationStates
+from src.handlers.states import RegistrationStates
 
 __all__ = [
     "registration_finite_state_router",
@@ -156,6 +156,6 @@ async def handling_name(
     await state.set_name(message.text)
 
     await message.answer(
-        asking_data_validation_template(await state.surname, await state.name),
-        reply_markup=ask_fullname_validity_buttons(is_editing=False)
+        asking_fullname_validation_template(await state.surname, await state.name),
+        reply_markup=ask_fullname_validity_buttons()
     )

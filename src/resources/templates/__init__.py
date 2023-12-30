@@ -18,7 +18,7 @@ __all__ = [
     "ASK_UNIVERSITY_TEMPLATE",
     "successful_role_choose_template",
     "successful_university_choose_template",
-    "asking_data_validation_template",
+    "asking_fullname_validation_template",
     "ASK_GROUP_TEMPLATE",
     "INCORRECT_UNIVERSITY_TEMPLATE",
     "INCORRECT_STUDENT_ROLE_TEMPLATE",
@@ -35,5 +35,11 @@ __all__ = [
     "BIRTHDATE_INCORRECT_TEMPLATE",
     "ASK_BIRTHDATE_TEMPLATE",
     "TOO_MUCH_NAME_LENGTH_TEMPLATE",
-    "TOO_MUCH_SURNAME_LENGTH_TEMPLATE"
+    "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
+    "profile_info",
+    "ASK_NEW_NAME_TEMPLATE",
+    "ASK_NEW_SURNAME_TEMPLATE",
+    "asking_name_validation_template",
+    "asking_surname_validation_template",
+    "your_choice_is_template"
 ]

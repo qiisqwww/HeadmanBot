@@ -8,7 +8,7 @@ __all__ = [
     "role_buttons",
     "attendance_buttons",
     "choose_lesson_buttons",
-    "main_menu",
+    "profile_info",
     "ALL_PAIRS_TEMPLATE",
     "NO_PAIRS_TEMPLATE",
     "NO_LESSONS_TODAY_TEMPLATE",
@@ -16,7 +16,7 @@ __all__ = [
     "POLL_TEMPLATE",
     "WHICH_PAIR_TEMPLATE",
     "attendance_for_headmen_template",
-    "asking_data_validation_template",
+    "asking_fullname_validation_template",
     "start_message_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
@@ -43,5 +43,13 @@ __all__ = [
     "ASK_BIRTHDATE_TEMPLATE",
     "TOO_MUCH_NAME_LENGTH_TEMPLATE",
     "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
-    "ask_fullname_validity_buttons"
+    "ask_fullname_validity_buttons",
+    "profile_buttons",
+    "main_menu",
+    "ASK_NEW_NAME_TEMPLATE",
+    "ASK_NEW_SURNAME_TEMPLATE",
+    "asking_surname_validation_template",
+    "asking_name_validation_template",
+    "is_field_correct_buttons",
+    "your_choice_is_template"
 ]

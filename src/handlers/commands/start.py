@@ -12,7 +12,7 @@ from src.resources import (
 )
 from src.resources.buttons.reply_buttons import restart_button
 
-from ..finite_state.registration.registration_states import RegistrationStates
+from src.handlers.states.registration_states import RegistrationStates
 
 __all__ = [
     "start_command_router",

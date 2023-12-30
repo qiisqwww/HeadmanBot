@@ -4,11 +4,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
 __all__ = [
-    "EditingContext",
+    "ProfileUpdateContext",
 ]
 
 
-class EditingContext:
+class ProfileUpdateContext:
     """Just adapter to FSMContext."""
 
     _context: FSMContext

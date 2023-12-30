@@ -1,6 +1,5 @@
 from datetime import date
 from typing import Iterable
-from loguru import logger
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -12,10 +11,11 @@ from src.dto.callback_data import (
     UniversityCallbackData,
     UpdateAttendanceCallbackData,
     AskNewFullnameValidityCallbackData,
-    AskEditedFullnameValidityCallbackData
+    AskUpdatedFieldValidityCallbackData,
+    ProfileUpdateCallbackData
 )
 from src.dto.models import Lesson, StudentId, University
-from src.enums import Role
+from src.enums import Role, ProfileField
 
 __all__ = [
     "university_list_buttons",
@@ -24,6 +24,8 @@ __all__ = [
     "attendance_buttons",
     "choose_lesson_buttons",
     "ask_fullname_validity_buttons",
+    "profile_buttons",
+    "is_field_correct_buttons"
 ]
 
 
@@ -91,18 +93,43 @@ def choose_lesson_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-def ask_fullname_validity_buttons(is_editing: bool = False) -> InlineKeyboardMarkup:
+def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-
-    if is_editing:
-        builder.button(text="Да", callback_data=AskEditedFullnameValidityCallbackData(is_fullname_correct=True))
-        builder.button(text="Нет", callback_data=AskEditedFullnameValidityCallbackData(is_fullname_correct=False))
-        builder.adjust(2)
-
-        return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
     builder.button(text="Да", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=True))
     builder.button(text="Нет", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=False))
+    builder.adjust(2)
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def profile_buttons() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Редактировать имя",
+        callback_data=ProfileUpdateCallbackData(updating_data=ProfileField.name)
+    )
+    builder.button(
+        text="Редактировать фамилию",
+        callback_data=ProfileUpdateCallbackData(updating_data=ProfileField.surname)
+    )
+    builder.adjust(2)
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def is_field_correct_buttons(field: ProfileField) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Да",
+        callback_data=AskUpdatedFieldValidityCallbackData(is_field_correct=True, field_type=field)
+    )
+    builder.button(
+        text="Нет",
+        callback_data=AskUpdatedFieldValidityCallbackData(is_field_correct=False, field_type=field)
+    )
     builder.adjust(2)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

@@ -4,13 +4,15 @@ __all__ = [
     "headman_send_registration_request_template",
     "student_send_registration_request_template",
     "start_message_template",
-    "asking_data_validation_template",
+    "asking_fullname_validation_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
     "REGISTRATION_ACCEPTED_TEMPLATE",
     "YOU_WERE_DENIED_TEMPLATE",
     "YOU_WERE_ACCEPTED_TEMPLATE",
     "ASK_UNIVERSITY_TEMPLATE",
+    "ASK_NEW_NAME_TEMPLATE",
+    "ASK_NEW_SURNAME_TEMPLATE",
     "successful_role_choose_template",
     "successful_university_choose_template",
     "ASK_GROUP_TEMPLATE",
@@ -29,21 +31,11 @@ __all__ = [
     "chosen_lesson_template",
     "TOO_MUCH_NAME_LENGTH_TEMPLATE",
     "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
+    "profile_info",
+    "asking_name_validation_template",
+    "asking_surname_validation_template",
+    "your_choice_is_template"
 ]
-
-
-def start_message_template(surname: str | None, name: str) -> str:
-    if surname is None:
-        return f"Приветствую {name}! Для начала, давай зарегистрируемся в системе бота."
-    return f"Приветствую {surname} {name}! Для начала, давай зарегистрируемся в системе бота."
-
-
-def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
-    return f"Вы посетите пару {lesson_name}, которая начнётся в {start_time}"
-
-
-def asking_data_validation_template(surname: str, name: str) -> str:
-    return f"{surname} {name}\n\nДанные верны?"
 
 
 CHOOSE_STUDENT_ROLE_TEMPLATE = "Нажмите на кнопку 'Я студент' или 'Я староста', чтобы выбрать свою роль."
@@ -64,32 +56,19 @@ YOU_WERE_DENIED_TEMPLATE = """
 
 ASK_UNIVERSITY_TEMPLATE = "Выберите свой университет."
 
-INCORRECT_UNIVERSITY_TEMPLATE = "Пожалуйста, нажмите на одну из кнопок выше, чтобы выбрать ваш университет."
+INCORRECT_UNIVERSITY_TEMPLATE = "Нажмите только на одну из кнопок выше, чтобы выбрать ваш университет."
 
-
-def successful_role_choose_template(role: Role) -> str:
-    return f"Роль была успешно выбрана. Вы - <b>{role}</b>."
-
-
-def successful_university_choose_template(university_name: str) -> str:
-    return f"Вы успешно выбрали университет <b>{university_name}</b>."
-
-
-def headman_send_registration_request_template(name: str, surname: str) -> str:
-    return f"Староста {surname} {name} подал заявку на регистарцию в боте."
-
-
-def student_send_registration_request_template(surname: str, name: str) -> str:
-    return f"Студент {surname} {name} подал заявку на регистарцию в боте."
-
-
-ASK_GROUP_TEMPLATE = "Отправьте название вашей группы"
+ASK_GROUP_TEMPLATE = "Введите название вашей группы"
 
 GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет"
 
-ASK_SURNAME_TEMPLATE = "Отправьте свою фамилию"
+ASK_SURNAME_TEMPLATE = "Введите свою фамилию"
 
-ASK_NAME_TEMPLATE = "Отправьте свое имя"
+ASK_NAME_TEMPLATE = "Введите свое имя"
+
+ASK_NEW_NAME_TEMPLATE = "Введите новое имя"
+
+ASK_NEW_SURNAME_TEMPLATE = "Введите новую фамилию"
 
 YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = "Ваше заявление на регистрацию старостой было передано администраторам."
 
@@ -133,3 +112,49 @@ GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа не зарегистриро
 TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длинной не более 255 символов. Попробуйте снова."
 
 TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть длинной не более 255 символов. Попробуйте снова."
+
+
+def successful_role_choose_template(role: Role) -> str:
+    return f"Роль была успешно выбрана. Вы - <b>{role}</b>."
+
+
+def successful_university_choose_template(university_name: str) -> str:
+    return f"Вы успешно выбрали университет <b>{university_name}</b>."
+
+
+def headman_send_registration_request_template(name: str, surname: str) -> str:
+    return f"Староста {surname} {name} подал заявку на регистарцию в боте."
+
+
+def student_send_registration_request_template(surname: str, name: str) -> str:
+    return f"Студент {surname} {name} подал заявку на регистарцию в боте."
+
+
+def start_message_template(surname: str | None, name: str) -> str:
+    if surname is None:
+        return f"Приветствую {name}! Для начала, давай зарегистрируемся в системе бота."
+    return f"Приветствую {surname} {name}! Для начала, давай зарегистрируемся в системе бота."
+
+
+def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
+    return f"Вы посетите пару {lesson_name}, которая начнётся в {start_time}"
+
+
+def asking_fullname_validation_template(surname: str, name: str) -> str:
+    return f"{surname} {name}\n\nДанные верны?"
+
+
+def profile_info(surname: str, name: str) -> str:
+    return f"<b>Профиль студента</b>\n\nФамилия: <i>{surname}</i>\n\nИмя: <i>{name}</i>"
+
+
+def asking_name_validation_template(name: str) -> str:
+    return f"Ваше новое имя: {name}\n\nДанные верны?"
+
+
+def asking_surname_validation_template(surname: str) -> str:
+    return f"Ваша новая фамилия: {surname}\n\nДанные верны?"
+
+
+def your_choice_is_template(is_fullname_correct: bool) -> str:
+    return f"Dы выбрали {'<b>да</b>' if is_fullname_correct else '<b>нет</b>'}"
