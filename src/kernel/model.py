@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from enum import Enum
 from types import NoneType, UnionType
 from typing import Mapping, NoReturn, Self
@@ -7,12 +8,13 @@ __all__ = [
 ]
 
 
-class Model:
-    def __init__(self, **_):
+class Model(ABC):
+    @abstractmethod
+    def __init__(self, **kwargs) -> None:
         ...
 
     @classmethod
-    def from_mapping(cls, data: Mapping) -> Self:
+    def from_mapping(cls: type[Self], data: Mapping) -> Self:
         """This constructor convert enum types, do type checking and
         set None for args which can be None but not passed into data mapping."""
         validated_data = {}

@@ -25,9 +25,9 @@ class Router(AiogramRouter):
     def __init__(
         self,
         *,
+        must_be_registered: bool | None = None,
         name: str | None = None,
         throttling: bool = False,
-        must_be_registered: bool | None = None,
         minimum_role: Role | None = None,
     ) -> None:
         super().__init__(name=name)

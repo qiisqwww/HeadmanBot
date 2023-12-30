@@ -1,5 +1,6 @@
 from src.dto.models import StudentFullnameView
-from src.enums import VisitStatus
+
+from ...domain.enums import VisitStatus
 
 __all__ = [
     "ALL_PAIRS_TEMPLATE",

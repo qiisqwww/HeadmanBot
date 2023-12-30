@@ -1,9 +1,4 @@
-from enum import (
-    UNIQUE,
-    EnumMeta,
-    StrEnum,
-    verify
-)
+from enum import UNIQUE, EnumMeta, StrEnum, verify
 from typing import Self
 
 __all__ = [
@@ -24,11 +19,23 @@ class EnumContainsMeta(EnumMeta):
 
 @verify(UNIQUE)
 class Role(StrEnum, metaclass=EnumContainsMeta):
-    ADMIN = "Админ"
-    HEADMAN = "Староста"
-    VICE_HEADMAN = "Заместитель cтаросты"
-    STUDENT = "Студент"
+    ADMIN = "admin"
+    HEADMAN = "headman"
+    VICE_HEADMAN = "vice headman"
+    STUDENT = "student"
 
+    @property
+    def translation(self) -> str:
+        translations = {
+            Role.ADMIN: "Админ",
+            Role.HEADMAN: "Староста",
+            Role.VICE_HEADMAN: "Заместитель старосты",
+            Role.STUDENT: "Студент",
+        }
+
+        return translations[self]
+
+    @property
     def _weight(self) -> int:
         roles_weight = {
             "ADMIN": 4,
@@ -43,22 +50,22 @@ class Role(StrEnum, metaclass=EnumContainsMeta):
         if not isinstance(other, Role):
             raise NotImplementedError
 
-        return self._weight() > other._weight()
+        return self._weight > other._weight
 
     def __ge__(self, other: Self) -> bool:  # type: ignore
         if not isinstance(other, Role):
             raise NotImplementedError
 
-        return self._weight() >= other._weight()
+        return self._weight >= other._weight
 
     def __lt__(self, other: Self) -> bool:  # type: ignore
         if not isinstance(other, Role):
             raise NotImplementedError
 
-        return self._weight() < other._weight()
+        return self._weight < other._weight
 
     def __le__(self, other: Self) -> bool:  # type: ignore
         if not isinstance(other, Role):
             raise NotImplementedError
 
-        return self._weight() <= other._weight()
+        return self._weight <= other._weight

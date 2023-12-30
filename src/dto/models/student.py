@@ -4,7 +4,7 @@ from typing import NewType
 
 from src.enums import Role
 
-from .group import GroupId
+from .group import Group
 from .model import Model
 
 __all__ = [
@@ -18,11 +18,12 @@ StudentId = NewType("StudentId", int)
 @dataclass(slots=True, frozen=True, unsafe_hash=True)
 class Student(Model):
     telegram_id: StudentId
-    group_id: GroupId
+    group: Group
     name: str
     surname: str
     role: Role
     birthdate: date | None
+    is_checked_in_today: bool
 
     @property
     def fullname(self) -> str:

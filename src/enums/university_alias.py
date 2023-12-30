@@ -1,8 +1,4 @@
-from enum import (
-    UNIQUE,
-    StrEnum,
-    verify
-)
+from enum import UNIQUE, StrEnum, verify
 
 __all__ = [
     "UniversityAlias",

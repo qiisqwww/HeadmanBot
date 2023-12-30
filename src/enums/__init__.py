@@ -1,13 +1,9 @@
-from .role import Role
-from .telegram_command import TelegramCommand
-from .university_alias import UniversityAlias
-from .visit_status import VisitStatus
 from .profile_field import ProfileField
+from .role import Role
+from .university_alias import UniversityAlias
 
 __all__ = [
+    "ProfileField",
     "Role",
     "UniversityAlias",
-    "VisitStatus",
-    "TelegramCommand",
-    "ProfileField"
 ]

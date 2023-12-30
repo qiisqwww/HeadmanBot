@@ -1,10 +1,11 @@
-from enum import StrEnum
+from enum import UNIQUE, StrEnum, verify
 
 __all__ = [
     "TelegramCommand",
 ]
 
 
+@verify(UNIQUE)
 class TelegramCommand(StrEnum):
     START = "/start"
     HELP = "Помощь"

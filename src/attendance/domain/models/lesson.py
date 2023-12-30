@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from datetime import time
 from typing import Any, NewType
 
-from .group import GroupId
-from .model import Model
+from src.dto.models.group import GroupId
+from src.kernel import Model
 
 __all__ = [
     "Lesson",

@@ -2,7 +2,7 @@ from datetime import date
 
 from aiogram.filters.callback_data import CallbackData
 
-from src.dto.models import LessonId
+from src.commands.get_attendance.domain.models import LessonId
 
 __all__ = [
     "UpdateAttendanceCallbackData",
