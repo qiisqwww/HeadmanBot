@@ -10,7 +10,7 @@ from src.resources import (
     NO_LESSONS_TODAY_TEMPLATE,
     WHICH_PAIR_TEMPLATE,
     choose_lesson_buttons,
-    profile_info,
+    main_menu,
 )
 from src.services import LessonService
 
@@ -34,5 +34,5 @@ async def get_stat_command(message: Message, student: Student, lesson_service: L
         await message.answer(NO_LESSONS_TODAY_TEMPLATE)
         return
 
-    await message.answer(CHOOSE_PAIR_TEMPLATE, reply_markup=profile_info(student.role))
+    await message.answer(CHOOSE_PAIR_TEMPLATE, reply_markup=main_menu(student.role))
     await message.answer(WHICH_PAIR_TEMPLATE, reply_markup=choose_lesson_buttons(lessons))
