@@ -41,5 +41,6 @@ __all__ = [
     "ASK_NEW_SURNAME_TEMPLATE",
     "asking_name_validation_template",
     "asking_surname_validation_template",
-    "your_choice_is_template"
+    "your_choice_is_template",
+    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE"
 ]

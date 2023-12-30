@@ -15,5 +15,7 @@ __all__ = [
     "restart_button",
     "ask_fullname_validity_buttons",
     "profile_buttons",
-    "is_field_correct_buttons"
+    "profile_update_choice_buttons",
+    "is_field_correct_buttons",
+    "get_back_button"
 ]

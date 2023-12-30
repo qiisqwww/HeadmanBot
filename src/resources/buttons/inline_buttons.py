@@ -12,7 +12,9 @@ from src.dto.callback_data import (
     UpdateAttendanceCallbackData,
     AskNewFullnameValidityCallbackData,
     AskUpdatedFieldValidityCallbackData,
-    ProfileUpdateCallbackData
+    ProfileUpdateChoiceCallbackData,
+    ProfileUpdateCallbackData,
+    GetBackToProfileCallbackData
 )
 from src.dto.models import Lesson, StudentId, University
 from src.enums import Role, ProfileField
@@ -25,7 +27,9 @@ __all__ = [
     "choose_lesson_buttons",
     "ask_fullname_validity_buttons",
     "profile_buttons",
-    "is_field_correct_buttons"
+    "profile_update_choice_buttons",
+    "is_field_correct_buttons",
+    "get_back_button"
 ]
 
 
@@ -103,18 +107,45 @@ def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
-def profile_buttons() -> InlineKeyboardMarkup:
+def profile_update_choice_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(
         text="Редактировать имя",
-        callback_data=ProfileUpdateCallbackData(updating_data=ProfileField.name)
+        callback_data=ProfileUpdateChoiceCallbackData(updating_data=ProfileField.name)
     )
     builder.button(
         text="Редактировать фамилию",
-        callback_data=ProfileUpdateCallbackData(updating_data=ProfileField.surname)
+        callback_data=ProfileUpdateChoiceCallbackData(updating_data=ProfileField.surname)
+    )
+    builder.button(
+        text="Вернуться назад",
+        callback_data=GetBackToProfileCallbackData()
     )
     builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def get_back_button() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Вернуться назад",
+        callback_data=GetBackToProfileCallbackData()
+    )
+    builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def profile_buttons() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Редактировать профиль",
+        callback_data=ProfileUpdateCallbackData()
+    )
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 

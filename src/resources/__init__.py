@@ -51,5 +51,8 @@ __all__ = [
     "asking_surname_validation_template",
     "asking_name_validation_template",
     "is_field_correct_buttons",
-    "your_choice_is_template"
+    "your_choice_is_template",
+    "profile_update_choice_buttons",
+    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE",
+    "get_back_button"
 ]

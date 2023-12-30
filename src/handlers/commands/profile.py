@@ -23,10 +23,8 @@ profile_router = Router(
 
 @profile_router.message(F.text == TelegramCommand.PROFILE)
 @logger.catch
-async def profile_command(
-        message: Message,
-        student: Student) -> None:
+async def profile_command(message: Message, student: Student) -> None:
     await message.answer(
-        text=profile_info(student.surname, student.name),
+        text=profile_info(student.surname, student.name, student.role),
         reply_markup=profile_buttons()
     )

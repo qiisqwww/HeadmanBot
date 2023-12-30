@@ -34,7 +34,8 @@ __all__ = [
     "profile_info",
     "asking_name_validation_template",
     "asking_surname_validation_template",
-    "your_choice_is_template"
+    "your_choice_is_template",
+    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE"
 ]
 
 
@@ -109,9 +110,11 @@ FAQ_TEMPLATE = """
 GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа не зарегистрирована в боте, попросите своего старосту ее зарегистрировать.
 Попробуйте ввести название группы заново."""
 
-TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длинной не более 255 символов. Попробуйте снова."
+TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длиной не более 255 символов. Попробуйте снова."
 
-TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть длинной не более 255 символов. Попробуйте снова."
+TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть длиной не более 255 символов. Попробуйте снова."
+
+WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы желаете изменить?"
 
 
 def successful_role_choose_template(role: Role) -> str:
@@ -144,8 +147,8 @@ def asking_fullname_validation_template(surname: str, name: str) -> str:
     return f"{surname} {name}\n\nДанные верны?"
 
 
-def profile_info(surname: str, name: str) -> str:
-    return f"<b>Профиль студента</b>\n\nФамилия: <i>{surname}</i>\nИмя: <i>{name}</i>"
+def profile_info(surname: str, name: str, role: Role) -> str:
+    return f"<b>Профиль студента</b>\n\nФамилия: <i>{surname}</i>\nИмя: <i>{name}</i>\nРоль: <i>{role}</i>"
 
 
 def asking_name_validation_template(name: str) -> str:

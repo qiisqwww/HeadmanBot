@@ -5,7 +5,9 @@ from .choose_role_callback_data import ChooseRoleCallbackData
 from .university_callback_data import UniversityCallbackData
 from .update_attendance_callback_data import UpdateAttendanceCallbackData
 from .ask_updated_field_validity_callback_data import AskUpdatedFieldValidityCallbackData
-from .profile_update_callback_data import ProfileUpdateCallbackData
+from .profile_update_choice_callback_data import ProfileUpdateChoiceCallbackData
+from .profile_menu import ProfileUpdateCallbackData
+from .get_back_to_profile_callback_data import GetBackToProfileCallbackData
 
 __all__ = [
     "AskNewFullnameValidityCallbackData",
@@ -15,5 +17,7 @@ __all__ = [
     "ChooseLessonCallbackData",
     "UpdateAttendanceCallbackData",
     "AskUpdatedFieldValidityCallbackData",
-    "ProfileUpdateCallbackData"
+    "ProfileUpdateChoiceCallbackData",
+    "ProfileUpdateCallbackData",
+    "GetBackToProfileCallbackData"
 ]

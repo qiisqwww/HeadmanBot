@@ -8,7 +8,7 @@ from .callbacks import (
     choose_university_router,
     update_attendance_router,
     ask_updated_fullname_validity_router,
-    profile_update_choice_callback_router
+    profile_menu_router
 )
 from .commands import (
     get_stat_command_router,
@@ -38,6 +38,6 @@ root_router.include_routers(
     registration_finite_state_router,
     ask_updated_fullname_validity_router,
     ask_new_fullname_validity_router,
-    profile_update_choice_callback_router,
+    profile_menu_router,
     profile_update_router
 )
