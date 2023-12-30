@@ -11,7 +11,8 @@ from src.resources import (
     inline_void_button,
     ASK_NEW_SURNAME_TEMPLATE,
     ASK_NEW_NAME_TEMPLATE,
-    your_choice_is_template
+    your_choice_is_template,
+    main_menu
 )
 from src.services import StudentService
 
@@ -50,14 +51,14 @@ async def ask_new_fullname_validity_callback(
         if callback_data.field_type == ProfileField.name:
             await callback.message.answer(
                 text=ASK_NEW_NAME_TEMPLATE,
-                reply_markup=inline_void_button()
+                reply_markup=main_menu(student.role)
             )
             await state.set_state(ProfileUpdateStates.waiting_new_name)
             return
         else:
             await callback.message.answer(
                 text=ASK_NEW_SURNAME_TEMPLATE,
-                reply_markup=inline_void_button()
+                reply_markup=main_menu(student.role)
             )
             await state.set_state(ProfileUpdateStates.waiting_new_surname)
             return

@@ -114,7 +114,7 @@ def profile_buttons() -> InlineKeyboardMarkup:
         text="Редактировать фамилию",
         callback_data=ProfileUpdateCallbackData(updating_data=ProfileField.surname)
     )
-    builder.adjust(2)
+    builder.adjust(1)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 

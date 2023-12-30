@@ -4,10 +4,12 @@ from loguru import logger
 from src.dto.callback_data import ProfileUpdateCallbackData
 from src.dto.contexts import ProfileUpdateContext
 from src.enums import Role, ProfileField
+from src.dto.models import Student
 from src.kernel import Router
 from src.resources import (
     ASK_NEW_SURNAME_TEMPLATE,
-    ASK_NEW_NAME_TEMPLATE
+    ASK_NEW_NAME_TEMPLATE,
+    main_menu
 )
 from src.handlers.states import ProfileUpdateStates
 
@@ -27,15 +29,22 @@ profile_update_choice_callback_router = Router(
 async def profile_update_choice(
     callback: CallbackQuery,
     callback_data: ProfileUpdateCallbackData,
-    state: ProfileUpdateContext
+    state: ProfileUpdateContext,
+    student: Student
 ):
     if callback.message is None:
         return
 
     if callback_data.updating_data == ProfileField.name:
-        await callback.message.answer(ASK_NEW_NAME_TEMPLATE)
+        await callback.message.answer(
+            ASK_NEW_NAME_TEMPLATE,
+            reply_markup=main_menu(student.role)
+        )
         await state.set_state(ProfileUpdateStates.waiting_new_name)
 
     if callback_data.updating_data == ProfileField.surname:
-        await callback.message.answer(ASK_NEW_SURNAME_TEMPLATE)
+        await callback.message.answer(
+            ASK_NEW_SURNAME_TEMPLATE,
+            reply_markup=main_menu(student.role)
+        )
         await state.set_state(ProfileUpdateStates.waiting_new_surname)

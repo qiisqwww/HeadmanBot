@@ -145,7 +145,7 @@ def asking_fullname_validation_template(surname: str, name: str) -> str:
 
 
 def profile_info(surname: str, name: str) -> str:
-    return f"<b>Профиль студента</b>\n\nФамилия: <i>{surname}</i>\n\nИмя: <i>{name}</i>"
+    return f"<b>Профиль студента</b>\n\nФамилия: <i>{surname}</i>\nИмя: <i>{name}</i>"
 
 
 def asking_name_validation_template(name: str) -> str:
@@ -157,4 +157,4 @@ def asking_surname_validation_template(surname: str) -> str:
 
 
 def your_choice_is_template(is_fullname_correct: bool) -> str:
-    return f"Dы выбрали {'<b>да</b>' if is_fullname_correct else '<b>нет</b>'}"
+    return f"Вы выбрали {'<b>да</b>' if is_fullname_correct else '<b>нет</b>'}"

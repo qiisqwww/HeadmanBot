@@ -10,10 +10,14 @@ __all__ = [
 
 def main_menu(role: Role) -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
-    buttons = [KeyboardButton(text=TelegramCommand.HELP)]
+    buttons = [
+        KeyboardButton(text=TelegramCommand.HELP),
+        KeyboardButton(text=TelegramCommand.PROFILE)
+    ]
 
     if role >= Role.VICE_HEADMAN:
         buttons.append(KeyboardButton(text=TelegramCommand.GET_ATTENDANCE))
 
     builder.add(*buttons)
+    builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)

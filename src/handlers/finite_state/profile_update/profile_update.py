@@ -38,7 +38,7 @@ async def new_surname_handler(message: Message, state: ProfileUpdateContext) -> 
             reply_markup=is_field_correct_buttons(ProfileField.surname)
         )
 
-        await state.set_name(new_surname)
+        await state.set_surname(new_surname)
         await state.set_state(ProfileUpdateStates.on_validation)
 
 
