@@ -1,6 +1,6 @@
 from redis.asyncio import ConnectionPool
 
-from src.config import REDIS_HOST, REDIS_PORT
+from ..config import REDIS_HOST, REDIS_PORT
 
 __all__ = [
     "get_redis_pool",

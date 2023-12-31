@@ -1,9 +1,6 @@
 from aiogram import Router as AiogramRouter
 
-from src.enums import Role
-from src.kernel.router.middlewares.permission_manager_middleware import (
-    PermissionManagerMiddleware,
-)
+from src.domain.student_management.enums import Role
 
 from .middlewares import (
     InjectContextMiddleware,
@@ -11,6 +8,7 @@ from .middlewares import (
     InjectRedisConnectionMiddleware,
     InjectServicesMiddleware,
     InjectStudentMiddleware,
+    PermissionManagerMiddleware,
     ThrottlingMiddleware,
 )
 

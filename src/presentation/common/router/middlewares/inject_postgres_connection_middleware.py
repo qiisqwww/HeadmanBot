@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import Update
 from loguru import logger
 
-from src.external.database import get_postgres_pool
+from src.infrastructure.common.database import get_postgres_pool
 
 __all__ = [
     "InjectPostgresMiddleware",

@@ -4,7 +4,12 @@ from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from loguru import logger
 
-from src.dto.contexts import RegistrationContext, ProfileUpdateContext
+from src.presentation.student_management.profile.profile_update_context import (
+    ProfileUpdateContext,
+)
+from src.presentation.student_management.registration.registration_context import (
+    RegistrationContext,
+)
 
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
@@ -21,7 +26,7 @@ class InjectContextMiddleware(BaseMiddleware):
         if "state" in annotations:
             if annotations["state"] == RegistrationContext and not isinstance(data["state"], RegistrationContext):
                 data["state"] = RegistrationContext(data["state"])
-            if annotations["state"] == ProfileUpdateContext and not isinstance(data["state"], ProfileUpdateContext):
+            elif annotations["state"] == ProfileUpdateContext and not isinstance(data["state"], ProfileUpdateContext):
                 data["state"] = ProfileUpdateContext(data["state"])
 
         return await handler(event, data)

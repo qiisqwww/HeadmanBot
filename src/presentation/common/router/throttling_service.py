@@ -1,8 +1,15 @@
-from src.services.interfaces.redis_service import RedisService
+from redis.asyncio import Redis  # type: ignore
 
 __all__ = [
     "ThrottlingService",
 ]
+
+
+class RedisService:
+    _con: Redis
+
+    def __init__(self, con: Redis) -> None:
+        self._con = con
 
 
 class ThrottlingService(RedisService):

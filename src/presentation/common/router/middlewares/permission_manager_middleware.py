@@ -4,8 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
-from src.dto.models import Student
-from src.enums import Role
+from src.domain.student_management.enums import Role
 
 HandlerType: TypeAlias = Callable[[Message | CallbackQuery, dict[str, Any]], Awaitable[Any]]
 
@@ -23,7 +22,7 @@ class PermissionManagerMiddleware(BaseMiddleware):
 
     @logger.catch
     async def __call__(self, handler: HandlerType, event: Message | CallbackQuery, data: dict[str, Any]) -> Any:
-        student: Student = data["student"]
+        student = data["student"]
 
         if student.role < self._min_role:
             await event.answer("У вас недостаточно прав для выполнения данной команды")

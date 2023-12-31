@@ -3,9 +3,9 @@ from datetime import date
 from typing import NewType
 
 from src.domain.common import Model
+from src.domain.edu_info.models import Group
 
 from ..enums import Role
-from .group import Group
 
 __all__ = [
     "Student",
