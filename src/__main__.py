@@ -4,28 +4,27 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
-from asyncpg.pool import Pool
 
-from src.config import BOT_TOKEN, configurate_logger
+from src.infrastructure.common.config import BOT_TOKEN, configurate_logger
 
-from src.jobs import SendingJob, UpdateDatabaseJob
-from src.external.database import get_postgres_pool
-from src.handlers import root_router
-from src.repositories.impls import UniversityRepositoryImpl
-from src.services.impls import UniversityServiceImpl
+# from src.external.database import get_postgres_pool
+from src.presentation import root_router
 
-
-async def init_postgres_database(pool: Pool) -> None:
-    async with pool.acquire() as con:
-        await UniversityServiceImpl(UniversityRepositoryImpl(con)).add_universities()
+# from src.repositories.impls import UniversityRepositoryImpl
+# from src.services.impls import UniversityServiceImpl
 
 
-async def init_jobs(bot: Bot, pool: Pool) -> None:
-    sender = SendingJob(bot, pool)
-    database_updater = UpdateDatabaseJob(pool)
+# async def init_postgres_database(pool: Pool) -> None:
+#     async with pool.acquire() as con:
+#         await UniversityServiceImpl(UniversityRepositoryImpl(con)).add_universities()
+#
 
-    await database_updater.start()
-    await sender.start()
+# async def init_jobs(bot: Bot, pool: Pool) -> None:
+#     sender = SendingJob(bot, pool)
+#     database_updater = UpdateDatabaseJob(pool)
+#
+#     await database_updater.start()
+#     await sender.start()
 
 
 async def main():
@@ -39,9 +38,9 @@ async def main():
 
     configurate_logger()
 
-    pool = await get_postgres_pool()
-    await init_postgres_database(pool)
-    await init_jobs(bot, pool)
+    # pool = await get_postgres_pool()
+    # await init_postgres_database(pool)
+    # await init_jobs(bot, pool)
 
     logger.info("Bot is starting.")
 
