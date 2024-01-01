@@ -94,7 +94,7 @@ WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы желаете изменить?"
 
 
 def successful_role_choose_template(role: Role) -> str:
-    return f"Роль была успешно выбрана. Вы - <b>{role}</b>."
+    return f"Роль была успешно выбрана. Вы - <b>{role.translation}</b>."
 
 
 def successful_university_choose_template(university_name: str) -> str:

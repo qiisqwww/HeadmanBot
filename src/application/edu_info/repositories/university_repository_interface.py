@@ -12,9 +12,10 @@ class UniversityRepository:
     async def get_by_alias(self, alias: UniversityAlias) -> University:
         ...
 
-    # @abstractmethod
-    # async def all(self) -> list[University]:
-    #     ...
+    @abstractmethod
+    async def all(self) -> list[University]:
+        ...
+
     #
     # @abstractmethod
     # async def get_by_id(self, university_id: UniversityId) -> University:

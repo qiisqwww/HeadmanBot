@@ -4,6 +4,7 @@ from dependency_injector.providers import Dependency, Singleton
 
 from src.application.student_management.queries import (
     FindStudentQuery,
+    GetAllUniversitiesQuery,
     GetUniversityByAliasQuery,
 )
 from src.infrastructure.edu_info.persistence import UniversityRepositoryImpl
@@ -28,5 +29,10 @@ class StudentManagementContainer(DeclarativeContainer):
 
     get_university_by_alias_query = Singleton(
         GetUniversityByAliasQuery,
+        university_repository,
+    )
+
+    get_all_universities_query = Singleton(
+        GetAllUniversitiesQuery,
         university_repository,
     )

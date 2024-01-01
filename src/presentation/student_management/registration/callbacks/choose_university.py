@@ -27,13 +27,12 @@ async def get_university_from_user(
     callback: CallbackQuery,
     callback_data: UniversityCallbackData,
     state: RegistrationContext,
-    get_university_query: type[GetUniversityByAliasQuery],
+    get_university_query: GetUniversityByAliasQuery,
 ) -> None:
     if callback.message is None:
         return
 
-    query = GetUniversityByAliasQuery(callback_data.university_alias)
-    choosen_uni = await university_service.get_by_alias(callback_data.university_alias)
+    choosen_uni = await get_university_query.execute(callback_data.university_alias)
 
     await state.set_university_alias(callback_data.university_alias)
 

@@ -12,7 +12,7 @@ __all__ = [
 
 class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
     async def get_by_alias(self, alias: UniversityAlias) -> University:
-        query = "SELECT * FROM universities WHERE alias LIKE $1"
+        query = "SELECT * FROM universities WHERE alias = $1"
         record = await self._con.fetchrow(query, alias)
 
         if record is None:
@@ -20,11 +20,11 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
 
         return University.from_mapping(record)
 
-    # async def all(self) -> list[University]:
-    #     query = "SELECT * FROM universities"
-    #     records = await self._con.fetch(query)
-    #
-    #     return [University.from_mapping(record) for record in records]
+    async def all(self) -> list[University]:
+        query = "SELECT * FROM universities"
+        records = await self._con.fetch(query)
+
+        return [University.from_mapping(record) for record in records]
 
     # async def get_by_id(self, university_id: UniversityId) -> University:
     #     query = "SELECT * FROM universities WHERE id = $1"
