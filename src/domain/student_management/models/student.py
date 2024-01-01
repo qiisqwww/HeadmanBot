@@ -15,7 +15,7 @@ __all__ = [
 StudentId = NewType("StudentId", int)
 
 
-@dataclass(slots=True, frozen=True, unsafe_hash=True)
+@dataclass(slots=True)
 class Student(Model):
     telegram_id: StudentId
     name: str
@@ -40,3 +40,6 @@ class Student(Model):
 
     def is_student(self) -> bool:
         return self.role == Role.STUDENT
+
+    def __hash__(self) -> int:
+        return hash(self.telegram_id)

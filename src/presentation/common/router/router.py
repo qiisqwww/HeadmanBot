@@ -1,6 +1,9 @@
 from aiogram import Router as AiogramRouter
 
 from src.domain.student_management.enums import Role
+from src.presentation.common.router.middlewares.inject_di_container_middleware import (
+    InjectDIContainerMiddleware,
+)
 
 from .middlewares import (
     InjectContextMiddleware,
@@ -41,11 +44,12 @@ class Router(AiogramRouter):
                 )
 
         self._inject_redis_middleware()
+        self._inject_postgres_middleware()
 
         if throttling:
             self._inject_throttling_middleware()
 
-        self._inject_postgres_middleware()
+        self._inject_di_container_middleware()
         self._inject_services_middleware()
 
         if must_be_registered is not None:
@@ -79,6 +83,10 @@ class Router(AiogramRouter):
     def _inject_services_middleware(self) -> None:
         self.message.middleware(InjectServicesMiddleware())
         self.callback_query.middleware(InjectServicesMiddleware())
+
+    def _inject_di_container_middleware(self) -> None:
+        self.message.middleware(InjectDIContainerMiddleware())
+        self.callback_query.middleware(InjectDIContainerMiddleware())
 
     def _inject_context_middleware(self) -> None:
         self.message.middleware(InjectContextMiddleware())

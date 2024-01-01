@@ -15,7 +15,7 @@ __all__ = [
 AttendanceId = NewType("AttendanceId", int)
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)
 class Attendance(Model):
     id: AttendanceId
     student_id: StudentId

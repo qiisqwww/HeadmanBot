@@ -1,4 +1,5 @@
 from .inject_context_middleware import InjectContextMiddleware
+from .inject_di_container_middleware import InjectDIContainerMiddleware
 from .inject_postgres_connection_middleware import InjectPostgresMiddleware
 from .inject_redis_connection_middleware import InjectRedisConnectionMiddleware
 from .inject_services_middleware import InjectServicesMiddleware
@@ -14,4 +15,6 @@ __all__ = [
     "InjectContextMiddleware",
     "InjectServicesMiddleware",
     "PermissionManagerMiddleware",
+    "InjectContextMiddleware",
+    "InjectDIContainerMiddleware",
 ]

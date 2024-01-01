@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.dto.models.group import GroupId
+from src.domain.edu_info.models.group import Group
 from src.kernel import Model
 
 from .lesson import Lesson
@@ -12,7 +12,7 @@ __all__ = [
 
 @dataclass(slots=True)
 class Schedule(Model):
-    group_id: GroupId
+    group: Group
     lessons: list[Lesson]
 
     def __post_init__(self) -> None:

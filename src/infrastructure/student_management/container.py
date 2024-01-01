@@ -1,8 +1,12 @@
 from asyncpg.pool import PoolConnectionProxy
 from dependency_injector.containers import DeclarativeContainer
-from dependency_injector.providers import Dependency, Factory, Singleton
+from dependency_injector.providers import Dependency, Singleton
 
-from src.application.student_management.queries import FindStudentQuery
+from src.application.student_management.queries import (
+    FindStudentQuery,
+    GetUniversityByAliasQuery,
+)
+from src.infrastructure.edu_info.persistence import UniversityRepositoryImpl
 
 from .persistance import StudentRepositoryImpl
 
@@ -13,9 +17,16 @@ __all__ = [
 
 class StudentManagementContainer(DeclarativeContainer):
     db_con = Dependency(instance_of=PoolConnectionProxy)
-    student_repository = Singleton(StudentRepositoryImpl, con=db_con)
 
-    find_student_query = Factory(
+    student_repository = Singleton(StudentRepositoryImpl, db_con)
+    university_repository = Singleton(UniversityRepositoryImpl, db_con)
+
+    find_student_query = Singleton(
         FindStudentQuery,
-        repository=student_repository,
+        student_repository,
+    )
+
+    get_university_by_alias_query = Singleton(
+        GetUniversityByAliasQuery,
+        university_repository,
     )

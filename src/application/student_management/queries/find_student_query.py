@@ -8,12 +8,10 @@ __all__ = [
 
 
 class FindStudentQuery:
-    _telegram_id: int
     _repository: StudentRepository
 
-    def __init__(self, telegram_id: int, repository: StudentRepository) -> None:
-        self._telegram_id = telegram_id
+    def __init__(self, repository: StudentRepository) -> None:
         self._repository = repository
 
-    async def execute(self) -> Student | None:
-        return await self._repository.find_by_id(self._telegram_id)
+    async def execute(self, telegram_id: int) -> Student | None:
+        return await self._repository.find_by_id(telegram_id)

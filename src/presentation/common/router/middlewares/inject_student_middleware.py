@@ -4,7 +4,6 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
-from src.infrastructure.student_management import StudentManagementContainer
 from src.presentation.common.router.middlewares.templates import (
     ALREADY_REGISTERED_TEMPLATE,
     MUST_BE_REG_TEMPLATE,
@@ -31,11 +30,10 @@ class InjectStudentMiddleware(BaseMiddleware):
         if event.from_user is None:
             return
 
-        container = StudentManagementContainer(db_con=data["postgres_con"])
-        find_student_query = container.find_student_query(event.from_user.id)
+        find_student_query = data["container"].find_student_query()
 
         if data.get("student", None) is None:
-            student = await find_student_query.execute()
+            student = await find_student_query.execute(event.from_user.id)
         else:
             student = data["student"]
 

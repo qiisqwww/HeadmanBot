@@ -12,7 +12,7 @@ __all__ = [
 
 
 @dataclass(frozen=True, slots=True)
-class GroupLessonVisitStatus(Model):
+class LessonAttendanceForGroup(Model):
     group_id: GroupId
     lesson_id: LessonId
     attendance: dict[Student, VisitStatus]
