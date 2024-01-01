@@ -3,36 +3,19 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.dto.callback_data import (
-    AccessCallbackData,
-    AskNewFullnameValidityCallbackData,
-    AskUpdatedFieldValidityCallbackData,
-    ChooseRoleCallbackData,
-    GetBackToProfileCallbackData,
-    ProfileUpdateCallbackData,
-    ProfileUpdateChoiceCallbackData,
-    UniversityCallbackData,
-    UpdateAttendanceCallbackData,
-)
-from src.dto.models import Lesson, StudentId, University
-from src.enums import ProfileField, Role
+from src.domain.edu_info import University
+from src.domain.student_management import Role, StudentId
 
+from ..callback_data import (
+    AccessCallbackData,
+    ChooseRoleCallbackData,
+    UniversityCallbackData,
 )
-from src.dto.callback_data.ask_fullname_validity_callback_data import (
-    AskFullnameValidityCallbackData,
-)
-from src.dto.models import StudentId, University
-from src.enums import Role
 
 __all__ = [
     "university_list_buttons",
     "accept_or_deny_buttons",
     "role_buttons",
-    "ask_fullname_validity_buttons",
-    "profile_buttons",
-    "profile_update_choice_buttons",
-    "is_field_correct_buttons",
-    "get_back_button"
 ]
 
 

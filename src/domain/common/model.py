@@ -17,6 +17,7 @@ class Model(ABC):
     def from_mapping(cls: type[Self], data: Mapping) -> Self:
         """This constructor convert enum types, do type checking and
         set None for args which can be None but not passed into data mapping."""
+
         validated_data = {}
 
         model_annotations = cls.__annotations__.items()

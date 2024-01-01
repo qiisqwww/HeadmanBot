@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
-from src.dto.models import StudentId
+from src.domain.student_management import StudentId
 
 __all__ = [
     "AccessCallbackData",

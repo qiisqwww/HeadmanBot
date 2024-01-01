@@ -1,80 +1,91 @@
+from abc import ABC, abstractmethod
 from datetime import date
 from typing import Any
 
-from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
-from src.domain.edu_info.enums import UniversityAlias
-from src.domain.student_management.enums import Role
+from src.domain.edu_info import UniversityAlias
+from src.domain.student_management import Role
 
 __all__ = [
     "RegistrationContext",
 ]
 
 
-class RegistrationContext:
+class RegistrationContext(ABC):
     """Just adapter to FSMContext."""
 
-    _context: FSMContext
-
-    def __init__(self, context: FSMContext) -> None:
-        self._context = context
-
     @property
+    @abstractmethod
     async def telegram_id(self) -> int:
-        return (await self._context.get_data())["telegram_id"]
+        ...
 
+    @abstractmethod
     async def set_telegram_id(self, telegram_id: int) -> None:
-        await self._context.update_data(telegram_id=telegram_id)
+        ...
 
     @property
+    @abstractmethod
     async def role(self) -> Role:
-        return (await self._context.get_data())["role"]
+        ...
 
+    @abstractmethod
     async def set_role(self, role: Role) -> None:
-        await self._context.update_data(role=role)
+        ...
 
     @property
+    @abstractmethod
     async def group_name(self) -> str:
-        return (await self._context.get_data())["group_name"]
+        ...
 
+    @abstractmethod
     async def set_group_name(self, group_name: str) -> None:
-        await self._context.update_data(group_name=group_name)
+        ...
 
     @property
+    @abstractmethod
     async def surname(self) -> str:
-        return (await self._context.get_data())["surname"]
+        ...
 
+    @abstractmethod
     async def set_surname(self, surname: str) -> None:
-        await self._context.update_data(surname=surname)
+        ...
 
     @property
+    @abstractmethod
     async def name(self) -> str:
-        return (await self._context.get_data())["name"]
+        ...
 
+    @abstractmethod
     async def set_name(self, name: str) -> None:
-        await self._context.update_data(name=name)
+        ...
 
     @property
+    @abstractmethod
     async def university_alias(self) -> UniversityAlias:
-        return (await self._context.get_data())["university_alias"]
+        ...
 
+    @abstractmethod
     async def set_university_alias(self, university_alias: UniversityAlias) -> None:
-        await self._context.update_data(university_alias=university_alias)
+        ...
 
     @property
+    @abstractmethod
     async def birthdate(self) -> date | None:
-        return (await self._context.get_data())["birthdate"]
+        ...
 
+    @abstractmethod
     async def set_birthday(self, birthdate: date | None) -> None:
-        await self._context.update_data(birthdate=birthdate)
+        ...
 
+    @abstractmethod
     async def set_state(self, state: StateType = None) -> None:
-        await self._context.set_state(state)
+        ...
 
+    @abstractmethod
     async def clear(self) -> None:
-        await self._context.set_state(state=None)
-        await self._context.set_data({})
+        ...
 
+    @abstractmethod
     async def get_data(self) -> dict[str, Any]:
-        return await self._context.get_data()
+        ...

@@ -11,6 +11,8 @@ from src.presentation.student_management.registration.registration_context impor
     RegistrationContext,
 )
 
+from ...contextes import ProfileUpdateContextImpl, RegistrationContextImpl
+
 HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
@@ -25,8 +27,8 @@ class InjectContextMiddleware(BaseMiddleware):
 
         if "state" in annotations:
             if annotations["state"] == RegistrationContext and not isinstance(data["state"], RegistrationContext):
-                data["state"] = RegistrationContext(data["state"])
+                data["state"] = RegistrationContextImpl(data["state"])
             elif annotations["state"] == ProfileUpdateContext and not isinstance(data["state"], ProfileUpdateContext):
-                data["state"] = ProfileUpdateContext(data["state"])
+                data["state"] = ProfileUpdateContextImpl(data["state"])
 
         return await handler(event, data)

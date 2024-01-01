@@ -1,18 +1,13 @@
-from aiogram import F
 from aiogram.types import Message
 from loguru import logger
 
-from src.dto.contexts import RegistrationContext
-from src.enums import TelegramCommand
-from src.kernel import Router
-from src.resources import (
-    CHOOSE_STUDENT_ROLE_TEMPLATE,
-    role_buttons,
-    start_message_template,
-)
-from src.resources.buttons.reply_buttons import restart_button
+from src.presentation.common.command_filter import CommandFilter, TelegramCommand
+from src.presentation.common.router import Router
 
-from src.handlers.states.registration_states import RegistrationStates
+from ..registration_context import RegistrationContext
+from ..registration_states import RegistrationStates
+from ..resources import restart_button, role_buttons
+from ..resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
 
 __all__ = [
     "restart_command_router",
@@ -21,7 +16,7 @@ __all__ = [
 restart_command_router = Router(must_be_registered=False)
 
 
-@restart_command_router.message(F.text == TelegramCommand.RESTART)
+@restart_command_router.message(CommandFilter(TelegramCommand.RESTART))
 @logger.catch
 async def restart_command(message: Message, state: RegistrationContext) -> None:
     if message.from_user is None:

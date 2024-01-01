@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)
 class Schedule(Model):
     group_id: GroupId
     lessons: list[Lesson]

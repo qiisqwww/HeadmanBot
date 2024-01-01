@@ -1,4 +1,4 @@
-from src.enums import Role
+from src.domain.student_management.enums import Role
 
 __all__ = [
     "headman_send_registration_request_template",
@@ -34,7 +34,7 @@ __all__ = [
     "asking_name_validation_template",
     "asking_surname_validation_template",
     "your_choice_is_template",
-    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE"
+    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE",
 ]
 
 

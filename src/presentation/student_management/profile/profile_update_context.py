@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Any
 
 from aiogram.fsm.context import FSMContext
@@ -8,41 +9,48 @@ __all__ = [
 ]
 
 
-class ProfileUpdateContext:
+class ProfileUpdateContext(ABC):
     """Just adapter to FSMContext."""
 
-    _context: FSMContext
-
+    @abstractmethod
     def __init__(self, context: FSMContext) -> None:
-        self._context = context
+        ...
 
     @property
+    @abstractmethod
     async def telegram_id(self) -> int:
-        return (await self._context.get_data())["telegram_id"]
+        ...
 
+    @abstractmethod
     async def set_telegram_id(self, telegram_id: int) -> None:
-        await self._context.update_data(telegram_id=telegram_id)
+        ...
 
     @property
+    @abstractmethod
     async def surname(self) -> str:
-        return (await self._context.get_data())["surname"]
+        ...
 
+    @abstractmethod
     async def set_surname(self, surname: str) -> None:
-        await self._context.update_data(surname=surname)
+        ...
 
     @property
+    @abstractmethod
     async def name(self) -> str:
-        return (await self._context.get_data())["name"]
+        ...
 
+    @abstractmethod
     async def set_name(self, name: str) -> None:
-        await self._context.update_data(name=name)
+        ...
 
+    @abstractmethod
     async def set_state(self, state: StateType = None) -> None:
-        await self._context.set_state(state)
+        ...
 
+    @abstractmethod
     async def clear(self) -> None:
-        await self._context.set_state(state=None)
-        await self._context.set_data({})
+        ...
 
+    @abstractmethod
     async def get_data(self) -> dict[str, Any]:
-        return await self._context.get_data()
+        ...

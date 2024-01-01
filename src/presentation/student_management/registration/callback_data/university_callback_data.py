@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
-from src.enums import UniversityAlias
+from src.domain.edu_info import UniversityAlias
 
 __all__ = [
     "UniversityCallbackData",

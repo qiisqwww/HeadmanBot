@@ -1,7 +1,7 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from src.enums import TelegramCommand
+from src.presentation.common.command_filter import TelegramCommand
 
 __all__ = [
     "start_button",
