@@ -1,17 +1,16 @@
 from dataclasses import dataclass
 from datetime import date
 
-from src.enums import Role, UniversityAlias
-
-from .model import Model
+from src.domain.edu_info import UniversityAlias
+from src.domain.student_management import Role
 
 __all__ = [
-    "StudentLoginData",
+    "CreateStudentDTO",
 ]
 
 
 @dataclass(slots=True, frozen=True)
-class StudentLoginData(Model):
+class CreateStudentDTO:
     telegram_id: int
     name: str
     surname: str

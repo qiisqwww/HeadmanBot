@@ -1,7 +1,7 @@
 from src.application.student_management.repositories import StudentRepository
-from src.domain.edu_info import Group, GroupId
-from src.domain.student_management import Role, Student, StudentId
+from src.domain.student_management import Role, Student
 from src.infrastructure.common.persistence import PostgresRepositoryImpl
+from src.infrastructure.student_management.mappers import StudentMapper
 
 __all__ = [
     "StudentRepositoryImpl",
@@ -9,8 +9,10 @@ __all__ = [
 
 
 class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
+    _mapper: StudentMapper = StudentMapper()
+
     async def find_by_id(self, telegram_id: int) -> Student | None:
-        query = """SELECT st.name, st.surname, st.role, st.group_id,
+        query = """SELECT st.id, st.name, st.surname, st.role, st.group_id,
                  st.birthdate, st.is_checked_in_today, gr.name AS group_name, gr.university_id
                  FROM students AS st 
                  JOIN groups AS gr 
@@ -22,19 +24,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         if record is None:
             return None
 
-        student = Student(
-            telegram_id=StudentId(record["telegram_id"]),
-            name=record["name"],
-            surname=record["surname"],
-            group=Group(
-                id=GroupId(record["group_id"]), name=record["group_name"], university_id=record["university_id"]
-            ),
-            role=Role(record["role"]),
-            birthdate=record["birthdate"],
-            is_checked_in_today=record["is_checked_in_today"],
-        )
-
-        return student
+        return self._mapper.to_domain(record)
 
     async def find_by_group_name_and_role(self, group_name: str, role: Role) -> Student | None:
         query = """SELECT st.name, st.surname, st.role, st.group_id,
@@ -49,20 +39,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         if record is None:
             return None
 
-        # FIXME: Write DataMapper.
-        student = Student(
-            telegram_id=StudentId(record["telegram_id"]),
-            name=record["name"],
-            surname=record["surname"],
-            group=Group(
-                id=GroupId(record["group_id"]), name=record["group_name"], university_id=record["university_id"]
-            ),
-            role=Role(record["role"]),
-            birthdate=record["birthdate"],
-            is_checked_in_today=record["is_checked_in_today"],
-        )
-
-        return student
+        return self._mapper.to_domain(record)
 
     # async def create_and_return(
     #     self,

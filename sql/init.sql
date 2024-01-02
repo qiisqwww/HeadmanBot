@@ -21,7 +21,8 @@ create table if not exists groups (
 );
 
 create table if not exists students (
-    telegram_id bigint primary key,
+    id bigserial primary key,
+    telegram_id bigint NOT NULL UNIQUE,
     group_id bigint references groups(id) ON DELETE CASCADE,
     name varchar(255) NOT NULL,
     surname varchar(255) NOT NULL,

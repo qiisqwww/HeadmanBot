@@ -17,7 +17,8 @@ StudentId = NewType("StudentId", int)
 
 @dataclass(slots=True)
 class Student(Model):
-    telegram_id: StudentId
+    id: StudentId
+    telegram_id: int
     name: str
     surname: str
     group: Group
