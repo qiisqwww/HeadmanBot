@@ -17,14 +17,16 @@ class StudentAttendance:
     _student: Student
     _attendances: list[Attendance]
 
-    def update_lesson_attendance(self, lesson: Lesson, new_status: VisitStatus) -> None:
+    def update_lesson_attendance(self, lesson: Lesson, new_status: VisitStatus) -> Attendance:
         if not self._student.is_checked_in_today:
             self._student.is_checked_in_today = True
 
         for attendance in self._attendances:
             if attendance.lesson.id == lesson.id:
                 attendance.status = new_status
-                break
+                return attendance
+
+        raise ValueError(f"StudentAttendance don't have lesson with id={lesson.id}")
 
     def visit_all_lessons(self) -> None:
         if not self._student.is_checked_in_today:

@@ -1,7 +1,11 @@
 from aiogram import F
 from aiogram.types import Message
 
-from src.application.student_management.queries import CheckGroupExistsInUniQuery
+from src.application.student_management.queries import (
+    CheckGroupExistsInUniQuery,
+    FindGroupByNameAndUniQuery,
+)
+from src.domain.student_management import Role
 
 # from src.external.apis.schedule_api.exceptions import FailedToCheckGroupExistence
 from src.presentation.common.router import Router
@@ -11,6 +15,7 @@ from ..registration_states import RegistrationStates
 from ..resources.templates import (
     ASK_BIRTHDATE_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
+    GROUP_DOESNT_REGISTERED_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
 )
@@ -39,6 +44,7 @@ async def handling_group(
     message: Message,
     state: RegistrationContext,
     check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
+    find_group_by_name_and_uni_query: FindGroupByNameAndUniQuery,
 ) -> None:
     if message.text is None:
         return
@@ -56,12 +62,12 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    # group = await group_service.find_by_name_and_uni(message.text, await state.university_alias)
-    # if await state.role == Role.STUDENT and group is None:
-    #     await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
-    #     await state.set_state(RegistrationStates.waiting_group)
-    #     return
-    #
+    group = await find_group_by_name_and_uni_query.execute(message.text, await state.university_alias)
+    if await state.role == Role.STUDENT and group is None:
+        await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
+        await state.set_state(RegistrationStates.waiting_group)
+        return
+
     # if (
     #     group is not None
     #     and await state.role == Role.HEADMAN
