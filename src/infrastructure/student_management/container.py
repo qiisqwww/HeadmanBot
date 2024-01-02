@@ -5,6 +5,7 @@ from dependency_injector.providers import Dependency, Singleton
 from src.application.student_management.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndUniQuery,
+    FindGroupHeadmanQuery,
     FindStudentQuery,
     GetAllUniversitiesQuery,
     GetUniversityByAliasQuery,
@@ -30,6 +31,7 @@ class StudentManagementContainer(DeclarativeContainer):
     group_repository = Singleton(GroupRepositoryImpl, db_con)
 
     find_student_query = Singleton(FindStudentQuery, student_repository)
+    find_group_headman_query = Singleton(FindGroupHeadmanQuery, student_repository)
     get_university_by_alias_query = Singleton(GetUniversityByAliasQuery, university_repository)
     get_all_universities_query = Singleton(GetAllUniversitiesQuery, university_repository)
     check_group_exists_in_uni_query = Singleton(CheckGroupExistsInUniQuery, ScheduleApiImpl)

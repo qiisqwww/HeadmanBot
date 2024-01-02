@@ -2,7 +2,6 @@ from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
-from loguru import logger
 
 from src.presentation.student_management.profile.profile_update_context import (
     ProfileUpdateContext,
@@ -21,7 +20,6 @@ __all__ = [
 
 
 class InjectContextMiddleware(BaseMiddleware):
-    @logger.catch
     async def __call__(self, handler: HandlerType, event: TelegramObject, data: dict[str, Any]) -> Any:
         annotations = data["handler"].callback.__annotations__
 

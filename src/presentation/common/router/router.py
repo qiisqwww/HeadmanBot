@@ -44,6 +44,8 @@ class Router(AiogramRouter):
                     "don't use throttling in parent router."
                 )
 
+        self._inject_handle_exception_middleware()
+
         self._inject_redis_middleware()
         self._inject_postgres_middleware()
 
@@ -60,8 +62,6 @@ class Router(AiogramRouter):
 
         if minimum_role is not None:
             self._inject_permission_manager_middleware(minimum_role)
-
-        self._inject_handle_exception_middleware()
 
     def _inject_user_middleware(self, must_be_registered: bool) -> None:
         self.message.middleware(InjectStudentMiddleware(must_be_registered))

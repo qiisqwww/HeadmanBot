@@ -14,7 +14,6 @@ HandlerType: TypeAlias = Callable[[Update, dict[str, Any]], Awaitable[Any]]
 
 
 class InjectPostgresMiddleware(BaseMiddleware):
-    @logger.catch
     async def __call__(self, handler: HandlerType, event: Update, data: dict[str, Any]) -> Any:
         logger.trace("Inject database connection middleware started.")
 

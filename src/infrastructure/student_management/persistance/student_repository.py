@@ -1,5 +1,8 @@
 from src.application.student_management.repositories import StudentRepository
-from src.domain.student_management import Student
+from src.domain.edu_info import GroupId
+from src.domain.edu_info.models.group import Group
+from src.domain.student_management import Role, Student
+from src.domain.student_management.models.student import StudentId
 from src.infrastructure.common.persistence import PostgresRepositoryImpl
 
 __all__ = [
@@ -8,6 +11,61 @@ __all__ = [
 
 
 class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
+    async def find_by_id(self, telegram_id: int) -> Student | None:
+        query = """SELECT st.name, st.surname, st.role, st.group_id,
+                 st.birthdate, st.is_checked_in_today, gr.name AS group_name, gr.university_id
+                 FROM students AS st 
+                 JOIN groups AS gr 
+                 ON st.group_id = gr.id 
+                 WHERE telegram_id = $1"""
+
+        record = await self._con.fetchrow(query, telegram_id)
+
+        if record is None:
+            return None
+
+        student = Student(
+            telegram_id=StudentId(record["telegram_id"]),
+            name=record["name"],
+            surname=record["surname"],
+            group=Group(
+                id=GroupId(record["group_id"]), name=record["group_name"], university_id=record["university_id"]
+            ),
+            role=Role(record["role"]),
+            birthdate=record["birthdate"],
+            is_checked_in_today=record["is_checked_in_today"],
+        )
+
+        return student
+
+    async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
+        query = """SELECT st.name, st.surname, st.role, st.group_id,
+                 st.birthdate, st.is_checked_in_today, gr.name AS group_name, gr.university_id
+                 FROM students AS st 
+                 JOIN groups AS gr 
+                 ON st.group_id = gr.id 
+                 WHERE group_id = $1 AND role LIKE $2"""
+
+        record = await self._con.fetchrow(query, group_id, role)
+
+        if record is None:
+            return None
+
+        # FIXME: Write DataMapper.
+        student = Student(
+            telegram_id=StudentId(record["telegram_id"]),
+            name=record["name"],
+            surname=record["surname"],
+            group=Group(
+                id=GroupId(record["group_id"]), name=record["group_name"], university_id=record["university_id"]
+            ),
+            role=Role(record["role"]),
+            birthdate=record["birthdate"],
+            is_checked_in_today=record["is_checked_in_today"],
+        )
+
+        return student
+
     # async def create_and_return(
     #     self,
     #     student_raw: StudentLoginData,
@@ -36,24 +94,6 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     #         role=student_raw.role,
     #         birthdate=student_raw.birthdate,
     #     )
-
-    async def find_by_id(self, telegram_id: int) -> Student | None:
-        query = "SELECT * FROM students WHERE telegram_id = $1"
-        record = await self._con.fetchrow(query, telegram_id)
-
-        if record is None:
-            return None
-
-        return Student.from_mapping(record)
-
-    # async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
-    #     query = "SELECT * FROM students WHERE group_id = $1 AND role LIKE $2"
-    #     record = await self._con.fetchrow(query, group_id, role)
-    #
-    #     if record is None:
-    #         return None
-    #
-    #     return Student.from_mapping(record)
     #
     # async def all(self) -> list[Student]:
     #     query = "SELECT * FROM students"

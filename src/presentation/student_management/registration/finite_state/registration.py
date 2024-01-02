@@ -4,6 +4,7 @@ from aiogram.types import Message
 from src.application.student_management.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndUniQuery,
+    FindGroupHeadmanQuery,
 )
 from src.domain.student_management import Role
 
@@ -16,6 +17,7 @@ from ..resources.templates import (
     ASK_BIRTHDATE_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
+    HEADMAN_ALREADY_EXISTS_TEMPLATE,
     INCORRECT_STUDENT_ROLE_TEMPLATE,
     INCORRECT_UNIVERSITY_TEMPLATE,
 )
@@ -45,6 +47,7 @@ async def handling_group(
     state: RegistrationContext,
     check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
     find_group_by_name_and_uni_query: FindGroupByNameAndUniQuery,
+    find_group_headman_query: FindGroupHeadmanQuery,
 ) -> None:
     if message.text is None:
         return
@@ -68,15 +71,14 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    # if (
-    #     group is not None
-    #     and await state.role == Role.HEADMAN
-    #     and await student_service.get_headman_by_group_name(group.name) is not None
-    # ):
-    #     await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
-    #     await state.set_state(RegistrationStates.waiting_group)
-    #     return
-    #
+    if group is not None and await state.role == Role.HEADMAN:
+        group_headman = await find_group_headman_query.execute(group)
+
+        if group_headman is not None:
+            await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
+            await state.set_state(RegistrationStates.waiting_group)
+            return
+
     await state.set_group_name(message.text)
     await message.answer(ASK_BIRTHDATE_TEMPLATE)
     await state.set_state(RegistrationStates.waiting_birthdate)

@@ -15,7 +15,6 @@ HandlerType: TypeAlias = Callable[[Update, dict[str, Any]], Awaitable[Any]]
 
 
 class InjectRedisConnectionMiddleware(BaseMiddleware):
-    @logger.catch
     async def __call__(self, handler: HandlerType, event: Update, data: dict[str, Any]) -> Any:
         logger.trace("Inject redis connection middleware started.")
 

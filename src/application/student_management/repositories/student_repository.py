@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
-from src.domain.student_management import Student
+from src.domain.edu_info import GroupId
+from src.domain.student_management import Role, Student
 
 __all__ = [
     "StudentRepository",
@@ -10,6 +11,10 @@ __all__ = [
 class StudentRepository:
     @abstractmethod
     async def find_by_id(self, telegram_id: int) -> Student | None:
+        ...
+
+    @abstractmethod
+    async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
         ...
 
     # @abstractmethod
@@ -27,10 +32,7 @@ class StudentRepository:
     # @abstractmethod
     # async def filter_group_by_id(self, group_id: GroupId) -> list[Student] | None:
     #     ...
-    #
-    # @abstractmethod
-    # async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
-    #     ...
+
     #
     # @abstractmethod
     # async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:

@@ -23,7 +23,6 @@ class InjectStudentMiddleware(BaseMiddleware):
         self._must_be_registered = must_be_registered
         super().__init__()
 
-    @logger.catch
     async def __call__(self, handler: HandlerType, event: Message | CallbackQuery, data: dict[str, Any]) -> Any:
         logger.trace("Check is user registred middleware started.")
 

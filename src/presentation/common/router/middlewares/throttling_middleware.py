@@ -3,7 +3,6 @@ from typing import Any, Awaitable, Callable, TypeAlias
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
-from loguru import logger
 
 from ..throttling_service import ThrottlingService
 
@@ -15,7 +14,6 @@ __all__ = [
 
 
 class ThrottlingMiddleware(BaseMiddleware):
-    @logger.catch
     async def __call__(self, handler: HandlerType, event: Message, data: dict[str, Any]) -> Any:
         if event.from_user is None:
             return None
