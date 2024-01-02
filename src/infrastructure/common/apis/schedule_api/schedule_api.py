@@ -26,12 +26,12 @@ class ScheduleApiImpl(ScheduleAPI):
         try:
             return await self._api_impl.group_exists(group_name)
         except httpx.ConnectTimeout as e:
-            logger.error(e)
+            logger.exception(e)
             raise FailedToCheckGroupExistence from e
 
     async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
         try:
             return await self._api_impl.fetch_schedule(group_name, weekday)
         except httpx.ConnectTimeout as e:
-            logger.error(e)
+            logger.exception(e)
             raise FailedToFetchScheduleException from e

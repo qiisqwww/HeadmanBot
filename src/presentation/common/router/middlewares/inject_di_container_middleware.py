@@ -14,6 +14,6 @@ __all__ = [
 
 class InjectDIContainerMiddleware(BaseMiddleware):
     async def __call__(self, handler: HandlerType, event: TelegramObject, data: dict[str, Any]) -> Any:
-        data["container"] = HeadmanDIContainer(db_con=data["postgres_con"])
+        data["container"] = HeadmanDIContainer(db_con=data["postgres_con"], redis_con=data["redis_con"])
 
         return await handler(event, data)

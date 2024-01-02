@@ -1,7 +1,13 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
 
+from src.application.student_management.commands.cache_create_student_data_command import (
+    CacheCreateStudentDataCommand,
+)
 from src.application.student_management.queries import FindGroupHeadmanQuery
+from src.application.student_management.repositories.create_student_dto import (
+    CreateStudentDTO,
+)
 from src.domain.student_management import Role, StudentId
 from src.infrastructure.common.config import ADMIN_IDS
 from src.presentation.common.resources.void_inline_buttons import inline_void_button
@@ -35,7 +41,7 @@ async def ask_new_fullname_validity_callback(
     state: RegistrationContext,
     bot: Bot,
     find_group_headman_query: FindGroupHeadmanQuery,
-    # cache_student_service: CacheStudentService,
+    cache_student_data_command: CacheCreateStudentDataCommand,
 ) -> None:
     if callback.message is None:
         return
@@ -60,7 +66,7 @@ async def ask_new_fullname_validity_callback(
 
     student_data = await state.get_data()
     student_id = int(callback.from_user.id)
-    # await cache_student_service.cache_student(student_data)
+    await cache_student_data_command.execute(CreateStudentDTO(**student_data))
 
     surname = await state.surname
     name = await state.name
