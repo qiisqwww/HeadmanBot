@@ -1,6 +1,5 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
-from loguru import logger
 
 from src.dto.callback_data import AccessCallbackData
 from src.kernel import Router
@@ -25,7 +24,6 @@ access_callback_router = Router(
 
 
 @access_callback_router.callback_query(AccessCallbackData.filter())
-@logger.catch
 async def accept_or_deny_callback(
     callback: CallbackQuery,
     callback_data: AccessCallbackData,

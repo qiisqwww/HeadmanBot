@@ -1,5 +1,4 @@
 from aiogram.types import CallbackQuery
-from loguru import logger
 
 from src.application.student_management.queries import GetUniversityByAliasQuery
 from src.presentation.common import Router
@@ -22,7 +21,6 @@ choose_university_router = Router(must_be_registered=False)
 
 
 @choose_university_router.callback_query(UniversityCallbackData.filter())
-@logger.catch
 async def get_university_from_user(
     callback: CallbackQuery,
     callback_data: UniversityCallbackData,

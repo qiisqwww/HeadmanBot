@@ -6,6 +6,7 @@ from src.presentation.common.router.middlewares.inject_di_container_middleware i
 )
 
 from .middlewares import (
+    HandleExceptionMiddleware,
     InjectContextMiddleware,
     InjectPostgresMiddleware,
     InjectRedisConnectionMiddleware,
@@ -60,6 +61,8 @@ class Router(AiogramRouter):
         if minimum_role is not None:
             self._inject_permission_manager_middleware(minimum_role)
 
+        self._inject_handle_exception_middleware()
+
     def _inject_user_middleware(self, must_be_registered: bool) -> None:
         self.message.middleware(InjectStudentMiddleware(must_be_registered))
         self.callback_query.middleware(InjectStudentMiddleware(must_be_registered))
@@ -91,3 +94,7 @@ class Router(AiogramRouter):
     def _inject_context_middleware(self) -> None:
         self.message.middleware(InjectContextMiddleware())
         self.callback_query.middleware(InjectContextMiddleware())
+
+    def _inject_handle_exception_middleware(self) -> None:
+        self.message.middleware(HandleExceptionMiddleware())
+        self.callback_query.middleware(HandleExceptionMiddleware())

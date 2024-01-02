@@ -1,5 +1,4 @@
 from aiogram.types import CallbackQuery
-from loguru import logger
 
 from src.application.student_management.queries import GetAllUniversitiesQuery
 from src.presentation.common.resources.void_inline_buttons import inline_void_button
@@ -24,7 +23,6 @@ choose_role_router = Router(
 
 
 @choose_role_router.callback_query(ChooseRoleCallbackData.filter())
-@logger.catch
 async def get_role_from_user(
     callback: CallbackQuery,
     callback_data: ChooseRoleCallbackData,

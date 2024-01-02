@@ -1,3 +1,4 @@
+from .handle_exception_middleware import HandleExceptionMiddleware
 from .inject_context_middleware import InjectContextMiddleware
 from .inject_di_container_middleware import InjectDIContainerMiddleware
 from .inject_postgres_connection_middleware import InjectPostgresMiddleware
@@ -17,4 +18,5 @@ __all__ = [
     "PermissionManagerMiddleware",
     "InjectContextMiddleware",
     "InjectDIContainerMiddleware",
+    "HandleExceptionMiddleware",
 ]

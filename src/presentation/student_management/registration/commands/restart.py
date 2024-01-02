@@ -1,5 +1,4 @@
 from aiogram.types import Message
-from loguru import logger
 
 from src.presentation.common.command_filter import CommandFilter, TelegramCommand
 from src.presentation.common.router import Router
@@ -17,7 +16,6 @@ restart_command_router = Router(must_be_registered=False)
 
 
 @restart_command_router.message(CommandFilter(TelegramCommand.RESTART))
-@logger.catch
 async def restart_command(message: Message, state: RegistrationContext) -> None:
     if message.from_user is None:
         return
