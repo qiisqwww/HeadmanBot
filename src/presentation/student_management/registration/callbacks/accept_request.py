@@ -1,17 +1,17 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
 
-from src.dto.callback_data import AccessCallbackData
-from src.kernel import Router
-from src.resources import (
+from src.presentation.common.resources.main_menu import main_menu
+from src.presentation.common.resources.void_inline_buttons import inline_void_button
+from src.presentation.common.router import Router
+
+from ..callback_data import AccessCallbackData
+from ..resources.templates import (
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
 )
-from src.resources.buttons import inline_void_button
-from src.resources.buttons.main_menu import main_menu
-from src.services import CacheStudentService, StudentService
 
 __all__ = [
     "access_callback_router",
