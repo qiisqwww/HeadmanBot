@@ -1,8 +1,6 @@
 from src.application.student_management.repositories import StudentRepository
-from src.domain.edu_info import GroupId
-from src.domain.edu_info.models.group import Group
-from src.domain.student_management import Role, Student
-from src.domain.student_management.models.student import StudentId
+from src.domain.edu_info import Group, GroupId
+from src.domain.student_management import Role, Student, StudentId
 from src.infrastructure.common.persistence import PostgresRepositoryImpl
 
 __all__ = [
@@ -38,15 +36,15 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
 
         return student
 
-    async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
+    async def find_by_group_name_and_role(self, group_name: str, role: Role) -> Student | None:
         query = """SELECT st.name, st.surname, st.role, st.group_id,
                  st.birthdate, st.is_checked_in_today, gr.name AS group_name, gr.university_id
                  FROM students AS st 
                  JOIN groups AS gr 
                  ON st.group_id = gr.id 
-                 WHERE group_id = $1 AND role LIKE $2"""
+                 WHERE gr.name LIKE $1 AND role = $2"""
 
-        record = await self._con.fetchrow(query, group_id, role)
+        record = await self._con.fetchrow(query, group_name, role)
 
         if record is None:
             return None

@@ -1,6 +1,10 @@
 from src.presentation.common.router import Router
 
-from .registration.callbacks import choose_role_router, choose_university_router
+from .registration.callbacks import (
+    ask_new_fullname_validity_router,
+    choose_role_router,
+    choose_university_router,
+)
 from .registration.commands import restart_command_router, start_command_router
 from .registration.finite_state import registration_finite_state_router
 
@@ -15,5 +19,6 @@ student_management_router.include_routers(
     restart_command_router,
     choose_role_router,
     choose_university_router,
+    ask_new_fullname_validity_router,
     registration_finite_state_router,
 )

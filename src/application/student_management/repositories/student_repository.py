@@ -1,6 +1,5 @@
 from abc import abstractmethod
 
-from src.domain.edu_info import GroupId
 from src.domain.student_management import Role, Student
 
 __all__ = [
@@ -14,7 +13,7 @@ class StudentRepository:
         ...
 
     @abstractmethod
-    async def find_by_group_id_and_role(self, group_id: GroupId, role: Role) -> Student | None:
+    async def find_by_group_name_and_role(self, group_name: str, role: Role) -> Student | None:
         ...
 
     # @abstractmethod

@@ -1,43 +1,41 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
-from loguru import logger
 
-from src.config.config import ADMIN_IDS
-from src.dto.callback_data import AskNewFullnameValidityCallbackData
-from src.dto.contexts import RegistrationContext
-from src.dto.models import StudentId
-from src.enums import Role
-from src.handlers.states.registration_states import (
-    RegistrationStates,
-)
-from src.kernel import Router
-from src.resources.buttons.inline_buttons import accept_or_deny_buttons
-from src.resources.buttons.void_inline_buttons import inline_void_button
-from src.resources.templates.templates import (
+from src.application.student_management.queries import FindGroupHeadmanQuery
+from src.domain.student_management import Role, StudentId
+from src.infrastructure.common.config import ADMIN_IDS
+from src.presentation.common.resources.void_inline_buttons import inline_void_button
+from src.presentation.common.router import Router
+
+from ..callback_data import AskNewFullnameValidityCallbackData
+from ..registration_context import RegistrationContext
+from ..registration_states import RegistrationStates
+from ..resources.inline_buttons import accept_or_deny_buttons
+from ..resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     headman_send_registration_request_template,
-    student_send_registration_request_template
+    student_send_registration_request_template,
 )
-from src.services import CacheStudentService, StudentService
 
 __all__ = [
     "ask_new_fullname_validity_router",
 ]
 
 
-ask_new_fullname_validity_router = Router(must_be_registered=False)
+ask_new_fullname_validity_router = Router(
+    must_be_registered=False,
+)
 
 
 @ask_new_fullname_validity_router.callback_query(AskNewFullnameValidityCallbackData.filter())
-@logger.catch
 async def ask_new_fullname_validity_callback(
     callback: CallbackQuery,
     callback_data: AskNewFullnameValidityCallbackData,
     state: RegistrationContext,
     bot: Bot,
-    cache_student_service: CacheStudentService,
-    student_service: StudentService,
+    find_group_headman_query: FindGroupHeadmanQuery,
+    # cache_student_service: CacheStudentService,
 ) -> None:
     if callback.message is None:
         return
@@ -62,7 +60,7 @@ async def ask_new_fullname_validity_callback(
 
     student_data = await state.get_data()
     student_id = int(callback.from_user.id)
-    await cache_student_service.cache_student(student_data)
+    # await cache_student_service.cache_student(student_data)
 
     surname = await state.surname
     name = await state.name
@@ -75,12 +73,15 @@ async def ask_new_fullname_validity_callback(
             )
         return
 
-    headman = await student_service.get_headman_by_group_name(await state.group_name)
+    headman = await find_group_headman_query.execute(await state.group_name)
+
+    if headman is None:
+        raise RuntimeError("Group already must have a headman")
 
     await state.clear()
 
     await bot.send_message(
         headman.telegram_id,
-        student_send_registration_request_template(name, surname),
+        student_send_registration_request_template(surname, name),
         reply_markup=accept_or_deny_buttons(StudentId(student_id)),
     )
