@@ -1,21 +1,19 @@
 import httpx
 from loguru import logger
 
-from src.enums import UniversityAlias
+from src.application.common.apis.schedule_api import Schedule, ScheduleAPI, Weekday
+from src.domain.edu_info.enums import UniversityAlias
 
-from .dto import Schedule
-from .enums import Weekday
 from .exceptions import FailedToCheckGroupExistence, FailedToFetchScheduleException
 from .impls import BmstuScheduleApi, MireaScheduleApi
-from .schedule_api_interface import IScheduleAPI
 
 __all__ = [
-    "ScheduleApi",
+    "ScheduleApiImpl",
 ]
 
 
-class ScheduleApi:
-    _api_impl: IScheduleAPI
+class ScheduleApiImpl(ScheduleAPI):
+    _api_impl: ScheduleAPI
 
     def __init__(self, university: UniversityAlias) -> None:
         match university:

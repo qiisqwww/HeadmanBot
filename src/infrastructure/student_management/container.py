@@ -3,10 +3,12 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Dependency, Singleton
 
 from src.application.student_management.queries import (
+    CheckGroupExistsInUniQuery,
     FindStudentQuery,
     GetAllUniversitiesQuery,
     GetUniversityByAliasQuery,
 )
+from src.infrastructure.common.apis.schedule_api import ScheduleApiImpl
 from src.infrastructure.edu_info.persistence import UniversityRepositoryImpl
 
 from .persistance import StudentRepositoryImpl
@@ -35,4 +37,9 @@ class StudentManagementContainer(DeclarativeContainer):
     get_all_universities_query = Singleton(
         GetAllUniversitiesQuery,
         university_repository,
+    )
+
+    check_group_exists_in_uni_query = Singleton(
+        CheckGroupExistsInUniQuery,
+        ScheduleApiImpl,
     )

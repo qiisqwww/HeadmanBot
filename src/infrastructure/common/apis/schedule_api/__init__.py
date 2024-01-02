@@ -1,10 +1,8 @@
-from .enums import Weekday
 from .exceptions import FailedToCheckGroupExistence, FailedToFetchScheduleException
-from .schedule_api import ScheduleApi
+from .schedule_api import ScheduleApiImpl
 
 __all__ = [
-    "ScheduleApi",
-    "Weekday",
+    "ScheduleApiImpl",
     "FailedToFetchScheduleException",
     "FailedToCheckGroupExistence",
 ]

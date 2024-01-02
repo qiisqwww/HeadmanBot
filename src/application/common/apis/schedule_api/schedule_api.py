@@ -1,14 +1,20 @@
 from abc import ABC, abstractmethod
 
+from src.domain.edu_info import UniversityAlias
+
 from .dto import Schedule
 from .enums import Weekday
 
 __all__ = [
-    "IScheduleAPI",
+    "ScheduleAPI",
 ]
 
 
-class IScheduleAPI(ABC):
+class ScheduleAPI(ABC):
+    @abstractmethod
+    def __init__(self, university_alias: UniversityAlias) -> None:
+        ...
+
     @abstractmethod
     async def group_exists(self, group_name: str) -> bool:
         ...

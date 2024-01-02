@@ -8,6 +8,7 @@ from src.domain.student_management import Role, StudentId
 
 from ..callback_data import (
     AccessCallbackData,
+    AskNewFullnameValidityCallbackData,
     ChooseRoleCallbackData,
     UniversityCallbackData,
 )
@@ -42,5 +43,15 @@ def accept_or_deny_buttons(student_id: StudentId) -> InlineKeyboardMarkup:
 
     builder.button(text="Одобрить", callback_data=AccessCallbackData(student_id=student_id, accepted=True))
     builder.button(text="Отказать", callback_data=AccessCallbackData(student_id=student_id, accepted=False))
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(text="Да", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=True))
+    builder.button(text="Нет", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=False))
+    builder.adjust(2)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

@@ -1,13 +1,3 @@
-def ask_fullname_validity_buttons() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-
-    builder.button(text="Да", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=True))
-    builder.button(text="Нет", callback_data=AskNewFullnameValidityCallbackData(is_fullname_correct=False))
-    builder.adjust(2)
-
-    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
-
-
 def profile_update_choice_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 

@@ -4,19 +4,19 @@ from datetime import datetime, time
 from bs4 import BeautifulSoup, Tag
 from httpx import AsyncClient
 
-from src.retry_decorator import retry
-
-from ..dto import Schedule
-from ..enums import Weekday
-from ..schedule_api_interface import IScheduleAPI
+from src.application.common.apis.schedule_api import Schedule, ScheduleAPI, Weekday
+from src.infrastructure.common.retry import retry
 
 __all__ = [
     "BmstuScheduleApi",
 ]
 
 
-class BmstuScheduleApi(IScheduleAPI):
+class BmstuScheduleApi(ScheduleAPI):
     _ALL_SCHEDULE_URL: str = "https://lks.bmstu.ru/schedule/list"
+
+    def __init__(self) -> None:
+        ...
 
     async def group_exists(self, group_name: str) -> bool:
         soup = await self._fetch_all_schedule_soup()

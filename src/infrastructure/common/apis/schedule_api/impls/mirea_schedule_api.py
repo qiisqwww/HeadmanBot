@@ -3,21 +3,21 @@ from typing import Any, Iterable
 
 from httpx import AsyncClient
 
-from src.retry_decorator import retry
-
-from ..dto import Schedule
-from ..enums import Weekday
-from ..schedule_api_interface import IScheduleAPI
+from src.application.common.apis.schedule_api import Schedule, ScheduleAPI, Weekday
+from src.infrastructure.common.retry import retry
 
 __all__ = [
     "MireaScheduleApi",
 ]
 
 
-class MireaScheduleApi(IScheduleAPI):
+class MireaScheduleApi(ScheduleAPI):
     _URL: str = "https://timetable.mirea.ru/api/groups/name/{group_name}"
     _MAX_LESSON_NAME_LEN: int = 16
     _CURRENT_SEMESTR_START: datetime = datetime(year=2023, month=8, day=28)
+
+    def __init__(self) -> None:
+        ...
 
     async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
         """By default return today schedule."""
