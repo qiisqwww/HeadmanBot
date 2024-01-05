@@ -1,4 +1,4 @@
-from typing import Final
+from typing import Final, final
 
 from src.application.student_management.repositories import (
     CacheStudentDataRepository,
@@ -12,6 +12,7 @@ __all__ = [
 ]
 
 
+@final
 class CacheStudentDataRepositoryImpl(RedisRepositoryImpl, CacheStudentDataRepository):
     _mapper: CreateStudentDTOMapper = CreateStudentDTOMapper()
     _SECONDS_TO_EXPIRE: Final[int] = 24 * 60 * 60  # 24 hours
@@ -22,8 +23,8 @@ class CacheStudentDataRepositoryImpl(RedisRepositoryImpl, CacheStudentDataReposi
         await self._con.hmset(mapped_data["telegram_id"], mapped_data)
         await self._con.expire(mapped_data["telegram_id"], self._SECONDS_TO_EXPIRE)
 
-    async def pop(self, student_id: int) -> CreateStudentDTO:
-        student_data = await self._con.hgetall(str(student_id))
-        await self._con.hdel(str(student_id), *student_data)
+    async def pop(self, telegram_id: int) -> CreateStudentDTO:
+        student_data = await self._con.hgetall(str(telegram_id))
+        await self._con.hdel(str(telegram_id), *student_data)
 
         return self._mapper.from_redis_dict(student_data)

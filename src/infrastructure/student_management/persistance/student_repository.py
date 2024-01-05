@@ -1,3 +1,5 @@
+from typing import final
+
 from src.application.student_management.repositories import StudentRepository
 from src.domain.student_management import Role, Student
 from src.infrastructure.common.persistence import PostgresRepositoryImpl
@@ -8,6 +10,7 @@ __all__ = [
 ]
 
 
+@final
 class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     _mapper: StudentMapper = StudentMapper()
 
