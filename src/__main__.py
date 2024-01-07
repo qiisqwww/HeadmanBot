@@ -5,10 +5,10 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
-from src.infrastructure.common.config import BOT_TOKEN, configurate_logger
-
 # from src.external.database import get_postgres_pool
-from src.presentation import root_router
+from src.bot import root_router
+from src.modules.common.infrastructure.config import BOT_TOKEN, configurate_logger
+from src.modules.common.infrastructure.container import assemble_project_containers
 
 # from src.repositories.impls import UniversityRepositoryImpl
 # from src.services.impls import UniversityServiceImpl
@@ -27,11 +27,12 @@ from src.presentation import root_router
 #     await sender.start()
 
 
-async def main():
+async def main() -> None:
     bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
     dp = Dispatcher(
         storage=MemoryStorage(),
         bot=bot,
+        assemble_project_containers=assemble_project_containers,
     )
 
     dp.include_router(root_router)
