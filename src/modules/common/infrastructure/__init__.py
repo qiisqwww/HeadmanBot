@@ -4,6 +4,7 @@ from .config import (
     HTTP_HOST,
     HTTP_PORT,
     WEBHOOK_PATH,
+    WEBHOOK_SECRET,
     WEBHOOK_URL,
     configurate_logger,
 )
@@ -20,4 +21,5 @@ __all__ = [
     "WEBHOOK_URL",
     "HTTP_HOST",
     "HTTP_PORT",
+    "WEBHOOK_SECRET",
 ]

@@ -4,7 +4,12 @@ from aiogram.types import Update
 from fastapi import FastAPI, Request
 
 from src.bot import bot, dispatcher
-from src.modules.common.infrastructure import DEBUG, WEBHOOK_PATH, WEBHOOK_URL
+from src.modules.common.infrastructure import (
+    DEBUG,
+    WEBHOOK_PATH,
+    WEBHOOK_SECRET,
+    WEBHOOK_URL,
+)
 
 __all__ = [
     "app",
@@ -15,7 +20,7 @@ __all__ = [
 async def lifespan(_: FastAPI):
     webhook_info = await bot.get_webhook_info()
     if webhook_info.url != WEBHOOK_URL:
-        await bot.set_webhook(url=WEBHOOK_URL)
+        await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
 
     yield
 

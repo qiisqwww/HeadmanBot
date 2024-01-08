@@ -13,6 +13,7 @@ from .config import (
     REDIS_HOST,
     REDIS_PORT,
     WEBHOOK_PATH,
+    WEBHOOK_SECRET,
     WEBHOOK_URL,
 )
 from .logger_config import configurate_logger
@@ -34,4 +35,5 @@ __all__ = [
     "WEBHOOK_URL",
     "HTTP_HOST",
     "HTTP_PORT",
+    "WEBHOOK_SECRET",
 ]

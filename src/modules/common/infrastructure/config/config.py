@@ -18,6 +18,7 @@ __all__ = [
     "HTTP_HOST",
     "WEBHOOK_URL",
     "WEBHOOK_PATH",
+    "WEBHOOK_SECRET",
 ]
 
 DEBUG: bool = bool(BoolEnv("DEBUG"))
@@ -42,3 +43,4 @@ HTTP_PORT: int = IntEnv("HTTP_PORT")
 
 WEBHOOK_PATH: str = StrEnv("WEBHOOK_PATH")
 WEBHOOK_URL: str = StrEnv("WEBHOOK_URL")
+WEBHOOK_SECRET: str = StrEnv("WEBHOOK_SECRET")
