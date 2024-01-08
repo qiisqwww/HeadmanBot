@@ -1,11 +1,11 @@
 from aiogram.types import CallbackQuery
 
-from src.application.student_management.queries import GetAllUniversitiesQuery
-from src.presentation.common.resources.void_inline_buttons import inline_void_button
-from src.presentation.common.router import Router
+from src.bot.common.contextes import RegistrationContext
+from src.bot.common.resources.void_inline_buttons import void_inline_buttons
+from src.bot.common.router import Router
+from src.modules.student_management.application.queries import GetAllUniversitiesQuery
 
 from ..callback_data import ChooseRoleCallbackData
-from ..registration_context import RegistrationContext
 from ..registration_states import RegistrationStates
 from ..resources.inline_buttons import university_list_buttons
 from ..resources.templates import (
@@ -14,12 +14,16 @@ from ..resources.templates import (
 )
 
 __all__ = [
-    "choose_role_router",
+    "include_choose_role_router",
 ]
 
 choose_role_router = Router(
     must_be_registered=False,
 )
+
+
+def include_choose_role_router(root_router: Router) -> None:
+    root_router.include_router(choose_role_router)
 
 
 @choose_role_router.callback_query(ChooseRoleCallbackData.filter())
@@ -37,7 +41,7 @@ async def get_role_from_user(
 
     await state.set_role(callback_data.role)
 
-    await callback.message.answer(successful_role_choose_template(await state.role), reply_markup=inline_void_button())
+    await callback.message.answer(successful_role_choose_template(await state.role), reply_markup=void_inline_buttons())
 
     universities = await get_all_universities_query.execute()
 

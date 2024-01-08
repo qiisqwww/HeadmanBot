@@ -6,11 +6,11 @@ from src.modules.student_management.domain import Student
 from ..repositories import StudentRepository
 
 __all__ = [
-    "FindStudentQuery",
+    "FindStudentByTelegramIdQuery",
 ]
 
 
-class FindStudentQuery(Dependency):
+class FindStudentByTelegramIdQuery(Dependency):
     _repository: StudentRepository
 
     @inject
@@ -18,4 +18,4 @@ class FindStudentQuery(Dependency):
         self._repository = repository
 
     async def execute(self, telegram_id: int) -> Student | None:
-        return await self._repository.find_by_id(telegram_id)
+        return await self._repository.find_by_telegram_id(telegram_id)

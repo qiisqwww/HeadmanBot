@@ -10,7 +10,6 @@ from .config import (
     LOGGING_PATH,
     REDIS_HOST,
     REDIS_PORT,
-    UNIVERSITIES_LIST,
 )
 from .logger_config import configurate_logger
 
@@ -27,5 +26,4 @@ __all__ = [
     "REDIS_PORT",
     "REDIS_HOST",
     "configurate_logger",
-    "UNIVERSITIES_LIST",
 ]

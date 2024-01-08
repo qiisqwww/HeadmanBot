@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from datetime import date
 
 from ..enums import Role
-from .group import Group
 
 __all__ = [
     "Student",
@@ -13,7 +12,7 @@ __all__ = [
 class Student:
     id: int
     telegram_id: int
-    group: Group
+    group_id: int
     name: str
     surname: str
     role: Role

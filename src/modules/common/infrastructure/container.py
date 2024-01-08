@@ -2,13 +2,12 @@ from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator
 
 from asyncpg.pool import PoolConnectionProxy
-from injector import Binder, Injector, singleton
+from injector import Binder, Injector, InstanceProvider, singleton
 from redis.asyncio import Redis
 
 from src.modules.common.application.schedule_api import ScheduleAPI
 from src.modules.common.infrastructure.apis.schedule_api import ScheduleApiImpl
-from src.modules.common.infrastructure.database.postgres import get_postgres_pool
-from src.modules.common.infrastructure.database.redis import get_redis_pool
+from src.modules.common.infrastructure.database import get_postgres_pool, get_redis_pool
 from src.modules.edu_info.infrastructure.container import assemble_edu_info_module
 from src.modules.student_management.infrastructure.container import (
     assemble_student_management_module,
@@ -18,13 +17,15 @@ __all__ = [
     "project_container",
 ]
 
+ScheduleApiType = type[ScheduleAPI]
+
 
 def singleton_bind(binder: Binder, interface, to) -> None:
     binder.bind(interface, to, singleton)
 
 
 def assemble_common_dependencies(binder: Binder) -> None:
-    singleton_bind(binder, ScheduleAPI, to=ScheduleApiImpl)
+    singleton_bind(binder, ScheduleApiType, to=InstanceProvider(ScheduleApiImpl))
 
 
 def assemble_modules(binder: Binder) -> None:

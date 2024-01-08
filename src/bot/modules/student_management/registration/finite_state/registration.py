@@ -3,18 +3,18 @@ from datetime import date
 from aiogram import F
 from aiogram.types import Message
 
-from src.application.student_management.queries import (
-    CheckGroupExistsInUniQuery,
-    FindGroupHeadmanQuery,
-    IsGroupRegisteredQuery,
-)
-from src.domain.student_management import Role
+from src.bot.common.contextes import RegistrationContext
 
 # from src.external.apis.schedule_api.exceptions import FailedToCheckGroupExistence
-from src.presentation.common.router import Router
+from src.bot.common.router import Router
+from src.modules.student_management.application.queries import (
+    CheckGroupExistsInUniQuery,
+    FindGroupByNameAndAliasQuery,
+    FindGroupHeadmanQuery,
+)
+from src.modules.student_management.domain import Role
 
 from ...validation import is_valid_name_len
-from ..registration_context import RegistrationContext
 from ..registration_states import RegistrationStates
 from ..resources.inline_buttons import ask_fullname_validity_buttons
 from ..resources.templates import (
@@ -33,12 +33,16 @@ from ..resources.templates import (
 )
 
 __all__ = [
-    "registration_finite_state_router",
+    "include_registration_finite_state_router",
 ]
 
 registration_finite_state_router = Router(
     must_be_registered=False,
 )
+
+
+def include_registration_finite_state_router(root_router: Router) -> None:
+    root_router.include_router(registration_finite_state_router)
 
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_role)
@@ -56,7 +60,7 @@ async def handling_group(
     message: Message,
     state: RegistrationContext,
     check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
-    is_group_registered_query: IsGroupRegisteredQuery,
+    find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
     find_group_headman_query: FindGroupHeadmanQuery,
 ) -> None:
     if message.text is None:
@@ -77,14 +81,14 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    group_registered = await is_group_registered_query.execute(group_name, await state.university_alias)
-    if await state.role == Role.STUDENT and not group_registered:
+    group = await find_group_by_name_and_alias_query.execute(group_name, await state.university_alias)
+    if await state.role == Role.STUDENT and group is None:
         await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    if not group_registered and await state.role == Role.HEADMAN:
-        group_headman = await find_group_headman_query.execute(group_name)
+    if group is not None and await state.role == Role.HEADMAN:
+        group_headman = await find_group_headman_query.execute(group.id)
         if group_headman is not None:
             await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
             await state.set_state(RegistrationStates.waiting_group)

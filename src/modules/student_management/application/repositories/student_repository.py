@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 from src.modules.common.application.dependency import Dependency
-from src.modules.student_management.domain import Group, Role, Student
+from src.modules.student_management.domain import Role, Student
 
 from .create_student_dto import CreateStudentDTO
 
@@ -12,18 +12,22 @@ __all__ = [
 
 class StudentRepository(Dependency):
     @abstractmethod
-    async def find_by_id(self, telegram_id: int) -> Student | None:
+    async def find_by_id(self, student_id: int) -> Student | None:
         ...
 
     @abstractmethod
-    async def find_by_group_name_and_role(self, group_name: str, role: Role) -> Student | None:
+    async def find_by_telegram_id(self, telegram_id: int) -> Student | None:
+        ...
+
+    @abstractmethod
+    async def find_by_group_id_and_role(self, group_id: int, role: Role) -> Student | None:
         ...
 
     @abstractmethod
     async def create(
         self,
         student_data: CreateStudentDTO,
-        group: Group,
+        group_id: int,
     ) -> Student:
         ...
 

@@ -3,8 +3,7 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.modules.edu_info.domain import University
-from src.modules.student_management.domain import Role
+from src.modules.student_management.domain import Role, UniversityInfo
 
 from ..callback_data import (
     AccessCallbackData,
@@ -20,11 +19,11 @@ __all__ = [
 ]
 
 
-def university_list_buttons(universities: Iterable[University]) -> InlineKeyboardMarkup:
+def university_list_buttons(universities: Iterable[UniversityInfo]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     for uni in universities:
-        builder.button(text=uni.name, callback_data=UniversityCallbackData(university_id=uni.id))
+        builder.button(text=uni.name, callback_data=UniversityCallbackData(university_alias=uni.alias))
 
     return builder.as_markup(resize_keyboard=True)
 

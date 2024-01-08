@@ -1,5 +1,5 @@
-from .registration import registration_finite_state_router
+from .registration import include_registration_finite_state_router
 
 __all__ = [
-    "registration_finite_state_router",
+    "include_registration_finite_state_router",
 ]

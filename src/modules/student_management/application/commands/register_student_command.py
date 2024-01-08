@@ -44,6 +44,6 @@ class RegisterStudentCommand(Dependency):
                 create_student_data.group_name, student_university.id
             )
 
-        student = await self._student_repository.create(create_student_data, student_group)
+        student = await self._student_repository.create(create_student_data, student_group.id)
 
         return student

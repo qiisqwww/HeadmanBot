@@ -13,3 +13,4 @@ class RegistrationStates(StatesGroup):
     waiting_surname = State()
     waiting_name = State()
     ask_fullame_validity = State()
+    on_verification = State()

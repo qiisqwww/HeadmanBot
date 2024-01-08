@@ -17,5 +17,5 @@ class FindGroupHeadmanQuery(Dependency):
     def __init__(self, repository: StudentRepository) -> None:
         self._repository = repository
 
-    async def execute(self, group_name: str) -> Student | None:
-        return await self._repository.find_by_group_name_and_role(group_name, Role.HEADMAN)
+    async def execute(self, group_id: int) -> Student | None:
+        return await self._repository.find_by_group_id_and_role(group_id, Role.HEADMAN)

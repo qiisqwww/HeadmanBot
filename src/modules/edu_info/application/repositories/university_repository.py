@@ -19,15 +19,15 @@ class UniversityRepository(Dependency):
     async def all(self) -> list[University]:
         ...
 
-    #
+    @abstractmethod
+    async def create(self, name: str, alias: UniversityAlias) -> None:
+        ...
+
+    @abstractmethod
+    async def find_by_name(self, name: str) -> None | University:
+        ...
+
     # @abstractmethod
     # async def get_by_id(self, university_id: UniversityId) -> University:
     #     ...
     #
-    # @abstractmethod
-    # async def find_by_name(self, name: str) -> None | University:
-    #     ...
-    #
-    # @abstractmethod
-    # async def create(self, name: str, alias: UniversityAlias) -> None:
-    #     ...

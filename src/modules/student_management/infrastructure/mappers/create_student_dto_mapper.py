@@ -23,10 +23,10 @@ class CreateStudentDTOMapper:
         return result
 
     def from_redis_dict(self, data: Mapping) -> CreateStudentDTO:
-        birthdate = None if data["birthdate"] == "0" == None else date.fromisoformat(data["birthdate"])
+        birthdate = None if data["birthdate"] == "0" else date.fromisoformat(data["birthdate"])
 
         return CreateStudentDTO(
-            telegram_id=int(data["birthdate"]),
+            telegram_id=int(data["telegram_id"]),
             name=data["name"],
             surname=data["surname"],
             birthdate=birthdate,

@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from src.modules.common.domain import UniversityAlias
-
 from .env import BoolEnv, IntEnv, IntListEnv, StrEnv
 
 __all__ = [
@@ -34,8 +32,3 @@ DB_HOST: str = StrEnv("DB_HOST")
 
 REDIS_HOST: str = StrEnv("REDIS_HOST")
 REDIS_PORT: int = IntEnv("REDIS_PORT")
-
-UNIVERSITIES_LIST: list[tuple[str, UniversityAlias]] = [
-    ("РТУ МИРЭА", UniversityAlias.MIREA),
-    ("МГТУ им. Н.Э. Баумана", UniversityAlias.BMSTU),
-]
