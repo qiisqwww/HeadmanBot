@@ -22,10 +22,4 @@ class HandleExceptionMiddleware(BaseMiddleware):
         except Exception as e:
             logger.exception(e)
 
-            if isinstance(event, Message):
-                return await event.answer(SOMETHING_WENT_WRONG_TEMPLATE)
-
-            if event.message is None:
-                return
-
-            return await event.message.answer(SOMETHING_WENT_WRONG_TEMPLATE)
+            return await event.answer(SOMETHING_WENT_WRONG_TEMPLATE, show_alert=True)
