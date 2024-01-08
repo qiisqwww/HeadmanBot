@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
-from src.modules.student_management.domain import Role, Student
+from src.modules.common.application.dependency import Dependency
+from src.modules.student_management.domain import Group, Role, Student
 
 from .create_student_dto import CreateStudentDTO
 
@@ -9,7 +10,7 @@ __all__ = [
 ]
 
 
-class StudentRepository(ABC):
+class StudentRepository(Dependency):
     @abstractmethod
     async def find_by_id(self, telegram_id: int) -> Student | None:
         ...
@@ -22,7 +23,7 @@ class StudentRepository(ABC):
     async def create(
         self,
         student_data: CreateStudentDTO,
-        group_id: int,
+        group: Group,
     ) -> Student:
         ...
 

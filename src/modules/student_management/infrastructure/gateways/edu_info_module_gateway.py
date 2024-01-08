@@ -1,4 +1,9 @@
+from typing import final
+
+from injector import inject
+
 from src.modules.edu_info.contract import EduInfoModuleContract
+from src.modules.student_management.application.gateways import EduInfoModuleGateway
 from src.modules.student_management.domain import UniversityInfo
 
 __all__ = [
@@ -6,9 +11,11 @@ __all__ = [
 ]
 
 
-class EduInfoModuleGatewayImpl:
+@final
+class EduInfoModuleGatewayImpl(EduInfoModuleGateway):
     _contract: EduInfoModuleContract
 
+    @inject
     def __init__(self, contract: EduInfoModuleContract) -> None:
         self._contract = contract
 

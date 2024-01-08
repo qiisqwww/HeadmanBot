@@ -1,3 +1,4 @@
+from injector import inject
 from redis.asyncio import Redis  # type: ignore
 
 __all__ = [
@@ -8,6 +9,7 @@ __all__ = [
 class RedisService:
     _con: Redis
 
+    @inject
     def __init__(self, con: Redis) -> None:
         self._con = con
 

@@ -1,3 +1,6 @@
+from injector import inject
+
+from src.modules.common.application.dependency import Dependency
 from src.modules.common.application.schedule_api import ScheduleAPI
 from src.modules.common.domain.university_alias import UniversityAlias
 
@@ -6,9 +9,10 @@ __all__ = [
 ]
 
 
-class CheckGroupExistsInUniQuery:
+class CheckGroupExistsInUniQuery(Dependency):
     _schedule_api_impl: type[ScheduleAPI]
 
+    @inject
     def __init__(self, schedule_api_impl: type[ScheduleAPI]) -> None:
         self._schedule_api_impl = schedule_api_impl
 

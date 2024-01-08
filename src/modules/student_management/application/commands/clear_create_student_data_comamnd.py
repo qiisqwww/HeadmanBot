@@ -1,3 +1,7 @@
+from injector import inject
+
+from src.modules.common.application.dependency import Dependency
+
 from ..repositories import CacheStudentDataRepository
 
 __all__ = [
@@ -5,9 +9,10 @@ __all__ = [
 ]
 
 
-class ClearCreateStudentDataCacheCommand:
+class ClearCreateStudentDataCacheCommand(Dependency):
     _repository: CacheStudentDataRepository
 
+    @inject
     def __init__(self, repository: CacheStudentDataRepository) -> None:
         self._repository = repository
 

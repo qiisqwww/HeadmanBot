@@ -1,6 +1,6 @@
 from dataclasses import asdict
 from datetime import date
-from typing import Mapping
+from typing import Mapping, final
 
 from src.modules.common.domain import UniversityAlias
 from src.modules.student_management.application.repositories import CreateStudentDTO
@@ -11,6 +11,7 @@ __all__ = [
 ]
 
 
+@final
 class CreateStudentDTOMapper:
     def to_redis_dict(self, data: CreateStudentDTO) -> Mapping:
         result = asdict(data)

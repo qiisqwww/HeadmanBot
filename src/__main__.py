@@ -8,7 +8,7 @@ from loguru import logger
 # from src.external.database import get_postgres_pool
 from src.bot import root_router
 from src.modules.common.infrastructure.config import BOT_TOKEN, configurate_logger
-from src.modules.common.infrastructure.container import assemble_project_containers
+from src.modules.common.infrastructure.container import project_container
 
 # from src.repositories.impls import UniversityRepositoryImpl
 # from src.services.impls import UniversityServiceImpl
@@ -32,7 +32,7 @@ async def main() -> None:
     dp = Dispatcher(
         storage=MemoryStorage(),
         bot=bot,
-        assemble_project_containers=assemble_project_containers,
+        project_container=project_container,
     )
 
     dp.include_router(root_router)

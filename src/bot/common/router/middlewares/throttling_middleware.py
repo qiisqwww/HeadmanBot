@@ -3,6 +3,7 @@ from typing import Any, Awaitable, Callable, TypeAlias
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
 from aiogram.types import Message
+from injector import Injector
 
 from ..throttling_service import ThrottlingService
 
@@ -24,7 +25,9 @@ class ThrottlingMiddleware(BaseMiddleware):
         if void:
             return
 
-        throttling_service = ThrottlingService(data["containers"][0].redis_con())
+        container: Injector = data["container"]
+
+        throttling_service = container.get(ThrottlingService)
         user_activity = await throttling_service.get_user_throttling(user_id)
         if not user_activity:
             await throttling_service.set_user_throttling(user_id)

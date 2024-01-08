@@ -1,14 +1,18 @@
+from injector import inject
+
+from src.modules.common.application import Dependency
 from src.modules.student_management.application.gateways import EduInfoModuleGateway
 from src.modules.student_management.domain import Role, Student
 
 from ..repositories import CacheStudentDataRepository, StudentRepository
 
 
-class RegisterStudentCommand:
+class RegisterStudentCommand(Dependency):
     _cache_student_repository: CacheStudentDataRepository
     _student_repository: StudentRepository
     _edu_info_module_gateway: EduInfoModuleGateway
 
+    @inject
     def __init__(
         self,
         student_repostory: StudentRepository,
@@ -40,6 +44,6 @@ class RegisterStudentCommand:
                 create_student_data.group_name, student_university.id
             )
 
-        student = await self._student_repository.create(create_student_data, student_group.id)
+        student = await self._student_repository.create(create_student_data, student_group)
 
         return student

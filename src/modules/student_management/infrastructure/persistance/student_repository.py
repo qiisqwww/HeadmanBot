@@ -3,8 +3,11 @@ from typing import final
 from src.modules.common.infrastructure.persistence.postgres_repository import (
     PostgresRepositoryImpl,
 )
-from src.modules.student_management.application.repositories import StudentRepository
-from src.modules.student_management.domain import Role, Student
+from src.modules.student_management.application.repositories import (
+    CreateStudentDTO,
+    StudentRepository,
+)
+from src.modules.student_management.domain import Group, Role, Student
 from src.modules.student_management.infrastructure.mappers import StudentMapper
 
 __all__ = [
@@ -46,34 +49,37 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
 
         return self._mapper.to_domain(record)
 
-    # async def create_and_return(
-    #     self,
-    #     student_raw: StudentLoginData,
-    #     group_id: GroupId,
-    # ) -> Student:
-    #     query = (
-    #         "INSERT INTO students "
-    #         "(telegram_id, group_id, name, surname, role, birthdate) "
-    #         "VALUES ($1, $2, $3, $4, $5, $6)"
-    #     )
-    #     await self._con.execute(
-    #         query,
-    #         student_raw.telegram_id,
-    #         group_id,
-    #         student_raw.name,
-    #         student_raw.surname,
-    #         student_raw.role,
-    #         student_raw.birthdate,
-    #     )
-    #
-    #     return Student(
-    #         telegram_id=StudentId(student_raw.telegram_id),
-    #         group_id=group_id,
-    #         name=student_raw.name,
-    #         surname=student_raw.surname,
-    #         role=student_raw.role,
-    #         birthdate=student_raw.birthdate,
-    #     )
+    async def create(
+        self,
+        student_data: CreateStudentDTO,
+        group: Group,
+    ) -> Student:
+        query = (
+            "INSERT INTO students "
+            "(telegram_id, group_id, name, surname, role, birthdate) "
+            "VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
+        )
+        student_id = await self._con.fetchval(
+            query,
+            student_data.telegram_id,
+            group.id,
+            student_data.name,
+            student_data.surname,
+            student_data.role,
+            student_data.birthdate,
+        )
+
+        return Student(
+            id=student_id,
+            telegram_id=student_data.telegram_id,
+            group=group,
+            name=student_data.name,
+            surname=student_data.surname,
+            role=student_data.role,
+            birthdate=student_data.birthdate,
+            is_checked_in_today=False,
+        )
+
     #
     # async def all(self) -> list[Student]:
     #     query = "SELECT * FROM students"

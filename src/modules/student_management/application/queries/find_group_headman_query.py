@@ -1,3 +1,6 @@
+from injector import inject
+
+from src.modules.common.application.dependency import Dependency
 from src.modules.student_management.domain import Role, Student
 
 from ..repositories import StudentRepository
@@ -7,9 +10,10 @@ __all__ = [
 ]
 
 
-class FindGroupHeadmanQuery:
+class FindGroupHeadmanQuery(Dependency):
     _repository: StudentRepository
 
+    @inject
     def __init__(self, repository: StudentRepository) -> None:
         self._repository = repository
 

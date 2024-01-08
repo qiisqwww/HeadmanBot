@@ -1,5 +1,6 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
+from src.modules.common.application import Dependency
 from src.modules.common.domain import UniversityAlias
 from src.modules.edu_info.contract import EduInfoModuleContract
 from src.modules.student_management.domain import Group, UniversityInfo
@@ -9,7 +10,7 @@ __all__ = [
 ]
 
 
-class EduInfoModuleGateway(ABC):
+class EduInfoModuleGateway(Dependency):
     _contract: EduInfoModuleContract
 
     @abstractmethod

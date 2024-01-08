@@ -18,7 +18,7 @@ loguru = "^0.7.2"
 redis = "^5.0.1"
 beautifulsoup4 = "^4.12.2"
 apscheduler = "^3.10.4"
-dependency-injector = "^4.41.0"
+injector = "^0.21.0"
 
 
 [tool.poetry.group.dev.dependencies]

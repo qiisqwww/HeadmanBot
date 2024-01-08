@@ -1,4 +1,4 @@
-from typing import Mapping
+from typing import Mapping, final
 
 from src.modules.student_management.domain import Group, Role, Student
 
@@ -7,6 +7,7 @@ __all__ = [
 ]
 
 
+@final
 class StudentMapper:
     def to_domain(self, record: Mapping) -> Student:
         group = Group(

@@ -1,5 +1,6 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
+from src.modules.common.application import Dependency
 from src.modules.common.domain import UniversityAlias
 
 from ...domain import University
@@ -9,7 +10,7 @@ __all__ = [
 ]
 
 
-class UniversityRepository(ABC):
+class UniversityRepository(Dependency):
     @abstractmethod
     async def get_by_alias(self, alias: UniversityAlias) -> University:
         ...
