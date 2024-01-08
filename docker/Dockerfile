@@ -28,4 +28,5 @@ RUN poetry config virtualenvs.create false \
 COPY . /app
 
 # Start bot with this command. Will be called when docker container will be started.
-CMD ["python", "-m", "src"]
+CMD [ "python", "-m", "src" ]
+

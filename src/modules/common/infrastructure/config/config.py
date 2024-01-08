@@ -14,6 +14,10 @@ __all__ = [
     "DB_HOST",
     "REDIS_HOST",
     "REDIS_PORT",
+    "HTTP_PORT",
+    "HTTP_HOST",
+    "WEBHOOK_URL",
+    "WEBHOOK_PATH",
 ]
 
 DEBUG: bool = bool(BoolEnv("DEBUG"))
@@ -32,3 +36,9 @@ DB_HOST: str = StrEnv("DB_HOST")
 
 REDIS_HOST: str = StrEnv("REDIS_HOST")
 REDIS_PORT: int = IntEnv("REDIS_PORT")
+
+HTTP_HOST: str = StrEnv("HTTP_HOST")
+HTTP_PORT: int = IntEnv("HTTP_PORT")
+
+WEBHOOK_PATH: str = StrEnv("WEBHOOK_PATH")
+WEBHOOK_URL: str = StrEnv("WEBHOOK_URL")

@@ -1,9 +1,14 @@
 import asyncio
 
-from loguru import logger
+import uvicorn
 
-from src.bot import bot, dispatcher
-from src.modules.common.infrastructure import DEBUG, configurate_logger, init_database
+from src.api import app
+from src.modules.common.infrastructure import (
+    HTTP_HOST,
+    HTTP_PORT,
+    configurate_logger,
+    init_database,
+)
 
 # async def init_jobs(bot: Bot, pool: Pool) -> None:
 #     sender = SendingJob(bot, pool)
@@ -13,22 +18,16 @@ from src.modules.common.infrastructure import DEBUG, configurate_logger, init_da
 #     await sender.start()
 
 
-async def start_debug_bot() -> None:
-    logger.info("Bot starting.")
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dispatcher.start_polling(bot)
-    logger.info("Bot stoped.")
-
-
 async def main() -> None:
     configurate_logger()
 
     await init_database()
-
-    if DEBUG:
-        await start_debug_bot()
-
     # await init_jobs(bot, pool)
+
+    server_config = uvicorn.Config(app, host=HTTP_HOST, port=HTTP_PORT)
+    server = uvicorn.Server(server_config)
+
+    await server.serve()
 
 
 if __name__ == "__main__":
