@@ -2,7 +2,7 @@ from aiogram.types import Message
 
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.contextes import RegistrationContext
-from src.bot.common.router import Router
+from src.bot.common.router import RootRouter, Router
 
 from ..registration_states import RegistrationStates
 from ..resources import restart_button, role_buttons
@@ -12,7 +12,7 @@ __all__ = [
     "include_start_command_router",
 ]
 
-start_command_router = Router(must_be_registered=False)
+start_command_router = Router()
 
 
 @start_command_router.message(CommandFilter(TelegramCommand.START))
@@ -28,5 +28,5 @@ async def start_command(message: Message, state: RegistrationContext) -> None:
     await state.set_state(RegistrationStates.waiting_role)
 
 
-def include_start_command_router(root_router: Router) -> None:
+def include_start_command_router(root_router: RootRouter) -> None:
     root_router.include_router(start_command_router)

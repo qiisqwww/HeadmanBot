@@ -2,7 +2,7 @@ from aiogram import Bot
 from aiogram.types import CallbackQuery
 
 from src.bot.common.resources import main_menu, void_inline_buttons
-from src.bot.common.router import Router
+from src.bot.common.router import RootRouter, Router
 from src.modules.student_management.application.commands import (
     ClearCreateStudentDataCacheCommand,
     RegisterStudentCommand,
@@ -21,12 +21,10 @@ __all__ = [
 ]
 
 
-access_callback_router = Router(
-    must_be_registered=False,
-)
+access_callback_router = Router()
 
 
-def include_access_callback_router(root_router: Router) -> None:
+def include_access_callback_router(root_router: RootRouter) -> None:
     root_router.include_router(access_callback_router)
 
 

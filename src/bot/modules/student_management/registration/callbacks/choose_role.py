@@ -1,8 +1,8 @@
 from aiogram.types import CallbackQuery
 
 from src.bot.common.contextes import RegistrationContext
-from src.bot.common.resources.void_inline_buttons import void_inline_buttons
-from src.bot.common.router import Router
+from src.bot.common.resources import void_inline_buttons
+from src.bot.common.router import RootRouter, Router
 from src.modules.student_management.application.queries import GetAllUniversitiesQuery
 
 from ..callback_data import ChooseRoleCallbackData
@@ -17,12 +17,10 @@ __all__ = [
     "include_choose_role_router",
 ]
 
-choose_role_router = Router(
-    must_be_registered=False,
-)
+choose_role_router = Router()
 
 
-def include_choose_role_router(root_router: Router) -> None:
+def include_choose_role_router(root_router: RootRouter) -> None:
     root_router.include_router(choose_role_router)
 
 

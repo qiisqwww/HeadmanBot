@@ -1,4 +1,4 @@
-from src.bot.common.router import Router
+from src.bot.common.router import RootRouter
 
 from .registration.callbacks import include_registration_callbacks
 from .registration.commands import (
@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-def include_student_management_router(root_router: Router) -> None:
+def include_student_management_router(root_router: RootRouter) -> None:
     include_start_command_router(root_router)
     include_restart_command_router(root_router)
     include_registration_finite_state_router(root_router)

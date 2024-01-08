@@ -3,7 +3,6 @@ from typing import Any, Awaitable, Callable, TypeAlias
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from injector import Injector
-from loguru import logger
 
 from src.bot.common.router.middlewares.templates import (
     ALREADY_REGISTERED_TEMPLATE,
@@ -17,19 +16,18 @@ __all__ = [
     "InjectStudentMiddleware",
 ]
 
-HandlerType: TypeAlias = Callable[[Message | CallbackQuery, dict[str, Any]], Awaitable[Any]]
+EventType: TypeAlias = Message | CallbackQuery
+HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 
 class InjectStudentMiddleware(BaseMiddleware):
     _must_be_registered: bool
 
     def __init__(self, must_be_registered: bool) -> None:
-        self._must_be_registered = must_be_registered
         super().__init__()
+        self._must_be_registered = must_be_registered
 
-    async def __call__(self, handler: HandlerType, event: Message | CallbackQuery, data: dict[str, Any]) -> Any:
-        logger.trace("Check is user registred middleware started.")
-
+    async def __call__(self, handler: HandlerType, event: EventType, data: dict[str, Any]) -> Any:
         if event.from_user is None:
             return
 
@@ -44,16 +42,11 @@ class InjectStudentMiddleware(BaseMiddleware):
         is_registered = student is not None
 
         if is_registered != self._must_be_registered and not self._must_be_registered:
-            await event.answer(ALREADY_REGISTERED_TEMPLATE)
-            logger.trace("middleware finished, already registered")
-            return
+            return await event.answer(ALREADY_REGISTERED_TEMPLATE)
 
         if is_registered != self._must_be_registered and self._must_be_registered:
-            await event.answer(MUST_BE_REG_TEMPLATE)
-            logger.trace("middleware finished, must be registered")
-            return
+            return await event.answer(MUST_BE_REG_TEMPLATE)
 
-        logger.trace("Check is user registred middleware finished.")
         data["student"] = student
 
         return await handler(event, data)

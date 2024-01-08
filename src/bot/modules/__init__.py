@@ -1,4 +1,4 @@
-from src.bot.common.router import Router
+from src.bot.common.router import RootRouter
 
 from .help import include_help_command_router
 from .student_management.student_management_router import (
@@ -10,6 +10,6 @@ __all__ = [
 ]
 
 
-def include_all_routers(root_router: Router) -> None:
+def include_all_routers(root_router: RootRouter) -> None:
     include_help_command_router(root_router)
     include_student_management_router(root_router)

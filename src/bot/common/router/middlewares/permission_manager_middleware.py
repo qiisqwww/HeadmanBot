@@ -5,7 +5,10 @@ from aiogram.types import CallbackQuery, Message
 
 from src.modules.student_management.domain import Role
 
-HandlerType: TypeAlias = Callable[[Message | CallbackQuery, dict[str, Any]], Awaitable[Any]]
+from .templates import YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE
+
+EventType: TypeAlias = Message | CallbackQuery
+HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
     "PermissionManagerMiddleware",
@@ -19,11 +22,11 @@ class PermissionManagerMiddleware(BaseMiddleware):
         self._min_role = min_role
         super().__init__()
 
-    async def __call__(self, handler: HandlerType, event: Message | CallbackQuery, data: dict[str, Any]) -> Any:
+    async def __call__(self, handler: HandlerType, event: EventType, data: dict[str, Any]) -> Any:
         student = data["student"]
 
         if student.role < self._min_role:
-            await event.answer("У вас недостаточно прав для выполнения данной команды")
+            await event.answer(YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE)
             return
 
         return await handler(event, data)

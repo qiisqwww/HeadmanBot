@@ -1,4 +1,4 @@
-from src.bot.common.router import Router
+from src.bot.common.router import RootRouter
 
 from .accept_request import include_access_callback_router
 from .ask_new_fullname_validity_callback import include_ask_new_fullname_validity_router
@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-def include_registration_callbacks(root_router: Router) -> None:
+def include_registration_callbacks(root_router: RootRouter) -> None:
     include_choose_role_router(root_router)
     include_choose_university_router(root_router)
     include_ask_new_fullname_validity_router(root_router)

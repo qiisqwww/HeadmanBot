@@ -2,12 +2,14 @@ from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, Message
 from injector import Injector
+from loguru import logger
 
 from ..throttling_service import ThrottlingService
 
-HandlerType: TypeAlias = Callable[[Message, dict[str, Any]], Awaitable[Any]]
+EventType: TypeAlias = Message | CallbackQuery
+HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
     "ThrottlingMiddleware",
@@ -15,26 +17,27 @@ __all__ = [
 
 
 class ThrottlingMiddleware(BaseMiddleware):
-    async def __call__(self, handler: HandlerType, event: Message, data: dict[str, Any]) -> Any:
+    async def __call__(self, handler: HandlerType, event: EventType, data: dict[str, Any]) -> Any:
         if event.from_user is None:
             return None
 
-        user_id = str(event.from_user.id)
+        telegram_id = str(event.from_user.id)
 
-        void = get_flag(data, "void")
-        if void:
+        if get_flag(data, "void"):
+            logger.error("Void event.")
             return
 
         container: Injector = data["container"]
 
         throttling_service = container.get(ThrottlingService)
-        user_activity = await throttling_service.get_user_throttling(user_id)
+        user_activity = await throttling_service.get_user_throttling(telegram_id)
+
         if not user_activity:
-            await throttling_service.set_user_throttling(user_id)
+            await throttling_service.set_user_throttling(telegram_id)
             return await handler(event, data)
 
         if int(user_activity) >= 10:
             return
 
-        await throttling_service.increase_user_throttling(user_id)
+        await throttling_service.increase_user_throttling(telegram_id)
         return await handler(event, data)

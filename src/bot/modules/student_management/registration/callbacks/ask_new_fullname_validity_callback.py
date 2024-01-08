@@ -2,8 +2,8 @@ from aiogram import Bot
 from aiogram.types import CallbackQuery
 
 from src.bot.common.contextes import RegistrationContext
-from src.bot.common.resources.void_inline_buttons import void_inline_buttons
-from src.bot.common.router import Router
+from src.bot.common.resources import void_inline_buttons
+from src.bot.common.router import RootRouter, Router
 from src.modules.common.infrastructure.config import ADMIN_IDS
 from src.modules.student_management.application.commands import (
     CacheCreateStudentDataCommand,
@@ -30,12 +30,10 @@ __all__ = [
 ]
 
 
-ask_new_fullname_validity_router = Router(
-    must_be_registered=False,
-)
+ask_new_fullname_validity_router = Router()
 
 
-def include_ask_new_fullname_validity_router(root_router: Router) -> None:
+def include_ask_new_fullname_validity_router(root_router: RootRouter) -> None:
     root_router.include_router(ask_new_fullname_validity_router)
 
 
