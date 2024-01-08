@@ -9,6 +9,7 @@ from src.modules.common.application.schedule_api import ScheduleAPI
 from src.modules.common.infrastructure.apis.schedule_api import ScheduleApiImpl
 from src.modules.common.infrastructure.database.postgres import get_postgres_pool
 from src.modules.common.infrastructure.database.redis import get_redis_pool
+from src.modules.edu_info.infrastructure.container import assemble_edu_info_module
 from src.modules.student_management.infrastructure.container import (
     assemble_student_management_module,
 )
@@ -28,6 +29,7 @@ def assemble_common_dependencies(binder: Binder) -> None:
 
 def assemble_modules(binder: Binder) -> None:
     assemble_common_dependencies(binder)
+    assemble_edu_info_module(binder)
     assemble_student_management_module(binder)
 
 

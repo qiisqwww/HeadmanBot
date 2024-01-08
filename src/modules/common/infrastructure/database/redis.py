@@ -1,11 +1,9 @@
-from typing import Any, AsyncGenerator
-
-from redis.asyncio import ConnectionPool, Redis
+from redis.asyncio import ConnectionPool
 
 from ..config import REDIS_HOST, REDIS_PORT
 
 __all__ = [
-    "get_redis_connection",
+    "get_redis_pool",
 ]
 
 
@@ -15,10 +13,3 @@ def get_redis_pool() -> ConnectionPool:
     if not hasattr(get_redis_pool, "pool"):
         get_redis_pool.pool = ConnectionPool().from_url(REDIS_URL)  # type: ignore
     return get_redis_pool.pool  # type: ignore
-
-
-async def get_redis_connection() -> AsyncGenerator[Redis, Any]:
-    pool = get_redis_pool()
-
-    async with Redis(connection_pool=pool) as con:
-        yield con
