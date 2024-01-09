@@ -70,3 +70,9 @@ class EduInfoModuleContract(Dependency):
         return_value['name']: str -> university name
         return_value['alias']: UniversityAlias -> university alias
         """
+
+    @abstractmethod
+    async def get_group_name_and_uni_name(self, group_id: int) -> tuple[str, str] | None:
+        """Return data like a tuple
+        return_value[0]: str -> group_name
+        return_value[1]: str -> university_name"""

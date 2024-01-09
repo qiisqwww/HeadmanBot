@@ -5,6 +5,7 @@ from injector import inject
 
 from src.modules.common.domain import UniversityAlias
 from src.modules.edu_info.application.repositories import (
+    EduInfoRepository,
     GroupRepository,
     UniversityRepository,
 )
@@ -19,11 +20,18 @@ __all__ = [
 class EduInfoModuleContractImpl(EduInfoModuleContract):
     _university_repository: UniversityRepository
     _group_repository: GroupRepository
+    _edu_info_repository: EduInfoRepository
 
     @inject
-    def __init__(self, university_repository: UniversityRepository, group_repository: GroupRepository) -> None:
+    def __init__(
+        self,
+        university_repository: UniversityRepository,
+        group_repository: GroupRepository,
+        edu_info_repository: EduInfoRepository,
+    ) -> None:
         self._university_repository = university_repository
         self._group_repository = group_repository
+        self._edu_info_repository = edu_info_repository
 
     async def get_all_universities_info(self) -> list[dict[str, Any]]:
         universities = await self._university_repository.all()
@@ -62,3 +70,6 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
     async def get_university_info_by_alias(self, alias: UniversityAlias) -> dict[str, Any]:
         university = await self._university_repository.get_by_alias(alias)
         return asdict(university)
+
+    async def get_group_name_and_uni_name(self, group_id: int) -> tuple[str, str] | None:
+        return await self._edu_info_repository.get_group_and_uni_name_by_group_id(group_id)

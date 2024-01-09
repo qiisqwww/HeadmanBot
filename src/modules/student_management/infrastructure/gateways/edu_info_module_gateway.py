@@ -2,10 +2,10 @@ from typing import final
 
 from injector import inject
 
-from src.modules.common.domain.university_alias import UniversityAlias
+from src.modules.common.domain import UniversityAlias
 from src.modules.edu_info.contract import EduInfoModuleContract
 from src.modules.student_management.application.gateways import EduInfoModuleGateway
-from src.modules.student_management.domain import Group, UniversityInfo
+from src.modules.student_management.domain import EduProfileInfo, Group, UniversityInfo
 
 __all__ = [
     "EduInfoModuleGatewayImpl",
@@ -56,3 +56,14 @@ class EduInfoModuleGatewayImpl(EduInfoModuleGateway):
     async def create_group(self, group_name: str, university_id: int) -> Group:
         group_info = await self._contract.create_group(group_name, university_id)
         return Group(**group_info)
+
+    async def get_edu_profile_info(self, group_id: int) -> EduProfileInfo | None:
+        edu_info = await self._contract.get_group_name_and_uni_name(group_id)
+
+        if edu_info is None:
+            return None
+
+        return EduProfileInfo(
+            group_name=edu_info[0],
+            university_name=edu_info[1],
+        )

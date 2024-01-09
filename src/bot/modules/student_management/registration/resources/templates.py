@@ -30,9 +30,6 @@ __all__ = [
     "chosen_lesson_template",
     "TOO_MUCH_NAME_LENGTH_TEMPLATE",
     "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
-    "profile_info",
-    "asking_name_validation_template",
-    "asking_surname_validation_template",
     "your_choice_is_template",
     "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE",
 ]
@@ -121,18 +118,6 @@ def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
 
 def asking_fullname_validation_template(surname: str, name: str) -> str:
     return f"{surname} {name}\n\nДанные верны?"
-
-
-def profile_info(surname: str, name: str, role: Role) -> str:
-    return f"<b>Профиль студента</b>\n\nФамилия: <i>{surname}</i>\nИмя: <i>{name}</i>\nРоль: <i>{role}</i>"
-
-
-def asking_name_validation_template(name: str) -> str:
-    return f"Ваше новое имя: {name}\n\nДанные верны?"
-
-
-def asking_surname_validation_template(surname: str) -> str:
-    return f"Ваша новая фамилия: {surname}\n\nДанные верны?"
 
 
 def your_choice_is_template(is_fullname_correct: bool) -> str:

@@ -1,5 +1,6 @@
 from src.bot.common.router import RootRouter
 
+from .profile.command import include_profile_command_router
 from .registration.callbacks import include_registration_callbacks
 from .registration.commands import (
     include_restart_command_router,
@@ -17,3 +18,4 @@ def include_student_management_router(root_router: RootRouter) -> None:
     include_restart_command_router(root_router)
     include_registration_finite_state_router(root_router)
     include_registration_callbacks(root_router)
+    include_profile_command_router(root_router)

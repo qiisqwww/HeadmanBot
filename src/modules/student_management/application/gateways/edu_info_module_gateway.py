@@ -3,7 +3,7 @@ from abc import abstractmethod
 from src.modules.common.application import Dependency
 from src.modules.common.domain import UniversityAlias
 from src.modules.edu_info.contract import EduInfoModuleContract
-from src.modules.student_management.domain import Group, UniversityInfo
+from src.modules.student_management.domain import EduProfileInfo, Group, UniversityInfo
 
 __all__ = [
     "EduInfoModuleGateway",
@@ -39,4 +39,8 @@ class EduInfoModuleGateway(Dependency):
 
     @abstractmethod
     async def create_group(self, group_name: str, university_id: int) -> Group:
+        ...
+
+    @abstractmethod
+    async def get_edu_profile_info(self, group_id: int) -> EduProfileInfo | None:
         ...

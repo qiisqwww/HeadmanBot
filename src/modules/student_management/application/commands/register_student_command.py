@@ -50,4 +50,4 @@ class RegisterStudentCommand(Dependency):
 
             student = await self._student_repository.create(create_student_data, student_group.id)
 
-            return student
+        return student
