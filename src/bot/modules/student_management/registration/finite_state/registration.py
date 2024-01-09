@@ -138,10 +138,7 @@ async def handling_name(
     message: Message,
     state: RegistrationContext,
 ) -> None:
-    if message.from_user is None:
-        return
-
-    if message.text is None:
+    if message.from_user is None or message.text is None:
         return
 
     if not is_valid_name_len(message.text):

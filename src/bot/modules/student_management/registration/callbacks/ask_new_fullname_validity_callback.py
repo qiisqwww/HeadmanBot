@@ -21,8 +21,8 @@ from ..resources.inline_buttons import accept_or_deny_buttons
 from ..resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-    headman_send_registration_request_template,
     student_send_registration_request_template,
+    your_choice_is_template,
 )
 
 __all__ = [
@@ -54,9 +54,10 @@ async def ask_new_fullname_validity_callback(
         return
 
     await callback.message.edit_text(
-        f"Отлично, вы выбрали {'<b>да</b>' if callback_data.is_fullname_correct else '<b>нет</b>'}",
+        your_choice_is_template(callback_data.is_fullname_correct),
         reply_markup=void_inline_buttons(),
     )
+
     if not callback_data.is_fullname_correct:
         await callback.message.answer("Введите фамилию.", reply_markup=void_inline_buttons())
         await state.set_state(RegistrationStates.waiting_surname)
@@ -69,19 +70,20 @@ async def ask_new_fullname_validity_callback(
             await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE, reply_markup=void_inline_buttons())
 
     student_data = await state.get_data()
-    telegram_id = int(callback.from_user.id)
     await cache_student_data_command.execute(CreateStudentDTO(**student_data))
 
+    telegram_id = await state.telegram_id
     surname = await state.surname
     name = await state.name
+    role = await state.role
 
-    if await state.role == Role.HEADMAN:
+    if role == Role.HEADMAN:
         await state.clear()
         await state.set_state(RegistrationStates.on_verification)
         for admin_id in ADMIN_IDS:
             await bot.send_message(
                 admin_id,
-                headman_send_registration_request_template(name, surname),
+                student_send_registration_request_template(surname, name, role, telegram_id),
                 reply_markup=accept_or_deny_buttons(telegram_id),
             )
         return
@@ -97,9 +99,8 @@ async def ask_new_fullname_validity_callback(
 
     await state.clear()
     await state.set_state(RegistrationStates.on_verification)
-
     await bot.send_message(
         headman.telegram_id,
-        student_send_registration_request_template(surname, name),
+        student_send_registration_request_template(surname, name, role, telegram_id),
         reply_markup=accept_or_deny_buttons(telegram_id),
     )

@@ -1,7 +1,8 @@
+from jinja2 import Template
+
 from src.modules.student_management.domain import Role
 
 __all__ = [
-    "headman_send_registration_request_template",
     "student_send_registration_request_template",
     "start_message_template",
     "asking_fullname_validation_template",
@@ -91,34 +92,43 @@ WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы желаете изменить?"
 
 
 def successful_role_choose_template(role: Role) -> str:
-    return f"Роль была успешно выбрана. Вы - <b>{role.translation}</b>."
+    template = Template("Роль была успешно выбрана. Вы - <b>{{role.translation}}</b>.", autoescape=True)
+    return template.render(role=role)
 
 
 def successful_university_choose_template(university_name: str) -> str:
-    return f"Вы успешно выбрали университет <b>{university_name}</b>."
+    template = Template("Вы успешно выбрали университет <b>{{university_name}}</b>.", autoescape=True)
+    return template.render(university_name=university_name)
 
 
-def headman_send_registration_request_template(name: str, surname: str) -> str:
-    return f"Староста {surname} {name} подал заявку на регистарцию в боте."
-
-
-def student_send_registration_request_template(surname: str, name: str) -> str:
-    return f"Студент {surname} {name} подал заявку на регистарцию в боте."
+def student_send_registration_request_template(surname: str, name: str, role: Role, telegram_id: int) -> str:
+    template = Template(
+        "{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{surname}} {{name}}</a> подал заявку на регистарцию в боте.",
+        autoescape=True,
+    )
+    return template.render(role=role, surname=surname, name=name, telegram_id=telegram_id)
 
 
 def start_message_template(surname: str | None, name: str) -> str:
-    if surname is None:
-        return f"Приветствую {name}! Для начала, давай зарегистрируемся в системе бота."
-    return f"Приветствую {surname} {name}! Для начала, давай зарегистрируемся в системе бота."
+    template = Template(
+        "Приветствую {% if surname is not none %} {{surname}} {% endif %} {{name}}! Для начала, давай зарегистрируемся в системе бота.",
+        autoescape=True,
+    )
+    return template.render(surname=surname, name=name)
 
 
 def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
-    return f"Вы посетите пару {lesson_name}, которая начнётся в {start_time}"
+    template = Template("Вы посетите пару {{lesson_name}}, которая начнётся в {{start_time}}", autoescape=True)
+    return template.render(lesson_name=lesson_name, start_time=start_time)
 
 
 def asking_fullname_validation_template(surname: str, name: str) -> str:
-    return f"{surname} {name}\n\nДанные верны?"
+    template = Template("{{surname}} {{name}}\n\nДанные верны?", autoescape=True)
+    return template.render(surname=surname, name=name)
 
 
 def your_choice_is_template(is_fullname_correct: bool) -> str:
-    return f"Вы выбрали {'<b>да</b>' if is_fullname_correct else '<b>нет</b>'}"
+    template = Template(
+        "Вы выбрали {% if is_fullname_correct %} '<b>да</b>' {% else %} '<b>нет</b>' {% endif %}", autoescape=True
+    )
+    return template.render(is_fullname_correct=is_fullname_correct)

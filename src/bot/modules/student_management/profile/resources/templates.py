@@ -1,3 +1,5 @@
+from jinja2 import Template
+
 from src.modules.student_management.domain import EduProfileInfo, Student
 
 __all__ = [
@@ -8,14 +10,18 @@ __all__ = [
 
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
-    return (
-        f"<b>Профиль студента</b>\n\n"
-        f"Фамилия: <i>{student.surname}</i>\n"
-        f"Имя: <i>{student.name}</i>\n"
-        f"Роль: <i>{student.role.translation}</i>\n"
-        f"Группа: <i>{edu_info.group_name}</i>\n"
-        f"Университет: <i>{edu_info.university_name}</i>\n"
+    template = Template(
+        "<b>Профиль студента</b>\n\n"
+        "Фамилия: {{student.surname}}\n"
+        "Имя: {{student.name}}\n"
+        "Роль: {{student.role.translation}}\n"
+        "Группа: {{edu_info.group_name}}\n"
+        "Университет: {{edu_info.university_name}}\n"
+        "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %} не указана {% endif %}",
+        autoescape=True,
     )
+
+    return template.render(student=student, edu_info=edu_info)
 
 
 def asking_name_validation_template(name: str) -> str:
