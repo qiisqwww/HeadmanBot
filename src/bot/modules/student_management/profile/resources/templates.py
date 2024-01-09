@@ -25,8 +25,10 @@ def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
 
 
 def asking_name_validation_template(name: str) -> str:
-    return f"Ваше новое имя: {name}\n\nДанные верны?"
+    template = Template("Ваше новое имя: {{name}}\n\nДанные верны?", autoescape=True)
+    return template.render(name=name)
 
 
 def asking_surname_validation_template(surname: str) -> str:
-    return f"Ваша новая фамилия: {surname}\n\nДанные верны?"
+    template = Template("Ваша новая фамилия: {{surname}}\n\nДанные верны?", autoescape=True)
+    return template.render(surname=surname)
