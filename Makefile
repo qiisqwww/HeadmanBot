@@ -1,6 +1,5 @@
 dev: 
-	sudo docker-compose  -f ./docker/docker-compose.dev.yml up --build &
-	ngrok http --domain=honestly-assured-wildcat.ngrok-free.app --log=stdout 8080 > /dev/null
+	docker compose  -f ./docker/docker-compose.dev.yml --env-file ./.env/.dev.env up --build
 
 down:
 	docker-compose -f ./docker/docker-compose.dev.yml stop
