@@ -1,7 +1,10 @@
 from injector import inject
 
 from src.modules.common.application import Dependency, UnitOfWork
-from src.modules.student_management.application.gateways import EduInfoModuleGateway
+from src.modules.student_management.application.gateways import (
+    AttendanceModuleGateway,
+    EduInfoModuleGateway,
+)
 from src.modules.student_management.domain import Role, Student
 
 from ..repositories import CacheStudentDataRepository, StudentRepository
@@ -11,6 +14,7 @@ class RegisterStudentCommand(Dependency):
     _cache_student_repository: CacheStudentDataRepository
     _student_repository: StudentRepository
     _edu_info_module_gateway: EduInfoModuleGateway
+    _attendance_module_gateway: AttendanceModuleGateway
     _uow: UnitOfWork
 
     @inject
@@ -19,11 +23,13 @@ class RegisterStudentCommand(Dependency):
         student_repostory: StudentRepository,
         cache_student_data_repository: CacheStudentDataRepository,
         edu_info_module_gateway: EduInfoModuleGateway,
+        attendance_module_gateway: AttendanceModuleGateway,
         uow: UnitOfWork,
     ) -> None:
         self._cache_student_repository = cache_student_data_repository
         self._student_repository = student_repostory
         self._edu_info_module_gateway = edu_info_module_gateway
+        self._attendance_module_gateway = attendance_module_gateway
         self._uow = uow
 
     async def execute(self, telegram_id: int) -> Student:
@@ -49,5 +55,8 @@ class RegisterStudentCommand(Dependency):
                 )
 
             student = await self._student_repository.create(create_student_data, student_group.id)
+            await self._attendance_module_gateway.create_attendance(
+                student.id, create_student_data.university_alias, student_group.id, student_group.name
+            )
 
         return student

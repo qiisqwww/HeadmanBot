@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod
 
-from src.dto.models import GroupId
-
-from ..models import Lesson
-from .dto import CreateLessonDTO
+from src.modules.attendance.domain import Lesson
+from src.modules.common.application.schedule_api import Schedule
 
 __all__ = [
     "LessonRepository",
@@ -12,13 +10,17 @@ __all__ = [
 
 class LessonRepository(ABC):
     @abstractmethod
-    async def create(self, data: CreateLessonDTO) -> Lesson:
+    async def filter_by_group_id(self, group_id: int) -> list[Lesson]:
         ...
 
     @abstractmethod
-    async def filter_by_group_id(self, group_id: GroupId) -> list[Lesson]:
+    async def create_for_group(self, group_id: int, schedule: list[Schedule]) -> list[Lesson]:
         ...
 
-    @abstractmethod
-    async def delete_all(self) -> None:
-        ...
+    # @abstractmethod
+    # async def create(self, data: CreateLessonDTO) -> Lesson:
+    #     ...
+
+    # @abstractmethod
+    # async def delete_all(self) -> None:
+    #     ...

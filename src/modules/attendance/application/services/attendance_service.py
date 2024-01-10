@@ -1,18 +1,8 @@
-from src.dto.models import (
-    GroupId,
-    LessonId,
-    Student,
-    StudentId,
-    StudentFullnameView
-)
+from src.dto.models import GroupId, LessonId, StudentFullnameView, StudentId
 from src.dto.models.attendance_with_lesson import AttendanceWithLesson
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
-from src.services.interfaces import (
-    AttendanceService,
-    LessonService,
-    StudentService
-)
+from src.services.interfaces import AttendanceService, LessonService, StudentService
 
 __all__ = [
     "AttendanceServiceImpl",
@@ -69,11 +59,3 @@ class AttendanceServiceImpl(AttendanceService):
                 )
 
         await self._attendance_repository.update_status_for_lesson(student_id, lesson_id, new_status)
-
-    async def create_for_student(self, student: Student) -> None:
-        lessons = await self._lesson_service.filter_by_group_id(student.group_id)
-
-        if not lessons:
-            return
-
-        await self._attendance_repository.create(student.telegram_id, [lesson.id for lesson in lessons])
