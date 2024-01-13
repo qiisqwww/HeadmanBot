@@ -1,5 +1,6 @@
 import re
-from datetime import datetime, time
+from datetime import time
+from typing import final
 
 from bs4 import BeautifulSoup, Tag
 from httpx import AsyncClient
@@ -12,6 +13,7 @@ __all__ = [
 ]
 
 
+@final
 class BmstuScheduleApi(ScheduleAPI):
     _ALL_SCHEDULE_URL: str = "https://lks.bmstu.ru/schedule/list"
 
@@ -25,14 +27,13 @@ class BmstuScheduleApi(ScheduleAPI):
         return group_name in group_names
 
     async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
-        if weekday is None:
-            weekday = Weekday(datetime.today().weekday())
+        weekday = Weekday.today() if weekday is None else weekday
 
         if weekday == Weekday.SUNDAY:
             return []
 
         schedule_soup = await self._fetch_schedule_soup(group_name)
-        today_schedule = self._get_today_schedule_table(weekday, schedule_soup)
+        today_schedule = self._get_today_schedule_table(schedule_soup, weekday)
         is_zn = self._is_zn(schedule_soup)
 
         rows: list[Tag] = today_schedule.find_all("tr")[2:]
@@ -115,6 +116,6 @@ class BmstuScheduleApi(ScheduleAPI):
         group_pat = re.compile("/schedule/*")
         return soup.find_all(href=group_pat)
 
-    def _get_today_schedule_table(self, weekday: Weekday, schedule_soup: BeautifulSoup) -> Tag:
+    def _get_today_schedule_table(self, schedule_soup: BeautifulSoup, weekday: Weekday) -> Tag:
         day_schedule = schedule_soup.find_all(class_="col-lg-6 d-none d-md-block")[weekday]
         return day_schedule.table.tbody

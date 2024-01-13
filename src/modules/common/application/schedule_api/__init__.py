@@ -1,9 +1,9 @@
-from .dto import Schedule
-from .enums import Weekday
+from .schedule import Schedule
 from .schedule_api import ScheduleAPI
+from .weekday import Weekday
 
 __all__ = [
     "ScheduleAPI",
-    "Weekday",
     "Schedule",
+    "Weekday",
 ]

@@ -3,9 +3,9 @@ from datetime import time
 import pytest
 from bs4 import BeautifulSoup
 
-from src.external.apis.schedule_api.dto import Schedule
-from src.external.apis.schedule_api.enums import Weekday
-from src.external.apis.schedule_api.impls import BmstuScheduleApi
+from src.modules.common.application.schedule_api import Schedule
+from src.modules.common.application.schedule_api.weekday import Weekday
+from src.modules.common.infrastructure.apis.schedule_api.impls import BmstuScheduleApi
 
 
 @pytest.mark.asyncio

@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from src.external.apis.schedule_api.impls import MireaScheduleApi
+from src.modules.common.infrastructure.apis.schedule_api.impls import MireaScheduleApi
 
 JSON_PATH: Path = Path("./tests/assets/mirea_api_response_with_schedule.json")
 

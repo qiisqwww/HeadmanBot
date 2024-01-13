@@ -24,13 +24,14 @@ class LessonRepositoryImpl(PostgresRepositoryImpl, LessonRepository):
         lessons = []
 
         for lesson in schedule:
-            lesson_id = await self._con.fetchval(query, lesson.lesson_name, group_id, lesson.start_time)
+            start_time = self._create_time_with_timezone(lesson.start_time)
+            lesson_id = await self._con.fetchval(query, lesson.lesson_name, group_id, start_time)
             lessons.append(
                 Lesson(
                     id=lesson_id,
                     name=lesson.lesson_name,
                     group_id=group_id,
-                    start_time=self._create_time_with_timezone(lesson.start_time),
+                    start_time=start_time,
                 )
             )
 

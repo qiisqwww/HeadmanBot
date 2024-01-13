@@ -1,3 +1,5 @@
+from typing import final
+
 import httpx
 from loguru import logger
 
@@ -12,6 +14,7 @@ __all__ = [
 ]
 
 
+@final
 class ScheduleApiImpl(ScheduleAPI):
     _api_impl: ScheduleAPI
 

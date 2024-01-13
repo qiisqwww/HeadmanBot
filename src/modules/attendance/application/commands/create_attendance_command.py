@@ -1,16 +1,12 @@
-from datetime import datetime
-
 from injector import inject
-from loguru import logger
 
 from src.modules.attendance.application.repositories import (
     AttendanceRepository,
     LessonRepository,
 )
 from src.modules.common.application import Dependency
-from src.modules.common.application.schedule_api import ScheduleAPI, Weekday
+from src.modules.common.application.schedule_api import ScheduleAPI
 from src.modules.common.domain import UniversityAlias
-from src.modules.common.infrastructure import DEBUG
 
 __all__ = [
     "CreateAttendanceCommand",
@@ -37,16 +33,8 @@ class CreateAttendanceCommand(Dependency):
         group_schedule = await self._lesson_repository.filter_by_group_id(group_id)
 
         if not group_schedule:
-            today = datetime.today().weekday()
-
-            if DEBUG:
-                today = datetime(year=2023, month=10, day=11).weekday()
-
             schedule_api = self._schedule_api(university_alias)
-            logger.error("Before")
-            fetched_schedule = await schedule_api.fetch_schedule(group_name, Weekday(today))
-            logger.error(fetched_schedule)
-            logger.error("After")
+            fetched_schedule = await schedule_api.fetch_schedule(group_name)
 
             group_schedule = await self._lesson_repository.create_for_group(group_id, fetched_schedule)
 
