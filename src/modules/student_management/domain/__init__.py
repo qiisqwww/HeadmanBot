@@ -1,5 +1,5 @@
 from .enums import Role
-from .models import EduProfileInfo, Group, Student, UniversityInfo
+from .models import EduProfileInfo, Group, Student, StudentInfo, UniversityInfo
 
 __all__ = [
     "Student",
@@ -7,4 +7,5 @@ __all__ = [
     "Group",
     "UniversityInfo",
     "EduProfileInfo",
+    "StudentInfo",
 ]

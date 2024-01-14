@@ -1,5 +1,4 @@
 from aiogram.types import CallbackQuery
-from loguru import logger
 
 from src.dto.callback_data import UpdateAttendanceCallbackData
 from src.dto.models import Student
@@ -21,7 +20,6 @@ update_attendance_router.callback_query.middleware(CheckInMiddleware())
 
 
 @update_attendance_router.callback_query(UpdateAttendanceCallbackData.filter())
-@logger.catch
 async def update_attendance(
     callback: CallbackQuery,
     callback_data: UpdateAttendanceCallbackData,

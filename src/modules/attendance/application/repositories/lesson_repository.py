@@ -18,9 +18,5 @@ class LessonRepository(ABC):
         ...
 
     # @abstractmethod
-    # async def create(self, data: CreateLessonDTO) -> Lesson:
-    #     ...
-
-    # @abstractmethod
     # async def delete_all(self) -> None:
     #     ...

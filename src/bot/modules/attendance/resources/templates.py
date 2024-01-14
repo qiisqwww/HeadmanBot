@@ -1,6 +1,6 @@
-from src.dto.models import StudentFullnameView
+from jinja2 import Template
 
-from ...domain.enums import VisitStatus
+from src.modules.attendance.domain import Lesson, LessonAttendanceForGroup
 
 __all__ = [
     "ALL_PAIRS_TEMPLATE",
@@ -11,9 +11,7 @@ __all__ = [
     "WHICH_PAIR_TEMPLATE",
     "YOU_CAN_NOT_ANSWER_TIME_TEMPLATE",
     "YOU_CAN_NOT_ANSWER_DAY_TEMPLATE",
-    "attendance_for_headmen_template",
 ]
-
 
 WHICH_PAIR_TEMPLATE = """
 Какая пара вас интересует?"""
@@ -42,35 +40,31 @@ POLL_TEMPLATE = """
 Если возникли проблемы - напишите о них в @noheadproblemsbot"""
 
 
-def telegram_link_template(student_meta: StudentFullnameView) -> str:
-    return f'<a href="tg://user?id={student_meta.telegram_id}">{student_meta.surname} {student_meta.name}</a>\n'
+def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup) -> str:
+    template = Template(
+        """{{lesson.name}} {{lesson.start_time.strftime('%H:%M')}}
 
+Не отметились:
+{% for student in group_attendance.attendance['absent'] -%}
+    {% if not student.is_checked_in_today -%}
+        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
+    {%- endif %}
+{%- endfor %}
 
-def attendance_for_headmen_template(group_attendance: dict[StudentFullnameView, VisitStatus]) -> str:
-    visit_text = "Придут:\n"
-    none_text = "Не отметились:\n"
-    no_text = "Не придут:\n"
+Придут:
+{% for student in group_attendance.attendance['present'] -%}
+    <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
+{%- endfor %}
 
-    not_visit: list[StudentFullnameView] = []
-    visit: list[StudentFullnameView] = []
-    not_checked: list[StudentFullnameView] = []
+Не придут:
+{% for student in group_attendance.attendance['absent'] -%}
+    {% if student.is_checked_in_today -%}
+        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
+    {%- endif %}
+{%- endfor %}
 
-    for student, visit_status in group_attendance.items():
-        match visit_status:
-            case VisitStatus.NOT_CHECKED:
-                not_checked.append(student)
-            case VisitStatus.VISIT:
-                visit.append(student)
-            case VisitStatus.NOT_VISIT:
-                not_visit.append(student)
+Что-то еще?""",
+        autoescape=True,
+    )
 
-    for student in sorted(not_checked, key=lambda sorted_student: student.surname.lower()):
-        none_text += telegram_link_template(student)
-
-    for student in sorted(visit, key=lambda sorted_student: student.surname.lower()):
-        visit_text += telegram_link_template(student)
-
-    for student in sorted(not_visit, key=lambda sorted_student: student.surname.lower()):
-        no_text += telegram_link_template(student)
-
-    return f"{none_text}\n{visit_text}\n{no_text}\nЧто-то еще?"
+    return template.render(lesson=choosen_lesson, group_attendance=group_attendance)

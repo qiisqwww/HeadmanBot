@@ -1,14 +1,11 @@
-from datetime import date
 from typing import Iterable
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.commands.get_attendance.domain.models import Lesson
-from src.commands.get_attendance.presentation.handlers.callback_data import (
-    ChooseLessonCallbackData,
-    UpdateAttendanceCallbackData,
-)
+from src.modules.attendance.domain import Lesson
+
+from ..callback_data import ChooseLessonCallbackData, UpdateAttendanceCallbackData
 
 __all__ = [
     "attendance_buttons",
@@ -21,17 +18,17 @@ def attendance_buttons(lessons: Iterable[Lesson]) -> InlineKeyboardMarkup:
 
     builder.button(
         text="Буду на всех",
-        callback_data=UpdateAttendanceCallbackData(all=True, day_of_poll=date.today()),
+        callback_data=UpdateAttendanceCallbackData(all=True),
     )
     builder.button(
         text="Меня сегодня не будет",
-        callback_data=UpdateAttendanceCallbackData(all=False, day_of_poll=date.today()),
+        callback_data=UpdateAttendanceCallbackData(all=False),
     )
 
     for lesson in lessons:
         builder.button(
             text=f"Буду на {lesson.start_time.strftime('%H:%M')} {lesson.name}",
-            callback_data=UpdateAttendanceCallbackData(lesson_id=lesson.id, day_of_poll=date.today()),
+            callback_data=UpdateAttendanceCallbackData(lesson_id=lesson.id),
         )
 
     builder.adjust(2)

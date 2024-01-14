@@ -1,9 +1,4 @@
-from datetime import (
-    datetime,
-    timedelta,
-    timezone,
-    date
-)
+from datetime import date, datetime, timedelta, timezone
 from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
@@ -16,14 +11,14 @@ from src.repositories.impls import (
     LessonRepositoryImpl,
     UniversityRepositoryImpl,
 )
+from src.resources import (
+    YOU_CAN_NOT_ANSWER_DAY_TEMPLATE,
+    YOU_CAN_NOT_ANSWER_TIME_TEMPLATE,
+)
 from src.services.impls import (
     GroupServiceImpl,
     LessonServiceImpl,
     UniversityServiceImpl,
-)
-from src.resources import (
-    YOU_CAN_NOT_ANSWER_DAY_TEMPLATE,
-    YOU_CAN_NOT_ANSWER_TIME_TEMPLATE
 )
 
 __all__ = [
@@ -35,7 +30,6 @@ HandlerType: TypeAlias = Callable[[TelegramObject, dict[str, Any]], Awaitable[An
 
 
 class CheckInMiddleware(BaseMiddleware):
-    @logger.catch
     async def __call__(self, handler: HandlerType, event: CallbackQuery, data: dict[str, Any]) -> Any:
         logger.info("callback middleware started")
 

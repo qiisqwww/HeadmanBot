@@ -34,12 +34,7 @@ class StudentRepository(Dependency):
     # @abstractmethod
     # async def all(self) -> list[Student]:
     #     ...
-    #
-    # @abstractmethod
-    # async def filter_group_by_id(self, group_id: GroupId) -> list[Student] | None:
-    #     ...
 
-    #
     # @abstractmethod
     # async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:
     #     ...
