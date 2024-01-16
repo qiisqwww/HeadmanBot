@@ -18,9 +18,8 @@ __all__ = [
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    webhook_info = await bot.get_webhook_info()
-    if webhook_info.url != WEBHOOK_URL:
-        await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+    await bot.delete_webhook(drop_pending_updates=True)
+    await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
 
     yield
 
@@ -31,6 +30,6 @@ app = FastAPI(debug=DEBUG, lifespan=lifespan)
 
 
 @app.post(WEBHOOK_PATH)
-async def bot_webhook(request: Request):
+async def bot_webhook(request: Request) -> None:
     update = Update.model_validate_json(await request.body(), context={"bot": bot})
     await dispatcher.feed_update(bot, update)
