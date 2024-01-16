@@ -4,6 +4,7 @@ from .find_group_headman_query import FindGroupHeadmanQuery
 from .find_student_query import FindStudentByTelegramIdQuery
 from .get_all_universities_query import GetAllUniversitiesQuery
 from .get_edu_profile_info_query import GetEduProfileInfoQuery
+from .get_students_from_group_query import GetStudentsInfoFromGroupQuery
 from .get_university_by_alias_query import GetUniversityByAliasQuery
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "FindGroupByNameAndAliasQuery",
     "FindGroupHeadmanQuery",
     "GetEduProfileInfoQuery",
+    "GetStudentsInfoFromGroupQuery",
 ]

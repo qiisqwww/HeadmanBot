@@ -31,9 +31,9 @@ class StudentRepository(Dependency):
     ) -> Student:
         ...
 
-    # @abstractmethod
-    # async def all(self) -> list[Student]:
-    #     ...
+    @abstractmethod
+    async def update_is_checked_in(self, student_id: int, new_is_checked_in: bool) -> None:
+        ...
 
     # @abstractmethod
     # async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:

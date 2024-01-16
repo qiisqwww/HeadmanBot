@@ -21,7 +21,9 @@ __all__ = [
 ]
 
 
-access_callback_router = Router()
+access_callback_router = Router(
+    must_be_registered=None,
+)
 
 
 def include_access_callback_router(root_router: RootRouter) -> None:

@@ -1,5 +1,4 @@
-from src.dto.models import GroupId, LessonId, StudentFullnameView, StudentId
-from src.dto.models.attendance_with_lesson import AttendanceWithLesson
+from src.dto.models import LessonId, StudentId
 from src.enums import VisitStatus
 from src.repositories import AttendanceRepository
 from src.services.interfaces import AttendanceService, LessonService, StudentService
@@ -31,21 +30,8 @@ class AttendanceServiceImpl(AttendanceService):
         for student in students:
             await self.create_for_student(student)
 
-    async def get_visit_status_for_group_students(
-        self, group_id: GroupId, lesson_id: LessonId
-    ) -> dict[StudentFullnameView, VisitStatus]:
-        return await self._attendance_repository.get_visit_status_for_group_students(group_id, lesson_id)
-
-    async def get_visit_status_by_student_id_and_lesson(
-        self, student_id: StudentId, lesson_id: LessonId
-    ) -> VisitStatus:
-        return await self._attendance_repository.get_visit_status_by_student_id_and_lesson(student_id, lesson_id)
-
     async def update_visit_status_all(self, student_id: StudentId, new_status: VisitStatus) -> None:
         await self._attendance_repository.update_visit_status_all(student_id, new_status)
-
-    async def filter_by_student_id(self, student_id: StudentId) -> list[AttendanceWithLesson]:
-        return await self._attendance_repository.filter_by_student_id(student_id)
 
     async def update_visit_status_for_lesson(
         self, student_id: StudentId, lesson_id: LessonId, new_status: VisitStatus

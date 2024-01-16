@@ -1,9 +1,10 @@
 from .enums import VisitStatus
-from .models import Lesson, LessonAttendanceForGroup, StudentInfo
+from .models import Attendance, Lesson, LessonAttendanceForGroup, StudentInfo
 
 __all__ = [
     "Lesson",
     "VisitStatus",
     "LessonAttendanceForGroup",
     "StudentInfo",
+    "Attendance",
 ]

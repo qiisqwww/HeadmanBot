@@ -3,6 +3,10 @@ from typing import Any
 
 from src.modules.common.application import Dependency
 
+__all__ = [
+    "StudentManagementContract",
+]
+
 
 class StudentManagementContract(Dependency):
     @abstractmethod
@@ -16,3 +20,7 @@ class StudentManagementContract(Dependency):
         student_info['surname']: str -> student surname
         student_info['is_checked_in_today']: bool -> True mean, that student already have checked in today.
         """
+
+    @abstractmethod
+    async def update_checked_in_status(self, student_id: int, previous_is_checked_in: bool) -> None:
+        """If status was False set it to True else do nothing."""

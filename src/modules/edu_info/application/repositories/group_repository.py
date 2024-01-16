@@ -27,7 +27,6 @@ class GroupRepository(Dependency):
     async def find_by_id(self, group_id: int) -> Group | None:
         ...
 
-    #
-    # @abstractmethod
-    # async def all(self) -> list[Group]:
-    #     ...
+    @abstractmethod
+    async def all(self) -> list[Group]:
+        ...

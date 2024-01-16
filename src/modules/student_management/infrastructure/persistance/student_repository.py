@@ -85,19 +85,10 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
             is_checked_in_today=False,
         )
 
-    #
-    # async def all(self) -> list[Student]:
-    #     query = "SELECT * FROM students"
-    #     records = await self._con.fetch(query)
-    #
-    #     return [Student.from_mapping(record) for record in records]
-    #
-    # async def filter_group_by_id(self, group_id: GroupId) -> list[Student] | None:
-    #     query = "SELECT * FROM students WHERE group_id = $1"
-    #
-    #     records = await self._con.fetch(query, group_id)
-    #     return [Student.from_mapping(record) for record in records]
-    #
+    async def update_is_checked_in(self, student_id: int, new_is_checked_in: bool) -> None:
+        query = "UPDATE student_management.students SET is_checked_in_today = $1 WHERE id = $2"
+        await self._con.execute(query, new_is_checked_in, student_id)
+
     # async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:
     #     query = ("UPDATE students "
     #              "SET surname = $1 "

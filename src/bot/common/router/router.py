@@ -13,7 +13,7 @@ __all__ = [
 class Router(AiogramRouter):
     def __init__(
         self,
-        must_be_registered: bool = False,
+        must_be_registered: bool | None = False,
         minimum_role: Role = Role.STUDENT,
         name: str | None = None,
     ) -> None:
@@ -23,7 +23,8 @@ class Router(AiogramRouter):
             if not isinstance(self.parent_router, RootRouter):
                 raise RuntimeError("Router parent can be only RootRouter.")
 
-        self._add_inject_student_middleware(must_be_registered)
+        if must_be_registered is not None:
+            self._add_inject_student_middleware(must_be_registered)
 
         if must_be_registered and minimum_role is not None:
             self._add_permission_manager_middleware(minimum_role)

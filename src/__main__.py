@@ -9,20 +9,16 @@ from src.modules.common.infrastructure import (
     configurate_logger,
     init_database,
 )
-
-# async def init_jobs(bot: Bot, pool: Pool) -> None:
-#     sender = SendingJob(bot, pool)
-#     database_updater = UpdateDatabaseJob(pool)
-#
-#     await database_updater.start()
-#     await sender.start()
+from src.modules.common.infrastructure.build_scheduler import build_scheduler
 
 
 async def main() -> None:
     configurate_logger()
 
     await init_database()
-    # await init_jobs(bot, pool)
+
+    scheduler = await build_scheduler()
+    scheduler.start()
 
     server_config = uvicorn.Config(app, host=HTTP_HOST, port=HTTP_PORT)
     server = uvicorn.Server(server_config)

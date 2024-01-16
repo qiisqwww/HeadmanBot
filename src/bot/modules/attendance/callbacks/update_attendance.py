@@ -1,22 +1,28 @@
 from aiogram.types import CallbackQuery
 
-from src.dto.callback_data import UpdateAttendanceCallbackData
-from src.dto.models import Student
-from src.enums import VisitStatus
-from src.kernel import Router
-from src.middlewares.check_in_middleware import CheckInMiddleware
-from src.resources import ALL_PAIRS_TEMPLATE, NO_PAIRS_TEMPLATE, inline_void_button
-from src.resources.buttons.inline_buttons import attendance_buttons
-from src.resources.templates.templates import chosen_lesson_template
-from src.services import AttendanceService
+from src.bot.common.router import RootRouter, Router
+from src.modules.attendance.application.commands import UpdateAttendanceCommand
+from src.modules.attendance.application.queries import GetStudentAttendanceQuery
+from src.modules.attendance.domain.enums.visit_status import VisitStatus
+from src.modules.student_management.domain import Student
+
+from ..callback_data import UpdateAttendanceCallbackData
+from ..resources.inline_buttons import attendance_buttons
+from ..resources.templates import your_all_choice_is_template, your_choice_is_template
 
 __all__ = [
-    "update_attendance_router",
+    "include_update_attendance_router",
 ]
 
 
-update_attendance_router = Router(must_be_registered=True)
-update_attendance_router.callback_query.middleware(CheckInMiddleware())
+update_attendance_router = Router(
+    must_be_registered=True,
+)
+# update_attendance_router.callback_query.middleware(CheckInMiddleware())
+
+
+def include_update_attendance_router(root_router: RootRouter) -> None:
+    root_router.include_router(update_attendance_router)
 
 
 @update_attendance_router.callback_query(UpdateAttendanceCallbackData.filter())
@@ -24,42 +30,27 @@ async def update_attendance(
     callback: CallbackQuery,
     callback_data: UpdateAttendanceCallbackData,
     student: Student,
-    attendance_service: AttendanceService,
+    update_attendance_command: UpdateAttendanceCommand,
+    get_student_attendance_query: GetStudentAttendanceQuery,
 ):
-    if callback.message is None:
+    if callback.message is None or callback.message.text is None:
         return
 
-    if callback_data.all is not None and callback_data.all:
-        await attendance_service.update_visit_status_all(student.telegram_id, VisitStatus.VISIT)
-        await callback.message.edit_text(ALL_PAIRS_TEMPLATE, reply_markup=inline_void_button())
-        return
-
-    if callback_data.all is not None and not callback_data.all:
-        await attendance_service.update_visit_status_all(student.telegram_id, VisitStatus.NOT_VISIT)
-        await callback.message.edit_text(NO_PAIRS_TEMPLATE, reply_markup=inline_void_button())
-        return
-
-    if callback_data.all is None and callback_data.lesson_id is None:
-        raise TypeError("Incorrect buttons usage")
-
-    await attendance_service.update_visit_status_for_lesson(
-        student.telegram_id, callback_data.lesson_id, VisitStatus.VISIT
+    await update_attendance_command.execute(
+        student.id, student.is_checked_in_today, callback_data.attendance_id, callback_data.new_status
     )
-    attendances = await attendance_service.filter_by_student_id(student.telegram_id)
 
-    choosen_lesson = next(
-        filter(lambda attendance: attendance.lesson.id == callback_data.lesson_id, attendances)
-    ).lesson
-    non_visit_lessons = [attendance.lesson for attendance in attendances if attendance.status != VisitStatus.VISIT]
+    new_attendances = await get_student_attendance_query.execute(student.id)
+    choosen_attendance = next(filter(lambda attendance: attendance.id == callback_data.attendance_id, new_attendances))
 
-    if non_visit_lessons:
-        keyboard = attendance_buttons(non_visit_lessons)
-        text = chosen_lesson_template(choosen_lesson.name, choosen_lesson.str_start_time)
+    if all(attendance.status == VisitStatus.PRESENT for attendance in new_attendances):
+        new_text = your_all_choice_is_template(VisitStatus.PRESENT)
+    elif all(attendance.status == VisitStatus.ABSENT for attendance in new_attendances):
+        new_text = your_all_choice_is_template(VisitStatus.ABSENT)
     else:
-        keyboard = inline_void_button()
-        text = ALL_PAIRS_TEMPLATE
+        new_text = your_choice_is_template(choosen_attendance)
 
     await callback.message.edit_text(
-        text,
-        reply_markup=keyboard,
+        new_text,
+        reply_markup=attendance_buttons(True, new_attendances),
     )

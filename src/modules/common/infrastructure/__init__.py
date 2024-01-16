@@ -22,4 +22,5 @@ __all__ = [
     "HTTP_HOST",
     "HTTP_PORT",
     "WEBHOOK_SECRET",
+    "build_scheduler",
 ]

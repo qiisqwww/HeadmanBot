@@ -2,7 +2,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from src.modules.common.infrastructure import BOT_TOKEN, project_container
+from src.modules.common.infrastructure.config.config import BOT_TOKEN
+from src.modules.common.infrastructure.container import project_container
 
 from .root_router import root_router
 

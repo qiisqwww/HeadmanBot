@@ -1,84 +1,87 @@
-import asyncio
+from asyncio import TaskGroup
+from typing import Any, final
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from asyncpg.pool import Pool
+from asyncpg import Pool
 from loguru import logger
 
-from src.config import DEBUG
-from src.dto.models import Group
-from src.repositories.impls import (
-    GroupRepositoryImpl,
-    LessonRepositoryImpl,
-    StudentRepositoryImpl,
-    UniversityRepositoryImpl,
+from src.bot.common.jobs import AsyncJob
+from src.modules.attendance.application.queries import GetStudentAttendanceQuery
+from src.modules.attendance.infrastructure.persistence import AttendanceRepositoryImpl
+from src.modules.edu_info.application.queries import GetAllGroupsQuery
+from src.modules.edu_info.domain import Group
+from src.modules.edu_info.infrastructure.persistence import GroupRepositoryImpl
+from src.modules.student_management.application.queries import (
+    GetStudentsInfoFromGroupQuery,
 )
-from src.resources import POLL_TEMPLATE, attendance_buttons
-from src.services import LessonService, StudentService
-from src.services.impls import (
-    GroupServiceImpl,
-    LessonServiceImpl,
-    StudentServiceImpl,
-    UniversityServiceImpl,
+from src.modules.student_management.infrastructure.persistance import (
+    StudentInfoRepositoryImpl,
 )
+
+from ..resources.inline_buttons import attendance_buttons
+from ..resources.templates import POLL_TEMPLATE
 
 __all__ = [
     "SendingJob",
 ]
 
 
-class SendingJob:
+@final
+class SendingJob(AsyncJob):
     """Send everyone message which allow user to choose lessons which will be visited."""
 
-    _scheduler: AsyncIOScheduler
+    _bot: Bot
+    _pool: Pool
 
-    def __init__(self, bot: Bot, pool: Pool) -> None:
-        self._scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
+    def __init__(self, bot: Bot, pool: Pool, debug: bool = False) -> None:
+        self._bot = bot
+        self._pool = pool
 
-        if DEBUG:
-            self._scheduler.add_job(self._send, args=(bot, pool))
+        if debug:
+            self._trigger = None
+            self._trigger_args = {}
         else:
-            self._scheduler.add_job(self._send, "cron", day_of_week="mon-sat", hour=7, minute=00, args=(bot, pool))
+            self._trigger = "cron"
+            self._trigger_args = {
+                "hour": 7,
+                "minute": 00,
+                "day_of_week": "mon-sat",
+            }
 
-    async def start(self):
-        logger.info("Sending job started.")
-        self._scheduler.start()
-        logger.info("Sending job finished.")
+    async def __call__(self) -> Any:
+        async with self._pool.acquire() as con:
+            group_repository = GroupRepositoryImpl(con)
+            get_all_groups_query = GetAllGroupsQuery(group_repository)
 
-    @logger.catch
-    async def _send_to_group(
-        self, bot: Bot, lesson_service: LessonService, student_service: StudentService, group: Group
-    ) -> None:
-        lessons = await lesson_service.filter_by_group_id(group.id)
+            groups = await get_all_groups_query.execute()
 
-        if not lessons:
-            return
-
-        users = await student_service.filter_by_group_id(group.id)
-
-        for user in users:
-            try:
-                await bot.send_message(user.telegram_id, POLL_TEMPLATE, reply_markup=attendance_buttons(lessons))
-            except TelegramForbiddenError as e:
-                logger.error(f"Failed to send message to user {user.surname} {user.surname} id={user.telegram_id}")
-                logger.error(e)
-
-    @logger.catch
-    async def _send(self, bot: Bot, pool: Pool) -> None:
-        async with pool.acquire() as con:
-            group_service = GroupServiceImpl(GroupRepositoryImpl(con))
-            student_service = StudentServiceImpl(
-                StudentRepositoryImpl(con), group_service, UniversityServiceImpl(UniversityRepositoryImpl(con))
-            )
-            lesson_service = LessonServiceImpl(
-                LessonRepositoryImpl(con), group_service, UniversityServiceImpl(UniversityRepositoryImpl(con))
-            )
-
-            if DEBUG:
-                await asyncio.sleep(5)
-
-            groups = await group_service.all()
-
+        async with TaskGroup() as tg:
             for group in groups:
-                await self._send_to_group(bot, lesson_service, student_service, group)
+                tg.create_task(self._send_to_group(group))
+
+    async def _send_to_group(self, group: Group) -> None:
+        async with self._pool.acquire() as con:
+            attendance_repository = AttendanceRepositoryImpl(con)
+            get_student_attedance_query = GetStudentAttendanceQuery(attendance_repository)
+
+            student_info_repository = StudentInfoRepositoryImpl(con)
+            get_students_info_from_group_query = GetStudentsInfoFromGroupQuery(student_info_repository)
+
+            students_info = await get_students_info_from_group_query.execute(group.id)
+
+            for student_info in students_info:
+                attendances = await get_student_attedance_query.execute(student_info.id)
+
+                try:
+                    await self._bot.send_message(
+                        student_info.telegram_id,
+                        POLL_TEMPLATE,
+                        reply_markup=attendance_buttons(student_info.is_checked_in_today, attendances),
+                    )
+                except TelegramForbiddenError as e:
+                    logger.error(
+                        f"Failed to send message to user {student_info.surname} {student_info.surname} "
+                        f"id={student_info.telegram_id}"
+                    )
+                    logger.error(e)
