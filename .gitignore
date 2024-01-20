@@ -16,3 +16,4 @@ todo.md
 transform_data.py
 *.bkp
 *.dtmp
+db.sql
