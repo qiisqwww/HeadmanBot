@@ -5,6 +5,5 @@
 - [README.md](./README.md) - Входной файл в документацию.
 - schemas/ - Каталог с диаграммами, показывающими структуру данных в разных базах.
     - schemas/postgres.drawio - Структура данных в postgres.
-- [kernel.md](./kernel.md) - Документация всего ядра проекта.
-- [structure.md](./structure.md) - Структура проекта по каталогам, архитектура и общие положения.
-- [naming.md](./naming.md) - Рекомендацию по code style и именованию методов в сервисах и репозиториях.
+- [structure.md](./structure.md) - Структура проекта по каталогам.
+- [architecture.md](./architecture.md) - Архитектура проекта.
