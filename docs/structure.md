@@ -35,9 +35,8 @@
 
     - infrastructure/ - Реализация слоя infrastructure.
         - gateways/ - Имплементация интерфейсов из module_name/application/gateways/
-        - persistence/ - Модуль, отвечающий за сохранение данных
-            - mappers/ - Модуль, содержащий в себе DataMappers.
-            - repositories/ - Имплементация репозиториев из module_name/application/repositories/
+        - mappers/ - Модуль, содержащий в себе DataMappers.
+        - repositories/ - Имплементация репозиториев из module_name/application/repositories/
         - container.py - Конфигурация DI контейнера этого модуля
         - contract.py - Реализация интерфейса контракта этого модуля
 
