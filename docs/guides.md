@@ -5,7 +5,7 @@
 Для добавления нового функционала могут понадобиться такие компоненты:
 - Repository - для чтения и записи данных из базы, Redis или других источников.
 - Mapper - Преобразует объект (asyncpg.Record или dict), который вернет коннектор к базе в доменную сущность.
-- Gateway - для взаимодействия с другим модулем.
+- Gateway - для взаимодействия с другим модулем или внешними API.
 - Contract - описывает интерфейс модуля, чтобы его потом могли использовать другие модули.
 - Query - нужен для чтения из базы. Может использоваться внутри контроллера.
 - Command - нужен для мутации данных. Может использовать внутри контроллера.
@@ -228,3 +228,85 @@ async def start_command(
 def include_start_command_router(root_router: RootRouter) -> None:
     root_router.include_router(start_command_router)
 ```
+
+Есть два типа роутеров:
+- RootRouter - он один на всего бота. Он подключается в dispatcher. в нем можно настроить throttling.
+- Router - один для одной комманды/callback. В нем настривается инъекция пользователя и права доступа для этого роутера.
+
+Функции include_router можно группировать как угодно, по модулям и т. д. Главное потом вставить эту функцию в 
+
+file: _src/bot/modules/\_\_init\_\_.py_
+```py 
+from src.bot.common.router import RootRouter
+
+def include_all_routers(root_router: RootRouter) -> None:
+    include_start_command_router(root_router)
+```
+
+В остальном можно делать уже по аналогии с написаным кодом.
+
+## Взаимодействие между модулями 
+
+А что если мы хотим как-то взаимодействовать с другим модулем? Нам нужно будет реализовать contract другого модуля и gateway, который
+будет уметь взаимодействовать с этим контрактом.
+
+file: _src/modules/analitics/contract.py_
+```py
+class AnaliticsModuleContract(ABC):
+    @abstractmethod
+    async def safe_user_for_analitics(self, user_id: int, name: str, surname: str) -> None:
+        ...
+```
+
+Ниже будет находиться реализация контракта. Там может быть что угодно.
+
+file: _src/modules/analitics/infrastructure/contract.py_
+
+file: _src/modules/users/applications/gateways/analitics_module_gateway.py_
+```py
+class AnaliticsModuleGateway(ABC):
+    _contract: AnaliticsModuleContract
+
+    @abstractmethod
+    async def safe_user_for_analitics(self, user: User) -> None:
+        ...
+```
+
+И реализация:
+
+```py
+@final
+class AnaliticsModuleGatewayImpl(AnaliticsModuleGateway):
+    _contract: AnaliticsModuleContract
+
+    @inject
+    def __init__(self, contract: AnaliticsModuleContract) -> None:
+        self._contract = contract
+
+    async def safe_user_for_analitics(self, user: User) -> None:
+        await self._contract.safe_user_for_analitics(user.id, user.name. user.surname)
+```
+Этот gateway уже можно использовать в users/application
+
+file: _src/modules/users/application/commands/create_user_command.py_
+```py 
+@final
+class CreateUserCommand(UseCase):
+    _repository: UserRepository
+    _gateway: AnaliticsModuleGateway
+
+    @inject
+    def __init__(self, repository: UserRepository, gateway: AnaliticsModuleGateway) -> None:
+        self._repository = repository
+
+    async def execute(self, name: str, surname: str, age: int) -> User:
+        user = await self._repository.create(name, surname, age)
+        await self._gateway.safe_user_for_analitics(user)
+        return user
+```
+
+Таким образом мы используем код из другово модуля.
+
+Важные детали:
+- Реализиация contract и gateway пишется по аналогии с репозиториями: классы должны быть final c декоратором @inject 
+- Не забудь описать в DI контейнере связь между интерфейсов контракта и его реализацией, тоже и для gateway.
