@@ -8,4 +8,5 @@
 - [architecture.md](./architecture.md) - Архитектура проекта.
 - [guides.md](./guides.md) - Гайды как, что сделать.
 - [trello.md](./trello.md) - Про работу в команде, а так же организацию веток.
-- [code style](./code%20style.md) - Про стиль кода
+- [code style.md](./code%20style.md) - Про нормы написания кода.
+- [ci_cd.md](./ci_cd.md) - CI/CD
