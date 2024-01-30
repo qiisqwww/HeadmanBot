@@ -7,3 +7,4 @@
     - schemas/postgres.drawio - Структура данных в postgres.
 - [structure.md](./structure.md) - Структура проекта по каталогам.
 - [architecture.md](./architecture.md) - Архитектура проекта.
+- [guides.md](./guides.md) - Гайды как что сделать.

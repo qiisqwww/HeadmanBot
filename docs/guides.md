@@ -3,23 +3,24 @@
 ## Хочу добавить новую фичу, что делать?
 
 Для добавления нового функционала могут понадобиться такие компоненты:
-- Repository - для чтения данных из базы или Redis
-- Mapper - Преобразует Record объект, который вернет коннектор к базе в domain model
+- Repository - для чтения и записи данных из базы, Redis или других источников.
+- Mapper - Преобразует объект (asyncpg.Record или dict), который вернет коннектор к базе в доменную сущность.
+- Gateway - для взаимодействия с другим модулем.
+- Contract - описывает интерфейс модуля, чтобы его потом могли использовать другие модули.
 - Query - нужен для чтения из базы. Может использоваться внутри контроллера.
 - Command - нужен для мутации данных. Может использовать внутри контроллера.
-- Gateway - для взаимодействия с другим модулем.
 
 ## Как создать Repository 
 
-Чтобы сделать репозиторий нам понадобиться сделать его интерфейс и реализацию.
-Допустим наш текущий модуль называется users и мы хотим сделать UserRepository для работы с таблице users. 
+Чтобы сделать репозиторий, нам понадобиться описать его интерфейс и реализацию.
+Допустим, наш текущий модуль называется *users*, и мы хотим сделать *UserRepository* для работы с таблицей users. 
 
-Первое правило: интерфейсы репозиториев НЕ содержат заглавную букву I в начале. Нет никаких IUserRepository. А
-вот уже реализация содераржит суффикс Impl и получиться - UserRepositoryImpl.
+Правило наименования - интерфейсы НЕ содержат заглавную букву I в начале. Нет никаких *IUserRepository*. А
+вот уже реализация содержит суффикс *Impl*, и получиться - *UserRepositoryImpl*.
 
 Создадим интерфейс репозитория:
 
-file: src/modules/users/application/repositories/user_repository.py
+file: _src/modules/users/application/repositories/user_repository.py_
 ```py 
 class UserRepository(ABC):
     @abstractmethod
@@ -31,11 +32,11 @@ class UserRepository(ABC):
         ...
 ```
 
-В данном случае User - это сущность из слоя domain. Может лежать в файле src/modules/users/domain/models/user.py
+В данном случае User - это сущность из слоя domain. ОНа может быть описана в файле _src/modules/users/domain/models/user.py_
 
 А теперь напишем реализацию репозитория:
 
-file: src/modules/users/infrastructure/persistence/repositories/user_repository.py
+file: _src/modules/users/infrastructure/persistence/repositories/user_repository.py_
 ```py
 @final
 class UserRepositoryImpl(PostgresRepositoryImpl, UserRepository):
@@ -65,10 +66,10 @@ class UserRepositoryImpl(PostgresRepositoryImpl, UserRepository):
         )
 ```
 Важные детали:
-- Реализация репозитория должна быть final
-- Мы должны еще отнаследоваться от класса PostgresRepositoryImpl или RedisRepositoryImpl в которых уже прописана логика инъекции
+- Реализация репозитория должна быть *final*.
+- Мы должны еще отнаследоваться от класса *PostgresRepositoryImpl* или *RedisRepositoryImpl*, в которых уже прописана логика инъекции
 подключения к базе данных
-- Объект подключения лежит в аттрибуте self._con 
-- Репозиторий всегда возвращает валидную доменную сущность или None. В крайнем случае bool для метод exists
-- Для упрощения работы используется класс UserMapper. Он должен, используя метод to_domain перегонять результат запроса в доменную
-сущность
+- Объект подключения лежит в аттрибуте *self._con*.
+- Репозиторий всегда возвращает валидную доменную сущность или None. В крайнем случае bool для метод exists.
+- Для упрощения работы используется класс UserMapper. Он должен, используя метод to_domain, трансформировать результат запроса в доменную
+сущность.
