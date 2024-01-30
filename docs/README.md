@@ -2,9 +2,11 @@
 
 ## Структура документации
 
-- [README.md](./README.md) - Входной файл в документацию.
 - schemas/ - Каталог с диаграммами, показывающими структуру данных в разных базах.
     - schemas/postgres.drawio - Структура данных в postgres.
-- [kernel.md](./kernel.md) - Документация всего ядра проекта.
-- [structure.md](./structure.md) - Структура проекта по каталогам, архитектура и общие положения.
-- [naming.md](./naming.md) - Рекомендацию по code style и именованию методов в сервисах и репозиториях.
+- [structure.md](./structure.md) - Структура проекта по каталогам.
+- [architecture.md](./architecture.md) - Архитектура проекта.
+- [guides.md](./guides.md) - Гайды как, что сделать.
+- [trello.md](./trello.md) - Про работу в команде, а так же организацию веток.
+- [code style.md](./code%20style.md) - Про нормы написания кода.
+- [ci_cd.md](./ci_cd.md) - CI/CD
