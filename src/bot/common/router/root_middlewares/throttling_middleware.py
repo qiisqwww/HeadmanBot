@@ -6,7 +6,9 @@ from aiogram.types import CallbackQuery, Message
 from injector import Injector
 from loguru import logger
 
-from ..throttling_service import ThrottlingService
+from src.modules.common.application.queries.throttling_get_user_query import ThrottlingGetUserQuery
+from src.modules.common.application.commands.throttling_set_user_command import ThrottlingSetUserCommand
+from src.modules.common.application.commands.throttling_increase_user_command import ThrottlingIncreaseUserCommand
 
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
@@ -29,15 +31,17 @@ class ThrottlingMiddleware(BaseMiddleware):
 
         container: Injector = data["container"]
 
-        throttling_service = container.get(ThrottlingService)
-        user_activity = await throttling_service.get_user_throttling(telegram_id)
+        throttling_get_user_query = container.get(ThrottlingGetUserQuery)
+        throttling_set_user_command = container.get(ThrottlingSetUserCommand)
+        throttling_increase_user_command = container.get(ThrottlingIncreaseUserCommand)
+        user_activity = await throttling_get_user_query.execute(telegram_id)
 
         if not user_activity:
-            await throttling_service.set_user_throttling(telegram_id)
+            await throttling_set_user_command.execute(telegram_id)
             return await handler(event, data)
 
         if int(user_activity) >= 10:
             return
 
-        await throttling_service.increase_user_throttling(telegram_id)
+        await throttling_increase_user_command.execute(telegram_id)
         return await handler(event, data)
