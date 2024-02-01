@@ -1,5 +1,5 @@
 from .enums import VisitStatus
-from .models import Attendance, Lesson, LessonAttendanceForGroup, StudentInfo
+from .models import Attendance, Lesson, LessonAttendanceForGroup, StudentInfo, GroupInfo
 
 __all__ = [
     "Lesson",
@@ -7,4 +7,5 @@ __all__ = [
     "LessonAttendanceForGroup",
     "StudentInfo",
     "Attendance",
+    "GroupInfo",
 ]

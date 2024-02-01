@@ -73,3 +73,6 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
 
     async def get_group_name_and_uni_name(self, group_id: int) -> tuple[str, str] | None:
         return await self._edu_info_repository.get_group_and_uni_name_by_group_id(group_id)
+
+    async def fetch_all_groups_info(self) -> list[dict[str, str]]:
+        return [asdict(group) for group in await self._group_repository.all()]

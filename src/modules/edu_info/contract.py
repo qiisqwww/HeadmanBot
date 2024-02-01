@@ -1,15 +1,14 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from typing import Any
 
-from src.modules.common.application import Dependency
-from src.modules.common.domain.university_alias import UniversityAlias
+from src.modules.common.domain import UniversityAlias
 
 __all__ = [
     "EduInfoModuleContract",
 ]
 
 
-class EduInfoModuleContract(Dependency):
+class EduInfoModuleContract(ABC):
     @abstractmethod
     async def get_group_info_by_group_id(self, group_id: int) -> dict[str, Any] | None:
         """Return data like a dict
@@ -76,3 +75,13 @@ class EduInfoModuleContract(Dependency):
         """Return data like a tuple
         return_value[0]: str -> group_name
         return_value[1]: str -> university_name"""
+
+    @abstractmethod 
+    async def fetch_all_groups_info(self) -> list[dict[str, Any]]:
+        """Return data like a list of dicts
+        group_info = return_value[0]
+
+        group_info['id']: int -> group id
+        group_info['name']: str -> group name
+        group_info['alias']: UniversityAlias -> university alias
+        """
