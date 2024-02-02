@@ -2,6 +2,10 @@ from abc import abstractmethod
 
 from src.modules.common.application import Dependency
 
+__all__ = [
+    "ThrottlingRepository"
+]
+
 
 class ThrottlingRepository(Dependency):
 
@@ -10,5 +14,5 @@ class ThrottlingRepository(Dependency):
         ...
 
     @abstractmethod
-    async def set_execution_time(self, user_id: str) -> None:
+    async def set_expire_time(self, user_id: str) -> None:
         ...

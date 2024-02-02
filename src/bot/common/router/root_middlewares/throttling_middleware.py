@@ -6,7 +6,7 @@ from aiogram.types import CallbackQuery, Message
 from injector import Injector
 from loguru import logger
 
-from src.modules.common.application.commands.can_perform_action_command import CanPerformActionCommand
+from src.modules.common.application.commands import CanPerformActionCommand
 
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]

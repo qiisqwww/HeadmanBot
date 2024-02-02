@@ -12,11 +12,9 @@ from src.modules.common.infrastructure.apis.schedule_api import ScheduleApiImpl
 from src.modules.common.infrastructure.database import get_postgres_pool, get_redis_pool
 from src.modules.common.infrastructure.uow import UnitOfWorkImpl
 from src.modules.edu_info.infrastructure.container import assemble_edu_info_module
-from src.modules.student_management.infrastructure.container import (
-    assemble_student_management_module,
-)
-from src.modules.common.application.repositories.throttling_repository import ThrottlingRepository
-from src.modules.common.infrastructure.persistence.throttling_repositiory_impl import ThrottlingRepositoryImpl
+from src.modules.student_management.infrastructure.container import assemble_student_management_module
+from src.modules.common.application.repositories import ThrottlingRepository
+from src.modules.common.infrastructure.persistence import ThrottlingRepositoryImpl
 
 __all__ = [
     "project_container",
