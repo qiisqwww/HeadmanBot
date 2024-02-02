@@ -1,3 +1,4 @@
+from injector import inject
 from src.modules.common.application import Dependency
 
 from ...domain import StudentInfo
@@ -11,6 +12,7 @@ __all__ = [
 class GetStudentsInfoFromGroupQuery(Dependency):
     _repository: StudentInfoRepository
 
+    @inject
     def __init__(self, repository: StudentInfoRepository) -> None:
         self._repository = repository
 

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 
 __all__ = [
@@ -10,7 +11,6 @@ class UseCase(ABC):
     def __init__(self) -> None:
         ...
 
-
     @abstractmethod
-    async def execute(self) -> None:
+    async def execute(self) -> Any:
         ...
