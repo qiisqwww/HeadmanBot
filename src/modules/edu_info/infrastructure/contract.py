@@ -8,6 +8,7 @@ from src.modules.edu_info.application.repositories import (
     EduInfoRepository,
     GroupRepository,
     UniversityRepository,
+    GroupInfoRepository,
 )
 from src.modules.edu_info.contract import EduInfoModuleContract
 
@@ -20,6 +21,7 @@ __all__ = [
 class EduInfoModuleContractImpl(EduInfoModuleContract):
     _university_repository: UniversityRepository
     _group_repository: GroupRepository
+    _group_info_repository: GroupInfoRepository
     _edu_info_repository: EduInfoRepository
 
     @inject
@@ -28,10 +30,12 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
         university_repository: UniversityRepository,
         group_repository: GroupRepository,
         edu_info_repository: EduInfoRepository,
+        group_info_repository: GroupInfoRepository,
     ) -> None:
         self._university_repository = university_repository
         self._group_repository = group_repository
         self._edu_info_repository = edu_info_repository
+        self._group_info_repository = group_info_repository
 
     async def get_all_universities_info(self) -> list[dict[str, Any]]:
         universities = await self._university_repository.all()
@@ -75,4 +79,4 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
         return await self._edu_info_repository.get_group_and_uni_name_by_group_id(group_id)
 
     async def fetch_all_groups_info(self) -> list[dict[str, str]]:
-        return [asdict(group) for group in await self._group_repository.all()]
+        return [asdict(group) for group in await self._group_info_repository.fetch_all()]

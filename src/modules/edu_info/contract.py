@@ -83,5 +83,5 @@ class EduInfoModuleContract(ABC):
 
         group_info['id']: int -> group id
         group_info['name']: str -> group name
-        group_info['alias']: UniversityAlias -> university alias
+        group_info['university_alias']: UniversityAlias -> university alias
         """

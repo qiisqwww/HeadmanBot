@@ -2,7 +2,6 @@ from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
-from loguru import logger
 
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
@@ -17,6 +16,5 @@ class InjectContainerMiddleware(BaseMiddleware):
         project_container = data["project_container"]
 
         async with project_container() as container:
-            logger.error(type(project_container))
             data["container"] = container
             return await handler(event, data)

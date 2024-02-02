@@ -23,11 +23,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
                    WHERE id = $1"""
 
         record = await self._con.fetchrow(query, student_id)
-
-        if record is None:
-            return None
-
-        return self._mapper.to_domain(record)
+        return None if record is None else self._mapper.to_domain(record)
 
     async def find_by_telegram_id(self, telegram_id: int) -> Student | None:
         query = """SELECT id, telegram_id, name, surname, role, group_id, birthdate, is_checked_in_today
@@ -35,11 +31,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
                    WHERE telegram_id = $1"""
 
         record = await self._con.fetchrow(query, telegram_id)
-
-        if record is None:
-            return None
-
-        return self._mapper.to_domain(record)
+        return None if record is None else self._mapper.to_domain(record)
 
     async def find_by_group_id_and_role(self, group_id: int, role: Role) -> Student | None:
         query = """SELECT id, telegram_id, name, surname, role, group_id, birthdate, is_checked_in_today
@@ -47,11 +39,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
                    WHERE group_id = $1 AND role = $2"""
 
         record = await self._con.fetchrow(query, group_id, role)
-
-        if record is None:
-            return None
-
-        return self._mapper.to_domain(record)
+        return None if record is None else self._mapper.to_domain(record)
 
     async def create(
         self,
@@ -89,16 +77,6 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         query = "UPDATE student_management.students SET is_checked_in_today = $1 WHERE id = $2"
         await self._con.execute(query, new_is_checked_in, student_id)
 
-    # async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:
-    #     query = ("UPDATE students "
-    #              "SET surname = $1 "
-    #              "WHERE telegram_id = $2")
-    #
-    #     await self._con.execute(query, new_surname, student_id)
-    #
-    # async def update_name_by_id(self, new_name: str, student_id: StudentId) -> None:
-    #     query = ("UPDATE students "
-    #              "SET name = $1 "
-    #              "WHERE telegram_id = $2")
-    #
-    #     await self._con.execute(query, new_name, student_id)
+    async def update_is_checked_in_all(self, new_is_checked_in: bool) -> None:
+        query = "UPDATE student_management.students SET is_checked_in_today = $1"
+        await self._con.execute(query, new_is_checked_in)

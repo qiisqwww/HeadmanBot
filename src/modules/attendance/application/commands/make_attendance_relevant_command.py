@@ -1,4 +1,6 @@
 from typing import final
+
+from injector import inject
 from src.modules.attendance.application.gateways.student_management_gateway import StudentManagementGateway
 
 from src.modules.common.application import UseCase, UnitOfWork
@@ -20,17 +22,20 @@ class MakeAttendanceRelevantCommand(UseCase):
     _schedule_api: type[ScheduleAPI]
     _uow: UnitOfWork
 
+    @inject
     def __init__(self, 
                  attendance_repostory: AttendanceRepository,
                  lesson_repository: LessonRepository,
                  edu_info_gateway: EduInfoModuleGateway,
+                 student_management_gateway: StudentManagementGateway,
                  uow: UnitOfWork,
-                 schedule_api: type[ScheduleAPI]
+                 schedule_api: type[ScheduleAPI],
                     ) -> None:
         self._schedule_api = schedule_api
         self._attendance_repository = attendance_repostory 
         self._lesson_repository = lesson_repository
         self._edu_info_gateway = edu_info_gateway
+        self._student_management_gateway = student_management_gateway
         self._uow = uow
 
     async def execute(self) -> None:
@@ -41,7 +46,7 @@ class MakeAttendanceRelevantCommand(UseCase):
             groups = await self._edu_info_gateway.fetch_all_groups()
 
             for group in groups:
-                schedule_api = self._schedule_api(group.alias)
+                schedule_api = self._schedule_api(group.university_alias)
 
                 fetched_schedule = await schedule_api.fetch_schedule(group.name)
                 group_schedule = await self._lesson_repository.create_for_group(group.id, fetched_schedule)

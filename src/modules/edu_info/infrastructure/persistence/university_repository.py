@@ -45,12 +45,3 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
     async def create(self, name: str, alias: UniversityAlias) -> None:
         query = "INSERT INTO edu_info.universities (name, alias) VALUES($1, $2)"
         await self._con.execute(query, name, alias)
-
-    # async def get_by_id(self, university_id: UniversityId) -> University:
-    #     query = "SELECT * FROM universities WHERE id = $1"
-    #     record = await self._con.fetchrow(query, university_id)
-    #
-    #     if record is None:
-    #         raise CorruptedDatabaseError(f"Not found university with {university_id=}")
-    #
-    #     return University.from_mapping(record)

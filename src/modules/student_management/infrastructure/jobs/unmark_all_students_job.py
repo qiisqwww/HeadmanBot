@@ -3,15 +3,15 @@ from typing import AsyncContextManager, Callable, final
 from injector import Injector
 
 from src.modules.common.infrastructure.scheduling import AsyncJob
-from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
 from src.modules.common.infrastructure.config import DEBUG
+from src.modules.student_management.application.commands import UncheckAllStudentsCommand
 
 __all__ = [
-    "MakeAttendanceRelevantJob",
+    "UnmarkAllStudentsJob",
 ]
 
 @final 
-class MakeAttendanceRelevantJob(AsyncJob):
+class UnmarkAllStudentsJob(AsyncJob):
     _build_container: Callable[[], AsyncContextManager[Injector]]
 
     def __init__(self, build_container: Callable[[], AsyncContextManager[Injector]]) -> None:
@@ -27,5 +27,5 @@ class MakeAttendanceRelevantJob(AsyncJob):
 
     async def __call__(self) -> None:
         async with self._build_container() as container:
-            command = container.get(MakeAttendanceRelevantCommand)
+            command = container.get(UncheckAllStudentsCommand)
             await command.execute()

@@ -38,10 +38,7 @@ class SendingJob(AsyncJob):
         self._bot = bot
         self._pool = pool
 
-        if debug:
-            self._trigger = None
-            self._trigger_args = {}
-        else:
+        if not debug:
             self._trigger = "cron"
             self._trigger_args = {
                 "hour": 7,
