@@ -10,8 +10,8 @@ __all__ = [
 class ThrottlingRepositoryImpl(ThrottlingRepository, RedisRepositoryImpl):
 
     async def increase_user_throttling_rate(self, user_id: str) -> int:
-        await self._con.incr(f"throttling_{user_id}")
-        return int(await self._con.get(f"throttling_{user_id}"))
+        throttling_rate: int = await self._con.incr(f"throttling_{user_id}")
+        return throttling_rate
 
     async def set_expire_time(self, user_id: str) -> None:
         await self._con.expire(f"throttling_{user_id}", THROTTLING_EXPIRE_TIME)
