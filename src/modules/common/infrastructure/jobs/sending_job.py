@@ -1,12 +1,12 @@
 from asyncio import TaskGroup
-from typing import Any, final
+from typing import final
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from asyncpg import Pool
 from loguru import logger
 
-from src.bot.common.jobs import AsyncJob
+from src.modules.common.application.jobs import AsyncJob
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
 from src.modules.attendance.infrastructure.persistence import AttendanceRepositoryImpl
 from src.modules.edu_info.application.queries import GetAllGroupsQuery
@@ -49,7 +49,7 @@ class SendingJob(AsyncJob):
                 "day_of_week": "mon-sat",
             }
 
-    async def __call__(self) -> Any:
+    async def __call__(self) -> None:
         async with self._pool.acquire() as con:
             group_repository = GroupRepositoryImpl(con)
             get_all_groups_query = GetAllGroupsQuery(group_repository)

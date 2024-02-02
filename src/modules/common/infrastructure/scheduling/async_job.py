@@ -7,8 +7,8 @@ __all__ = [
 
 
 class AsyncJob(ABC):
-    _trigger: str | None
-    _trigger_args: dict[str, Any]
+    _trigger: str | None = None
+    _trigger_args: dict[str, Any] = {}
 
     @property
     def trigger(self) -> str | None:
@@ -19,5 +19,5 @@ class AsyncJob(ABC):
         return self._trigger_args
 
     @abstractmethod
-    async def __call__(self) -> Any:
+    async def __call__(self) -> None:
         pass

@@ -1,10 +1,11 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from types import TracebackType
 
-from .dependency import Dependency
+__all__ = [
+    "UnitOfWork",
+]
 
-
-class UnitOfWork(Dependency):
+class UnitOfWork(ABC):
     @abstractmethod
     async def __aenter__(self) -> None:
         ...

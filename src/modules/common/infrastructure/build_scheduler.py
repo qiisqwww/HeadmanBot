@@ -1,5 +1,5 @@
 from src.bot import bot
-from src.bot.common.jobs import AsyncScheduler
+from src.modules.common.application.jobs import AsyncScheduler
 from src.bot.modules.attendance.jobs import SendingJob
 from src.modules.common.infrastructure.config.config import DEBUG
 from src.modules.common.infrastructure.database import get_postgres_pool
