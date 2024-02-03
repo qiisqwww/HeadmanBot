@@ -1,14 +1,15 @@
 from aiogram.types import CallbackQuery
 
-from src.bot.common.router import RootRouter, Router
+from src.bot.common import RootRouter, Router
+from src.bot.poll_attendance.callback_data import UpdateAttendanceCallbackData
+from src.bot.poll_attendance.resources import (
+    update_attendance_buttons,
+    your_all_choice_is_template,
+    your_choice_is_template,
+)
 from src.modules.attendance.application.commands import UpdateAttendanceCommand
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
-from src.modules.attendance.domain.enums.visit_status import VisitStatus
 from src.modules.student_management.domain import Student
-
-from ..callback_data import UpdateAttendanceCallbackData
-from ..resources.inline_buttons import attendance_buttons
-from ..resources.templates import your_all_choice_is_template, your_choice_is_template
 
 __all__ = [
     "include_update_attendance_router",
@@ -32,7 +33,7 @@ async def update_attendance(
     student: Student,
     update_attendance_command: UpdateAttendanceCommand,
     get_student_attendance_query: GetStudentAttendanceQuery,
-):
+) -> None:
     if callback.message is None or callback.message.text is None:
         return
 
@@ -46,14 +47,12 @@ async def update_attendance(
     new_attendances = await get_student_attendance_query.execute(student.id)
     choosen_attendance = next(filter(lambda attendance: attendance.id == callback_data.attendance_id, new_attendances))
 
-    if all(attendance.status == VisitStatus.PRESENT for attendance in new_attendances):
-        new_text = your_all_choice_is_template(VisitStatus.PRESENT)
-    elif all(attendance.status == VisitStatus.ABSENT for attendance in new_attendances):
-        new_text = your_all_choice_is_template(VisitStatus.ABSENT)
+    if all(choosen_attendance.status == attendance.status for attendance in new_attendances):
+        new_text = your_all_choice_is_template(choosen_attendance.status)
     else:
         new_text = your_choice_is_template(choosen_attendance)
 
     await callback.message.edit_text(
         new_text,
-        reply_markup=attendance_buttons(True, new_attendances),
+        reply_markup=update_attendance_buttons(True, new_attendances),
     )

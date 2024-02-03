@@ -1,3 +1,4 @@
+from aiogram.filters import or_f
 from aiogram.types import Message
 
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
@@ -15,10 +16,14 @@ __all__ = [
 start_command_router = Router()
 
 
-@start_command_router.message(CommandFilter(TelegramCommand.START))
+@start_command_router.message(or_f(CommandFilter(TelegramCommand.START), CommandFilter(TelegramCommand.RESTART)))
 async def start_command(message: Message, state: RegistrationContext) -> None:
     if message.from_user is None:
         return
+
+    if message.text == TelegramCommand.RESTART:
+        await state.clear()
+
 
     start_message = start_message_template(message.from_user.last_name, message.from_user.first_name)
     await message.answer(start_message, reply_markup=restart_button())

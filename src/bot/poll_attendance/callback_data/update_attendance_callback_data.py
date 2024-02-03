@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
-from src.modules.attendance.domain.enums.visit_status import VisitStatus
+from src.modules.attendance.domain import VisitStatus
 
 __all__ = [
     "UpdateAttendanceCallbackData",

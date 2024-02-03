@@ -43,6 +43,9 @@ select = ["ALL"]
 ignore = [
     "D1", # No docstrings.
     "ANN101", # Do not annotate Self.
+    "RUF001", # False positive. Tell about latin C and cyrilc C
+
+    "FBT", # I want to use boolean as a function argument.
 ]
 fix = true
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$" # For unusable variables.
