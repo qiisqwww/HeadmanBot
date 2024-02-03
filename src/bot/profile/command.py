@@ -1,7 +1,7 @@
 from aiogram.types import Message
 
+from src.bot.common import RootRouter, Router
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
-from src.bot.common.router import RootRouter, Router
 from src.modules.student_management.application.queries import GetEduProfileInfoQuery
 from src.modules.student_management.domain import Student
 
