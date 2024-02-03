@@ -1,4 +1,4 @@
-from typing import Mapping
+from collections.abc import Mapping
 
 from src.modules.common.domain import UniversityAlias
 from src.modules.edu_info.domain import University

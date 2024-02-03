@@ -12,7 +12,10 @@ from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
 @final
 class GroupAttendanceRepositoryImpl(PostgresRepositoryImpl, GroupAttendanceRepository):
     async def find_group_visit_status_for_lesson(
-        self, group_id: int, lesson_id: int, students_info: dict[int, StudentInfo]
+        self,
+        group_id: int,
+        lesson_id: int,
+        students_info: dict[int, StudentInfo],
     ) -> LessonAttendanceForGroup:
         query = """
         SELECT status, student_id

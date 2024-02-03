@@ -1,4 +1,5 @@
-from typing import Mapping, final
+from collections.abc import Mapping
+from typing import final
 
 from src.modules.edu_info.domain import GroupInfo
 
@@ -7,11 +8,11 @@ __all__ = [
 ]
 
 
-@final 
+@final
 class GroupInfoMapper:
     def to_domain(self, data: Mapping) -> GroupInfo:
         return GroupInfo(
-            id=data['id'],
-            name=data['name'],
-            university_alias=data['alias'],
+            id=data["id"],
+            name=data["name"],
+            university_alias=data["alias"],
         )

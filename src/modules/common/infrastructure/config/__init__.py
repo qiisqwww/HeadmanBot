@@ -12,11 +12,11 @@ from .config import (
     LOGGING_PATH,
     REDIS_HOST,
     REDIS_PORT,
+    THROTTLING_EXPIRE_TIME,
+    THROTTLING_RATE_PER_MINUTE,
     WEBHOOK_PATH,
     WEBHOOK_SECRET,
     WEBHOOK_URL,
-    THROTTLING_EXPIRE_TIME,
-    THROTTLING_RATE_PER_MINUTE
 )
 from .logger_config import configurate_logger
 
@@ -39,5 +39,5 @@ __all__ = [
     "HTTP_PORT",
     "WEBHOOK_SECRET",
     "THROTTLING_EXPIRE_TIME",
-    "THROTTLING_RATE_PER_MINUTE"
+    "THROTTLING_RATE_PER_MINUTE",
 ]

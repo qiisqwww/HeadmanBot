@@ -17,9 +17,9 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
 
     async def filter_by_student_id(self, student_id: int) -> list[Attendance]:
         query = """SELECT at.id, at.lesson_id, at.status, le.group_id, le.name, le.start_time
-                   FROM attendance.attendances AS at 
-                   JOIN attendance.lessons AS le 
-                   ON at.lesson_id = le.id  
+                   FROM attendance.attendances AS at
+                   JOIN attendance.lessons AS le
+                   ON at.lesson_id = le.id
                    WHERE student_id = $1"""
 
         records = await self._con.fetch(query, student_id)

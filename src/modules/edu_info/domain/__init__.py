@@ -1,4 +1,4 @@
-from .models import Group, University, GroupInfo
+from .models import Group, GroupInfo, University
 
 __all__ = [
     "Group",

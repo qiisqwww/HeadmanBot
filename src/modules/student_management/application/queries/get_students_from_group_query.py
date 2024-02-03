@@ -1,5 +1,6 @@
 from injector import inject
-from src.modules.common.application import Dependency
+
+from src.modules.common.application import UseCase
 
 from ...domain import StudentInfo
 from ..repositories import StudentInfoRepository
@@ -9,7 +10,7 @@ __all__ = [
 ]
 
 
-class GetStudentsInfoFromGroupQuery(Dependency):
+class GetStudentsInfoFromGroupQuery(UseCase):
     _repository: StudentInfoRepository
 
     @inject

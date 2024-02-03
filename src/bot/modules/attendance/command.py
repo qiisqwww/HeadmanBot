@@ -30,7 +30,9 @@ def include_get_attendance_command(root_router: RootRouter) -> None:
 
 @get_attendance_command_router.message(CommandFilter(TelegramCommand.GET_ATTENDANCE))
 async def get_attendance_command(
-    message: Message, student: Student, get_today_schedule_query: GetTodayScheduleQuery
+    message: Message,
+    student: Student,
+    get_today_schedule_query: GetTodayScheduleQuery,
 ) -> None:
     schedule = await get_today_schedule_query.execute(student.group_id)
 

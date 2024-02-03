@@ -6,9 +6,9 @@ from injector import inject
 from src.modules.common.domain import UniversityAlias
 from src.modules.edu_info.application.repositories import (
     EduInfoRepository,
+    GroupInfoRepository,
     GroupRepository,
     UniversityRepository,
-    GroupInfoRepository,
 )
 from src.modules.edu_info.contract import EduInfoModuleContract
 
@@ -58,7 +58,9 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
         return asdict(group)
 
     async def get_group_info_by_group_name_and_alias(
-        self, group_name: str, alias: UniversityAlias
+        self,
+        group_name: str,
+        alias: UniversityAlias,
     ) -> dict[str, Any] | None:
         group = await self._group_repository.find_by_name_and_uni(group_name, alias)
 

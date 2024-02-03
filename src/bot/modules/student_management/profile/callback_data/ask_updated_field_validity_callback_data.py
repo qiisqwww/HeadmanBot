@@ -10,4 +10,3 @@ __all__ = [
 class AskUpdatedFieldValidityCallbackData(CallbackData, prefix="ask_field_for_update"):  # type: ignore
     is_field_correct: bool
     field_type: ProfileField
-

@@ -2,14 +2,14 @@ from injector import inject
 
 from src.modules.attendance.application.repositories import AttendanceRepository
 from src.modules.attendance.domain import Attendance
-from src.modules.common.application import Dependency
+from src.modules.common.application import UseCase
 
 __all__ = [
     "GetStudentAttendanceQuery",
 ]
 
 
-class GetStudentAttendanceQuery(Dependency):
+class GetStudentAttendanceQuery(UseCase):
     _repository: AttendanceRepository
 
     @inject

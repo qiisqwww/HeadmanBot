@@ -74,7 +74,7 @@ async def handling_group(
             return
     except Exception:
         await message.answer(
-            "Не удалось проверить наличие группы в университете, попробуйте снова или напишите в @noheadproblemsbot"
+            "Не удалось проверить наличие группы в университете, попробуйте снова или напишите в @noheadproblemsbot",
         )
         await state.set_state(RegistrationStates.waiting_group)
         return

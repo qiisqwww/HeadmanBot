@@ -1,6 +1,7 @@
+from collections.abc import Mapping
 from dataclasses import asdict
 from datetime import date
-from typing import Mapping, final
+from typing import final
 
 from src.modules.common.domain import UniversityAlias
 from src.modules.student_management.application.repositories import CreateStudentDTO

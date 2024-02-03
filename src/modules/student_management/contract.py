@@ -1,17 +1,16 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from typing import Any
-
-from src.modules.common.application import Dependency
 
 __all__ = [
     "StudentManagementContract",
 ]
 
 
-class StudentManagementContract(Dependency):
+class StudentManagementContract(ABC):
     @abstractmethod
     async def get_students_info(self, group_id: int) -> list[dict[str, Any]]:
-        """Return data in format like
+        """Return data in format like.
+
         student_info = return_value[0]
 
         student_info['id']: int -> student id

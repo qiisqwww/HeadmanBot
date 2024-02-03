@@ -40,7 +40,8 @@ async def get_university_from_user(
 
     await callback.message.delete()
     await callback.message.answer(
-        successful_university_choose_template(choosen_uni.name), reply_markup=void_inline_buttons()
+        successful_university_choose_template(choosen_uni.name),
+        reply_markup=void_inline_buttons(),
     )
     await callback.message.answer(ASK_GROUP_TEMPLATE)
 

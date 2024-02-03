@@ -41,13 +41,16 @@ async def profile_update(callback: CallbackQuery, state: ProfileUpdateContext) -
 @profile_menu_router.callback_query(GetBackToProfileCallbackData.filter())
 async def back_to_profile(callback: CallbackQuery, student: Student) -> None:
     await callback.message.edit_text(
-        text=profile_info(student.surname, student.name, student.role), reply_markup=profile_buttons()
+        text=profile_info(student.surname, student.name, student.role),
+        reply_markup=profile_buttons(),
     )
 
 
 @profile_menu_router.callback_query(ProfileUpdateChoiceCallbackData.filter())
 async def profile_update_choice(
-    callback: CallbackQuery, callback_data: ProfileUpdateChoiceCallbackData, state: ProfileUpdateContext
+    callback: CallbackQuery,
+    callback_data: ProfileUpdateChoiceCallbackData,
+    state: ProfileUpdateContext,
 ) -> None:
     if callback.message is None:
         return

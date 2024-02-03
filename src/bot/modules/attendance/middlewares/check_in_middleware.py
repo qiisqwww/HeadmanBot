@@ -1,5 +1,6 @@
-from datetime import date, datetime, timedelta, timezone
-from typing import Any, Awaitable, Callable, TypeAlias
+from collections.abc import Awaitable, Callable
+from datetime import UTC, date, datetime, timedelta
+from typing import Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, TelegramObject
@@ -34,12 +35,12 @@ class CheckInMiddleware(BaseMiddleware):
         logger.info("callback middleware started")
 
         if event.message is None:
-            return
+            return None
 
         logger.info(f"EVENT TYPE={type(event)}")
         student: Student = data["student"]
         lesson_len = timedelta(hours=1, minutes=30)
-        now = datetime.now(tz=timezone.utc)
+        now = datetime.now(tz=UTC)
 
         if data["callback_data"].day_of_poll != date.today():
             await event.message.edit_text(YOU_CAN_NOT_ANSWER_DAY_TEMPLATE)
@@ -56,6 +57,6 @@ class CheckInMiddleware(BaseMiddleware):
         if now > first_lesson_time + lesson_len:
             logger.info("(poll) callback middleware finished, lesson was already started")
             await event.message.edit_text(YOU_CAN_NOT_ANSWER_TIME_TEMPLATE)
-            return
+            return None
 
         return await handler(event, data)

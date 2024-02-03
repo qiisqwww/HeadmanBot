@@ -1,16 +1,14 @@
 from injector import Binder, singleton
 
-from src.modules.attendance.application.contract import AttendanceModuleContract
-from src.modules.attendance.application.gateways import StudentManagementGateway
-from src.modules.attendance.application.gateways import EduInfoModuleGateway
+from src.modules.attendance.application.gateways import EduInfoModuleGateway, StudentManagementGateway
 from src.modules.attendance.application.repositories import (
     AttendanceRepository,
     GroupAttendanceRepository,
     LessonRepository,
 )
+from src.modules.attendance.contract import AttendanceModuleContract
 from src.modules.attendance.infrastructure.contract import AttendanceModuleContractImpl
-from src.modules.attendance.infrastructure.gateways import StudentManagementGatewayImpl
-from src.modules.attendance.infrastructure.gateways import EduInfoModuleGatewayImpl
+from src.modules.attendance.infrastructure.gateways import EduInfoModuleGatewayImpl, StudentManagementGatewayImpl
 from src.modules.attendance.infrastructure.persistence import (
     AttendanceRepositoryImpl,
     GroupAttendanceRepositoryImpl,

@@ -1,7 +1,7 @@
 from injector import inject
 
-from src.modules.common.application import Dependency
-from src.modules.common.domain.university_alias import UniversityAlias
+from src.modules.common.application import UseCase
+from src.modules.common.domain import UniversityAlias
 from src.modules.student_management.application.gateways import EduInfoModuleGateway
 from src.modules.student_management.domain import UniversityInfo
 
@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-class GetUniversityByAliasQuery(Dependency):
+class GetUniversityByAliasQuery(UseCase):
     _edu_info_module_gateway: EduInfoModuleGateway
 
     @inject

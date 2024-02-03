@@ -73,7 +73,7 @@ YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = "Ваше заявление на ре�
 YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE = "Ваше заявление на регистрацию студентом было передано старосте."
 
 ASK_BIRTHDATE_TEMPLATE = """Введите дату рождения в формате ДД.ММ.ГГГГ.
-Это поможет сделать бота еще удобнее. 
+Это поможет сделать бота еще удобнее.
 Если вы не хотите указывать свою дату рождения, введите 0"""
 
 BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели некорректные данные. Введите дату в формате ДД.ММ.ГГГГ"
@@ -129,6 +129,7 @@ def asking_fullname_validation_template(surname: str, name: str) -> str:
 
 def your_choice_is_template(is_fullname_correct: bool) -> str:
     template = Template(
-        "Вы выбрали {% if is_fullname_correct %} '<b>да</b>' {% else %} '<b>нет</b>' {% endif %}", autoescape=True
+        "Вы выбрали {% if is_fullname_correct %} '<b>да</b>' {% else %} '<b>нет</b>' {% endif %}",
+        autoescape=True,
     )
     return template.render(is_fullname_correct=is_fullname_correct)

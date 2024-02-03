@@ -23,7 +23,6 @@ fastapi = "^0.108.0"
 uvicorn = "^0.25.0"
 jinja2 = "^3.1.2"
 
-
 [tool.poetry.group.dev.dependencies]
 pytest-asyncio = "^0.23.2"
 pytest = "^7.4.3"
@@ -33,46 +32,32 @@ types-requests = "^2.31.0.10"
 types-redis = "^4.6.0.11"
 asyncpg-stubs = "^0.29.1"
 pyright = "^1.1.342"
-black = "^23.12.1"
-isort = "^5.13.2"
 ruff = "^0.1.9"
 mypy = "^1.8.0"
 pytest-env = "^1.1.3"
 
-
-[tool.poetry.group.pympler.dependencies]
-pytest-env = "^1.1.3"
-
-[tool.pylint]
-max-line-length = 120
-disable = [
-    "missing-class-docstring",
-    "missing-function-docstring",
-    "missing-module-docstring",
-    "too-few-public-methods",
-    "cyclic-import",
-    "unspecified-encoding",
-    "redefined-outer-name",
-    "useless-return",
-    "W0511",
-    "C0103",
-    "R0801",
-    "E0401"
-]
-
 [tool.ruff]
+target-version = "py311"
 line-length = 120
-
-[tool.black]
-color = true
-line-length = 120
-
-[tool.isort]
-profile = "black"
+select = ["ALL"]
+ignore = [
+    "D1", # No docstrings.
+    "ANN101", # Do not annotate Self.
+]
+fix = true
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$" # For unusable variables.
 
 [tool.mypy]
-ignore_missing_imports = true
 python_version = "3.11"
+strict = true
+show_error_codes = true
+ignore_missing_imports = true # Work incorrectly and useless
+disallow_untyped_decorators = false # Because of FastAPI and aiogramm decorators invoke this error
+
+[tool.pyright]
+include = ["src"]
+strict = ["src"]
+reportMissingImports = false
 
 [tool.pytest_env]
 DEBUG=true
@@ -94,3 +79,5 @@ WEBHOOK_URL=""
 WEBHOOK_SECRET=""
 NGROK_AUTHTOKEN="" 
 NGROK_DOMAIN=""
+THROTTLING_EXPIRE_TIME=60
+THROTTLING_RATE_PER_MINUTE=1000

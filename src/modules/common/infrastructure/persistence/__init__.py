@@ -5,5 +5,5 @@ from .throttling_repository import ThrottlingRepositoryImpl
 __all__ = [
     "PostgresRepositoryImpl",
     "RedisRepositoryImpl",
-    "ThrottlingRepositoryImpl"
+    "ThrottlingRepositoryImpl",
 ]

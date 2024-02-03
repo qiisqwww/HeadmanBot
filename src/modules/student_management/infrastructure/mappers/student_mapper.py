@@ -1,4 +1,5 @@
-from typing import Mapping, final
+from collections.abc import Mapping
+from typing import final
 
 from src.modules.student_management.domain import Role, Student
 

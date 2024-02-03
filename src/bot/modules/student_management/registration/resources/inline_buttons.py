@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder

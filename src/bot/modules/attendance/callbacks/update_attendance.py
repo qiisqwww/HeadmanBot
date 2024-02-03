@@ -37,7 +37,10 @@ async def update_attendance(
         return
 
     await update_attendance_command.execute(
-        student.id, student.is_checked_in_today, callback_data.attendance_id, callback_data.new_status
+        student.id,
+        student.is_checked_in_today,
+        callback_data.attendance_id,
+        callback_data.new_status,
     )
 
     new_attendances = await get_student_attendance_query.execute(student.id)

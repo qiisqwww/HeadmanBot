@@ -2,10 +2,10 @@ from injector import inject
 
 from src.modules.attendance.application.repositories import LessonRepository
 from src.modules.attendance.domain import Lesson
-from src.modules.common.application import Dependency
+from src.modules.common.application import UseCase
 
 
-class GetTodayScheduleQuery(Dependency):
+class GetTodayScheduleQuery(UseCase):
     _repository: LessonRepository
 
     @inject

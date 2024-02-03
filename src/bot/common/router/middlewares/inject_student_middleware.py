@@ -1,4 +1,5 @@
-from typing import Any, Awaitable, Callable, TypeAlias
+from collections.abc import Awaitable, Callable
+from typing import Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
@@ -29,7 +30,7 @@ class InjectStudentMiddleware(BaseMiddleware):
 
     async def __call__(self, handler: HandlerType, event: EventType, data: dict[str, Any]) -> Any:
         if event.from_user is None:
-            return
+            return None
 
         container: Injector = data["container"]
         find_student_query = container.get(FindStudentByTelegramIdQuery)

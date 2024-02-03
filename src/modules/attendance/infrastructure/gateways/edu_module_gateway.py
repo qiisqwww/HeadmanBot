@@ -1,6 +1,7 @@
 from typing import final
 
 from injector import inject
+
 from src.modules.attendance.application.gateways import EduInfoModuleGateway
 from src.modules.attendance.domain import GroupInfo
 from src.modules.edu_info.contract import EduInfoModuleContract
@@ -8,6 +9,7 @@ from src.modules.edu_info.contract import EduInfoModuleContract
 __all__ = [
     "EduInfoModuleGatewayImpl",
 ]
+
 
 @final
 class EduInfoModuleGatewayImpl(EduInfoModuleGateway):

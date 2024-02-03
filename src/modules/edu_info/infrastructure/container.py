@@ -2,10 +2,10 @@ from injector import Binder, singleton
 
 from src.modules.edu_info.application.repositories import (
     EduInfoRepository,
+    GroupInfoRepository,
     GroupRepository,
     UniversityRepository,
 )
-from src.modules.edu_info.application.repositories import GroupInfoRepository
 from src.modules.edu_info.contract import EduInfoModuleContract
 from src.modules.edu_info.infrastructure.contract import EduInfoModuleContractImpl
 from src.modules.edu_info.infrastructure.persistence import (
@@ -29,6 +29,5 @@ def assemble_edu_info_module(binder: Binder) -> None:
     singleton_bind(binder, UniversityRepository, UniversityRepositoryImpl)
     singleton_bind(binder, EduInfoRepository, EduInfoRepositoryImpl)
     singleton_bind(binder, GroupInfoRepository, GroupInfoRepositoryImpl)
-
 
     singleton_bind(binder, EduInfoModuleContract, EduInfoModuleContractImpl)

@@ -3,14 +3,14 @@ from injector import inject
 from src.modules.attendance.application.gateways import StudentManagementGateway
 from src.modules.attendance.application.repositories import AttendanceRepository
 from src.modules.attendance.domain import VisitStatus
-from src.modules.common.application import Dependency, UnitOfWork
+from src.modules.common.application import UnitOfWork, UseCase
 
 __all__ = [
     "UpdateAllAttendancesCommand",
 ]
 
 
-class UpdateAllAttendancesCommand(Dependency):
+class UpdateAllAttendancesCommand(UseCase):
     _repostiory: AttendanceRepository
     _gateway: StudentManagementGateway
     _uow: UnitOfWork

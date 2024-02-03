@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -27,14 +27,16 @@ def attendance_buttons(is_checked_in_today: bool, attendances: Iterable[Attendan
                 builder.button(
                     text=f"❌ Не посещу {attendance.lesson.start_time.strftime('%H:%M')} {attendance.lesson.name}",
                     callback_data=UpdateAttendanceCallbackData(
-                        attendance_id=attendance.id, new_status=VisitStatus.PRESENT
+                        attendance_id=attendance.id,
+                        new_status=VisitStatus.PRESENT,
                     ),
                 )
             else:
                 builder.button(
                     text=f"✅ Посещу {attendance.lesson.start_time.strftime('%H:%M')} {attendance.lesson.name}",
                     callback_data=UpdateAttendanceCallbackData(
-                        attendance_id=attendance.id, new_status=VisitStatus.ABSENT
+                        attendance_id=attendance.id,
+                        new_status=VisitStatus.ABSENT,
                     ),
                 )
         else:

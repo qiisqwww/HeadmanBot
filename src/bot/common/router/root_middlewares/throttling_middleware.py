@@ -1,4 +1,5 @@
-from typing import Any, Awaitable, Callable, TypeAlias
+from collections.abc import Awaitable, Callable
+from typing import Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
@@ -25,7 +26,7 @@ class ThrottlingMiddleware(BaseMiddleware):
 
         if get_flag(data, "void"):
             logger.error("Void event.")
-            return
+            return None
 
         container: Injector = data["container"]
 
@@ -33,4 +34,3 @@ class ThrottlingMiddleware(BaseMiddleware):
         can_perform_action = await can_perform_action_command.execute(telegram_id)
         if can_perform_action:
             return await handler(event, data)
-

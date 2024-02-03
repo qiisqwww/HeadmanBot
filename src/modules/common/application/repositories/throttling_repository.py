@@ -1,14 +1,11 @@
-from abc import abstractmethod
-
-from src.modules.common.application import Dependency
+from abc import ABC, abstractmethod
 
 __all__ = [
-    "ThrottlingRepository"
+    "ThrottlingRepository",
 ]
 
 
-class ThrottlingRepository(Dependency):
-
+class ThrottlingRepository(ABC):
     @abstractmethod
     async def increase_user_throttling_rate(self, user_id: str) -> int:
         ...

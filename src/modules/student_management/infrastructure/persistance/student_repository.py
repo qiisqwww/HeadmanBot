@@ -48,7 +48,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     ) -> Student:
         query = """INSERT INTO student_management.students
                    (telegram_id, group_id, name, surname, role, birthdate, is_checked_in_today)
-                   VALUES ($1, $2, $3, $4, $5, $6, $7) 
+                   VALUES ($1, $2, $3, $4, $5, $6, $7)
                    RETURNING id"""
 
         student_id = await self._con.fetchval(

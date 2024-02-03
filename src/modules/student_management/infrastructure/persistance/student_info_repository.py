@@ -15,7 +15,7 @@ __all__ = [
 class StudentInfoRepositoryImpl(PostgresRepositoryImpl, StudentInfoRepository):
     async def filter_by_group_id(self, group_id: int) -> list[StudentInfo]:
         query = """SELECT id, telegram_id, name, surname, is_checked_in_today
-                   FROM student_management.students 
+                   FROM student_management.students
                    WHERE group_id = $1"""
         records = await self._con.fetch(query, group_id)
 

@@ -38,7 +38,8 @@ async def new_name_handler(message: Message, state: ProfileUpdateContext) -> Non
 
     if is_valid_name_len(new_name):
         await message.answer(
-            text=asking_name_validation_template(new_name), reply_markup=is_field_correct_buttons(ProfileField.name)
+            text=asking_name_validation_template(new_name),
+            reply_markup=is_field_correct_buttons(ProfileField.name),
         )
 
         await state.set_name(new_name)

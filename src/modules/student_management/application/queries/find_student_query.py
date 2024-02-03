@@ -1,6 +1,6 @@
 from injector import inject
 
-from src.modules.common.application.dependency import Dependency
+from src.modules.common.application import UseCase
 from src.modules.student_management.domain import Student
 
 from ..repositories import StudentRepository
@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-class FindStudentByTelegramIdQuery(Dependency):
+class FindStudentByTelegramIdQuery(UseCase):
     _repository: StudentRepository
 
     @inject

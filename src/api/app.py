@@ -1,4 +1,6 @@
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from aiogram.types import Update
 from fastapi import FastAPI, Request
@@ -17,7 +19,7 @@ __all__ = [
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI):
+async def lifespan(_: FastAPI) -> AsyncGenerator[None, Any]:
     await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
 

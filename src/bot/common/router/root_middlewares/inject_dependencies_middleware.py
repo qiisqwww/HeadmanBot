@@ -1,10 +1,11 @@
-from typing import Any, Awaitable, Callable, TypeAlias
+from collections.abc import Awaitable, Callable
+from typing import Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from injector import Injector
 
-from src.modules.common.application import Dependency
+from src.modules.common.application import UseCase
 
 from ...contextes import ProfileUpdateContext, RegistrationContext
 
@@ -28,7 +29,7 @@ class InjectDependenciesMiddleware(BaseMiddleware):
                 data["state"] = ProfileUpdateContext(data["state"])
 
         for service_obj_name, service_type in annotations.items():
-            if service_obj_name == "return" or not issubclass(service_type, Dependency):
+            if service_obj_name == "return" or not issubclass(service_type, UseCase):
                 continue
 
             impl = container.get(service_type)

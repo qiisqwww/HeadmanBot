@@ -1,4 +1,4 @@
-from datetime import time, timezone
+from datetime import UTC, time
 from typing import final
 
 from src.modules.attendance.application.repositories import LessonRepository
@@ -32,14 +32,14 @@ class LessonRepositoryImpl(PostgresRepositoryImpl, LessonRepository):
                     name=lesson.lesson_name,
                     group_id=group_id,
                     start_time=start_time,
-                )
+                ),
             )
 
         return lessons
 
     @staticmethod
     def _create_time_with_timezone(time_without_tz: time) -> time:
-        return time(hour=time_without_tz.hour, minute=time_without_tz.minute, tzinfo=timezone.utc)
+        return time(hour=time_without_tz.hour, minute=time_without_tz.minute, tzinfo=UTC)
 
     async def delete_all(self) -> None:
         query = "TRUNCATE TABLE attendance.lessons CASCADE"

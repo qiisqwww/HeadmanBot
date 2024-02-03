@@ -1,6 +1,8 @@
+from typing import final
+
 from injector import inject
 
-from src.modules.common.application.dependency import Dependency
+from src.modules.common.application import UseCase
 from src.modules.student_management.domain import Role, Student
 
 from ..repositories import StudentRepository
@@ -10,7 +12,8 @@ __all__ = [
 ]
 
 
-class FindGroupHeadmanQuery(Dependency):
+@final
+class FindGroupHeadmanQuery(UseCase):
     _repository: StudentRepository
 
     @inject

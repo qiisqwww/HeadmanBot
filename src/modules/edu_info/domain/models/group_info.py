@@ -9,6 +9,6 @@ __all__ = [
 
 @dataclass(slots=True, frozen=True)
 class GroupInfo:
-    id: int 
+    id: int
     name: str
     university_alias: UniversityAlias

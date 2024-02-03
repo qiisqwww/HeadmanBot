@@ -10,6 +10,10 @@ __all__ = [
 class AttendanceModuleContract(ABC):
     @abstractmethod
     async def create_attendance(
-        self, student_id: int, university_alias: UniversityAlias, group_id: int, group_name: str
+        self,
+        student_id: int,
+        university_alias: UniversityAlias,
+        group_id: int,
+        group_name: str,
     ) -> None:
         ...
