@@ -5,9 +5,9 @@ from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.router import RootRouter, Router
 
-from ..registration_states import RegistrationStates
-from ..resources import restart_button, role_buttons
-from ..resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
+from .registration_states import RegistrationStates
+from .resources import restart_button, role_buttons
+from .resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
 
 __all__ = [
     "include_start_command_router",

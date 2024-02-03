@@ -1,5 +1,6 @@
 from .inline_buttons import (
     accept_or_deny_buttons,
+    ask_fullname_validity_buttons,
     role_buttons,
     university_list_buttons,
 )
@@ -11,4 +12,5 @@ __all__ = [
     "role_buttons",
     "university_list_buttons",
     "accept_or_deny_buttons",
+    "ask_fullname_validity_buttons",
 ]

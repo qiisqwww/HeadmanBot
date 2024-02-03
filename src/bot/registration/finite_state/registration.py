@@ -3,21 +3,11 @@ from datetime import date
 from aiogram import F
 from aiogram.types import Message
 
+from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
-
-# from src.external.apis.schedule_api.exceptions import FailedToCheckGroupExistence
-from src.bot.common.router import RootRouter, Router
-from src.modules.student_management.application.queries import (
-    CheckGroupExistsInUniQuery,
-    FindGroupByNameAndAliasQuery,
-    FindGroupHeadmanQuery,
-)
-from src.modules.student_management.domain import Role
-
-from ...validation import is_valid_name_len
-from ..registration_states import RegistrationStates
-from ..resources.inline_buttons import ask_fullname_validity_buttons
-from ..resources.templates import (
+from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.resources import ask_fullname_validity_buttons
+from src.bot.registration.resources.templates import (
     ASK_BIRTHDATE_TEMPLATE,
     ASK_NAME_TEMPLATE,
     ASK_SURNAME_TEMPLATE,
@@ -31,6 +21,13 @@ from ..resources.templates import (
     TOO_MUCH_SURNAME_LENGTH_TEMPLATE,
     asking_fullname_validation_template,
 )
+from src.bot.registration.validation import is_valid_name_len
+from src.modules.student_management.application.queries import (
+    CheckGroupExistsInUniQuery,
+    FindGroupByNameAndAliasQuery,
+    FindGroupHeadmanQuery,
+)
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "include_registration_finite_state_router",

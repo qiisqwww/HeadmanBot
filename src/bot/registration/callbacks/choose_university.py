@@ -1,16 +1,15 @@
 from aiogram.types import CallbackQuery
 
+from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.resources import void_inline_buttons
-from src.bot.common.router import RootRouter, Router
-from src.modules.student_management.application.queries import GetUniversityByAliasQuery
-
-from ..callback_data import UniversityCallbackData
-from ..registration_states import RegistrationStates
-from ..resources.templates import (
+from src.bot.registration.callback_data import UniversityCallbackData
+from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.resources.templates import (
     ASK_GROUP_TEMPLATE,
     successful_university_choose_template,
 )
+from src.modules.student_management.application.queries import GetUniversityByAliasQuery
 
 __all__ = [
     "include_choose_university_router",

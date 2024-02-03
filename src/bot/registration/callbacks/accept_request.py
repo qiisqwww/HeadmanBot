@@ -1,19 +1,18 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
 
+from src.bot.common import RootRouter, Router
 from src.bot.common.resources import main_menu, void_inline_buttons
-from src.bot.common.router import RootRouter, Router
-from src.modules.student_management.application.commands import (
-    ClearCreateStudentDataCacheCommand,
-    RegisterStudentCommand,
-)
-
-from ..callback_data import AccessCallbackData
-from ..resources.templates import (
+from src.bot.registration.callback_data import AccessCallbackData
+from src.bot.registration.resources.templates import (
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
+)
+from src.modules.student_management.application.commands import (
+    ClearCreateStudentDataCacheCommand,
+    RegisterStudentCommand,
 )
 
 __all__ = [

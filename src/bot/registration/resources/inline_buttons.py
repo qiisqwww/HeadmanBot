@@ -3,19 +3,19 @@ from collections.abc import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.modules.student_management.domain import Role, UniversityInfo
-
-from ..callback_data import (
+from src.bot.registration.callback_data import (
     AccessCallbackData,
     AskNewFullnameValidityCallbackData,
     ChooseRoleCallbackData,
     UniversityCallbackData,
 )
+from src.modules.student_management.domain import Role, UniversityInfo
 
 __all__ = [
     "university_list_buttons",
     "accept_or_deny_buttons",
     "role_buttons",
+    "ask_fullname_validity_buttons",
 ]
 
 

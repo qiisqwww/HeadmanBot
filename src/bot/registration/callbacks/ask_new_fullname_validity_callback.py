@@ -4,6 +4,15 @@ from aiogram.types import CallbackQuery
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.resources import void_inline_buttons
 from src.bot.common.router import RootRouter, Router
+from src.bot.registration.callback_data import AskNewFullnameValidityCallbackData
+from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.resources import accept_or_deny_buttons
+from src.bot.registration.resources.templates import (
+    YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
+    YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
+    student_send_registration_request_template,
+    your_choice_is_template,
+)
 from src.modules.common.infrastructure.config import ADMIN_IDS
 from src.modules.student_management.application.commands import (
     CacheCreateStudentDataCommand,
@@ -14,16 +23,6 @@ from src.modules.student_management.application.queries import (
 )
 from src.modules.student_management.application.repositories import CreateStudentDTO
 from src.modules.student_management.domain import Role
-
-from ..callback_data import AskNewFullnameValidityCallbackData
-from ..registration_states import RegistrationStates
-from ..resources.inline_buttons import accept_or_deny_buttons
-from ..resources.templates import (
-    YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
-    YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-    student_send_registration_request_template,
-    your_choice_is_template,
-)
 
 __all__ = [
     "include_ask_new_fullname_validity_router",

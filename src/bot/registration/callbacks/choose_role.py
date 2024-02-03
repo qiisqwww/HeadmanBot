@@ -1,17 +1,16 @@
 from aiogram.types import CallbackQuery
 
+from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.resources import void_inline_buttons
-from src.bot.common.router import RootRouter, Router
-from src.modules.student_management.application.queries import GetAllUniversitiesQuery
-
-from ..callback_data import ChooseRoleCallbackData
-from ..registration_states import RegistrationStates
-from ..resources.inline_buttons import university_list_buttons
-from ..resources.templates import (
+from src.bot.registration.callback_data import ChooseRoleCallbackData
+from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.resources import university_list_buttons
+from src.bot.registration.resources.templates import (
     ASK_UNIVERSITY_TEMPLATE,
     successful_role_choose_template,
 )
+from src.modules.student_management.application.queries import GetAllUniversitiesQuery
 
 __all__ = [
     "include_choose_role_router",
@@ -31,10 +30,7 @@ async def get_role_from_user(
     state: RegistrationContext,
     get_all_universities_query: GetAllUniversitiesQuery,
 ) -> None:
-    if callback.message is None:
-        return
-
-    if callback.message.from_user is None:
+    if callback.message is None or callback.message.from_user is None:
         return
 
     await state.set_role(callback_data.role)
