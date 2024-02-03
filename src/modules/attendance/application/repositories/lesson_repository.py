@@ -17,6 +17,6 @@ class LessonRepository(ABC):
     async def create_for_group(self, group_id: int, schedule: list[Schedule]) -> list[Lesson]:
         ...
 
-    # @abstractmethod
-    # async def delete_all(self) -> None:
-    #     ...
+    @abstractmethod
+    async def delete_all(self) -> None:
+        ...

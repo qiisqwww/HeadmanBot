@@ -1,6 +1,5 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-from src.modules.common.application import Dependency
 from src.modules.common.domain import UniversityAlias
 
 from ...domain import Group
@@ -10,7 +9,7 @@ __all__ = [
 ]
 
 
-class GroupRepository(Dependency):
+class GroupRepository(ABC):
     @abstractmethod
     async def find_by_name_and_uni(self, name: str, university_alias: UniversityAlias) -> Group | None:
         ...

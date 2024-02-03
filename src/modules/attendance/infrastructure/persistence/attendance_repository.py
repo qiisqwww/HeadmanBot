@@ -47,6 +47,6 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
         query = "UPDATE attendance.attendances SET status = $1 WHERE student_id = $2"
         await self._con.execute(query, new_status, student_id)
 
-    # async def delete_all(self) -> None:
-    #     query = "TRUNCATE TABLE attendances"
-    #     await self._con.execute(query)
+    async def delete_all(self) -> None:
+        query = "TRUNCATE TABLE attendance.attendances"
+        await self._con.execute(query)

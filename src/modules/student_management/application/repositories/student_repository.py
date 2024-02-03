@@ -1,6 +1,5 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-from src.modules.common.application.dependency import Dependency
 from src.modules.student_management.domain import Role, Student
 
 from .create_student_dto import CreateStudentDTO
@@ -10,7 +9,7 @@ __all__ = [
 ]
 
 
-class StudentRepository(Dependency):
+class StudentRepository(ABC):
     @abstractmethod
     async def find_by_id(self, student_id: int) -> Student | None:
         ...
@@ -33,6 +32,10 @@ class StudentRepository(Dependency):
 
     @abstractmethod
     async def update_is_checked_in(self, student_id: int, new_is_checked_in: bool) -> None:
+        ...
+
+    @abstractmethod
+    async def update_is_checked_in_all(self, new_is_checked_in: bool) -> None:
         ...
 
     # @abstractmethod

@@ -24,6 +24,6 @@ class AttendanceRepository(ABC):
     async def update_status_for_student(self, student_id: int, new_status: VisitStatus) -> None:
         ...
 
-    # @abstractmethod
-    # async def delete_all(self) -> None:
-    #     ...
+    @abstractmethod
+    async def delete_all(self) -> None:
+        ...

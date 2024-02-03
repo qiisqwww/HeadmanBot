@@ -24,6 +24,8 @@ class ScheduleApiImpl(ScheduleAPI):
                 self._api_impl = MireaScheduleApi()
             case UniversityAlias.BMSTU:
                 self._api_impl = BmstuScheduleApi()
+            case _:
+                raise RuntimeError("Cannot create API")
 
     async def group_exists(self, group_name: str) -> bool:
         try:

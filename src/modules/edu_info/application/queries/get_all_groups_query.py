@@ -1,4 +1,5 @@
-from src.modules.common.application import Dependency
+from injector import inject
+from src.modules.common.application.use_case import UseCase
 from src.modules.edu_info.application.repositories import GroupRepository
 
 from ...domain import Group
@@ -8,9 +9,10 @@ __all__ = [
 ]
 
 
-class GetAllGroupsQuery(Dependency):
+class GetAllGroupsQuery(UseCase):
     _repository: GroupRepository
 
+    @inject
     def __init__(self, repository: GroupRepository) -> None:
         self._repository = repository
 

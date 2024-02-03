@@ -3,6 +3,7 @@ import asyncio
 import uvicorn
 
 from src.api import app
+from src.bot import bot
 from src.modules.common.infrastructure import (
     HTTP_HOST,
     HTTP_PORT,
@@ -17,7 +18,7 @@ async def main() -> None:
 
     await init_database()
 
-    scheduler = await build_scheduler()
+    scheduler = await build_scheduler(bot)
     scheduler.start()
 
     server_config = uvicorn.Config(app, host=HTTP_HOST, port=HTTP_PORT)

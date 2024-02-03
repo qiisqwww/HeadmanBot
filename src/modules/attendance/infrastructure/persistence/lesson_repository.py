@@ -41,6 +41,6 @@ class LessonRepositoryImpl(PostgresRepositoryImpl, LessonRepository):
     def _create_time_with_timezone(time_without_tz: time) -> time:
         return time(hour=time_without_tz.hour, minute=time_without_tz.minute, tzinfo=timezone.utc)
 
-    # async def delete_all(self) -> None:
-    #     query = "TRUNCATE TABLE lessons CASCADE"
-    #     await self._con.execute(query)
+    async def delete_all(self) -> None:
+        query = "TRUNCATE TABLE attendance.lessons CASCADE"
+        await self._con.execute(query)
