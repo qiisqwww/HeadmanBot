@@ -15,6 +15,8 @@ from .config import (
     WEBHOOK_PATH,
     WEBHOOK_SECRET,
     WEBHOOK_URL,
+    THROTTLING_EXPIRE_TIME,
+    THROTTLING_RATE_PER_MINUTE
 )
 from .logger_config import configurate_logger
 
@@ -36,4 +38,6 @@ __all__ = [
     "HTTP_HOST",
     "HTTP_PORT",
     "WEBHOOK_SECRET",
+    "THROTTLING_EXPIRE_TIME",
+    "THROTTLING_RATE_PER_MINUTE"
 ]
