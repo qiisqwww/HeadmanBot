@@ -37,12 +37,8 @@ NO_LESSONS_TODAY_TEMPLATE = """
 CHOOSE_PAIR_TEMPLATE = """
 Выберите пару из списка:"""
 
-
-
-
-
 def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup) -> str:
-    template = Template(
+    template: str = Template(
         """{{lesson.name}} {{lesson.start_time.strftime('%H:%M')}}
 
 Не отметились:
@@ -66,6 +62,6 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
 
 Что-то еще?""",
         autoescape=True,
-    )
+    ).render(lesson=choosen_lesson, group_attendance=group_attendance)
 
-    return template.render(lesson=choosen_lesson, group_attendance=group_attendance)
+    return template

@@ -1,15 +1,13 @@
 from aiogram.types import CallbackQuery
 
-from src.bot.common.router import RootRouter, Router
+from src.bot.common import RootRouter, Router
+from src.bot.show_group_attendance.callback_data import ChooseLessonCallbackData
+from src.bot.show_group_attendance.resources import attendance_for_headmen_template, choose_lesson_buttons
 from src.modules.attendance.application.queries import (
     GetLessonAttendanceForGroupQuery,
     GetTodayScheduleQuery,
 )
 from src.modules.student_management.domain import Role, Student
-
-from ..callback_data import ChooseLessonCallbackData
-from ..resources.inline_buttons import choose_lesson_buttons
-from ..resources.templates import attendance_for_headmen_template
 
 __all__ = [
     "include_choose_lesson_callback_router",
@@ -33,7 +31,7 @@ async def attendance_send_callback(
     student: Student,
     get_today_schedule_query: GetTodayScheduleQuery,
     get_visit_status_for_group_students_query: GetLessonAttendanceForGroupQuery,
-):
+) -> None:
     if callback.message is None:
         return
 

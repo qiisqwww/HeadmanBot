@@ -1,7 +1,6 @@
 from aiogram.types import Message
 
-from src.bot.common.command_filter import CommandFilter, TelegramCommand
-from src.bot.common.router import RootRouter, Router
+from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
 
 from .templates import HELP_TEMPLATE
 

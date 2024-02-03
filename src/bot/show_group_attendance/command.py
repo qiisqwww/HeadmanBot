@@ -1,7 +1,6 @@
 from aiogram.types import Message
 
-from src.bot.common import RootRouter, Router
-from src.bot.common.command_filter import CommandFilter, TelegramCommand
+from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
 from src.bot.common.resources import main_menu
 from src.modules.attendance.application.queries import GetTodayScheduleQuery
 from src.modules.student_management.domain import Role, Student
@@ -28,7 +27,7 @@ def include_get_attendance_command(root_router: RootRouter) -> None:
     root_router.include_router(get_attendance_command_router)
 
 
-@get_attendance_command_router.message(CommandFilter(TelegramCommand.GET_ATTENDANCE))
+@get_attendance_command_router.message(CommandFilter(TelegramCommand.SHOW_GROUP_ATTENDANCE))
 async def get_attendance_command(
     message: Message,
     student: Student,
