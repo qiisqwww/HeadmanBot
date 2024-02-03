@@ -37,6 +37,7 @@
         - gateways/ - Имплементация интерфейсов из module_name/application/gateways/
         - mappers/ - Модуль, содержащий в себе DataMappers.
         - repositories/ - Имплементация репозиториев из module_name/application/repositories/
+        - jobs/ - Фоновые задачи этого модуля.
         - container.py - Конфигурация DI контейнера этого модуля
         - contract.py - Реализация интерфейса контракта этого модуля
 

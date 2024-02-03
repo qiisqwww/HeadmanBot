@@ -21,7 +21,7 @@ class LessonRepositoryImpl(PostgresRepositoryImpl, LessonRepository):
 
     async def create_for_group(self, group_id: int, schedule: list[Schedule]) -> list[Lesson]:
         query = "INSERT INTO attendance.lessons (name, group_id, start_time) VALUES($1, $2, $3) RETURNING id"
-        lessons = []
+        lessons: list[Lesson] = []
 
         for lesson in schedule:
             start_time = self._create_time_with_timezone(lesson.start_time)

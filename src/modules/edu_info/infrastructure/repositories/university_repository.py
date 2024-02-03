@@ -5,8 +5,7 @@ from src.modules.common.domain import UniversityAlias
 from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
 from src.modules.edu_info.application.repositories import UniversityRepository
 from src.modules.edu_info.domain import University
-
-from .university_mapper import UniversityMapper
+from src.modules.edu_info.infrastructure.mappers import UniversityMapper
 
 __all__ = [
     "UniversityRepositoryImpl",

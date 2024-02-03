@@ -1,5 +1,4 @@
 from collections.abc import Mapping
-from dataclasses import asdict
 from datetime import date
 from typing import final
 
@@ -14,24 +13,25 @@ __all__ = [
 
 @final
 class CreateStudentDTOMapper:
-    def to_redis_dict(self, data: CreateStudentDTO) -> Mapping:
-        result = asdict(data)
+    def to_redis_dict(self, data: CreateStudentDTO) -> Mapping[bytes | str, str]:
+        return {
+            "name": data.name,
+            "surname": data.surname,
+            "role":  data.role.value,
+            "group_name": data.group_name,
+            "telegram_id":  str(data.telegram_id),
+            "university_alias": data.university_alias.value,
+            "birthdate": "0" if data.birthdate is None else data.birthdate.isoformat(),
+        }
 
-        birthdate: None | date = result["birthdate"]
-        result["birthdate"] = "0" if birthdate is None else birthdate.isoformat()
-        result["telegram_id"] = str(result["telegram_id"])
-
-        return result
-
-    def from_redis_dict(self, data: Mapping) -> CreateStudentDTO:
-        birthdate = None if data["birthdate"] == "0" else date.fromisoformat(data["birthdate"])
+    def from_redis_dict(self, data: Mapping[str, str]) -> CreateStudentDTO:
 
         return CreateStudentDTO(
-            telegram_id=int(data["telegram_id"]),
             name=data["name"],
             surname=data["surname"],
-            birthdate=birthdate,
             role=Role(data["role"]),
-            university_alias=UniversityAlias(data["university_alias"]),
             group_name=data["group_name"],
+            telegram_id=int(data["telegram_id"]),
+            university_alias=UniversityAlias(data["university_alias"]),
+            birthdate = None if data["birthdate"] == "0" else date.fromisoformat(data["birthdate"]),
         )

@@ -7,27 +7,25 @@ from src.modules.edu_info.application.repositories import (
     UniversityRepository,
 )
 from src.modules.edu_info.contract import EduInfoModuleContract
-from src.modules.edu_info.infrastructure.contract import EduInfoModuleContractImpl
-from src.modules.edu_info.infrastructure.persistence import (
+
+from .contract import EduInfoModuleContractImpl
+from .repositories import (
     EduInfoRepositoryImpl,
+    GroupInfoRepositoryImpl,
     GroupRepositoryImpl,
     UniversityRepositoryImpl,
 )
-from src.modules.edu_info.infrastructure.repositories import GroupInfoRepositoryImpl
 
 __all__ = [
     "assemble_edu_info_module",
 ]
 
 
-def singleton_bind(binder: Binder, interface, to) -> None:
-    binder.bind(interface, to, singleton)
-
 
 def assemble_edu_info_module(binder: Binder) -> None:
-    singleton_bind(binder, GroupRepository, GroupRepositoryImpl)
-    singleton_bind(binder, UniversityRepository, UniversityRepositoryImpl)
-    singleton_bind(binder, EduInfoRepository, EduInfoRepositoryImpl)
-    singleton_bind(binder, GroupInfoRepository, GroupInfoRepositoryImpl)
+    binder.bind(GroupRepository, GroupRepositoryImpl, singleton)
+    binder.bind(UniversityRepository, UniversityRepositoryImpl, singleton)
+    binder.bind(EduInfoRepository, EduInfoRepositoryImpl, singleton)
+    binder.bind(GroupInfoRepository, GroupInfoRepositoryImpl, singleton)
 
-    singleton_bind(binder, EduInfoModuleContract, EduInfoModuleContractImpl)
+    binder.bind(EduInfoModuleContract, EduInfoModuleContractImpl, singleton)
