@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 from typing import NoReturn
 
 from src.modules.common.domain import UniversityAlias
-from src.modules.utils.schedule_api.domain import Schedule, Weekday
+from src.modules.utils.schedule_api.domain import Schedule
 
 __all__ = [
     "ScheduleAPI",
@@ -19,5 +20,5 @@ class ScheduleAPI(ABC):
         """Check group existence using university API."""
 
     @abstractmethod
-    async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule] | NoReturn:
+    async def fetch_schedule(self, group_name: str, day: datetime | None = None) -> list[Schedule] | NoReturn:
         """Fetch schedule for selected weekday or for today by default. Work in range of current week."""

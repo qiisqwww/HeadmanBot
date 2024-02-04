@@ -698,6 +698,21 @@ http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
 
 [[package]]
+name = "icalendar"
+version = "5.0.11"
+description = "iCalendar parser/generator"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "icalendar-5.0.11-py3-none-any.whl", hash = "sha256:81864971ac43a1b7d0a555dc1b667836ce59fc719a7f845a96f2f03205fb83b9"},
+    {file = "icalendar-5.0.11.tar.gz", hash = "sha256:7a298bb864526589d0de81f4b736eeb6ff9e539fefb405f7977aa5c1e201ca00"},
+]
+
+[package.dependencies]
+python-dateutil = "*"
+pytz = "*"
+
+[[package]]
 name = "idna"
 version = "3.6"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -1274,6 +1289,20 @@ files = [
 pytest = "*"
 
 [[package]]
+name = "python-dateutil"
+version = "2.8.2"
+description = "Extensions to the standard Python datetime module"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+files = [
+    {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
+    {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
+]
+
+[package.dependencies]
+six = ">=1.5"
+
+[[package]]
 name = "pytz"
 version = "2023.3.post1"
 description = "World timezone definitions, modern and historical"
@@ -1283,6 +1312,23 @@ files = [
     {file = "pytz-2023.3.post1-py2.py3-none-any.whl", hash = "sha256:ce42d816b81b68506614c11e8937d3aa9e41007ceb50bfdcb0749b921bf646c7"},
     {file = "pytz-2023.3.post1.tar.gz", hash = "sha256:7b4fddbeb94a1eba4b557da24f19fdf9db575192544270a9101d8509f9f43d7b"},
 ]
+
+[[package]]
+name = "recurring-ical-events"
+version = "2.1.2"
+description = "A Python module which repeats ICalendar events by RRULE, RDATE and EXDATE."
+optional = false
+python-versions = "*"
+files = [
+    {file = "recurring_ical_events-2.1.2-py3-none-any.whl", hash = "sha256:b510d6d46e54381df1d6b35fcf2a727b71ecc510c85701b15c57312a5f172eff"},
+    {file = "recurring_ical_events-2.1.2.tar.gz", hash = "sha256:803d14a93bc2f94bbac03c7010aee98648f73246ef65d1f3c9bc8da88af6bd24"},
+]
+
+[package.dependencies]
+icalendar = ">=5.0.9,<6.0.0"
+python-dateutil = ">=2.8.1"
+pytz = ">=2023.3"
+x-wr-timezone = ">=0.0.5,<1.0.0"
 
 [[package]]
 name = "redis"
@@ -1525,6 +1571,21 @@ files = [
 dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
+name = "x-wr-timezone"
+version = "0.0.6"
+description = "A Python module and program to convert calendars using X-WR-TIMEZONE to standard ones."
+optional = false
+python-versions = "*"
+files = [
+    {file = "x_wr_timezone-0.0.6-py3-none-any.whl", hash = "sha256:26d98b5f5ae190b68df8b9b9856c4867389956f5b295e0e14f632d7341b60f67"},
+    {file = "x_wr_timezone-0.0.6.tar.gz", hash = "sha256:0a5e20c603c0876b03b6ce3b8682c69c18da8ca107aec70caefa58a8f396bf48"},
+]
+
+[package.dependencies]
+icalendar = "*"
+pytz = "*"
+
+[[package]]
 name = "yarl"
 version = "1.9.4"
 description = "Yet another URL library"
@@ -1630,4 +1691,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "184e25618e8278cb6542ad9b2365311f494472677a5081feafa9bc9eca45902a"
+content-hash = "07d3ff09da79bbb36480fd3823ddd36095726a953ef941ee113766cf694d5721"

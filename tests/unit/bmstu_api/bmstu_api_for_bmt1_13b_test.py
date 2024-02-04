@@ -3,12 +3,11 @@ from datetime import time
 import pytest
 from bs4 import BeautifulSoup
 
-from src.modules.common.application.schedule_api import Schedule
-from src.modules.common.application.schedule_api.weekday import Weekday
-from src.modules.common.infrastructure.apis.schedule_api.impls import BmstuScheduleApi
+from src.modules.utils.schedule_api.domain import Schedule, Weekday
+from src.modules.utils.schedule_api.infrastructure.impls import BmstuScheduleApi
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @pytest.mark.parametrize(
     "weekday,expected_schedule",
     [
@@ -89,7 +88,7 @@ async def test_bmstu_api_fetch_schedule_bmt13(
     assert schedule == expected_schedule
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @pytest.mark.parametrize(
     "weekday,expected_schedule",
     [
