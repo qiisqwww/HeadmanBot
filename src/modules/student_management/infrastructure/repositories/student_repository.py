@@ -80,3 +80,11 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def update_is_checked_in_all(self, new_is_checked_in: bool) -> None:
         query = "UPDATE student_management.students SET is_checked_in_today = $1"
         await self._con.execute(query, new_is_checked_in)
+
+    async def update_name_by_id(self, student_id: int, new_name: str) -> None:
+        query = "UPDATE student_management.students SET name = $1 WHERE id = $2"
+        await self._con.execute(query, new_name, student_id)
+
+    async def update_surname_by_id(self, student_id: int, new_surname: str) -> None:
+        query = "UPDATE student_management.students SET surname = $1 WHERE id = $2"
+        await self._con.execute(query, new_surname, student_id)

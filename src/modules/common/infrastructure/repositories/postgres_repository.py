@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 else:
     DatabaseConnection: TypeAlias = PoolConnectionProxy
 
+
 class PostgresRepositoryImpl:
     _con: DatabaseConnection
 

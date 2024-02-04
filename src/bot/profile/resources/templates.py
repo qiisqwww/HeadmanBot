@@ -6,7 +6,18 @@ __all__ = [
     "profile_info",
     "asking_name_validation_template",
     "asking_surname_validation_template",
+    "ASK_NEW_SURNAME_TEMPLATE",
+    "ASK_NEW_NAME_TEMPLATE",
+    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE"
 ]
+
+
+ASK_NEW_NAME_TEMPLATE = "Введите новое имя"
+
+ASK_NEW_SURNAME_TEMPLATE = "Введите новую фамилию"
+
+WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы хотите отредактировать?"
+
 
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
@@ -17,7 +28,7 @@ def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
         "Роль: {{student.role.translation}}\n"
         "Группа: {{edu_info.group_name}}\n"
         "Университет: {{edu_info.university_name}}\n"
-        "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %} не указана {% endif %}",
+        "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %}не указана {% endif %}",
         autoescape=True,
     )
 

@@ -23,6 +23,7 @@ __all__ = [
     "assemble_student_management_module",
 ]
 
+
 def assemble_student_management_module(binder: Binder) -> None:
     binder.bind(StudentRepository, StudentRepositoryImpl, singleton)
     binder.bind(CacheStudentDataRepository, CacheStudentDataRepositoryImpl, singleton)
