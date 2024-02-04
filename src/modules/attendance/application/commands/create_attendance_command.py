@@ -5,8 +5,8 @@ from src.modules.attendance.application.repositories import (
     LessonRepository,
 )
 from src.modules.common.application import UseCase
-from src.modules.common.application.schedule_api import ScheduleAPI
 from src.modules.common.domain import UniversityAlias
+from src.modules.utils.schedule_api.application import ScheduleAPI
 
 __all__ = [
     "CreateAttendanceCommand",

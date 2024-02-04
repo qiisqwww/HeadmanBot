@@ -1,20 +1,20 @@
 from collections.abc import Callable, Coroutine
-from typing import Any, TypeAlias
+from typing import Any, TypeAlias, TypeVar
 
-from aiohttp import ClientError, ClientResponse
+from aiohttp import ClientError
 
 __all__ = [
     "aiohttp_retry",
 ]
 
 
+T = TypeVar("T")
+DecoratedCallable: TypeAlias = Callable[..., Coroutine[Any, Any, T]]
 
-DecoratedCallable: TypeAlias = Callable[..., Coroutine[Any, Any, ClientResponse]]
 
-
-def aiohttp_retry(attempts: int = 1) -> Callable[[DecoratedCallable], DecoratedCallable]:
-    def retry_decorator(func: DecoratedCallable) -> DecoratedCallable:
-        async def wrapper(*args: Any) -> ClientResponse: # noqa: ANN401
+def aiohttp_retry(attempts: int = 1) -> Callable[[DecoratedCallable[T]], DecoratedCallable[T]]:
+    def retry_decorator(func: DecoratedCallable[T]) -> DecoratedCallable[T]:
+        async def wrapper(*args: Any) -> T: # noqa: ANN401
             i = 0
             while True:
                 try:

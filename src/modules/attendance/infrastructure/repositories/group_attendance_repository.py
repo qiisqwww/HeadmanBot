@@ -6,7 +6,7 @@ from src.modules.attendance.domain import (
     StudentInfo,
     VisitStatus,
 )
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 
 
 @final

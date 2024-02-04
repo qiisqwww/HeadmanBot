@@ -1,6 +1,6 @@
 from typing import final
 
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.student_management.application.repositories import (
     CreateStudentDTO,
     StudentRepository,

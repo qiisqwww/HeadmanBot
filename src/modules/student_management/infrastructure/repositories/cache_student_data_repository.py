@@ -1,6 +1,6 @@
 from typing import Final, final
 
-from src.modules.common.infrastructure.persistence import RedisRepositoryImpl
+from src.modules.common.infrastructure.repositories import RedisRepositoryImpl
 from src.modules.student_management.application.repositories import (
     CacheStudentDataRepository,
     CreateStudentDTO,

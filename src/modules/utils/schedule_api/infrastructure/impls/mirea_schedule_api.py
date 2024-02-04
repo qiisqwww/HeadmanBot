@@ -1,7 +1,7 @@
 from datetime import datetime, time, timedelta
 from typing import NoReturn, final
 
-from aiohttp import ClientError, ClientResponse, ClientSession
+from aiohttp import ClientError, ClientSession
 from pydantic import ValidationError
 from pytz import UTC
 
@@ -36,12 +36,12 @@ class MireaScheduleApi(ScheduleAPI):
 
 
         try:
-            api_response = await self._fetch_api_response(group_name)
+            body = await self._fetch_api_response_body(group_name)
         except (TimeoutError, ClientError) as e:
             raise FailedToFetchScheduleError from e
 
         try:
-            mirea_schedule = MireaScheduleSchema.model_validate_json(await api_response.read())
+            mirea_schedule = MireaScheduleSchema.model_validate_json(body)
         except ValidationError as e:
             raise ParsingError from e
 
@@ -58,16 +58,23 @@ class MireaScheduleApi(ScheduleAPI):
 
     async def group_exists(self, group_name: str) -> bool | NoReturn:
         try:
-            api_response = await self._fetch_api_response(group_name)
+            status = await self._fetch_api_response_status(group_name)
         except (TimeoutError, ClientError) as e:
             raise FailedToCheckGroupExistenceError from e
 
-        return bool(api_response.status == self._HTTP_404_STATUS)
+        return bool(status != self._HTTP_404_STATUS)
 
     @aiohttp_retry(attempts=3)
-    async def _fetch_api_response(self, group_name: str) -> ClientResponse:
+    async def _fetch_api_response_status(self, group_name: str) -> int:
         async with ClientSession() as session, session.get(self._URL.format(group_name=group_name)) as response:
-            return response
+            status: int = response.status
+            return status
+
+    @aiohttp_retry(attempts=3)
+    async def _fetch_api_response_body(self, group_name: str) -> bytes:
+        async with ClientSession() as session, session.get(self._URL.format(group_name=group_name)) as response:
+            body: bytes = await response.read()
+            return body
 
     def _get_week_num(self, weekday: Weekday) -> int:
         today = datetime.now(tz=UTC)

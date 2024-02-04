@@ -1,8 +1,9 @@
 from loguru import logger
 
-from src.modules.common.infrastructure.database import get_postgres_pool
 from src.modules.edu_info.application.commands import InsertUniversitiesCommand
 from src.modules.edu_info.infrastructure.repositories import UniversityRepositoryImpl
+
+from .postgres import get_postgres_pool
 
 __all__ = [
     "init_database",
@@ -11,17 +12,37 @@ __all__ = [
 INIT_DATABASE_SQL = """
 /* CREATE SCHEMAS START */
 
-CREATE SCHEMA edu_info;
-CREATE SCHEMA attendance;
-CREATE SCHEMA student_management;
+CREATE SCHEMA IF NOT EXISTS edu_info ;
+CREATE SCHEMA IF NOT EXISTS attendance;
+CREATE SCHEMA IF NOT EXISTS student_management;
 
 /* CREATE SCHEMAS END */
 
 /* CREATE TYPES START */
 
-CREATE TYPE visit_status AS ENUM ('present', 'absent');
-CREATE TYPE role AS ENUM ('student', 'vice headman', 'headman', 'admin');
-CREATE TYPE university_alias AS ENUM ('MIREA', 'BMSTU');
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_status') THEN
+        CREATE TYPE visit_status AS ENUM ('present', 'absent');
+    END IF;
+END
+$$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role') THEN
+        CREATE TYPE role AS ENUM ('student', 'vice headman', 'headman', 'admin');
+    END IF;
+END
+$$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'university_alias') THEN
+        CREATE TYPE university_alias AS ENUM ('MIREA', 'BMSTU');
+    END IF;
+END
+$$;
 
 /* CREATE TYPES END */
 

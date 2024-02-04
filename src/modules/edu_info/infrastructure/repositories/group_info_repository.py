@@ -1,6 +1,6 @@
 from typing import final
 
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.edu_info.application.repositories import GroupInfoRepository
 from src.modules.edu_info.domain import GroupInfo
 from src.modules.edu_info.infrastructure.mappers import GroupInfoMapper

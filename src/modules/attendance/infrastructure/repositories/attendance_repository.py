@@ -2,7 +2,7 @@ from typing import final
 
 from src.modules.attendance.application.repositories import AttendanceRepository
 from src.modules.attendance.domain import Attendance, Lesson, VisitStatus
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 
 __all__ = [
     "AttendanceRepositoryImpl",

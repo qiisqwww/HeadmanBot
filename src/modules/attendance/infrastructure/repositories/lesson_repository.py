@@ -3,8 +3,8 @@ from typing import final
 
 from src.modules.attendance.application.repositories import LessonRepository
 from src.modules.attendance.domain import Lesson
-from src.modules.common.application.schedule_api import Schedule
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
+from src.modules.utils.schedule_api.domain import Schedule
 
 __all__ = [
     "LessonRepositoryImpl",

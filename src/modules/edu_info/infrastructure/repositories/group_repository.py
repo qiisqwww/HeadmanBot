@@ -1,7 +1,7 @@
 from typing import final
 
 from src.modules.common.domain import UniversityAlias
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.edu_info.application.repositories import GroupRepository
 from src.modules.edu_info.domain import Group
 from src.modules.edu_info.infrastructure.mappers import GroupMapper
@@ -63,4 +63,4 @@ class GroupRepositoryImpl(PostgresRepositoryImpl, GroupRepository):
         query = "SELECT * FROM edu_info.groups"
         records = await self._con.fetch(query)
 
-        return [self._mapper.to_domain(**record) for record in records]
+        return [self._mapper.to_domain(record) for record in records]

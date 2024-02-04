@@ -2,7 +2,7 @@ from typing import final
 
 from src.modules.common.application.exceptions import CorruptedDatabaseError
 from src.modules.common.domain import UniversityAlias
-from src.modules.common.infrastructure.persistence import PostgresRepositoryImpl
+from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.edu_info.application.repositories import UniversityRepository
 from src.modules.edu_info.domain import University
 from src.modules.edu_info.infrastructure.mappers import UniversityMapper

@@ -6,7 +6,7 @@ from src.modules.attendance.application.gateways import EduInfoModuleGateway
 from src.modules.attendance.application.gateways.student_management_gateway import StudentManagementGateway
 from src.modules.attendance.application.repositories import AttendanceRepository, LessonRepository
 from src.modules.common.application import UnitOfWork, UseCase
-from src.modules.common.application.schedule_api import ScheduleAPI
+from src.modules.utils.schedule_api.application import ScheduleAPI
 
 __all__ = [
     "MakeAttendanceRelevantCommand",
