@@ -4,16 +4,16 @@ from src.modules.attendance.application.repositories import (
     AttendanceRepository,
     LessonRepository,
 )
-from src.modules.common.application import Dependency
-from src.modules.common.application.schedule_api import ScheduleAPI
+from src.modules.common.application import UseCase
 from src.modules.common.domain import UniversityAlias
+from src.modules.utils.schedule_api.application import ScheduleAPI
 
 __all__ = [
     "CreateAttendanceCommand",
 ]
 
 
-class CreateAttendanceCommand(Dependency):
+class CreateAttendanceCommand(UseCase):
     _attendance_repository: AttendanceRepository
     _lesson_repository: LessonRepository
     _schedule_api: type[ScheduleAPI]

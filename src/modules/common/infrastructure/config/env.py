@@ -10,7 +10,7 @@ __all__ = [
 
 
 class UndefinedEnvError(Exception):
-    """Raise when cannot read env variable and getenv return None"""
+    """Raise when cannot read env variable and getenv return None."""
 
     def __init__(self, env_name: str) -> None:
         msg = f'Env name="{env_name}"'
@@ -43,10 +43,10 @@ class IntEnv(int):
         return obj
 
 
-class IntListEnv(list):
+class IntListEnv(list[int]):
     def __init__(self, env_name: str) -> None:
         env = getenv(env_name, None)
         if env is None:
             raise UndefinedEnvError(env_name)
 
-        super().__init__((map(int, env.split())))
+        super().__init__(map(int, env.split()))

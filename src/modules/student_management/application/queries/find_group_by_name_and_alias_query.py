@@ -1,6 +1,8 @@
+from typing import final
+
 from injector import inject
 
-from src.modules.common.application import Dependency
+from src.modules.common.application import UseCase
 from src.modules.common.domain import UniversityAlias
 from src.modules.student_management.application.gateways import EduInfoModuleGateway
 from src.modules.student_management.domain import Group
@@ -10,7 +12,8 @@ __all__ = [
 ]
 
 
-class FindGroupByNameAndAliasQuery(Dependency):
+@final
+class FindGroupByNameAndAliasQuery(UseCase):
     _edu_info_module_gateway: EduInfoModuleGateway
 
     @inject

@@ -17,8 +17,7 @@ class RootRouter(AiogramRouter):
     def __init__(self, throttling: bool, name: str | None = None) -> None:
         super().__init__(name=name)
 
-        if self.parent_router is not None:
-            if not isinstance(self.parent_router, (Dispatcher)):
+        if self.parent_router is not None and not isinstance(self.parent_router, (Dispatcher)):
                 raise RuntimeError("Only Dispatcher can be parent for RootRouter.")
 
         self._add_handle_exception_middleware()

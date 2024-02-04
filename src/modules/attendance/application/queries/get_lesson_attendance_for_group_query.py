@@ -3,14 +3,14 @@ from injector import inject
 from src.modules.attendance.application.gateways import StudentManagementGateway
 from src.modules.attendance.application.repositories import GroupAttendanceRepository
 from src.modules.attendance.domain import LessonAttendanceForGroup
-from src.modules.common.application.dependency import Dependency
+from src.modules.common.application import UseCase
 
 __all__ = [
     "GetLessonAttendanceForGroupQuery",
 ]
 
 
-class GetLessonAttendanceForGroupQuery(Dependency):
+class GetLessonAttendanceForGroupQuery(UseCase):
     _gateway: StudentManagementGateway
     _repository: GroupAttendanceRepository
 

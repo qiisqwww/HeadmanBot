@@ -1,4 +1,6 @@
-from typing import Mapping, final
+from typing import final
+
+from asyncpg import Record
 
 from src.modules.student_management.domain import Role, Student
 
@@ -9,7 +11,7 @@ __all__ = [
 
 @final
 class StudentMapper:
-    def to_domain(self, record: Mapping) -> Student:
+    def to_domain(self, record: Record) -> Student:
         return Student(
             id=record["id"],
             telegram_id=record["telegram_id"],

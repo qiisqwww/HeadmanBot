@@ -1,4 +1,5 @@
 from injector import inject
+
 from src.modules.common.application.use_case import UseCase
 from src.modules.edu_info.application.repositories import GroupRepository
 

@@ -13,7 +13,7 @@ from src.modules.student_management.contract import StudentManagementContract
 
 from .contract import StudentManagementContractImpl
 from .gateways import AttendanceModuleGatewayImpl, EduInfoModuleGatewayImpl
-from .persistance import (
+from .repositories import (
     CacheStudentDataRepositoryImpl,
     StudentInfoRepositoryImpl,
     StudentRepositoryImpl,
@@ -23,17 +23,12 @@ __all__ = [
     "assemble_student_management_module",
 ]
 
-
-def singleton_bind(binder: Binder, interface, to) -> None:
-    binder.bind(interface, to, singleton)
-
-
 def assemble_student_management_module(binder: Binder) -> None:
-    singleton_bind(binder, StudentRepository, StudentRepositoryImpl)
-    singleton_bind(binder, CacheStudentDataRepository, CacheStudentDataRepositoryImpl)
-    singleton_bind(binder, StudentInfoRepository, StudentInfoRepositoryImpl)
+    binder.bind(StudentRepository, StudentRepositoryImpl, singleton)
+    binder.bind(CacheStudentDataRepository, CacheStudentDataRepositoryImpl, singleton)
+    binder.bind(StudentInfoRepository, StudentInfoRepositoryImpl, singleton)
 
-    singleton_bind(binder, EduInfoModuleGateway, EduInfoModuleGatewayImpl)
-    singleton_bind(binder, AttendanceModuleGateway, AttendanceModuleGatewayImpl)
+    binder.bind(EduInfoModuleGateway, EduInfoModuleGatewayImpl, singleton)
+    binder.bind(AttendanceModuleGateway, AttendanceModuleGatewayImpl, singleton)
 
-    singleton_bind(binder, StudentManagementContract, StudentManagementContractImpl)
+    binder.bind(StudentManagementContract, StudentManagementContractImpl, singleton)

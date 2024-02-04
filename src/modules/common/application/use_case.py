@@ -1,16 +1,9 @@
-from abc import ABC, abstractmethod
-from typing import Any
-
+from abc import ABC
 
 __all__ = [
     "UseCase",
 ]
 
-class UseCase(ABC):
-    @abstractmethod 
-    def __init__(self) -> None:
-        ...
 
-    @abstractmethod
-    async def execute(self) -> Any:
-        ...
+class UseCase(ABC):
+    ...

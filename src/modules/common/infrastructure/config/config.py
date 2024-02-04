@@ -20,7 +20,7 @@ __all__ = [
     "WEBHOOK_PATH",
     "WEBHOOK_SECRET",
     "THROTTLING_EXPIRE_TIME",
-    "THROTTLING_RATE_PER_MINUTE"
+    "THROTTLING_RATE_PER_MINUTE",
 ]
 
 DEBUG: bool = bool(BoolEnv("DEBUG"))

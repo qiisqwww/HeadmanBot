@@ -31,7 +31,9 @@ class EduInfoModuleContract(ABC):
 
     @abstractmethod
     async def get_group_info_by_group_name_and_alias(
-        self, group_name: str, alias: UniversityAlias
+        self,
+        group_name: str,
+        alias: UniversityAlias,
     ) -> dict[str, Any] | None:
         """Return data like a dict
 
@@ -74,9 +76,10 @@ class EduInfoModuleContract(ABC):
     async def get_group_name_and_uni_name(self, group_id: int) -> tuple[str, str] | None:
         """Return data like a tuple
         return_value[0]: str -> group_name
-        return_value[1]: str -> university_name"""
+        return_value[1]: str -> university_name
+        """
 
-    @abstractmethod 
+    @abstractmethod
     async def fetch_all_groups_info(self) -> list[dict[str, Any]]:
         """Return data like a list of dicts
         group_info = return_value[0]

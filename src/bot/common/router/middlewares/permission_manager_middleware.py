@@ -1,4 +1,5 @@
-from typing import Any, Awaitable, Callable, TypeAlias
+from collections.abc import Awaitable, Callable
+from typing import Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
@@ -27,6 +28,6 @@ class PermissionManagerMiddleware(BaseMiddleware):
 
         if student.role < self._min_role:
             await event.answer(YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE)
-            return
+            return None
 
         return await handler(event, data)

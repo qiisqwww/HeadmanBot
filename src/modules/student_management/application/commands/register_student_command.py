@@ -1,6 +1,6 @@
 from injector import inject
 
-from src.modules.common.application import Dependency, UnitOfWork
+from src.modules.common.application import UnitOfWork, UseCase
 from src.modules.student_management.application.gateways import (
     AttendanceModuleGateway,
     EduInfoModuleGateway,
@@ -10,7 +10,7 @@ from src.modules.student_management.domain import Role, Student
 from ..repositories import CacheStudentDataRepository, StudentRepository
 
 
-class RegisterStudentCommand(Dependency):
+class RegisterStudentCommand(UseCase):
     _cache_student_repository: CacheStudentDataRepository
     _student_repository: StudentRepository
     _edu_info_module_gateway: EduInfoModuleGateway
@@ -40,23 +40,27 @@ class RegisterStudentCommand(Dependency):
                 raise RuntimeError("Not found user data in cache.")
 
             student_university = await self._edu_info_module_gateway.get_university_info_by_alias(
-                create_student_data.university_alias
+                create_student_data.university_alias,
             )
             student_group = await self._edu_info_module_gateway.find_group_by_name(create_student_data.group_name)
 
             if student_group is None and create_student_data.role < Role.HEADMAN:
                 raise RuntimeError(
-                    "For students with role 'student' and 'vice headman' group must already have been created before."
+                    "For students with role 'student' and 'vice headman' group must already have been created before.",
                 )
 
             if student_group is None:
                 student_group = await self._edu_info_module_gateway.create_group(
-                    create_student_data.group_name, student_university.id
+                    create_student_data.group_name,
+                    student_university.id,
                 )
 
             student = await self._student_repository.create(create_student_data, student_group.id)
             await self._attendance_module_gateway.create_attendance(
-                student.id, create_student_data.university_alias, student_group.id, student_group.name
+                student.id,
+                create_student_data.university_alias,
+                student_group.id,
+                student_group.name,
             )
 
         return student

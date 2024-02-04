@@ -8,7 +8,7 @@ __all__ = [
 @verify(UNIQUE)
 class TelegramCommand(StrEnum):
     START = "/start"
-    HELP = "Помощь"
-    GET_ATTENDANCE = "Узнать посещаемость"
     RESTART = "Начать регистрацию заново"
+    HELP = "Помощь"
     PROFILE = "Профиль"
+    SHOW_GROUP_ATTENDANCE = "Узнать посещаемость"

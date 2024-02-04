@@ -34,7 +34,6 @@ services:
       - ../.env/.database.dev.env
     volumes:
       - headman_bot_postgres_dev_data:/var/lib/postgresql/data
-      - ../sql:/docker-entrypoint-initdb.d
       - ../postgresql.conf:/etc/postgresql/postgresql.conf
     ports:
       - 5432:5432

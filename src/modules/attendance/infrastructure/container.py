@@ -1,17 +1,16 @@
 from injector import Binder, singleton
 
-from src.modules.attendance.application.contract import AttendanceModuleContract
-from src.modules.attendance.application.gateways import StudentManagementGateway
-from src.modules.attendance.application.gateways import EduInfoModuleGateway
+from src.modules.attendance.application.gateways import EduInfoModuleGateway, StudentManagementGateway
 from src.modules.attendance.application.repositories import (
     AttendanceRepository,
     GroupAttendanceRepository,
     LessonRepository,
 )
-from src.modules.attendance.infrastructure.contract import AttendanceModuleContractImpl
-from src.modules.attendance.infrastructure.gateways import StudentManagementGatewayImpl
-from src.modules.attendance.infrastructure.gateways import EduInfoModuleGatewayImpl
-from src.modules.attendance.infrastructure.persistence import (
+from src.modules.attendance.contract import AttendanceModuleContract
+
+from .contract import AttendanceModuleContractImpl
+from .gateways import EduInfoModuleGatewayImpl, StudentManagementGatewayImpl
+from .repositories import (
     AttendanceRepositoryImpl,
     GroupAttendanceRepositoryImpl,
     LessonRepositoryImpl,
@@ -22,16 +21,12 @@ __all__ = [
 ]
 
 
-def singleton_bind(binder: Binder, interface, to) -> None:
-    binder.bind(interface, to, singleton)
-
-
 def assemble_attendace_module(binder: Binder) -> None:
-    singleton_bind(binder, AttendanceRepository, AttendanceRepositoryImpl)
-    singleton_bind(binder, LessonRepository, LessonRepositoryImpl)
-    singleton_bind(binder, GroupAttendanceRepository, GroupAttendanceRepositoryImpl)
+    binder.bind(AttendanceRepository, AttendanceRepositoryImpl, singleton)
+    binder.bind(LessonRepository, LessonRepositoryImpl, singleton)
+    binder.bind(GroupAttendanceRepository, GroupAttendanceRepositoryImpl, singleton)
 
-    singleton_bind(binder, AttendanceModuleContract, AttendanceModuleContractImpl)
+    binder.bind(AttendanceModuleContract, AttendanceModuleContractImpl, singleton)
 
-    singleton_bind(binder, StudentManagementGateway, StudentManagementGatewayImpl)
-    singleton_bind(binder, EduInfoModuleGateway, EduInfoModuleGatewayImpl)
+    binder.bind(StudentManagementGateway, StudentManagementGatewayImpl, singleton)
+    binder.bind(EduInfoModuleGateway, EduInfoModuleGatewayImpl, singleton)

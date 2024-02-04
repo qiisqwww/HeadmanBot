@@ -1,6 +1,6 @@
 from injector import inject
 
-from src.modules.common.application import Dependency
+from src.modules.common.application import UseCase
 from src.modules.student_management.application.gateways import EduInfoModuleGateway
 from src.modules.student_management.domain import EduProfileInfo
 
@@ -9,7 +9,7 @@ __all__ = [
 ]
 
 
-class GetEduProfileInfoQuery(Dependency):
+class GetEduProfileInfoQuery(UseCase):
     _gateway: EduInfoModuleGateway
 
     @inject

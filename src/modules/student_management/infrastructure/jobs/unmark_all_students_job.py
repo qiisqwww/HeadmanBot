@@ -1,16 +1,18 @@
-from typing import AsyncContextManager, Callable, final
+from collections.abc import Callable
+from typing import AsyncContextManager, final
 
 from injector import Injector
 
-from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.common.infrastructure.config import DEBUG
+from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.student_management.application.commands import UncheckAllStudentsCommand
 
 __all__ = [
     "UnmarkAllStudentsJob",
 ]
 
-@final 
+
+@final
 class UnmarkAllStudentsJob(AsyncJob):
     _build_container: Callable[[], AsyncContextManager[Injector]]
 

@@ -6,7 +6,8 @@ __all__ = [
     "GroupInfoRepository",
 ]
 
+
 class GroupInfoRepository(ABC):
-    @abstractmethod 
+    @abstractmethod
     async def fetch_all(self) -> list[GroupInfo]:
         ...

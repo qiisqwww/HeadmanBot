@@ -1,17 +1,17 @@
 from typing import final
 
 from injector import inject
-from src.modules.attendance.application.gateways.student_management_gateway import StudentManagementGateway
 
-from src.modules.common.application import UseCase, UnitOfWork
-from src.modules.common.application.schedule_api import ScheduleAPI
-
-from src.modules.attendance.application.repositories import LessonRepository, AttendanceRepository
 from src.modules.attendance.application.gateways import EduInfoModuleGateway
+from src.modules.attendance.application.gateways.student_management_gateway import StudentManagementGateway
+from src.modules.attendance.application.repositories import AttendanceRepository, LessonRepository
+from src.modules.common.application import UnitOfWork, UseCase
+from src.modules.utils.schedule_api.application import ScheduleAPI
 
 __all__ = [
     "MakeAttendanceRelevantCommand",
 ]
+
 
 @final
 class MakeAttendanceRelevantCommand(UseCase):
@@ -23,16 +23,17 @@ class MakeAttendanceRelevantCommand(UseCase):
     _uow: UnitOfWork
 
     @inject
-    def __init__(self, 
-                 attendance_repostory: AttendanceRepository,
-                 lesson_repository: LessonRepository,
-                 edu_info_gateway: EduInfoModuleGateway,
-                 student_management_gateway: StudentManagementGateway,
-                 uow: UnitOfWork,
-                 schedule_api: type[ScheduleAPI],
-                    ) -> None:
+    def __init__(
+        self,
+        attendance_repostory: AttendanceRepository,
+        lesson_repository: LessonRepository,
+        edu_info_gateway: EduInfoModuleGateway,
+        student_management_gateway: StudentManagementGateway,
+        uow: UnitOfWork,
+        schedule_api: type[ScheduleAPI],
+    ) -> None:
         self._schedule_api = schedule_api
-        self._attendance_repository = attendance_repostory 
+        self._attendance_repository = attendance_repostory
         self._lesson_repository = lesson_repository
         self._edu_info_gateway = edu_info_gateway
         self._student_management_gateway = student_management_gateway

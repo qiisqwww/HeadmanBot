@@ -37,11 +37,3 @@ class StudentRepository(ABC):
     @abstractmethod
     async def update_is_checked_in_all(self, new_is_checked_in: bool) -> None:
         ...
-
-    # @abstractmethod
-    # async def update_surname_by_id(self, new_surname: str, student_id: StudentId) -> None:
-    #     ...
-    #
-    # @abstractmethod
-    # async def update_name_by_id(self, new_name: str, student_id: StudentId) -> None:
-    #     ...

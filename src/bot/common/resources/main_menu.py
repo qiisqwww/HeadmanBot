@@ -15,7 +15,7 @@ def main_menu(role: Role) -> ReplyKeyboardMarkup:
     buttons = [KeyboardButton(text=TelegramCommand.HELP), KeyboardButton(text=TelegramCommand.PROFILE)]
 
     if role >= Role.VICE_HEADMAN:
-        buttons.append(KeyboardButton(text=TelegramCommand.GET_ATTENDANCE))
+        buttons.append(KeyboardButton(text=TelegramCommand.SHOW_GROUP_ATTENDANCE))
 
     builder.add(*buttons)
     builder.adjust(2)

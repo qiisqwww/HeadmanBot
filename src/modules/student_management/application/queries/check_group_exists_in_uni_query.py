@@ -1,15 +1,15 @@
 from injector import inject
 
-from src.modules.common.application.dependency import Dependency
-from src.modules.common.application.schedule_api import ScheduleAPI
+from src.modules.common.application import UseCase
 from src.modules.common.domain.university_alias import UniversityAlias
+from src.modules.utils.schedule_api.application import ScheduleAPI
 
 __all__ = [
     "CheckGroupExistsInUniQuery",
 ]
 
 
-class CheckGroupExistsInUniQuery(Dependency):
+class CheckGroupExistsInUniQuery(UseCase):
     _schedule_api_impl: type[ScheduleAPI]
 
     @inject

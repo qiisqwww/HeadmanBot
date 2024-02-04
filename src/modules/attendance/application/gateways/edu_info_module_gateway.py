@@ -8,6 +8,6 @@ __all__ = [
 
 
 class EduInfoModuleGateway(ABC):
-    @abstractmethod 
+    @abstractmethod
     async def fetch_all_groups(self) -> list[GroupInfo]:
         ...

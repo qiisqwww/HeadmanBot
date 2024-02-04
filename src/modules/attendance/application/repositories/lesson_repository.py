@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from src.modules.attendance.domain import Lesson
-from src.modules.common.application.schedule_api import Schedule
+from src.modules.utils.schedule_api.domain import Schedule
 
 __all__ = [
     "LessonRepository",
