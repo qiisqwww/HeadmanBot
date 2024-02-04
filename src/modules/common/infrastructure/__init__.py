@@ -11,7 +11,7 @@ from .config import (
     configurate_logger,
 )
 from .container import project_container
-from .init_database import init_database
+from .database import init_database
 
 __all__ = [
     "init_database",
@@ -24,7 +24,6 @@ __all__ = [
     "HTTP_HOST",
     "HTTP_PORT",
     "WEBHOOK_SECRET",
-    "build_scheduler",
     "THROTTLING_EXPIRE_TIME",
     "THROTTLING_RATE_PER_MINUTE",
 ]

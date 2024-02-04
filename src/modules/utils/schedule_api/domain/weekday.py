@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import CONTINUOUS, UNIQUE, IntEnum, verify
 from typing import Self
 
@@ -18,5 +18,5 @@ class Weekday(IntEnum):
     SUNDAY = 6
 
     @classmethod
-    def today(cls) -> Self:
-        return cls(datetime.today().weekday())
+    def today(cls: type[Self]) -> Self:
+        return cls(datetime.now(tz=UTC).weekday())

@@ -3,7 +3,7 @@ from typing import Annotated, Any
 
 from pydantic import AfterValidator, BaseModel
 
-from src.modules.common.application.schedule_api.weekday import Weekday
+from src.modules.utils.schedule_api.domain import Weekday
 
 __all__ = [
     "MireaScheduleSchema",

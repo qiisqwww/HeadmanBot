@@ -46,6 +46,7 @@ ignore = [
     "RUF001", # False positive. Tell about latin C and cyrilc C
 
     "FBT", # I want to use boolean as a function argument.
+    "A003", # I want to use 'id' as name for object attribute.
 ]
 fix = true
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$" # For unusable variables.
@@ -56,6 +57,7 @@ strict = true
 show_error_codes = true
 ignore_missing_imports = true # Work incorrectly and useless
 disallow_untyped_decorators = false # Because of FastAPI and aiogramm decorators invoke this error
+disallow_subclassing_any = false
 
 [tool.pyright]
 include = ["src"]

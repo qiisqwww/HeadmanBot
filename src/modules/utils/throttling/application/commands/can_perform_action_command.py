@@ -3,8 +3,8 @@ from typing import final
 from injector import inject
 
 from src.modules.common.application import UseCase
-from src.modules.common.application.repositories import ThrottlingRepository
 from src.modules.common.infrastructure import THROTTLING_RATE_PER_MINUTE
+from src.modules.utils.throttling.application.repositories import ThrottlingRepository
 
 __all__ = [
     "CanPerformActionCommand",
@@ -24,4 +24,4 @@ class CanPerformActionCommand(UseCase):
 
         if throttling_rate == 1:
             await self._repository.set_expire_time(user_id)
-        return throttling_rate < THROTTLING_RATE_PER_MINUTE
+        return throttling_rate <= THROTTLING_RATE_PER_MINUTE

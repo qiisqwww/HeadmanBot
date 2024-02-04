@@ -1,4 +1,15 @@
-/* CREATE SCHEMAS START */ 
+from loguru import logger
+
+from src.modules.common.infrastructure.database import get_postgres_pool
+from src.modules.edu_info.application.commands import InsertUniversitiesCommand
+from src.modules.edu_info.infrastructure.repositories import UniversityRepositoryImpl
+
+__all__ = [
+    "init_database",
+]
+
+INIT_DATABASE_SQL = """
+/* CREATE SCHEMAS START */
 
 CREATE SCHEMA edu_info;
 CREATE SCHEMA attendance;
@@ -55,3 +66,14 @@ CREATE TABLE IF NOT EXISTS attendance.attendances (
 );
 
 /* CREATE TABLES END */
+"""
+
+async def init_database() -> None:
+    logger.info("Start initalizing database.")
+    pool = await get_postgres_pool()
+
+    async with pool.acquire() as con:
+        await con.execute(INIT_DATABASE_SQL)
+        insert_universities_command = InsertUniversitiesCommand(UniversityRepositoryImpl(con))
+        await insert_universities_command.execute()
+    logger.info("Finish initalizing database.")

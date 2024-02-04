@@ -1,3 +1,6 @@
+from collections.abc import Callable, Coroutine
+from typing import Any
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from .async_job import AsyncJob
@@ -17,10 +20,10 @@ class AsyncScheduler:
             self._scheduler.add_job(self._job_wrapper(job), trigger=job.trigger, **job.trigger_args)
 
     @staticmethod
-    def _job_wrapper(job: AsyncJob):
+    def _job_wrapper(job: AsyncJob) -> Callable[[], Coroutine[Any, Any, None]]:
         """APScheduler don't support async callable object and this wrapper solve this problem."""
 
-        async def _job_wrapper_inner():
+        async def _job_wrapper_inner() -> None:
             await job()
 
         return _job_wrapper_inner

@@ -2,11 +2,12 @@ import re
 from datetime import time
 from typing import final
 
+from aiohttp import ClientSession
 from bs4 import BeautifulSoup, Tag
-from httpx import AsyncClient
 
-from src.modules.common.application.schedule_api import Schedule, ScheduleAPI, Weekday
-from src.modules.common.infrastructure.retry import retry
+from src.modules.utils.schedule_api.application import ScheduleAPI
+from src.modules.utils.schedule_api.domain import Schedule, Weekday
+from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 
 __all__ = [
     "BmstuScheduleApi",
@@ -90,14 +91,13 @@ class BmstuScheduleApi(ScheduleAPI):
 
         return result
 
-    @retry(attempts=3)
+    @aiohttp_retry(attempts=3)
     async def _fetch_all_schedule_soup(self) -> BeautifulSoup:
-        async with AsyncClient() as client:
-            response = await client.get(self._ALL_SCHEDULE_URL)
+        async with ClientSession() as session, session.get(self._ALL_SCHEDULE_URL) as response:
+            response_payload = await response.text()
+        return BeautifulSoup(response_payload, "html.parser")
 
-        return BeautifulSoup(response.text, "html.parser")
-
-    @retry(attempts=3)
+    @aiohttp_retry(attempts=3)
     async def _fetch_schedule_soup(self, group_name: str) -> BeautifulSoup:
         soup = await self._fetch_all_schedule_soup()
         group_tags = self._parse_group_tags_soup(soup)
@@ -107,10 +107,11 @@ class BmstuScheduleApi(ScheduleAPI):
             if tag.text.strip() == group_name:
                 group_schedule_url = tag.attrs["href"]
 
-        async with AsyncClient() as client:
-            response = await client.get(f"https://lks.bmstu.ru{group_schedule_url}")
+        url = f"https://lks.bmstu.ru{group_schedule_url}"
+        async with ClientSession() as session, session.get(url) as response:
+            response_payload = await response.text()
 
-        return BeautifulSoup(response.text, "html.parser")
+        return BeautifulSoup(response_payload, "html.parser")
 
     def _parse_group_tags_soup(self, soup: BeautifulSoup) -> list[Tag]:
         group_pat = re.compile("/schedule/*")
