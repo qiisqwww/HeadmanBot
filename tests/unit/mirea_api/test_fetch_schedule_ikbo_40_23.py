@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, time
+from datetime import date, time
 from pathlib import Path
 from typing import Final
 
@@ -21,7 +21,7 @@ def isc_calendar() -> str:
 @pytest.mark.parametrize(
     "day,schedule",
     [
-        (datetime(year=2023, month=12, day=25, tzinfo=UTC), [
+        (date(year=2023, month=12, day=25), [
            Schedule(lesson_name="Зачет Основы российской государственности",
                     start_time=time(hour=10, minute=40)),
            Schedule(lesson_name="Зачет История России",
@@ -29,7 +29,7 @@ def isc_calendar() -> str:
            ]),
     ],
 )
-async def test_fetch_ikbo_40_23_schedule(day: datetime, schedule: list[Schedule], monkeypatch: MonkeyPatch, isc_calendar: str) -> None:
+async def test_fetch_ikbo_40_23_schedule(day: date, schedule: list[Schedule], monkeypatch: MonkeyPatch, isc_calendar: str) -> None:
     api = MireaScheduleApi()
 
     async def fetch_isc(*_) -> str:

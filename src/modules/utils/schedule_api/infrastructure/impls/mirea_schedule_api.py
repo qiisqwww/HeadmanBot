@@ -1,10 +1,12 @@
-from datetime import UTC, datetime
+from datetime import date, datetime
 from typing import Final, NoReturn, final
+from zoneinfo import ZoneInfo
 
 import recurring_ical_events
 from aiohttp import ClientSession
 from icalendar import Calendar, Event
 
+from src.modules.common.infrastructure.config import DEBUG
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
@@ -36,8 +38,10 @@ class MireaScheduleApi(ScheduleAPI):
             return True
         return False
 
-    async def fetch_schedule(self, group_name: str, day: datetime | None = None) -> list[Schedule] | NoReturn:
-        day = day or datetime.now(tz=UTC)
+    async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule] | NoReturn:
+        day = day or datetime.now(tz=ZoneInfo("UTC")).date()
+        if DEBUG:
+            day = date(year=2023, month=12, day=25)
 
         isc_link_location_bin = await self._fetch_isc_link_location(group_name)
         isc_link_location = MireaIscLinkSchema.model_validate_json(isc_link_location_bin)
@@ -48,9 +52,8 @@ class MireaScheduleApi(ScheduleAPI):
 
         return self._parse_schedule_from_calendar(calendar, day) # pyright: ignore[reportUnknownArgumentType]
 
-    def _parse_schedule_from_calendar(self, calendar: Calendar, day: datetime) -> list[Schedule]:
-        date = (day.year, day.month, day.day)
-        events: list[Event] = recurring_ical_events.of(calendar).at(date) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+    def _parse_schedule_from_calendar(self, calendar: Calendar, day: date) -> list[Schedule]:
+        events: list[Event] = recurring_ical_events.of(calendar).at(day) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
         return [
             Schedule(
                 lesson_name=str(event["SUMMARY"]), # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]

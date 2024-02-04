@@ -1,12 +1,13 @@
 import re
-from datetime import time
-from typing import final
+from datetime import date, datetime
+from typing import Final, final
+from zoneinfo import ZoneInfo
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup, Tag
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule, Weekday
+from src.modules.utils.schedule_api.domain import Schedule
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
 @final
 class BmstuScheduleApi(ScheduleAPI):
     _ALL_SCHEDULE_URL: str = "https://lks.bmstu.ru/schedule/list"
+    _SUNDAY: Final[int] = 6
 
     def __init__(self) -> None:
         ...
@@ -27,69 +29,26 @@ class BmstuScheduleApi(ScheduleAPI):
         group_names = [tag.text.strip() for tag in group_tags]
         return group_name in group_names
 
-    async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule]:
-        weekday = Weekday.today() if weekday is None else weekday
+    async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule]:
+        day = day or datetime.now(tz=ZoneInfo("UTC")).date()
 
-        if weekday == Weekday.SUNDAY:
+        if day.weekday() == self._SUNDAY:
             return []
 
-        schedule_soup = await self._fetch_schedule_soup(group_name)
-        today_schedule = self._get_today_schedule_table(schedule_soup, weekday)
-        is_zn = self._is_zn(schedule_soup)
+        soup = await self._fetch_all_schedule_soup()
+        isc_url = self._parse_isc_url(soup, group_name)
+        isc_file = await self._fetch_isc(isc_url)
 
-        rows: list[Tag] = today_schedule.find_all("tr")[2:]
-        rows = self._filter_empty_rows(rows)
+        calendar: Calendar = Calendar.from_ical(isc_file)
 
-        return self._parse_schedule(rows, is_zn)
+    def _parse_isc_url(self, page: BeautifulSoup, group_name: str) -> str:
+        group_tags = self._parse_group_tags_soup(page)
 
-    def _parse_row(self, row: Tag, is_zn: bool) -> Schedule | None:
-        cols = row.find_all("td")
-        time_duration = cols[0].text
-
-        if is_zn and len(cols) == 3:
-            if cols[2].span is None:
-                return None
-            lesson_name = cols[2].span.text
-        elif not is_zn and len(cols) == 3:
-            if cols[1].span is None:
-                return None
-            lesson_name = cols[1].span.text
-        else:
-            lesson_name = cols[1].span.text
-
-        start_time = time.fromisoformat(time_duration.split("-")[0].strip())
-
-        return Schedule(lesson_name, start_time)
-
-    def _parse_schedule(self, rows: list[Tag], is_zn: bool) -> list[Schedule]:
-        res = []
-        for row in rows:
-            row_schedule = self._parse_row(row, is_zn)
-            if row_schedule is not None:
-                res.append(row_schedule)
-
-        return res
-
-    def _is_zn(self, schedule_soup: BeautifulSoup) -> bool:
-        page_header = schedule_soup.find(class_="page-header")
-        tag_with_zn_value = page_header.h4.i  # type: ignore
-        *_, zn_value = tag_with_zn_value.text.split()  # type: ignore
-        return zn_value == "знаменатель"
-
-    def _filter_empty_rows(self, schedule_table: list[Tag]) -> list[Tag]:
-        result = []
-        for row in schedule_table:
-            cols = row.find_all("td")
-            is_empty = True
-
-            for i in range(1, len(cols)):
-                if cols[i].text.strip():
-                    is_empty = False
-
-            if not is_empty:
-                result.append(row)
-
-        return result
+        group_schedule_url = ""
+        for tag in group_tags:
+            if tag.text.strip() == group_name:
+                group_schedule_url = tag.attrs["href"]
+        return  f"https://lks.bmstu.ru{group_schedule_url}.ics"
 
     @aiohttp_retry(attempts=3)
     async def _fetch_all_schedule_soup(self) -> BeautifulSoup:
@@ -98,25 +57,11 @@ class BmstuScheduleApi(ScheduleAPI):
         return BeautifulSoup(response_payload, "html.parser")
 
     @aiohttp_retry(attempts=3)
-    async def _fetch_schedule_soup(self, group_name: str) -> BeautifulSoup:
-        soup = await self._fetch_all_schedule_soup()
-        group_tags = self._parse_group_tags_soup(soup)
-
-        group_schedule_url = ""
-        for tag in group_tags:
-            if tag.text.strip() == group_name:
-                group_schedule_url = tag.attrs["href"]
-
-        url = f"https://lks.bmstu.ru{group_schedule_url}"
-        async with ClientSession() as session, session.get(url) as response:
-            response_payload = await response.text()
-
-        return BeautifulSoup(response_payload, "html.parser")
+    async def _fetch_isc(self, url: str) -> str:
+        async with ClientSession() as client, client.get(url) as response:
+            payload: str = await response.text()
+        return payload
 
     def _parse_group_tags_soup(self, soup: BeautifulSoup) -> list[Tag]:
         group_pat = re.compile("/schedule/*")
         return soup.find_all(href=group_pat)
-
-    def _get_today_schedule_table(self, schedule_soup: BeautifulSoup, weekday: Weekday) -> Tag:
-        day_schedule = schedule_soup.find_all(class_="col-lg-6 d-none d-md-block")[weekday]
-        return day_schedule.table.tbody
