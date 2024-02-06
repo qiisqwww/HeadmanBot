@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import date
 
 from src.modules.student_management.domain import Role, Student
 
@@ -44,4 +45,8 @@ class StudentRepository(ABC):
 
     @abstractmethod
     async def update_surname_by_id(self, student_id: int, new_surname: str) -> None:
+        ...
+
+    @abstractmethod
+    async def update_birthdate_by_id(self, student_id: int, new_date: date | None) -> None:
         ...

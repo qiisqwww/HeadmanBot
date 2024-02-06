@@ -1,4 +1,5 @@
 from typing import final
+from datetime import date
 
 from injector import inject
 
@@ -22,7 +23,7 @@ class EditProfileFieldByNameCommand(UseCase):
     async def execute(
             self,
             field_type: ProfileField,
-            new_data: str,
+            new_data: str | None | date,
             student_id: int
     ) -> None:
         if field_type == ProfileField.NAME:
@@ -34,4 +35,9 @@ class EditProfileFieldByNameCommand(UseCase):
             await self._repository.update_surname_by_id(
                 student_id=student_id,
                 new_surname=new_data
+            )
+        if field_type == ProfileField.BIRTHDATE:
+            await self._repository.update_birthdate_by_id(
+                student_id=student_id,
+                new_date=new_data
             )

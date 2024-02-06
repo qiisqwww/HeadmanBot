@@ -1,4 +1,5 @@
 from typing import final
+from datetime import date
 
 from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.student_management.application.repositories import (
@@ -88,3 +89,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def update_surname_by_id(self, student_id: int, new_surname: str) -> None:
         query = "UPDATE student_management.students SET surname = $1 WHERE id = $2"
         await self._con.execute(query, new_surname, student_id)
+
+    async def update_birthdate_by_id(self, student_id: int, new_date: date | None) -> None:
+        query = "UPDATE student_management.students SET birthdate = $1 WHERE id = $2"
+        await self._con.execute(query, new_date, student_id)

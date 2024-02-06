@@ -1,9 +1,13 @@
 from aiogram.utils.keyboard import InlineKeyboardMarkup, InlineKeyboardBuilder
 
 from src.bot.profile.callback_data import (
-    ProfileUpdateChoiceCallbackData,
+    ProfileUpdateNameCallbackData,
+    ProfileUpdateSurnameCallbackData,
+    ProfileUpdateBirthdateCallbackData,
     GetBackToProfileCallbackData,
-    AskUpdatedFieldValidityCallbackData,
+    AskUpdatedNameValidityCallbackData,
+    AskUpdatedSurnameValidityCallbackData,
+    AskUpdatedBirthdateValidityCallbackData,
     ProfileUpdateCallbackData
 )
 from src.modules.student_management.domain.enums import ProfileField
@@ -21,11 +25,15 @@ def profile_update_choice_buttons() -> InlineKeyboardMarkup:
 
     builder.button(
         text="Редактировать имя",
-        callback_data=ProfileUpdateChoiceCallbackData(updating_data=ProfileField.NAME),
+        callback_data=ProfileUpdateNameCallbackData(),
     )
     builder.button(
         text="Редактировать фамилию",
-        callback_data=ProfileUpdateChoiceCallbackData(updating_data=ProfileField.SURNAME),
+        callback_data=ProfileUpdateSurnameCallbackData(),
+    )
+    builder.button(
+        text="Редактировать дату рождения",
+        callback_data=ProfileUpdateBirthdateCallbackData()
     )
     builder.button(text="Вернуться в профиль", callback_data=GetBackToProfileCallbackData())
     builder.adjust(1)
@@ -55,13 +63,16 @@ def is_field_correct_buttons(field: ProfileField) -> InlineKeyboardMarkup:
 
     builder.button(
         text="Да",
-        callback_data=AskUpdatedFieldValidityCallbackData(is_field_correct=True, field_type=field),
+        callback_data=AskUpdatedNameValidityCallbackData(is_field_correct=True) if field == ProfileField.NAME
+        else AskUpdatedSurnameValidityCallbackData(is_field_correct=True) if field == ProfileField.SURNAME
+        else AskUpdatedBirthdateValidityCallbackData(is_field_correct=True),
     )
     builder.button(
         text="Нет",
-        callback_data=AskUpdatedFieldValidityCallbackData(is_field_correct=False, field_type=field),
+        callback_data=AskUpdatedNameValidityCallbackData(is_field_correct=False) if field == ProfileField.NAME
+        else AskUpdatedSurnameValidityCallbackData(is_field_correct=False) if field == ProfileField.SURNAME
+        else AskUpdatedBirthdateValidityCallbackData(is_field_correct=False)
     )
     builder.adjust(2)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
-

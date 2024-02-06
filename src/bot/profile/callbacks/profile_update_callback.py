@@ -3,17 +3,20 @@ from aiogram.types import CallbackQuery
 from src.bot.profile.callback_data import (
     GetBackToProfileCallbackData,
     ProfileUpdateCallbackData,
-    ProfileUpdateChoiceCallbackData,
+    ProfileUpdateNameCallbackData,
+    ProfileUpdateSurnameCallbackData,
+    ProfileUpdateBirthdateCallbackData
 )
 from src.bot.common.contextes import ProfileUpdateContext
 from src.modules.student_management.domain.models import Student
-from src.modules.student_management.domain.enums import ProfileField, Role
+from src.modules.student_management.domain.enums import Role
 from src.modules.student_management.application.queries import GetEduProfileInfoQuery
 from src.bot.profile.profile_update_states import ProfileUpdateStates
 from src.bot.common import RootRouter, Router
 from src.bot.profile.resources.templates import (
     ASK_NEW_NAME_TEMPLATE,
     ASK_NEW_SURNAME_TEMPLATE,
+    ASK_NEW_BIRTHDATE_TEMPLATE,
     WHAT_DO_YOU_WANNA_EDIT_TEMPLATE,
     profile_info,
 )
@@ -65,19 +68,37 @@ async def back_to_profile(
     )
 
 
-@profile_menu_router.callback_query(ProfileUpdateChoiceCallbackData.filter())
-async def profile_update_choice(
+@profile_menu_router.callback_query(ProfileUpdateNameCallbackData.filter())
+async def profile_update_name(
     callback: CallbackQuery,
-    callback_data: ProfileUpdateChoiceCallbackData,
     state: ProfileUpdateContext,
 ) -> None:
     if callback.message is None:
         return
 
-    if callback_data.updating_data == ProfileField.NAME:
-        await callback.message.edit_text(ASK_NEW_NAME_TEMPLATE, reply_markup=get_back_button())
-        await state.set_state(ProfileUpdateStates.waiting_new_name)
+    await callback.message.edit_text(ASK_NEW_NAME_TEMPLATE, reply_markup=get_back_button())
+    await state.set_state(ProfileUpdateStates.waiting_new_name)
 
-    if callback_data.updating_data == ProfileField.SURNAME:
-        await callback.message.edit_text(ASK_NEW_SURNAME_TEMPLATE, reply_markup=get_back_button())
-        await state.set_state(ProfileUpdateStates.waiting_new_surname)
+
+@profile_menu_router.callback_query(ProfileUpdateSurnameCallbackData.filter())
+async def profile_update_surname(
+    callback: CallbackQuery,
+    state: ProfileUpdateContext,
+) -> None:
+    if callback.message is None:
+        return
+
+    await callback.message.edit_text(ASK_NEW_SURNAME_TEMPLATE, reply_markup=get_back_button())
+    await state.set_state(ProfileUpdateStates.waiting_new_surname)
+
+
+@profile_menu_router.callback_query(ProfileUpdateBirthdateCallbackData.filter())
+async def profile_update_surname(
+    callback: CallbackQuery,
+    state: ProfileUpdateContext,
+) -> None:
+    if callback.message is None:
+        return
+
+    await callback.message.edit_text(ASK_NEW_BIRTHDATE_TEMPLATE, reply_markup=get_back_button())
+    await state.set_state(ProfileUpdateStates.waiting_new_birthdate)
