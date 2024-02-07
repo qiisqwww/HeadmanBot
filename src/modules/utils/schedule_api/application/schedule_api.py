@@ -3,6 +3,8 @@ from datetime import date, tzinfo
 from typing import Final, NoReturn
 from zoneinfo import ZoneInfo
 
+from aiohttp import ClientTimeout
+
 from src.modules.common.domain import UniversityAlias
 from src.modules.utils.schedule_api.domain import Schedule
 
@@ -13,6 +15,7 @@ __all__ = [
 
 class ScheduleAPI(ABC):
     _RESULT_TIMEZONE: Final[tzinfo] = ZoneInfo("UTC")
+    _REQUEST_TIMEOUT: Final[ClientTimeout] = ClientTimeout(10.0)
 
     @abstractmethod
     def __init__(self, university_alias: UniversityAlias) -> None:

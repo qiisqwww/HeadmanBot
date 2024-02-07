@@ -62,13 +62,13 @@ class BmstuScheduleApi(ScheduleAPI):
 
     @aiohttp_retry(attempts=3)
     async def _fetch_all_schedule_soup(self) -> BeautifulSoup:
-        async with ClientSession() as session, session.get(self._ALL_SCHEDULE_URL) as response:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session, session.get(self._ALL_SCHEDULE_URL) as response:
             response_payload = await response.text()
         return BeautifulSoup(response_payload, "html.parser")
 
     @aiohttp_retry(attempts=3)
     async def _fetch_isc(self, url: str) -> str:
-        async with ClientSession() as client, client.get(url) as response:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(url) as response:
             payload: str = await response.text()
         return payload
 

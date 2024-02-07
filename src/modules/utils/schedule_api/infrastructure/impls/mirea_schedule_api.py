@@ -67,12 +67,12 @@ class MireaScheduleApi(ScheduleAPI):
 
     @aiohttp_retry(attempts=3)
     async def _fetch_isc_link_location(self, group_name: str) -> bytes:
-        async with ClientSession() as client, client.get(self._FIND_URL.format(group_name=group_name)) as response:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(self._FIND_URL.format(group_name=group_name)) as response:
             payload: bytes =  await response.read()
         return payload
 
     @aiohttp_retry(attempts=3)
     async def _fetch_isc(self, url: str) -> str:
-        async with ClientSession() as client, client.get(url) as response:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(url) as response:
             payload: str = await response.text()
         return payload
