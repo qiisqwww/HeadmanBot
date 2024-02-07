@@ -88,7 +88,3 @@ class SendingJob(AsyncJob):
                     headman_telegram_id,
                     student_was_not_polled_warning_template(student_info)
                 )
-                logger.error(
-                    f"Failed to send message to user {student_info.surname} {student_info.surname} "
-                    f"id={student_info.telegram_id} because of\n{e}",
-                )
