@@ -9,3 +9,4 @@ __all__ = [
 class ProfileField(StrEnum):
     SURNAME = "surname"
     NAME = "name"
+    BIRTHDATE = "birthdate"

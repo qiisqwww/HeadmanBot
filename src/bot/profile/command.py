@@ -6,6 +6,7 @@ from src.modules.student_management.application.queries import GetEduProfileInfo
 from src.modules.student_management.domain import Student
 
 from .resources.templates import profile_info
+from .resources.inline_buttons import profile_buttons
 
 __all__ = [
     "include_profile_command_router",
@@ -31,5 +32,5 @@ async def profile_command(
 
     if edu_info is None:
         raise RuntimeError("Failed to fetch edu_info.")
-    # await message.answer(text=profile_info(student.surname, student.name, student.role), reply_markup=profile_buttons())
-    await message.answer(text=profile_info(student, edu_info))
+
+    await message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
