@@ -3,8 +3,10 @@ from datetime import date, datetime
 from typing import Final, final
 from zoneinfo import ZoneInfo
 
+import recurring_ical_events
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup, Tag
+from icalendar import Calendar, Event
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule
@@ -17,7 +19,7 @@ __all__ = [
 
 @final
 class BmstuScheduleApi(ScheduleAPI):
-    _ALL_SCHEDULE_URL: str = "https://lks.bmstu.ru/schedule/list"
+    _ALL_SCHEDULE_URL: Final[str] = "https://lks.bmstu.ru/schedule/list"
     _SUNDAY: Final[int] = 6
 
     def __init__(self) -> None:
@@ -40,6 +42,14 @@ class BmstuScheduleApi(ScheduleAPI):
         isc_file = await self._fetch_isc(isc_url)
 
         calendar: Calendar = Calendar.from_ical(isc_file)
+        events: list[Event] = recurring_ical_events.of(calendar).at(day) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+        return [
+            Schedule(
+                lesson_name=str(event["SUMMARY"]), # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+                start_time=event["DTSTART"].dt.timetz(), # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+            )
+            for event in events
+        ]
 
     def _parse_isc_url(self, page: BeautifulSoup, group_name: str) -> str:
         group_tags = self._parse_group_tags_soup(page)

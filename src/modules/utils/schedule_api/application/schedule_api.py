@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from datetime import date
-from typing import NoReturn
+from datetime import date, tzinfo
+from typing import Final, NoReturn
+from zoneinfo import ZoneInfo
 
 from src.modules.common.domain import UniversityAlias
 from src.modules.utils.schedule_api.domain import Schedule
@@ -11,6 +12,8 @@ __all__ = [
 
 
 class ScheduleAPI(ABC):
+    _RESULT_TIMEZONE: Final[tzinfo] = ZoneInfo("UTC")
+
     @abstractmethod
     def __init__(self, university_alias: UniversityAlias) -> None:
         ...
