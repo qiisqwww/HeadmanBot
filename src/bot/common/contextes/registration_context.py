@@ -42,11 +42,18 @@ class RegistrationContext:
         await self._context.update_data(group_name=group_name)
 
     @property
-    async def new_data(self) -> str:
-        return (await self._context.get_data())["new_data"]
+    async def surname(self) -> str:
+        return (await self._context.get_data())["surname"]
 
-    async def set_data(self, new_data: str) -> None:
-        await self._context.update_data(new_data=new_data)
+    async def set_surname(self, surname: str) -> None:
+        await self._context.update_data(surname=surname)
+
+    @property
+    async def name(self) -> str:
+        return (await self._context.get_data())["name"]
+
+    async def set_name(self, name: str) -> None:
+        await self._context.update_data(name=name)
 
     @property
     async def university_alias(self) -> UniversityAlias:
