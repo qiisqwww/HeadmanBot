@@ -12,3 +12,4 @@ class University:
     id: int
     name: str
     alias: UniversityAlias
+    timezone: str

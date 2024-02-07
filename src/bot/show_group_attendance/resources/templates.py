@@ -1,5 +1,6 @@
 from jinja2 import Template
 
+from src.bot.common.convert_time import convert_time_from_utc
 from src.modules.attendance.domain import (
     Lesson,
     LessonAttendanceForGroup,
@@ -37,9 +38,10 @@ NO_LESSONS_TODAY_TEMPLATE = """
 CHOOSE_PAIR_TEMPLATE = """
 Выберите пару из списка:"""
 
-def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup) -> str:
+def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup, timezone: str) -> str:
+    start_time = convert_time_from_utc(choosen_lesson.start_time, timezone)
     template: str = Template(
-        """{{lesson.name}} {{lesson.start_time.strftime('%H:%M')}}
+        """{{lesson.name}} {{start_time.strftime('%H:%M')}}
 
 Не отметились:
 {% for student in group_attendance.attendance['absent'] -%}
@@ -47,21 +49,18 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
         <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
     {%- endif %}
 {%- endfor %}
-
 Придут:
 {% for student in group_attendance.attendance['present'] -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
 {% endfor %}
-
 Не придут:
 {% for student in group_attendance.attendance['absent'] -%}
     {% if student.is_checked_in_today -%}
         <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
     {%- endif %}
 {%- endfor %}
-
 Что-то еще?""",
         autoescape=True,
-    ).render(lesson=choosen_lesson, group_attendance=group_attendance)
+    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson)
 
     return template

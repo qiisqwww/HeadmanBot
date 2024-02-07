@@ -1,9 +1,10 @@
 from collections.abc import Awaitable, Callable
-from typing import Any, TypeAlias
+from typing import TYPE_CHECKING, Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 
+from src.modules.edu_info.application.queries import FetchUniTimezonByGroupIdQuery
 from src.modules.student_management.domain import Role
 
 from .templates import YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE
@@ -14,6 +15,9 @@ HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 __all__ = [
     "PermissionManagerMiddleware",
 ]
+
+if TYPE_CHECKING:
+    from injector import Injector
 
 
 class PermissionManagerMiddleware(BaseMiddleware):
@@ -29,5 +33,11 @@ class PermissionManagerMiddleware(BaseMiddleware):
         if student.role < self._min_role:
             await event.answer(YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE)
             return None
+
+        container: Injector = data["container"]
+        fetch_timezone_query = container.get(FetchUniTimezonByGroupIdQuery)
+
+        timezone = await fetch_timezone_query.execute(student.group_id)
+        data["timezone"] = timezone
 
         return await handler(event, data)

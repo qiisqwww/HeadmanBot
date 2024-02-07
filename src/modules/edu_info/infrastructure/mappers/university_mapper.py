@@ -17,4 +17,5 @@ class UniversityMapper:
             id=data["id"],
             name=data["name"],
             alias=UniversityAlias(data["alias"]),
+            timezone=data["timezone"],
         )

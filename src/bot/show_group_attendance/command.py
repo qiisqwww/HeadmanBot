@@ -32,6 +32,7 @@ async def get_attendance_command(
     message: Message,
     student: Student,
     get_today_schedule_query: GetTodayScheduleQuery,
+    timezone: str,
 ) -> None:
     schedule = await get_today_schedule_query.execute(student.group_id)
 
@@ -40,4 +41,4 @@ async def get_attendance_command(
         return
 
     await message.answer(CHOOSE_PAIR_TEMPLATE, reply_markup=main_menu(student.role))
-    await message.answer(WHICH_PAIR_TEMPLATE, reply_markup=choose_lesson_buttons(schedule))
+    await message.answer(WHICH_PAIR_TEMPLATE, reply_markup=choose_lesson_buttons(schedule, timezone))

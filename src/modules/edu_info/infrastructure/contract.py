@@ -39,7 +39,7 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
 
     async def get_all_universities_info(self) -> list[dict[str, Any]]:
         universities = await self._university_repository.all()
-        return [asdict(uni) for uni in universities]
+        return [{"id": uni.id, "name": uni.name, "alias": uni.alias} for uni in universities]
 
     async def get_group_info_by_group_id(self, group_id: int) -> dict[str, Any] | None:
         group = await self._group_repository.find_by_id(group_id)
@@ -74,8 +74,8 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
         return asdict(group)
 
     async def get_university_info_by_alias(self, alias: UniversityAlias) -> dict[str, Any]:
-        university = await self._university_repository.get_by_alias(alias)
-        return asdict(university)
+        uni = await self._university_repository.get_by_alias(alias)
+        return {"id": uni.id, "name": uni.name, "alias": uni.alias}
 
     async def get_group_name_and_uni_name(self, group_id: int) -> tuple[str, str] | None:
         return await self._edu_info_repository.get_group_and_uni_name_by_group_id(group_id)

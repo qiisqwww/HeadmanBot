@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from src.bot.common.convert_time import convert_time_from_utc
 from src.bot.poll_attendance.callback_data import UpdateAllAttendancesCallbackData, UpdateAttendanceCallbackData
 from src.modules.attendance.domain import Attendance, VisitStatus
 
@@ -11,14 +12,15 @@ __all__ = [
 ]
 
 
-def update_attendance_buttons(is_checked_in_today: bool, attendances: Iterable[Attendance]) -> InlineKeyboardMarkup:
+def update_attendance_buttons(is_checked_in_today: bool, attendances: Iterable[Attendance], timezone: str) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     for attendance in attendances:
+        start_time = convert_time_from_utc(attendance.lesson.start_time, timezone)
         if is_checked_in_today:
             if attendance.status == VisitStatus.ABSENT:
                 builder.button(
-                    text=f"❌ Не посещу {attendance.lesson.start_time.strftime('%H:%M')} {attendance.lesson.name}",
+                    text=f"❌ Не посещу {start_time:%H:%M} {attendance.lesson.name}",
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.PRESENT,
@@ -26,7 +28,7 @@ def update_attendance_buttons(is_checked_in_today: bool, attendances: Iterable[A
                 )
             else:
                 builder.button(
-                    text=f"✅ Посещу {attendance.lesson.start_time.strftime('%H:%M')} {attendance.lesson.name}",
+                    text=f"✅ Посещу {start_time:%H:%M} {attendance.lesson.name}",
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.ABSENT,
@@ -34,7 +36,7 @@ def update_attendance_buttons(is_checked_in_today: bool, attendances: Iterable[A
                 )
         else:
             builder.button(
-                text=f"🤷 Неизвестно {attendance.lesson.start_time.strftime('%H:%M')} {attendance.lesson.name}",
+                text=f"🤷 Неизвестно {start_time.strftime('%H:%M')} {attendance.lesson.name}",
                 callback_data=UpdateAttendanceCallbackData(attendance_id=attendance.id, new_status=VisitStatus.PRESENT),
             )
 

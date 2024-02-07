@@ -1,8 +1,7 @@
 from typing import Final
 
 from src.modules.common.domain import UniversityAlias
-
-from ..repositories import UniversityRepository
+from src.modules.edu_info.application.repositories import UniversityRepository
 
 __all__ = [
     "InsertUniversitiesCommand",
@@ -11,9 +10,9 @@ __all__ = [
 
 class InsertUniversitiesCommand:
     _repository: Final[UniversityRepository]
-    _UNIVERSITIES_LIST: tuple[tuple[str, UniversityAlias], ...] = (
-        ("РТУ МИРЭА", UniversityAlias.MIREA),
-        ("МГТУ им. Н.Э. Баумана", UniversityAlias.BMSTU),
+    _UNIVERSITIES_LIST: tuple[tuple[str, UniversityAlias, str], ...] = (
+        ("РТУ МИРЭА", UniversityAlias.MIREA, "Europe/Moscow"),
+        ("МГТУ им. Н.Э. Баумана", UniversityAlias.BMSTU, "Europe/Moscow"),
     )
 
     def __init__(self, repository: UniversityRepository) -> None:
