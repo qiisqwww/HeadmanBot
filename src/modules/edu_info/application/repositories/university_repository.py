@@ -18,10 +18,6 @@ class UniversityRepository(ABC):
         ...
 
     @abstractmethod
-    async def create(self, name: str, alias: UniversityAlias, timezone: str) -> None:
-        ...
-
-    @abstractmethod
     async def find_by_name(self, name: str) -> None | University:
         ...
 

@@ -5,6 +5,7 @@ from src.modules.attendance.domain import (
     Lesson,
     LessonAttendanceForGroup,
 )
+from src.modules.attendance.domain.enums.visit_status import VisitStatus
 
 __all__ = [
     "ALL_PAIRS_TEMPLATE",
@@ -45,23 +46,24 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
         """{{lesson.name}} {{start_time.strftime('%H:%M')}}
 
 Не отметились:
-{% for student in group_attendance.attendance['absent'] -%}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
     {% if not student.is_checked_in_today -%}
         <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
     {%- endif %}
 {%- endfor %}
 Придут:
-{% for student in group_attendance.attendance['present'] -%}
+{% for student in group_attendance.attendance[VisitStatus.PRESENT] -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
 {% endfor %}
 Не придут:
-{% for student in group_attendance.attendance['absent'] -%}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
     {% if student.is_checked_in_today -%}
         <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
     {%- endif %}
 {%- endfor %}
+
 Что-то еще?""",
         autoescape=True,
-    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson)
+    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson, VisitStatus=VisitStatus)
 
     return template

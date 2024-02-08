@@ -1,15 +1,3 @@
-from loguru import logger
-
-from src.modules.edu_info.application.commands import InsertUniversitiesCommand
-from src.modules.edu_info.infrastructure.repositories import UniversityRepositoryImpl
-
-from .postgres import get_postgres_pool
-
-__all__ = [
-    "init_database",
-]
-
-INIT_DATABASE_SQL = """
 /* CREATE SCHEMAS START */
 
 CREATE SCHEMA IF NOT EXISTS edu_info ;
@@ -20,29 +8,9 @@ CREATE SCHEMA IF NOT EXISTS student_management;
 
 /* CREATE TYPES START */
 
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_status') THEN
-        CREATE TYPE visit_status AS ENUM ('present', 'absent');
-    END IF;
-END
-$$;
-
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role') THEN
-        CREATE TYPE role AS ENUM ('student', 'vice headman', 'headman', 'admin');
-    END IF;
-END
-$$;
-
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'university_alias') THEN
-        CREATE TYPE university_alias AS ENUM ('MIREA', 'BMSTU');
-    END IF;
-END
-$$;
+CREATE TYPE visit_status AS ENUM ('PRESENT', 'ABSENT');
+CREATE TYPE role AS ENUM ('STUDENT', 'VICE HEADMAN', 'HEADMAN', 'ADMIN');
+CREATE TYPE university_alias AS ENUM ('MIREA', 'BMSTU');
 
 /* CREATE TYPES END */
 
@@ -88,14 +56,10 @@ CREATE TABLE IF NOT EXISTS attendance.attendances (
 );
 
 /* CREATE TABLES END */
-"""
 
-async def init_database() -> None:
-    logger.info("Start initalizing database.")
-    pool = await get_postgres_pool()
+/* INSERT CONSTANT DATA START */
 
-    async with pool.acquire() as con:
-        await con.execute(INIT_DATABASE_SQL)
-        insert_universities_command = InsertUniversitiesCommand(UniversityRepositoryImpl(con))
-        await insert_universities_command.execute()
-    logger.info("Finish initalizing database.")
+INSERT INTO edu_info.universities (name, alias, timezone) VALUES ('РТУ МИРЭА', 'MIREA', 'Europe/Moscow');
+INSERT INTO edu_info.universities (name, alias, timezone) VALUES ('МГТУ им. Н.Э. Баумана', 'BMSTU', 'Europe/Moscow');
+
+/* INSERT CONSTANT DATA END */
