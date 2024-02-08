@@ -1,35 +1,51 @@
 from aiogram.types import CallbackQuery
 
-from src.dto.callback_data import AskUpdatedFieldValidityCallbackData
-from src.dto.contexts import ProfileUpdateContext
-from src.dto.models import Student
-from src.enums import ProfileField, Role
-from src.handlers.states import ProfileUpdateStates
-from src.kernel import Router
-from src.resources import (
+from src.bot.profile.callback_data import (
+    AskUpdatedNameValidityCallbackData,
+    AskUpdatedSurnameValidityCallbackData,
+    AskUpdatedBirthdateValidityCallbackData
+)
+from src.bot.common.contextes import ProfileUpdateContext
+from src.modules.student_management.domain.models import Student
+from src.modules.student_management.domain.enums import ProfileField, Role
+from src.bot.profile.profile_update_states import ProfileUpdateStates
+from src.bot.common import RootRouter, Router
+from src.modules.student_management.application.commands import EditProfileFieldByNameCommand
+from src.modules.student_management.application.queries import GetEduProfileInfoQuery
+from src.bot.profile.resources.templates import (
     ASK_NEW_NAME_TEMPLATE,
     ASK_NEW_SURNAME_TEMPLATE,
-    inline_void_button,
-    main_menu,
-    your_choice_is_template,
+    ASK_NEW_BIRTHDATE_TEMPLATE,
+    profile_info
 )
-from src.services import StudentService
+from src.bot.profile.resources.inline_buttons import profile_buttons
+from src.bot.common.resources.main_menu import main_menu
+from src.bot.common.resources.void_inline_buttons import void_inline_buttons
+from src.bot.common.resources.templates import your_choice_is_template
 
 __all__ = [
-    "ask_updated_fullname_validity_router",
+    "include_ask_updated_field_validity_router"
 ]
 
 
-ask_updated_fullname_validity_router = Router(must_be_registered=True, minimum_role=Role.STUDENT)
+ask_updated_field_validity_router = Router(
+    must_be_registered=True,
+    minimum_role=Role.STUDENT
+)
 
 
-@ask_updated_fullname_validity_router.callback_query(AskUpdatedFieldValidityCallbackData.filter())
-async def ask_new_fullname_validity_callback(
+def include_ask_updated_field_validity_router(root_router: RootRouter) -> None:
+    root_router.include_router(ask_updated_field_validity_router)
+
+
+@ask_updated_field_validity_router.callback_query(AskUpdatedNameValidityCallbackData.filter())
+async def ask_new_name_validity_callback(
     callback: CallbackQuery,
-    callback_data: AskUpdatedFieldValidityCallbackData,
+    callback_data: AskUpdatedNameValidityCallbackData,
     state: ProfileUpdateContext,
-    student_service: StudentService,
     student: Student,
+    get_edu_profile_info_query: GetEduProfileInfoQuery,
+    edit_profile_field_by_name_command: EditProfileFieldByNameCommand
 ) -> None:
     if callback.message is None:
         return
@@ -39,24 +55,98 @@ async def ask_new_fullname_validity_callback(
 
     await callback.message.edit_text(
         your_choice_is_template(callback_data.is_field_correct),
-        reply_markup=inline_void_button(),
+        reply_markup=void_inline_buttons(),
     )
 
     if not callback_data.is_field_correct:
-        if callback_data.field_type == ProfileField.name:
-            await callback.message.answer(text=ASK_NEW_NAME_TEMPLATE, reply_markup=main_menu(student.role))
-            await state.set_state(ProfileUpdateStates.waiting_new_name)
-            return
-        else:
-            await callback.message.answer(text=ASK_NEW_SURNAME_TEMPLATE, reply_markup=main_menu(student.role))
-            await state.set_state(ProfileUpdateStates.waiting_new_surname)
-            return
+        await callback.message.answer(
+            text=ASK_NEW_NAME_TEMPLATE,
+            reply_markup=main_menu(student.role)
+        )
+        await state.set_state(ProfileUpdateStates.waiting_new_name)
+        return
 
-    if callback_data.field_type == ProfileField.name:
-        new_name = await state.name
-        await student_service.update_name_by_id(new_name, student.telegram_id)
-    else:
-        new_surname = await state.surname
-        await student_service.update_surname_by_id(new_surname, student.telegram_id)
+    new_data = await state.new_data
+    await edit_profile_field_by_name_command.execute(ProfileField.NAME, new_data, student.id)
+
+    if callback_data.is_field_correct:
+        edu_info = await get_edu_profile_info_query.execute(student.group_id)
+        await callback.message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
+
+    await state.clear()
+
+
+@ask_updated_field_validity_router.callback_query(AskUpdatedSurnameValidityCallbackData.filter())
+async def ask_new_surname_validity_callback(
+    callback: CallbackQuery,
+    callback_data: AskUpdatedSurnameValidityCallbackData,
+    state: ProfileUpdateContext,
+    student: Student,
+    get_edu_profile_info_query: GetEduProfileInfoQuery,
+    edit_profile_field_by_name_command: EditProfileFieldByNameCommand
+) -> None:
+    if callback.message is None:
+        return
+
+    if callback.message.from_user is None:
+        return
+
+    await callback.message.edit_text(
+        your_choice_is_template(callback_data.is_field_correct),
+        reply_markup=void_inline_buttons(),
+    )
+
+    if not callback_data.is_field_correct:
+        await callback.message.answer(
+            text=ASK_NEW_SURNAME_TEMPLATE,
+            reply_markup=main_menu(student.role)
+        )
+        await state.set_state(ProfileUpdateStates.waiting_new_surname)
+        return
+
+    new_data = await state.new_data
+    await edit_profile_field_by_name_command.execute(ProfileField.SURNAME, new_data, student.id)
+
+    if callback_data.is_field_correct:
+        edu_info = await get_edu_profile_info_query.execute(student.group_id)
+        await callback.message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
+
+    await state.clear()
+
+
+@ask_updated_field_validity_router.callback_query(AskUpdatedBirthdateValidityCallbackData.filter())
+async def ask_new_birthdate_validity_callback(
+        callback: CallbackQuery,
+        callback_data: AskUpdatedBirthdateValidityCallbackData,
+        state: ProfileUpdateContext,
+        student: Student,
+        get_edu_profile_info_query: GetEduProfileInfoQuery,
+        edit_profile_field_by_name_command: EditProfileFieldByNameCommand
+) -> None:
+    if callback.message is None:
+        return
+
+    if callback.message.from_user is None:
+        return
+
+    await callback.message.edit_text(
+        your_choice_is_template(callback_data.is_field_correct),
+        reply_markup=void_inline_buttons(),
+    )
+
+    if not callback_data.is_field_correct:
+        await callback.message.answer(
+            text=ASK_NEW_BIRTHDATE_TEMPLATE,
+            reply_markup=main_menu(student.role)
+        )
+        await state.set_state(ProfileUpdateStates.waiting_new_birthdate)
+        return
+
+    new_data = await state.new_data
+    await edit_profile_field_by_name_command.execute(ProfileField.BIRTHDATE, new_data, student.id)
+
+    if callback_data.is_field_correct:
+        edu_info = await get_edu_profile_info_query.execute(student.group_id)
+        await callback.message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
 
     await state.clear()

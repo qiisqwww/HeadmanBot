@@ -38,6 +38,7 @@ NO_LESSONS_TODAY_TEMPLATE = """
 CHOOSE_PAIR_TEMPLATE = """
 Выберите пару из списка:"""
 
+
 def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup, timezone: str) -> str:
     start_time = convert_time_from_utc(choosen_lesson.start_time, timezone)
     template: str = Template(

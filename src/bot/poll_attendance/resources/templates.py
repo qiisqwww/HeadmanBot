@@ -1,17 +1,20 @@
 from jinja2 import Template
 
+
 from src.bot.common.convert_time import convert_time_from_utc
-from src.modules.attendance.domain import Attendance, VisitStatus
+from src.modules.attendance.domain import Attendance, VisitStatus, StudentInfo
+
 
 __all__ = [
     "POLL_TEMPLATE",
     "your_all_choice_is_template",
     "your_choice_is_template",
+    "student_was_not_polled_warning_template"
 ]
 
 
-
 POLL_TEMPLATE = "На какие сегодняшие пары ты придешь?"
+
 
 def your_all_choice_is_template(status: VisitStatus) -> str:
     match status:
@@ -28,5 +31,15 @@ def your_choice_is_template(attendance: Attendance, timezone: str) -> str:
         "<b>{{attendance.lesson.name}} {{start_time.strftime('%H:%M')}}</b>",
         autoescape=True,
     ).render(attendance=attendance, start_time=start_time)
+
+    return template
+
+
+def student_was_not_polled_warning_template(student_info: StudentInfo) -> str:
+    template: str = Template(
+        'Студент <a href="tg://user?id={{ student_info.telegram_id }}">{{ student_info.surname }} '
+        '{{ student_info.name }}</a> не получил рассылку, так как заблокировал бота.',
+        autoescape=True
+    ).render(student_info=student_info)
 
     return template

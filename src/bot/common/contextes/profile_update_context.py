@@ -1,4 +1,5 @@
 from typing import Any
+from datetime import date
 
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
@@ -25,20 +26,12 @@ class ProfileUpdateContext:
         await self._context.update_data(telegram_id=telegram_id)
 
     @property
-    async def surname(self) -> str:
-        surname: str = (await self._context.get_data())["surname"]
-        return surname
+    async def new_data(self) -> str:
+        new_data: str = (await self._context.get_data())["new_data"]
+        return new_data
 
-    async def set_surname(self, surname: str) -> None:
-        await self._context.update_data(surname=surname)
-
-    @property
-    async def name(self) -> str:
-        name: str = (await self._context.get_data())["name"]
-        return name
-
-    async def set_name(self, name: str) -> None:
-        await self._context.update_data(name=name)
+    async def set_new_data(self, new_data: str | None | date) -> None:
+        await self._context.update_data(new_data=new_data)
 
     async def set_state(self, state: StateType = None) -> None:
         await self._context.set_state(state)
@@ -48,5 +41,5 @@ class ProfileUpdateContext:
         await self._context.set_data({})
 
     async def get_data(self) -> dict[str, Any]:
-        data: dict[str, Any] =  await self._context.get_data()
+        data: dict[str, Any] = await self._context.get_data()
         return data

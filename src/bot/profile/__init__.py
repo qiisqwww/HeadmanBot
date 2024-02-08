@@ -1,5 +1,5 @@
-from .command import include_profile_command_router
+from .profile_router import include_profile_router
 
 __all__ = [
-    "include_profile_command_router",
+    "include_profile_router"
 ]

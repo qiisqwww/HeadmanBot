@@ -118,7 +118,8 @@ def student_send_registration_request_template(surname: str, name: str, role: Ro
 
 def start_message_template(surname: str | None, name: str) -> str:
     template = Template(
-        "Приветствую {% if surname is not none %} {{surname}} {% endif %} {{name}}! Для начала, давай зарегистрируемся в системе бота.",
+        "Приветствую {% if surname is not none %} {{surname}} {% endif %} {{name}}! "
+        "Для начала, давай зарегистрируемся в системе бота.",
         autoescape=True,
     )
     return template.render(surname=surname, name=name)
