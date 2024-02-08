@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS attendance.lessons (
     id BIGSERIAL PRIMARY KEY,
     group_id BIGINT,
     name VARCHAR(255) NOT NULL,
-    start_time TIME WITH TIME ZONE NOT NULL
+    start_time TIME NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS attendance.attendances (

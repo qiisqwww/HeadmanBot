@@ -46,22 +46,27 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
         """{{lesson.name}} {{start_time.strftime('%H:%M')}}
 
 Не отметились:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
-    {% if not student.is_checked_in_today -%}
-        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
-    {%- endif %}
-{%- endfor %}
+{% if group_attendance.attendance[VisitStatus.ABSENT]|length > 0 -%}
+    {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
+        {% if not student.is_checked_in_today %}
+            <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
+        {% endif %}
+    {%- endfor %}
+{%- endif %}
 Придут:
-{% for student in group_attendance.attendance[VisitStatus.PRESENT] -%}
-    <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
-{% endfor %}
+{% if group_attendance.attendance[VisitStatus.PRESENT]|length > 0 -%}
+    {% for student in group_attendance.attendance[VisitStatus.PRESENT] -%}
+        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
+    {%- endfor %}
+{% endif %}
 Не придут:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
-    {% if student.is_checked_in_today -%}
-        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
-    {%- endif %}
-{%- endfor %}
-
+{% if group_attendance.attendance[VisitStatus.ABSENT]|length > 0 -%}
+    {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
+        {% if student.is_checked_in_today -%}
+            <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
+        {%- endif %}
+    {%- endfor %}
+{% endif %}
 Что-то еще?""",
         autoescape=True,
     ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson, VisitStatus=VisitStatus)
