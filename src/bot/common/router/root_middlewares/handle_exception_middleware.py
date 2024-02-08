@@ -2,9 +2,10 @@ from typing import Any, Awaitable, Callable, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
-from loguru import logger
 
-from .templates import SOMETHING_WENT_WRONG_TEMPLATE
+from src.modules.common.infrastructure.config.config import ADMIN_IDS
+
+from .templates import SOMETHING_WENT_WRONG_TEMPLATE, something_went_wrong_template
 
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
@@ -20,6 +21,7 @@ class HandleExceptionMiddleware(BaseMiddleware):
             return await handler(event, data)
 
         except Exception as e:
-            logger.exception(e)
+            for admin_id in ADMIN_IDS:
+                await event.bot.send_message(admin_id, something_went_wrong_template(e, event.from_user.id))
 
             return await event.answer(SOMETHING_WENT_WRONG_TEMPLATE, show_alert=True)
