@@ -51,7 +51,8 @@ $$;
 CREATE TABLE IF NOT EXISTS edu_info.universities (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    alias university_alias NOT NULL UNIQUE
+    alias university_alias NOT NULL UNIQUE,
+    timezone varchar(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS edu_info.groups (

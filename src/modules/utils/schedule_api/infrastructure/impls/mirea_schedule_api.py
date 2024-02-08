@@ -1,21 +1,24 @@
-from datetime import datetime, time, timedelta
-from typing import NoReturn, final
+from datetime import date, datetime, tzinfo
+from typing import Final, NoReturn, final
+from zoneinfo import ZoneInfo
 
-from aiohttp import ClientError, ClientSession
+import recurring_ical_events
+from aiohttp import ClientSession
+from icalendar import Calendar, Event
 from pydantic import ValidationError
-from pytz import UTC
 
-from src.modules.common.infrastructure import DEBUG
+from src.modules.common.infrastructure.config import DEBUG
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule, Weekday
+from src.modules.utils.schedule_api.domain import Schedule
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
     FailedToFetchScheduleError,
-    ParsingError,
+    GroupNotFoundError,
+    ParsingScheduleAPIResponseError,
 )
 
-from .mirea_schedule_schema import MireaScheduleSchema
+from .mirea_isc_link_schema import MireaIscLinkSchema
 
 __all__ = [
     "MireaScheduleApi",
@@ -24,72 +27,88 @@ __all__ = [
 
 @final
 class MireaScheduleApi(ScheduleAPI):
-    _URL: str = "https://timetable.mirea.ru/api/groups/name/{group_name}"
-    _CURRENT_SEMESTR_START: datetime = datetime(year=2023, month=8, day=28, tzinfo=UTC)
-    _HTTP_404_STATUS: int = 404
+    _FIND_URL: Final[str] = "https://schedule-of.mirea.ru/schedule/api/search?match={group_name}"
+    _API_TIMEZONE: Final[tzinfo] = ZoneInfo("Europe/Moscow")
 
     def __init__(self) -> None:
         ...
 
-    async def fetch_schedule(self, group_name: str, weekday: Weekday | None = None) -> list[Schedule] | NoReturn:
-        weekday = weekday or Weekday.today()
-
+    async def group_exists(self, group_name: str) -> bool | NoReturn:
+        try:
+            isc_link_location_bin = await self._fetch_isc_link_location(group_name)
+        except Exception as e:
+            err_msg = "Failed to fetch json with isc file location using MIREA API."
+            raise FailedToCheckGroupExistenceError(err_msg) from e
 
         try:
-            body = await self._fetch_api_response_body(group_name)
-        except (TimeoutError, ClientError) as e:
-            raise FailedToFetchScheduleError from e
-
-        try:
-            mirea_schedule = MireaScheduleSchema.model_validate_json(body)
+            isc_link_location = MireaIscLinkSchema.model_validate_json(isc_link_location_bin)
         except ValidationError as e:
-            raise ParsingError from e
+            err_msg = "Failed to parse json which contains isc file location using MIREA API"
+            raise ParsingScheduleAPIResponseError(err_msg) from e
 
-        schedule = self._extract_day_schedule(mirea_schedule, weekday)
 
-        if not schedule and DEBUG:
-            return [
-                Schedule("Физическая культура и спорт", time.fromisoformat("12:00")),
-                Schedule("Математический анализ", time.fromisoformat("15:40")),
-                Schedule("Аналитическая геометрия", time.fromisoformat("17:25")),
-            ]
+        return len(isc_link_location.data) == 1 and isc_link_location.data[0].targetTitle == group_name
+
+    async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule] | NoReturn:
+        day = day or datetime.now(tz=self._API_TIMEZONE).date()
+        if DEBUG:
+            day = date(year=2023, month=12, day=25)
+
+        try:
+            isc_link_location_bin = await self._fetch_isc_link_location(group_name)
+        except Exception as e:
+            err_msg = "Failed to parse json which contains isc file location using MIREA API"
+            raise FailedToFetchScheduleError(err_msg) from e
+
+        try:
+            isc_link_location = MireaIscLinkSchema.model_validate_json(isc_link_location_bin)
+        except ValidationError as e:
+            err_msg = "Failed to parse json which contains isc file location using MIREA API"
+            raise ParsingScheduleAPIResponseError(err_msg) from e
+
+        if len(isc_link_location.data) != 1 or isc_link_location.data[0].targetTitle != group_name:
+            err_msg = f"Failed to find group '{group_name}' using MIREA API for fetching schedule."
+            raise GroupNotFoundError(err_msg)
+
+        isc_url = isc_link_location.data[0].iCalLink
+
+        try:
+            isc_file = await self._fetch_isc(isc_url.unicode_string())
+        except Exception as e:
+            err_msg = "Failed to fetch isc file with schedule using MIREA API."
+            raise FailedToFetchScheduleError(err_msg) from e
+
+        try:
+            calendar: Calendar = Calendar.from_ical(isc_file) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            schedule =  self._parse_schedule_from_calendar(calendar, day) # pyright: ignore[reportUnknownArgumentType]
+        except Exception as e:
+            err_msg = "Failed to parse isc file with schedule from MIREA API."
+            raise ParsingScheduleAPIResponseError(err_msg) from e
 
         return schedule
 
-    async def group_exists(self, group_name: str) -> bool | NoReturn:
-        try:
-            status = await self._fetch_api_response_status(group_name)
-        except (TimeoutError, ClientError) as e:
-            raise FailedToCheckGroupExistenceError from e
 
-        return bool(status != self._HTTP_404_STATUS)
+    def _parse_schedule_from_calendar(self, calendar: Calendar, day: date) -> list[Schedule]:
+        events: list[Event] = recurring_ical_events.of(calendar).at(day) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+        schedule: list[Schedule] = []
+
+        for event in events:
+            start_datetime: datetime = event["DTSTART"].dt
+            start_time = start_datetime.astimezone(self._RESULT_TIMEZONE).timetz()
+            schedule.append(Schedule(lesson_name=str(event["SUMMARY"]), start_time=start_time))
+
+        return schedule
+
 
     @aiohttp_retry(attempts=3)
-    async def _fetch_api_response_status(self, group_name: str) -> int:
-        async with ClientSession() as session, session.get(self._URL.format(group_name=group_name)) as response:
-            status: int = response.status
-            return status
+    async def _fetch_isc_link_location(self, group_name: str) -> bytes:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, \
+            client.get(self._FIND_URL.format(group_name=group_name)) as response:
+            payload: bytes =  await response.read()
+        return payload
 
     @aiohttp_retry(attempts=3)
-    async def _fetch_api_response_body(self, group_name: str) -> bytes:
-        async with ClientSession() as session, session.get(self._URL.format(group_name=group_name)) as response:
-            body: bytes = await response.read()
-            return body
-
-    def _get_week_num(self, weekday: Weekday) -> int:
-        today = datetime.now(tz=UTC)
-        week_start = today - timedelta(days=today.weekday())
-        current_day = week_start + timedelta(days=weekday)
-        return (current_day - self._CURRENT_SEMESTR_START).days // 7 + 1
-
-    def _extract_day_schedule(self, mirea_schedule: MireaScheduleSchema, weekday: Weekday) -> list[Schedule]:
-        weeknum = self._get_week_num(weekday)
-
-        return [
-            Schedule(
-                lesson_name=lesson.discipline.name,
-                start_time=lesson.calls.time_start,
-            )
-            for lesson in mirea_schedule.lessons
-            if lesson.weekday == weekday and weeknum in lesson.weeks
-        ]
+    async def _fetch_isc(self, url: str) -> str:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(url) as response:
+            payload: str = await response.text()
+        return payload

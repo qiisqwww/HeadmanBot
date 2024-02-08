@@ -41,6 +41,18 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
 
         return self._mapper.to_domain(record)
 
-    async def create(self, name: str, alias: UniversityAlias) -> None:
-        query = "INSERT INTO edu_info.universities (name, alias) VALUES($1, $2)"
-        await self._con.execute(query, name, alias)
+    async def create(self, name: str, alias: UniversityAlias, timezone: str) -> None:
+        query = "INSERT INTO edu_info.universities (name, alias, timezone) VALUES($1, $2, $3)"
+        await self._con.execute(query, name, alias, timezone)
+
+    async def fetch_university_timezone_by_group_id(self, group_id: int) -> str:
+        query = """
+                SELECT uni.timezone
+                FROM edu_info.universities AS uni
+                JOIN edu_info.groups AS gr
+                ON uni.id = gr.university_id
+                WHERE gr.id = $1
+        """
+
+        value: str = await self._con.fetchval(query, group_id)
+        return value

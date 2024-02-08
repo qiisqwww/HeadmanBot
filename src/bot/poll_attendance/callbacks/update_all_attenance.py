@@ -32,6 +32,7 @@ async def update_attendance(
     student: Student,
     update_all_attendances_command: UpdateAllAttendancesCommand,
     get_student_attendance_query: GetStudentAttendanceQuery,
+    timezone: str,
 ) -> None:
     if callback.message is None or callback.message.text is None:
         return
@@ -46,5 +47,5 @@ async def update_attendance(
     else:
         await callback.message.edit_text(
             text=new_text,
-            reply_markup=update_attendance_buttons(True, new_attendances),
+            reply_markup=update_attendance_buttons(True, new_attendances, timezone),
         )

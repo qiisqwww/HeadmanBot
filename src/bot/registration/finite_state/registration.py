@@ -12,6 +12,7 @@ from src.bot.registration.resources.templates import (
     ASK_NAME_TEMPLATE,
     ASK_SURNAME_TEMPLATE,
     BIRTHDATE_INCORRECT_TEMPLATE,
+    FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
     HEADMAN_ALREADY_EXISTS_TEMPLATE,
@@ -28,6 +29,7 @@ from src.modules.student_management.application.queries import (
     FindGroupHeadmanQuery,
 )
 from src.modules.student_management.domain import Role
+from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
 
 __all__ = [
     "include_registration_finite_state_router",
@@ -65,14 +67,13 @@ async def handling_group(
 
     try:
         group_exists = await check_group_exists_in_uni_query.execute(group_name, await state.university_alias)
-        if not group_exists:
-            await message.answer(GROUP_DOESNT_EXISTS_TEMPLATE)
-            await state.set_state(RegistrationStates.waiting_group)
-            return
-    except Exception:
-        await message.answer(
-            "Не удалось проверить наличие группы в университете, попробуйте снова или напишите в @noheadproblemsbot",
-        )
+    except ScheduleApiError:
+        await message.answer(FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE)
+        await state.set_state(RegistrationStates.waiting_group)
+        return
+
+    if not group_exists:
+        await message.answer(GROUP_DOESNT_EXISTS_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
         return
 
@@ -144,6 +145,7 @@ async def handling_name(
         return
 
     await state.set_name(message.text)
+    await state.set_state(RegistrationStates.ask_fullame_validity)
 
     await message.answer(
         asking_fullname_validation_template(await state.surname, await state.name),

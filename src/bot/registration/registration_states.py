@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 
-class RegistrationStates(StatesGroup): # type: ignore [misc]
+class RegistrationStates(StatesGroup):
     waiting_role = State()
     waiting_university = State()
     waiting_group = State()

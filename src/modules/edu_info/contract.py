@@ -10,6 +10,16 @@ __all__ = [
 
 class EduInfoModuleContract(ABC):
     @abstractmethod
+    async def get_all_universities_info(self) -> list[dict[str, Any]]:
+        """Return data like a list of dicts
+        university_info = return_value[0]
+
+        university_info['id']: int -> university id
+        university_info['name']: str -> university name
+        university_info['alias']: UniversityAlias -> university alias
+        """
+
+    @abstractmethod
     async def get_group_info_by_group_id(self, group_id: int) -> dict[str, Any] | None:
         """Return data like a dict
 
@@ -53,15 +63,6 @@ class EduInfoModuleContract(ABC):
 
         """
 
-    @abstractmethod
-    async def get_all_universities_info(self) -> list[dict[str, Any]]:
-        """Return data like a list of dicts
-        university_info = return_value[0]
-
-        university_info['id']: int -> university id
-        university_info['name']: str -> university name
-        university_info['alias']: UniversityAlias -> university alias
-        """
 
     @abstractmethod
     async def get_university_info_by_alias(self, alias: UniversityAlias) -> dict[str, Any]:

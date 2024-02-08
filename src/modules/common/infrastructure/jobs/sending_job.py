@@ -13,7 +13,7 @@ from src.modules.attendance.application.queries import GetStudentAttendanceQuery
 from src.modules.student_management.application.queries import FindGroupHeadmanQuery
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
-from src.modules.edu_info.application.queries import GetAllGroupsQuery
+from src.modules.edu_info.application.queries import FetchUniTimezonByGroupIdQuery, GetAllGroupsQuery
 from src.modules.edu_info.domain import Group
 from src.modules.student_management.application.queries import (
     GetStudentsInfoFromGroupQuery,
@@ -49,29 +49,36 @@ class SendingJob(AsyncJob):
             get_all_groups_query = container.get(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
             get_students_info_from_group_query = container.get(GetStudentsInfoFromGroupQuery)
+
+            fetch_group_timezone = container.get(FetchUniTimezonByGroupIdQuery)
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
 
             for group in groups:
+                timezone = await fetch_group_timezone.execute(group.id)
                 await self._send_to_group(
                     group,
                     get_students_info_from_group_query,
-                    find_group_headman_query
+                    find_group_headman_query,
+                    timezone,
                 )
 
     async def _send_to_group(
         self,
         group: Group,
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
-        find_group_headman_query: FindGroupHeadmanQuery
+        find_group_headman_query: FindGroupHeadmanQuery,
+        timezone: str,
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
         group_headman = await find_group_headman_query.execute(group.id)
 
         async with TaskGroup() as tg:
             for student_info in students_info:
-                tg.create_task(self._send_to_student(student_info, group_headman.telegram_id))
+                tg.create_task(self._send_to_student(student_info, group_headman.id, timezone))
 
-    async def _send_to_student(self, student_info: StudentInfo, headman_telegram_id: int) -> None:
+
+
+    async def _send_to_student(self, student_info: StudentInfo, headman_telegram_id: int, timezone: str) -> None:
         async with self._build_container() as container:
             get_student_attedance_query = container.get(GetStudentAttendanceQuery)
             attendances = await get_student_attedance_query.execute(student_info.id)
@@ -80,7 +87,7 @@ class SendingJob(AsyncJob):
                 await self._bot.send_message(
                     student_info.telegram_id,
                     POLL_TEMPLATE,
-                    reply_markup=update_attendance_buttons(student_info.is_checked_in_today, attendances),
+                    reply_markup=update_attendance_buttons(student_info.is_checked_in_today, attendances, timezone),
                 )
             except TelegramForbiddenError:
                 await self._bot.send_message(
