@@ -73,7 +73,7 @@ class MireaScheduleApi(ScheduleAPI):
         isc_url = isc_link_location.data[0].iCalLink
 
         try:
-            isc_file = await self._fetch_isc(isc_url.unicode_string() + "aboba")
+            isc_file = await self._fetch_isc(isc_url.unicode_string())
         except Exception as e:
             err_msg = "Failed to fetch isc file with schedule using MIREA API."
             raise FailedToFetchScheduleError(err_msg) from e
