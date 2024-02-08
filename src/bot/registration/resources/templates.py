@@ -33,6 +33,8 @@ __all__ = [
     "TOO_MUCH_SURNAME_LENGTH_TEMPLATE",
     "your_choice_is_template",
     "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE",
+    "FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE",
+    "FAILED_TO_FETCH_SCHEDULE_TEMPLATE",
 ]
 
 
@@ -90,6 +92,11 @@ TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть дли�
 
 WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы желаете изменить?"
 
+FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE = ("Не удалось проверить наличие группы в университете, "
+                                    "попробуйте снова или напишите в @noheadproblemsbot.")
+
+FAILED_TO_FETCH_SCHEDULE_TEMPLATE = ("Не удалось загрузить расписание для вашей группы. "
+                            "Попробуйте зарегистрироваться еще раз или напишите в @noheadproblemsbot.")
 
 def successful_role_choose_template(role: Role) -> str:
     template = Template("Роль была успешно выбрана. Вы - <b>{{role.translation}}</b>.", autoescape=True)

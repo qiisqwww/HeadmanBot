@@ -7,6 +7,7 @@ from src.modules.attendance.application.gateways.student_management_gateway impo
 from src.modules.attendance.application.repositories import AttendanceRepository, LessonRepository
 from src.modules.common.application import UnitOfWork, UseCase
 from src.modules.utils.schedule_api.application import ScheduleAPI
+from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
 
 __all__ = [
     "MakeAttendanceRelevantCommand",
@@ -49,7 +50,11 @@ class MakeAttendanceRelevantCommand(UseCase):
             for group in groups:
                 schedule_api = self._schedule_api(group.university_alias)
 
-                fetched_schedule = await schedule_api.fetch_schedule(group.name)
+                try:
+                    fetched_schedule = await schedule_api.fetch_schedule(group.name)
+                except ScheduleApiError:
+                    continue
+
                 group_schedule = await self._lesson_repository.create_for_group(group.id, fetched_schedule)
 
                 students = await self._student_management_gateway.filter_student_info_by_group_id(group.id)
