@@ -25,6 +25,6 @@ class CacheStudentDataRepositoryImpl(RedisRepositoryImpl, CacheStudentDataReposi
 
     async def pop(self, telegram_id: int) -> CreateStudentDTO:
         student_data = await self._con.hgetall(str(telegram_id))
-        await self._con.hdel(str(telegram_id), *student_data)
+        await self._con.hdel(str(telegram_id), *list(student_data.keys()))
 
         return self._mapper.from_redis_dict(student_data)
