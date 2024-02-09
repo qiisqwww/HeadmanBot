@@ -49,25 +49,25 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
 
 Не отметились:
 {% if not_noted_count > 0 -%}
-    {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
-        {% if not student.attendance_noted -%}
-            <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>\n
-        {%- endif %}
-    {%- endfor %}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
+{% if not student.attendance_noted -%}
+<a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
+{%- endif %}
+{% endfor %}
 {% endif %}
 Придут:
 {% if group_attendance.attendance[VisitStatus.PRESENT]|length > 0 -%}
-    {% for student in group_attendance.attendance[VisitStatus.PRESENT] -%}
-        <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
-    {%- endfor %}
+{% for student in group_attendance.attendance[VisitStatus.PRESENT] -%}
+<a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
+{% endfor %}
 {% endif %}
 Не придут:
 {% if will_not_go_count > 0 -%}
-    {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
-        {% if student.attendance_noted -%}
-            <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>\n
-        {%- endif %}
-    {%- endfor %}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
+{% if student.attendance_noted -%}
+<a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
+{%- endif %}
+{% endfor %}
 {% endif %}
 Что-то еще?""",
         autoescape=True,

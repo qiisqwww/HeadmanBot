@@ -14,6 +14,10 @@ from src.modules.common.infrastructure.build_scheduler import build_scheduler
 
 async def main() -> None:
     configurate_logger()
+# from src.modules.common.infrastructure.container import project_container
+# from .transform_data import transform
+#
+#     await transform(project_container)
 
     scheduler = await build_scheduler(bot)
     scheduler.start()
