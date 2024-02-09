@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS student_management.students (
     last_name VARCHAR(255) NOT NULL,
     role role NOT NULL,
     birthdate DATE NULL,
-    is_checked_in_today BOOLEAN NOT NULL
+    attendance_noted BOOLEAN NOT NULL
 );
 
 

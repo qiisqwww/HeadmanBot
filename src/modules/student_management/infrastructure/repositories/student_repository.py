@@ -19,7 +19,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     _mapper: StudentMapper = StudentMapper()
 
     async def find_by_id(self, student_id: int) -> Student | None:
-        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, is_checked_in_today
+        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, attendance_noted
                    FROM student_management.students
                    WHERE id = $1"""
 
@@ -27,7 +27,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         return None if record is None else self._mapper.to_domain(record)
 
     async def find_by_telegram_id(self, telegram_id: int) -> Student | None:
-        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, is_checked_in_today
+        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, attendance_noted
                    FROM student_management.students
                    WHERE telegram_id = $1"""
 
@@ -35,7 +35,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         return None if record is None else self._mapper.to_domain(record)
 
     async def find_by_group_id_and_role(self, group_id: int, role: Role) -> Student | None:
-        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, is_checked_in_today
+        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, attendance_noted
                    FROM student_management.students
                    WHERE group_id = $1 AND role = $2"""
 
@@ -48,7 +48,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         group_id: int,
     ) -> Student:
         query = """INSERT INTO student_management.students
-                   (telegram_id, group_id, first_name, last_name, role, birthdate, is_checked_in_today)
+                   (telegram_id, group_id, first_name, last_name, role, birthdate, attendance_noted)
                    VALUES ($1, $2, $3, $4, $5, $6, $7)
                    RETURNING id"""
 
@@ -71,16 +71,16 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
             last_name=student_data.last_name,
             role=student_data.role,
             birthdate=student_data.birthdate,
-            is_checked_in_today=False,
+            attendance_noted=False,
         )
 
-    async def update_is_checked_in(self, student_id: int, new_is_checked_in: bool) -> None:
-        query = "UPDATE student_management.students SET is_checked_in_today = $1 WHERE id = $2"
-        await self._con.execute(query, new_is_checked_in, student_id)
+    async def update_attendance_noted_all(self, new_attendance_noted: bool) -> None:
+        query = "UPDATE student_management.students SET attendance_noted = $1"
+        await self._con.execute(query, new_attendance_noted)
 
-    async def update_is_checked_in_all(self, new_is_checked_in: bool) -> None:
-        query = "UPDATE student_management.students SET is_checked_in_today = $1"
-        await self._con.execute(query, new_is_checked_in)
+    async def update_attendance_noted_by_id(self, student_id: int, new_attendance_noted: bool) -> None:
+        query = "UPDATE student_management.students SET attendance_noted = $1 WHERE id = $2"
+        await self._con.execute(query, new_attendance_noted, student_id)
 
     async def update_first_name_by_id(self, student_id: int, new_first_name: str) -> None:
         query = "UPDATE student_management.students SET first_name = $1 WHERE id = $2"
@@ -90,6 +90,6 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         query = "UPDATE student_management.students SET last_name = $1 WHERE id = $2"
         await self._con.execute(query, new_last_name, student_id)
 
-    async def update_birthdate_by_id(self, student_id: int, new_date: date | None) -> None:
+    async def update_birthdate_by_id(self, student_id: int, new_birthdate: date | None) -> None:
         query = "UPDATE student_management.students SET birthdate = $1 WHERE id = $2"
-        await self._con.execute(query, new_date, student_id)
+        await self._con.execute(query, new_birthdate, student_id)

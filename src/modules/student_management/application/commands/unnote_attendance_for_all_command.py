@@ -6,12 +6,12 @@ from src.modules.common.application import UseCase
 from src.modules.student_management.application.repositories import StudentRepository
 
 __all__ = [
-    "UncheckAllStudentsCommand",
+    "UnnoteAttendanceForAllCommand",
 ]
 
 
 @final
-class UncheckAllStudentsCommand(UseCase):
+class UnnoteAttendanceForAllCommand(UseCase):
     _repository: StudentRepository
 
     @inject
@@ -19,4 +19,4 @@ class UncheckAllStudentsCommand(UseCase):
         self._repository = repository
 
     async def execute(self) -> None:
-        await self._repository.update_is_checked_in_all(False)
+        await self._repository.update_attendance_noted_all(False)

@@ -69,7 +69,17 @@ async def ask_new_first_name_validity_callback(
     await update_student_first_name_command.execute(student.id, await state.new_first_name)
 
     edu_info = await get_edu_profile_info_query.execute(student.group_id)
-    await callback.message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
+    new_student = Student(
+        id=student.id,
+        telegram_id=student.telegram_id,
+        first_name=await state.new_first_name,
+        last_name=student.last_name,
+        role=student.role,
+        group_id=student.group_id,
+        birthdate=student.birthdate,
+        attendance_noted=student.attendance_noted,
+    )
+    await callback.message.answer(text=profile_info(new_student, edu_info), reply_markup=profile_buttons())
 
     await state.clear()
 
@@ -101,8 +111,18 @@ async def ask_new_last_name_validity_callback(
 
     await update_student_last_name_command.execute(student.id, await state.new_last_name)
 
+    new_student = Student(
+        id=student.id,
+        telegram_id=student.telegram_id,
+        first_name=student.first_name,
+        last_name=await state.new_last_name,
+        role=student.role,
+        group_id=student.group_id,
+        birthdate=student.birthdate,
+        attendance_noted=student.attendance_noted,
+    )
     edu_info = await get_edu_profile_info_query.execute(student.group_id)
-    await callback.message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
+    await callback.message.answer(text=profile_info(new_student, edu_info), reply_markup=profile_buttons())
 
     await state.clear()
 
@@ -134,7 +154,17 @@ async def ask_new_birthdate_validity_callback(
 
     await update_student_birthdate_command.execute(student.id, await state.new_birthdate)
 
+    new_student = Student(
+        id=student.id,
+        telegram_id=student.telegram_id,
+        first_name=student.first_name,
+        last_name=student.last_name,
+        role=student.role,
+        group_id=student.group_id,
+        birthdate=await state.new_birthdate,
+        attendance_noted=student.attendance_noted,
+    )
     edu_info = await get_edu_profile_info_query.execute(student.group_id)
-    await callback.message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())
+    await callback.message.answer(text=profile_info(new_student, edu_info), reply_markup=profile_buttons())
 
     await state.clear()

@@ -12,12 +12,12 @@ __all__ = [
 ]
 
 
-def update_attendance_buttons(is_checked_in_today: bool, attendances: Iterable[Attendance], timezone: str) -> InlineKeyboardMarkup:
+def update_attendance_buttons(attendance_noted: bool, attendances: Iterable[Attendance], timezone: str) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     for attendance in attendances:
         start_time = convert_time_from_utc(attendance.lesson.start_time, timezone)
-        if is_checked_in_today:
+        if attendance_noted:
             if attendance.status == VisitStatus.ABSENT:
                 builder.button(
                     text=f"❌ Не посещу {start_time:%H:%M} {attendance.lesson.name}",

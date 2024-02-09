@@ -17,13 +17,13 @@ class Student:
     last_name: str
     role: Role
     birthdate: date | None
-    is_checked_in_today: bool
-
-    def is_headman(self) -> bool:
-        return self.role == Role.HEADMAN
+    attendance_noted: bool
 
     def is_admin(self) -> bool:
         return self.role == Role.ADMIN
+
+    def is_headman(self) -> bool:
+        return self.role == Role.HEADMAN
 
     def is_vice_headman(self) -> bool:
         return self.role == Role.VICE_HEADMAN

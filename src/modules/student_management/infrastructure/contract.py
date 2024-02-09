@@ -29,6 +29,5 @@ class StudentManagementContractImpl(StudentManagementContract):
             asdict(student_info) for student_info in (await self._student_info_repository.filter_by_group_id(group_id))
         ]
 
-    async def update_checked_in_status(self, student_id: int, previous_is_checked_in: bool) -> None:
-        if not previous_is_checked_in:
-            await self._student_repostory.update_is_checked_in(student_id, True)
+    async def note_student_attendance(self, student_id: int) -> None:
+        await self._student_repostory.update_attendance_noted_by_id(student_id, True)

@@ -20,5 +20,5 @@ class StudentMapper:
             group_id=record["group_id"],
             role=Role(record["role"]),
             birthdate=record["birthdate"],
-            is_checked_in_today=record["is_checked_in_today"],
+            attendance_noted=record["attendance_noted"],
         )

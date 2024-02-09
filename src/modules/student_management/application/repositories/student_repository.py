@@ -32,11 +32,11 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
-    async def update_is_checked_in(self, student_id: int, new_is_checked_in: bool) -> None:
+    async def update_attendance_noted_by_id(self, student_id: int, new_attendance_noted: bool) -> None:
         ...
 
     @abstractmethod
-    async def update_is_checked_in_all(self, new_is_checked_in: bool) -> None:
+    async def update_attendance_noted_all(self, new_attendance_noted: bool) -> None:
         ...
 
     @abstractmethod
@@ -48,5 +48,5 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
-    async def update_birthdate_by_id(self, student_id: int, new_date: date | None) -> None:
+    async def update_birthdate_by_id(self, student_id: int, new_birthdate: date | None) -> None:
         ...

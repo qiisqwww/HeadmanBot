@@ -42,14 +42,15 @@ CHOOSE_PAIR_TEMPLATE = """
 
 def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup, timezone: str) -> str:
     start_time = convert_time_from_utc(choosen_lesson.start_time, timezone)
-    not_noted_count = len(tuple(filter(lambda student: not student.is_checked_in_today, group_attendance.attendance[VisitStatus.ABSENT])))
+    not_noted_count = len(tuple(filter(lambda student: not student.attendance_noted, group_attendance.attendance[VisitStatus.ABSENT])))
+    will_not_go_count = len(group_attendance.attendance[VisitStatus.ABSENT]) - not_noted_count
     template: str = Template(
         """{{lesson.name}} {{start_time.strftime('%H:%M')}}
 
 Не отметились:
 {% if not_noted_count > 0 -%}
     {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
-        {% if not student.is_checked_in_today -%}
+        {% if not student.attendance_noted -%}
             <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>\n
         {%- endif %}
     {%- endfor %}
@@ -61,15 +62,16 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
     {%- endfor %}
 {% endif %}
 Не придут:
-{% if group_attendance.attendance[VisitStatus.ABSENT]|length > 0 -%}
+{% if will_not_go_count > 0 -%}
     {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
-        {% if student.is_checked_in_today -%}
+        {% if student.attendance_noted -%}
             <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>\n
         {%- endif %}
     {%- endfor %}
 {% endif %}
 Что-то еще?""",
         autoescape=True,
-    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson, VisitStatus=VisitStatus, not_noted_count=not_noted_count)
+    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson, VisitStatus=VisitStatus,
+             not_noted_count=not_noted_count, will_not_go_count=will_not_go_count)
 
     return template

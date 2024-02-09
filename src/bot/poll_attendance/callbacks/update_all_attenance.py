@@ -37,7 +37,7 @@ async def update_attendance(
     if callback.message is None or callback.message.text is None:
         return
 
-    await update_all_attendances_command.execute(student.id, student.is_checked_in_today, callback_data.new_status)
+    await update_all_attendances_command.execute(student.id, callback_data.new_status)
 
     new_attendances = await get_student_attendance_query.execute(student.id)
     new_text = your_all_choice_is_template(callback_data.new_status)

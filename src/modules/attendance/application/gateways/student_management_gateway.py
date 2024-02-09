@@ -13,5 +13,5 @@ class StudentManagementGateway(ABC):
         ...
 
     @abstractmethod
-    async def update_is_checked_in_status(self, student_id: int, is_checked_in_previous: bool) -> None:
+    async def note_student_attendance(self, student_id: int) -> None:
         ...

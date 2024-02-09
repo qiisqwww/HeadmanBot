@@ -11,4 +11,4 @@ class StudentInfo:
     telegram_id: int
     first_name: str
     last_name: str
-    is_checked_in_today: bool
+    attendance_noted: bool

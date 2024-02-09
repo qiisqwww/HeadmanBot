@@ -5,15 +5,15 @@ from injector import Injector
 
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
-from src.modules.student_management.application.commands import UncheckAllStudentsCommand
+from src.modules.student_management.application.commands import UnnoteAttendanceForAllCommand
 
 __all__ = [
-    "UnmarkAllStudentsJob",
+    "UnnoteAttendanceJob",
 ]
 
 
 @final
-class UnmarkAllStudentsJob(AsyncJob):
+class UnnoteAttendanceJob(AsyncJob):
     _build_container: Callable[[], AsyncContextManager[Injector]]
 
     def __init__(self, build_container: Callable[[], AsyncContextManager[Injector]]) -> None:
@@ -29,5 +29,5 @@ class UnmarkAllStudentsJob(AsyncJob):
 
     async def __call__(self) -> None:
         async with self._build_container() as container:
-            command = container.get(UncheckAllStudentsCommand)
+            command = container.get(UnnoteAttendanceForAllCommand)
             await command.execute()

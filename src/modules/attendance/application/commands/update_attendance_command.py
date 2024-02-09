@@ -21,7 +21,7 @@ class UpdateAttendanceCommand(UseCase):
         self._gateway = gateway
         self._uow = uow
 
-    async def execute(self, student_id: int, is_checked_in: bool, attendance_id: int, new_status: VisitStatus) -> None:
+    async def execute(self, student_id: int, attendance_id: int, new_status: VisitStatus) -> None:
         async with self._uow:
-            await self._gateway.update_is_checked_in_status(student_id, is_checked_in)
+            await self._gateway.note_student_attendance(student_id)
             await self._repostiory.update_status(attendance_id, new_status)
