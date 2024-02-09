@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Any
+from typing import TypedDict
 
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
@@ -10,6 +10,15 @@ from src.modules.student_management.domain import Role
 __all__ = [
     "RegistrationContext",
 ]
+
+class RegistrationData(TypedDict, total=False):
+    telegram_id: int
+    role: Role
+    group_name: str
+    first_name: str
+    last_name: str
+    university_alias: UniversityAlias
+    birthdate: date | None
 
 
 class RegistrationContext:
@@ -22,49 +31,61 @@ class RegistrationContext:
 
     @property
     async def telegram_id(self) -> int:
-        return (await self._context.get_data())["telegram_id"]
+        telegram_id = (await self.get_data()).get("telegram_id", None)
+        assert telegram_id is not None, "You must have setted telegram_id before."
+        return telegram_id
 
     async def set_telegram_id(self, telegram_id: int) -> None:
         await self._context.update_data(telegram_id=telegram_id)
 
     @property
     async def role(self) -> Role:
-        return (await self._context.get_data())["role"]
+        role = (await self.get_data()).get("role", None)
+        assert role is not None, "You must have setted role before."
+        return role
 
     async def set_role(self, role: Role) -> None:
         await self._context.update_data(role=role)
 
     @property
     async def group_name(self) -> str:
-        return (await self._context.get_data())["group_name"]
+        group_name = (await self.get_data()).get("group_name", None)
+        assert group_name is not None, "You must have setted group_name before."
+        return group_name
 
     async def set_group_name(self, group_name: str) -> None:
         await self._context.update_data(group_name=group_name)
 
     @property
-    async def surname(self) -> str:
-        return (await self._context.get_data())["surname"]
+    async def last_name(self) -> str:
+        last_name = (await self.get_data()).get("last_name", None)
+        assert last_name is not None, "You must have setted last_name before."
+        return last_name
 
-    async def set_surname(self, surname: str) -> None:
-        await self._context.update_data(surname=surname)
+    async def set_last_name(self, last_name: str) -> None:
+        await self._context.update_data(last_name=last_name)
 
     @property
-    async def name(self) -> str:
-        return (await self._context.get_data())["name"]
+    async def first_name(self) -> str:
+        first_name =  (await self.get_data()).get("first_name", None)
+        assert first_name is not None, "You must have setted first_name before."
+        return first_name
 
-    async def set_name(self, name: str) -> None:
-        await self._context.update_data(name=name)
+    async def set_first_name(self, first_name: str) -> None:
+        await self._context.update_data(first_name=first_name)
 
     @property
     async def university_alias(self) -> UniversityAlias:
-        return (await self._context.get_data())["university_alias"]
+        university_alias = (await self.get_data()).get("university_alias", None)
+        assert university_alias is not None, "You must have setted university_alias before."
+        return university_alias
 
     async def set_university_alias(self, university_alias: UniversityAlias) -> None:
         await self._context.update_data(university_alias=university_alias)
 
     @property
     async def birthdate(self) -> date | None:
-        return (await self._context.get_data())["birthdate"]
+        return (await self.get_data()).get("birthdate", None)
 
     async def set_birthday(self, birthdate: date | None) -> None:
         await self._context.update_data(birthdate=birthdate)
@@ -76,5 +97,5 @@ class RegistrationContext:
         await self._context.set_state(state=None)
         await self._context.set_data({})
 
-    async def get_data(self) -> dict[str, Any]:
-        return await self._context.get_data()
+    async def get_data(self) -> RegistrationData:
+        return await self._context.get_data() # pyright: ignore[reportGeneralTypeIssues]

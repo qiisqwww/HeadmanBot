@@ -7,7 +7,7 @@ from src.bot.registration.callback_data import (
     AccessCallbackData,
     AskNewFullnameValidityCallbackData,
     ChooseRoleCallbackData,
-    UniversityCallbackData
+    UniversityCallbackData,
 )
 from src.modules.student_management.domain import Role, UniversityInfo
 
