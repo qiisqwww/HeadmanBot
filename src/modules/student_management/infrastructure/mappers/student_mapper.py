@@ -15,10 +15,10 @@ class StudentMapper:
         return Student(
             id=record["id"],
             telegram_id=record["telegram_id"],
-            name=record["name"],
-            surname=record["surname"],
+            first_name=record["first_name"],
+            last_name=record["last_name"],
             group_id=record["group_id"],
             role=Role(record["role"]),
             birthdate=record["birthdate"],
-            is_checked_in_today=record["is_checked_in_today"],
+            attendance_noted=record["attendance_noted"],
         )

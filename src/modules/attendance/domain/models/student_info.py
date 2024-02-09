@@ -9,6 +9,6 @@ __all__ = [
 class StudentInfo:
     id: int
     telegram_id: int
-    name: str
-    surname: str
-    is_checked_in_today: bool
+    first_name: str
+    last_name: str
+    attendance_noted: bool

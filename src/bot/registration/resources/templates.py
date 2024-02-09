@@ -108,21 +108,21 @@ def successful_university_choose_template(university_name: str) -> str:
     return template.render(university_name=university_name)
 
 
-def student_send_registration_request_template(surname: str, name: str, role: Role, telegram_id: int) -> str:
+def student_send_registration_request_template(last_name: str, first_name: str, role: Role, telegram_id: int) -> str:
     template = Template(
-        "{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{surname}} {{name}}</a> подал заявку на регистарцию в боте.",
+        "{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{last_name}} {{first_name}}</a> подал заявку на регистарцию в боте.",
         autoescape=True,
     )
-    return template.render(role=role, surname=surname, name=name, telegram_id=telegram_id)
+    return template.render(role=role, last_name=last_name, first_name=first_name, telegram_id=telegram_id)
 
 
-def start_message_template(surname: str | None, name: str) -> str:
+def start_message_template(last_name: str | None, first_name: str) -> str:
     template = Template(
-        "Приветствую {% if surname is not none %} {{surname}} {% endif %} {{name}}! "
+        "Приветствую {% if surname is not none %} {{last_name}} {% endif %} {{first_name}}! "
         "Для начала, давай зарегистрируемся в системе бота.",
         autoescape=True,
     )
-    return template.render(surname=surname, name=name)
+    return template.render(last_name=last_name, first_name=first_name)
 
 
 def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
@@ -130,9 +130,9 @@ def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
     return template.render(lesson_name=lesson_name, start_time=start_time)
 
 
-def asking_fullname_validation_template(surname: str, name: str) -> str:
-    template = Template("{{surname}} {{name}}\n\nДанные верны?", autoescape=True)
-    return template.render(surname=surname, name=name)
+def asking_fullname_validation_template(last_name: str, first_name: str) -> str:
+    template = Template("{{last_name}} {{first_name}}\n\nДанные верны?", autoescape=True)
+    return template.render(last_name=last_name, first_name=first_name)
 
 
 def your_choice_is_template(is_fullname_correct: bool) -> str:

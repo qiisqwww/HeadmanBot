@@ -126,7 +126,7 @@ async def handling_surname(message: Message, state: RegistrationContext) -> None
         await state.set_state(RegistrationStates.waiting_surname)
         return
 
-    await state.set_surname(message.text)
+    await state.set_last_name(message.text)
     await state.set_state(RegistrationStates.waiting_name)
     await message.answer(ASK_NAME_TEMPLATE)
 
@@ -144,10 +144,10 @@ async def handling_name(
         await state.set_state(RegistrationStates.waiting_name)
         return
 
-    await state.set_name(message.text)
+    await state.set_first_name(message.text)
     await state.set_state(RegistrationStates.ask_fullame_validity)
 
     await message.answer(
-        asking_fullname_validation_template(await state.surname, await state.name),
+        asking_fullname_validation_template(await state.last_name, await state.first_name),
         reply_markup=ask_fullname_validity_buttons(),
     )

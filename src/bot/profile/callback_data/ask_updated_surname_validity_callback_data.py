@@ -5,5 +5,5 @@ __all__ = [
 ]
 
 
-class AskUpdatedSurnameValidityCallbackData(CallbackData, prefix="ask_name_for_update"):  # type: ignore
+class AskUpdatedSurnameValidityCallbackData(CallbackData, prefix="ask_last_name_for_update"):  # type: ignore
     is_field_correct: bool

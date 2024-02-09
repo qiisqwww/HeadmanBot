@@ -1,9 +1,7 @@
 from injector import inject
 
 from src.modules.common.application import UseCase
-from src.modules.student_management.application.repositories import CreateStudentDTO
-
-from ..repositories import CacheStudentDataRepository
+from src.modules.student_management.application.repositories import CacheStudentDataRepository, CreateStudentDTO
 
 __all__ = [
     "CacheCreateStudentDataCommand",

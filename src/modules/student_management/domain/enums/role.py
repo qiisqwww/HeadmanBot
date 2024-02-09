@@ -1,4 +1,4 @@
-from enum import UNIQUE, EnumMeta, StrEnum, verify
+from enum import UNIQUE, StrEnum, verify
 from typing import Self
 
 __all__ = [
@@ -6,23 +6,12 @@ __all__ = [
 ]
 
 
-class EnumContainsMeta(EnumMeta):
-    def __contains__(cls, item):
-        try:
-            cls(item)
-
-        except ValueError:
-            return False
-
-        return True
-
-
 @verify(UNIQUE)
-class Role(StrEnum, metaclass=EnumContainsMeta):
-    ADMIN = "admin"
-    HEADMAN = "headman"
-    VICE_HEADMAN = "vice headman"
-    STUDENT = "student"
+class Role(StrEnum):
+    ADMIN = "ADMIN"
+    HEADMAN = "HEADMAN"
+    VICE_HEADMAN = "VICE HEADMAN"
+    STUDENT = "STUDENT"
 
     @property
     def translation(self) -> str:

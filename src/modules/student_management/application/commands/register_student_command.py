@@ -5,9 +5,8 @@ from src.modules.student_management.application.gateways import (
     AttendanceModuleGateway,
     EduInfoModuleGateway,
 )
+from src.modules.student_management.application.repositories import CacheStudentDataRepository, StudentRepository
 from src.modules.student_management.domain import Role, Student
-
-from ..repositories import CacheStudentDataRepository, StudentRepository
 
 
 class RegisterStudentCommand(UseCase):

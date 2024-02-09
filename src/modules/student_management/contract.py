@@ -15,11 +15,11 @@ class StudentManagementContract(ABC):
 
         student_info['id']: int -> student id
         student_info['telegram_id']: int -> student telegram id
-        student_info['name']: str -> student name
-        student_info['surname']: str -> student surname
-        student_info['is_checked_in_today']: bool -> True mean, that student already have checked in today.
+        student_info['first_name']: str -> student name
+        student_info['last_name']: str -> student surname
+        student_info['attendance_noted']: bool -> True mean, that student already have checked in today.
         """
 
     @abstractmethod
-    async def update_checked_in_status(self, student_id: int, previous_is_checked_in: bool) -> None:
-        """If status was False set it to True else do nothing."""
+    async def note_student_attendance(self, student_id: int) -> None:
+        ...

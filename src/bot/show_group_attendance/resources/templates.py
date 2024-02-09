@@ -5,6 +5,7 @@ from src.modules.attendance.domain import (
     Lesson,
     LessonAttendanceForGroup,
 )
+from src.modules.attendance.domain.enums.visit_status import VisitStatus
 
 __all__ = [
     "ALL_PAIRS_TEMPLATE",
@@ -41,27 +42,36 @@ CHOOSE_PAIR_TEMPLATE = """
 
 def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup, timezone: str) -> str:
     start_time = convert_time_from_utc(choosen_lesson.start_time, timezone)
+    not_noted_count = len(tuple(filter(lambda student: not student.attendance_noted, group_attendance.attendance[VisitStatus.ABSENT])))
+    will_not_go_count = len(group_attendance.attendance[VisitStatus.ABSENT]) - not_noted_count
     template: str = Template(
         """{{lesson.name}} {{start_time.strftime('%H:%M')}}
 
 Не отметились:
-{% for student in group_attendance.attendance['absent'] -%}
-    {% if not student.is_checked_in_today -%}
-        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
-    {%- endif %}
-{%- endfor %}
+{% if not_noted_count > 0 -%}
+    {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
+        {% if not student.attendance_noted -%}
+            <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>\n
+        {%- endif %}
+    {%- endfor %}
+{% endif %}
 Придут:
-{% for student in group_attendance.attendance['present'] -%}
-    <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>
-{% endfor %}
+{% if group_attendance.attendance[VisitStatus.PRESENT]|length > 0 -%}
+    {% for student in group_attendance.attendance[VisitStatus.PRESENT] -%}
+        <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
+    {%- endfor %}
+{% endif %}
 Не придут:
-{% for student in group_attendance.attendance['absent'] -%}
-    {% if student.is_checked_in_today -%}
-        <a href="tg://user?id={{ student.telegram_id }}">{{ student.surname }} {{ student.name }}</a>\n
-    {%- endif %}
-{%- endfor %}
+{% if will_not_go_count > 0 -%}
+    {% for student in group_attendance.attendance[VisitStatus.ABSENT] -%}
+        {% if student.attendance_noted -%}
+            <a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>\n
+        {%- endif %}
+    {%- endfor %}
+{% endif %}
 Что-то еще?""",
         autoescape=True,
-    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson)
+    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson, VisitStatus=VisitStatus,
+             not_noted_count=not_noted_count, will_not_go_count=will_not_go_count)
 
     return template

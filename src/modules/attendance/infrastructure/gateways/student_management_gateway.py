@@ -25,5 +25,5 @@ class StudentManagementGatewayImpl(StudentManagementGateway):
             for student_info in (await self._contract.get_students_info(group_id))
         }
 
-    async def update_is_checked_in_status(self, student_id: int, is_checked_in_previous: bool) -> None:
-        await self._contract.update_checked_in_status(student_id, is_checked_in_previous)
+    async def note_student_attendance(self, student_id: int) -> None:
+        await self._contract.note_student_attendance(student_id)

@@ -11,7 +11,7 @@ from src.bot.registration.resources import accept_or_deny_buttons
 from src.bot.registration.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-    student_send_registration_request_template
+    student_send_registration_request_template,
 )
 from src.modules.common.infrastructure.config import ADMIN_IDS
 from src.modules.student_management.application.commands import (
@@ -72,8 +72,8 @@ async def ask_new_fullname_validity_callback(
     await cache_student_data_command.execute(CreateStudentDTO(**student_data))
 
     telegram_id = await state.telegram_id
-    surname = await state.surname
-    name = await state.name
+    last_name = await state.last_name
+    first_name = await state.first_name
     role = await state.role
 
     if role == Role.HEADMAN:
@@ -82,7 +82,7 @@ async def ask_new_fullname_validity_callback(
         for admin_id in ADMIN_IDS:
             await bot.send_message(
                 admin_id,
-                student_send_registration_request_template(surname, name, role, telegram_id),
+                student_send_registration_request_template(last_name,first_name, role, telegram_id),
                 reply_markup=accept_or_deny_buttons(telegram_id),
             )
         return
@@ -100,6 +100,6 @@ async def ask_new_fullname_validity_callback(
     await state.set_state(RegistrationStates.on_verification)
     await bot.send_message(
         headman.telegram_id,
-        student_send_registration_request_template(surname, name, role, telegram_id),
+        student_send_registration_request_template(last_name,first_name, role, telegram_id),
         reply_markup=accept_or_deny_buttons(telegram_id),
     )

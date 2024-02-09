@@ -7,5 +7,5 @@ __all__ = [
 
 @verify(UNIQUE)
 class VisitStatus(str, Enum):
-    PRESENT = "present"
-    ABSENT = "absent"
+    PRESENT = "PRESENT"
+    ABSENT = "ABSENT"

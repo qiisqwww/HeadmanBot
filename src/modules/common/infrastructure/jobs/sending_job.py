@@ -10,12 +10,12 @@ from injector import Injector
 from src.bot.poll_attendance.resources import POLL_TEMPLATE, YOU_MUST_REMEMBER_TEMPLATE, update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import student_was_not_polled_warning_template
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
-from src.modules.student_management.application.queries import FindGroupHeadmanQuery
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import FetchUniTimezonByGroupIdQuery, GetAllGroupsQuery
 from src.modules.edu_info.domain import Group
 from src.modules.student_management.application.queries import (
+    FindGroupHeadmanQuery,
     GetStudentsInfoFromGroupQuery,
 )
 from src.modules.student_management.domain import StudentInfo
@@ -86,7 +86,7 @@ class SendingJob(AsyncJob):
                 await self._bot.send_message(
                     student_info.telegram_id,
                     POLL_TEMPLATE,
-                    reply_markup=update_attendance_buttons(student_info.is_checked_in_today, attendances, timezone),
+                    reply_markup=update_attendance_buttons(student_info.attendance_noted, attendances, timezone),
                 )
                 await self._bot.send_message(
                     student_info.telegram_id,
@@ -95,5 +95,5 @@ class SendingJob(AsyncJob):
             except TelegramForbiddenError:
                 await self._bot.send_message(
                     headman_telegram_id,
-                    student_was_not_polled_warning_template(student_info)
+                    student_was_not_polled_warning_template(student_info),
                 )

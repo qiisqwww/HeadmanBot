@@ -6,7 +6,7 @@ __all__ = [
 
 
 class ProfileUpdateStates(StatesGroup):
-    waiting_new_surname = State()
-    waiting_new_name = State()
+    waiting_new_first_name = State()
+    waiting_new_last_name = State()
     waiting_new_birthdate = State()
     on_validation = State()

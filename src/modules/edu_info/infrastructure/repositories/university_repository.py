@@ -31,7 +31,6 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
 
         return [self._mapper.to_domain(record) for record in records]
 
-    #
     async def find_by_name(self, name: str) -> None | University:
         query = "SELECT * FROM edu_info.universities WHERE name LIKE $1"
         record = await self._con.fetchrow(query, name)
@@ -40,10 +39,6 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
             return None
 
         return self._mapper.to_domain(record)
-
-    async def create(self, name: str, alias: UniversityAlias, timezone: str) -> None:
-        query = "INSERT INTO edu_info.universities (name, alias, timezone) VALUES($1, $2, $3)"
-        await self._con.execute(query, name, alias, timezone)
 
     async def fetch_university_timezone_by_group_id(self, group_id: int) -> str:
         query = """

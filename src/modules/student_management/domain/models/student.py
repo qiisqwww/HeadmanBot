@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 
-from ..enums import Role
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "Student",
@@ -13,21 +13,17 @@ class Student:
     id: int
     telegram_id: int
     group_id: int
-    name: str
-    surname: str
+    first_name: str
+    last_name: str
     role: Role
     birthdate: date | None
-    is_checked_in_today: bool
-
-    @property
-    def fullname(self) -> str:
-        return f"{self.surname} {self.name}"
-
-    def is_headman(self) -> bool:
-        return self.role == Role.HEADMAN
+    attendance_noted: bool
 
     def is_admin(self) -> bool:
         return self.role == Role.ADMIN
+
+    def is_headman(self) -> bool:
+        return self.role == Role.HEADMAN
 
     def is_vice_headman(self) -> bool:
         return self.role == Role.VICE_HEADMAN

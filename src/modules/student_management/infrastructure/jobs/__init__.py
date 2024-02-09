@@ -1,5 +1,5 @@
-from .unmark_all_students_job import UnmarkAllStudentsJob
+from .unnote_attendance_job import UnnoteAttendanceJob
 
 __all__ = [
-    "UnmarkAllStudentsJob",
+    "UnnoteAttendanceJob",
 ]
