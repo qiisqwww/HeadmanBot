@@ -16,6 +16,7 @@ from src.modules.edu_info.application.queries import GetAllGroupsQuery
 from src.modules.edu_info.domain import Group
 from src.modules.student_management.application.queries import (
     GetStudentsInfoFromGroupQuery,
+    GetStudentRoleByTelegramIDQuery
 )
 from src.modules.student_management.domain import StudentInfo
 
@@ -54,6 +55,7 @@ class InformAboutUpdateJob(AsyncJob):
             get_all_groups_query = container.get(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
             get_students_info_from_group_query = container.get(GetStudentsInfoFromGroupQuery)
+            get_student_role_by_telegram_id_query = container.get(GetStudentRoleByTelegramIDQuery)
 
             with open("update_info.html", "r+") as update_info_file:
                 update_info = update_info_file.read()
@@ -64,6 +66,7 @@ class InformAboutUpdateJob(AsyncJob):
                     await self._send_to_group(
                         group,
                         get_students_info_from_group_query,
+                        get_student_role_by_telegram_id_query,
                         update_info
                     )
 
@@ -74,20 +77,22 @@ class InformAboutUpdateJob(AsyncJob):
         self,
         group: Group,
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
+        get_student_role_by_telegram_id_query: GetStudentRoleByTelegramIDQuery,
         update_info: str
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
 
         async with TaskGroup() as tg:
             for student_info in students_info:
-                tg.create_task(self._send_to_student(student_info, update_info))
+                student_role: Role = await get_student_role_by_telegram_id_query.execute(student_info.telegram_id)
+                tg.create_task(self._send_to_student(student_info, update_info, student_role))
 
-    async def _send_to_student(self, student_info: StudentInfo, update_info: str) -> None:
+    async def _send_to_student(self, student_info: StudentInfo, update_info: str, student_role: Role) -> None:
         try:
             await self._bot.send_message(
                 student_info.telegram_id,
                 update_info,
-                reply_markup=main_menu(Role.STUDENT),
+                reply_markup=main_menu(student_role),
             )
         except TelegramForbiddenError:
             pass
