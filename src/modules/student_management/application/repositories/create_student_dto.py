@@ -12,8 +12,8 @@ __all__ = [
 @dataclass(slots=True, frozen=True)
 class CreateStudentDTO:
     telegram_id: int
-    name: str
-    surname: str
+    first_name: str
+    last_name: str
     birthdate: date | None
     role: Role
     group_name: str

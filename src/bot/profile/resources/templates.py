@@ -13,7 +13,8 @@ __all__ = [
     "ASK_NEW_NAME_TEMPLATE",
     "ASK_NEW_BIRTHDATE_TEMPLATE",
     "NEW_BIRTHDATE_INCORRECT_TEMPLATE",
-    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE"
+    FAILED_TO_LOAD_EDU_INFO_TEMPLATE,
+    "WHAT_DO_YOU_WANNA_EDIT_TEMPLATE",
 ]
 
 
@@ -27,12 +28,14 @@ NEW_BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели данные в неккор
 
 WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы хотите отредактировать?"
 
+FAILED_TO_LOAD_EDU_INFO_TEMPLATE = "Не удалось загрузить информацию о пользователе. Попробробуйте снова или напишете в @noheadproblemsbot."
+
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
     template = Template(
         "<b>Профиль студента</b>\n\n"
-        "Фамилия: {{student.surname}}\n"
-        "Имя: {{student.name}}\n"
+        "Фамилия: {{student.last_name}}\n"
+        "Имя: {{student.first_name}}\n"
         "Роль: {{student.role.translation}}\n"
         "Группа: {{edu_info.group_name}}\n"
         "Университет: {{edu_info.university_name}}\n"
@@ -43,17 +46,19 @@ def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
     return template.render(student=student, edu_info=edu_info)
 
 
-def asking_name_validation_template(name: str) -> str:
-    template = Template("Ваше новое имя: {{name}}\n\nДанные верны?", autoescape=True)
-    return template.render(name=name)
+def asking_name_validation_template(first_name: str) -> str:
+    template = Template("Ваше новое имя: {{first_name}}\n\nДанные верны?", autoescape=True)
+    return template.render(first_name=first_name)
 
 
-def asking_surname_validation_template(surname: str) -> str:
-    template = Template("Ваша новая фамилия: {{surname}}\n\nДанные верны?", autoescape=True)
-    return template.render(surname=surname)
+def asking_surname_validation_template(last_name: str) -> str:
+    template = Template("Ваша новая фамилия: {{last_name}}\n\nДанные верны?", autoescape=True)
+    return template.render(last_name=last_name)
 
 
-def asking_birthdate_validation_template(birthdate: date | str) -> str:
-    template = Template("Ваша новая дата рождения: {{birthdate}}\n\nДанные верны?", autoescape=True)
-    return template.render(birthdate=birthdate)
-
+def asking_birthdate_validation_template(new_birthdate: date | None) -> str:
+    template = Template(
+        "Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}} {% else %}не указана {% endif %}\n\nДанные верны?",
+        autoescape=True,
+    )
+    return template.render(new_birthdate=new_birthdate)

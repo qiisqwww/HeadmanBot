@@ -5,8 +5,8 @@ from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.modules.student_management.application.queries import GetEduProfileInfoQuery
 from src.modules.student_management.domain import Student
 
-from .resources.templates import profile_info
 from .resources.inline_buttons import profile_buttons
+from .resources.templates import FAILED_TO_LOAD_EDU_INFO_TEMPLATE, profile_info
 
 __all__ = [
     "include_profile_command_router",
@@ -31,6 +31,7 @@ async def profile_command(
     edu_info = await get_edu_profile_info_query.execute(student.group_id)
 
     if edu_info is None:
-        raise RuntimeError("Failed to fetch edu_info.")
+        await message.answer(FAILED_TO_LOAD_EDU_INFO_TEMPLATE)
+        return
 
     await message.answer(text=profile_info(student, edu_info), reply_markup=profile_buttons())

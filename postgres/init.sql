@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS student_management.students (
     id BIGSERIAL PRIMARY KEY,
     telegram_id BIGINT NOT NULL UNIQUE,
     group_id BIGINT,
-    name VARCHAR(255) NOT NULL,
-    surname VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
     role role NOT NULL,
     birthdate DATE NULL,
     is_checked_in_today BOOLEAN NOT NULL

@@ -15,8 +15,8 @@ __all__ = [
 class CreateStudentDTOMapper:
     def to_redis_dict(self, data: CreateStudentDTO) -> Mapping[bytes | str, str]:
         return {
-            "name": data.name,
-            "surname": data.surname,
+            "first_name": data.first_name,
+            "last_name": data.last_name,
             "role":  data.role.value,
             "group_name": data.group_name,
             "telegram_id":  str(data.telegram_id),
@@ -25,10 +25,9 @@ class CreateStudentDTOMapper:
         }
 
     def from_redis_dict(self, data: Mapping[str, str]) -> CreateStudentDTO:
-
         return CreateStudentDTO(
-            name=data["name"],
-            surname=data["surname"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
             role=Role(data["role"]),
             group_name=data["group_name"],
             telegram_id=int(data["telegram_id"]),
