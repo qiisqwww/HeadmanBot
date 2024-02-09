@@ -9,9 +9,9 @@ __all__ = [
 
 
 def something_went_wrong_template(exception: Exception, user_telegram_id: int) -> str:
-    template = Template("Произошла ошибка {{exception}} у пользователя с telegram ID {{user_telegram_id}}. "
-                        "Возможно, стоит предпринять какие-то меры.\n"
-                        "{{traceback.format_exc()}}",
+    template = Template('Произошла ошибка {{exception}} у пользователя с telegram ID <a href="tg://user?id={{ user_telegram_id }}">Пользователь</a>. (ID = user_telegram_id)'
+                        'Возможно, стоит предпринять какие-то меры.\n'
+                        '{{traceback.format_exc()}}[',
                         autoescape=True)
     return template.render(exception=exception, user_telegram_id=user_telegram_id, traceback=traceback)
 
