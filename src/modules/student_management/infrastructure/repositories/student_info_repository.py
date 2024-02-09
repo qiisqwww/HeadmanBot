@@ -4,7 +4,7 @@ from src.modules.common.infrastructure.repositories import PostgresRepositoryImp
 from src.modules.student_management.application.repositories import (
     StudentInfoRepository,
 )
-from src.modules.student_management.domain import StudentInfo
+from src.modules.student_management.domain import StudentInfo, Role
 
 __all__ = [
     "StudentInfoRepositoryImpl",
@@ -20,3 +20,9 @@ class StudentInfoRepositoryImpl(PostgresRepositoryImpl, StudentInfoRepository):
         records = await self._con.fetch(query, group_id)
 
         return [StudentInfo(**record) for record in records]
+
+    async def get_role_by_telegram_id(self, telegram_id: int) -> Role:
+        query = """SELECT role FROM student_management.students WHERE telegram_id = $1"""
+        record = await self._con.fetch(query, telegram_id)
+
+        return Role(record)
