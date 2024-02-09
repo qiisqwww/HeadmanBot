@@ -43,36 +43,51 @@ class InformAboutUpdateJob(AsyncJob):
                 "day_of_week": "mon-sat",
             }
 
+        if DEBUG:
+            self._trigger = "interval"
+            self._trigger_args = {
+                "seconds": 10
+            }
+
     async def __call__(self) -> None:
         async with self._build_container() as container:
             get_all_groups_query = container.get(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
             get_students_info_from_group_query = container.get(GetStudentsInfoFromGroupQuery)
 
-            for group in groups:
-                await self._send_to_group(
-                    group,
-                    get_students_info_from_group_query,
-                )
+            with open("update_info.html", "r+") as update_info_file:
+                update_info = update_info_file.read()
+                if len(update_info) == 0:
+                    return
+
+                for group in groups:
+                    await self._send_to_group(
+                        group,
+                        get_students_info_from_group_query,
+                        update_info
+                    )
+
+                update_info_file.truncate(0)
+                update_info_file.flush()
 
     async def _send_to_group(
         self,
         group: Group,
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
+        update_info: str
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
 
         async with TaskGroup() as tg:
             for student_info in students_info:
-                tg.create_task(self._send_to_student(student_info))
+                tg.create_task(self._send_to_student(student_info, update_info))
 
-    async def _send_to_student(self, student_info: StudentInfo) -> None:
-        async with self._build_container() as container:
-            try:
-                await self._bot.send_message(
-                    student_info.telegram_id,
-                    "...",
-                    reply_markup=main_menu(Role.STUDENT),
-                )
-            except TelegramForbiddenError:
-                pass
+    async def _send_to_student(self, student_info: StudentInfo, update_info: str) -> None:
+        try:
+            await self._bot.send_message(
+                student_info.telegram_id,
+                update_info,
+                reply_markup=main_menu(Role.STUDENT),
+            )
+        except TelegramForbiddenError:
+            pass

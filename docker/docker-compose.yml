@@ -9,6 +9,7 @@ services:
       context: ../
     volumes:
       - /var/log/headman_bot:/app/logs
+      - PATH_TO_UPDATE_INFO_HTML_FILE_ON_SERVER:/app/logs
     depends_on:
       redis:
         condition: service_started

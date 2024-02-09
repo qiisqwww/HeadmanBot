@@ -17,3 +17,4 @@ transform_data.py
 *.bkp
 *.dtmp
 db.sql
+update_info.html
