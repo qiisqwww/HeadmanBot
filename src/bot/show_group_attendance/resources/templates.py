@@ -56,7 +56,7 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
 {% endfor %}
 
 Не придут:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] | sort(attribute='fullname') | rejectattr('attendance_noted', '==', False) -%}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] | sort(attribute='fullname') | selectattr('attendance_noted') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
 
