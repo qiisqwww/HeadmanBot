@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import AsyncContextManager, final
+from contextlib import AbstractAsyncContextManager
 
 from injector import Injector
 
@@ -14,9 +14,9 @@ __all__ = [
 
 @final
 class MakeAttendanceRelevantJob(AsyncJob):
-    _build_container: Callable[[], AsyncContextManager[Injector]]
+    _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
 
-    def __init__(self, build_container: Callable[[], AsyncContextManager[Injector]]) -> None:
+    def __init__(self, build_container: Callable[[], AbstractAsyncContextManager[Injector]]) -> None:
         self._build_container = build_container
 
         if not DEBUG:
@@ -24,7 +24,7 @@ class MakeAttendanceRelevantJob(AsyncJob):
             self._trigger_args = {
                 "hour": 1,
                 "minute": 00,
-                "day_of_week": "mon-sat",
+                "day_of_week": "mon-sun",
             }
 
     async def __call__(self) -> None:

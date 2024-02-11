@@ -55,9 +55,10 @@ class MakeAttendanceRelevantCommand(UseCase):
                 except ScheduleApiError:
                     continue
 
-                group_schedule = await self._lesson_repository.create_for_group(group.id, fetched_schedule)
+                if fetched_schedule:
+                    group_schedule = await self._lesson_repository.create_for_group(group.id, fetched_schedule)
 
-                students = await self._student_management_gateway.filter_student_info_by_group_id(group.id)
+                    students = await self._student_management_gateway.filter_student_info_by_group_id(group.id)
 
-                for student_id in students:
-                    await self._attendance_repository.create_for_student(student_id, group_schedule)
+                    for student_id in students:
+                        await self._attendance_repository.create_for_student(student_id, group_schedule)
