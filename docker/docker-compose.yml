@@ -2,13 +2,13 @@ version: '3.9'
 
 services:
   proxy:
-    image: ngrok/ngrok:alpine
-    env_file:
-      - ../.env/.dev.env
-    command: ["http", "headman_bot:8080", "--domain", "$NGROK_DOMAIN"]
-    ports: 
+    depends_on:
+      - headman_bot
+    build:
+      dockerfile: Dockerfile
+      context: ../nginx
+    ports:
       - 80:80
-      - 4040:4040
 
   headman_bot:
     env_file:
