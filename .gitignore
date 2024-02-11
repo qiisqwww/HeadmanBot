@@ -16,3 +16,6 @@ todo.md
 *.bkp
 *.dtmp
 db.sql
+*.pem 
+*.key
+*.crt
