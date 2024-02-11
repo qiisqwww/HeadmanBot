@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 from icalendar import Calendar, Event
 from pydantic import ValidationError
 
-from src.modules.common.infrastructure import DEBUG
+from src.modules.common.infrastructure.config.config import DEBUG
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry

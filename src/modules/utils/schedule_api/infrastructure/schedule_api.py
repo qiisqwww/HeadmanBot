@@ -27,11 +27,4 @@ class ScheduleApiImpl(ScheduleAPI):
         return await self._api_impl.group_exists(group_name)
 
     async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule] | NoReturn:
-        result = await self._api_impl.fetch_schedule(group_name, day)
-
-        # FIXME:        # for schedule_item in result:
-
-        #     if schedule_item.start_time.tzinfo is not self._RESULT_TIMEZONE:
-        #         raise RuntimeError(f"Incorrect time zone for schedule_item '{schedule_item.start_time.tzinfo}'.")
-
-        return result
+        return await self._api_impl.fetch_schedule(group_name, day)
