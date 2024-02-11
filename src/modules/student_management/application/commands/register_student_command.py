@@ -6,8 +6,7 @@ from src.modules.student_management.application.gateways import (
     EduInfoModuleGateway,
 )
 from src.modules.student_management.application.repositories import CacheStudentDataRepository, StudentRepository
-from src.modules.student_management.domain import Student
-from src.modules.student_management.domain.enums.role import Role
+from src.modules.student_management.domain import Role, Student
 
 
 class RegisterStudentCommand(UseCase):
@@ -32,7 +31,7 @@ class RegisterStudentCommand(UseCase):
         self._attendance_module_gateway = attendance_module_gateway
         self._uow = uow
 
-    async def execute(self,  telegram_id: int) -> Student:
+    async def execute(self, telegram_id: int) -> Student:
         async with self._uow:
             create_student_data = await self._cache_student_repository.pop(telegram_id)
             if create_student_data is None:
