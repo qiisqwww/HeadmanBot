@@ -19,6 +19,7 @@ WORKDIR /app
 # Set correct timezone.
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+COPY ../nginx/headman_bot.crt /app/
 COPY poetry.lock pyproject.toml /app/
 
 # Configurate poetry and install requirement dependencies.
