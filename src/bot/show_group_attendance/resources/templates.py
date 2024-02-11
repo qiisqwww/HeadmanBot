@@ -41,28 +41,27 @@ CHOOSE_PAIR_TEMPLATE = """
 
 
 def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup, timezone: str) -> str:
-    start_time = convert_time_from_utc(choosen_lesson.start_time, timezone)
+    start_time = convert_time_from_utc(choosen_lesson.start_time, timezone).strftime("%H:%M")
     template: str = Template(
-        """{{lesson.name}} {{start_time.strftime('%H:%M')}}
+        """{{lesson_name}} {{start_time}}
 
 Не отметились:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] %}
-{% if not student.attendance_noted %}
-<a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
-{% endif %}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] | sort(attribute='fullname') | rejectattr('attendance_noted') -%}
+    <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
+
 Придут:
-{% for student in group_attendance.attendance[VisitStatus.PRESENT] %}
-<a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
+{% for student in group_attendance.attendance[VisitStatus.PRESENT] | sort(attribute='fullname') -%}
+    <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
+
 Не придут:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] %}
-{% if student.attendance_noted %}
-<a href="tg://user?id={{ student.telegram_id }}">{{ student.last_name }} {{ student.first_name }}</a>
-{% endif %}
+{% for student in group_attendance.attendance[VisitStatus.ABSENT] | sort(attribute='fullname') | attr('attendance_noted') -%}
+    <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
+
 Что-то еще?""",
-        autoescape=True,
-    ).render(start_time=start_time, group_attendance=group_attendance, lesson=choosen_lesson, VisitStatus=VisitStatus)
+        autoescape=True,trim_blocks=True,
+    ).render(lesson_name=choosen_lesson.name, start_time=start_time, group_attendance=group_attendance,VisitStatus=VisitStatus)
 
     return template

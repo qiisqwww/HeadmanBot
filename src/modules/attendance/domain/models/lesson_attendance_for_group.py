@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from ..enums import VisitStatus
+from src.modules.attendance.domain import VisitStatus
+
 from .student_info import StudentInfo
 
 __all__ = [

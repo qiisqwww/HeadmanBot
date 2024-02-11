@@ -37,7 +37,7 @@ async def attendance_send_callback(
         return
 
     schedule = await get_today_schedule_query.execute(student.group_id)
-    choosen_lesson = next(filter(lambda lesson: lesson.id == callback_data.lesson_id, schedule))
+    choosen_lesson = next(lesson for lesson in schedule if lesson.id == callback_data.lesson_id)
     group_attendance = await get_visit_status_for_group_students_query.execute(student.group_id, choosen_lesson.id)
 
     new_message = attendance_for_headmen_template(choosen_lesson, group_attendance, timezone)

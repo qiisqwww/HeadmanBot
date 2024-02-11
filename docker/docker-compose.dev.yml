@@ -5,22 +5,22 @@ services:
     image: ngrok/ngrok:alpine
     env_file:
       - ../.env/.dev.env
-    command: ["http", "proxy:443", "--domain", "$NGROK_DOMAIN"]
+    command: ["http", "proxy:80", "--domain", "$NGROK_DOMAIN"]
 
   proxy:
     depends_on:
       - headman_bot
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ../nginx
     ports:
-      - 443:443
+      - 80:80
 
   headman_bot:
     env_file:
       - ../.env/.dev.env
     build: 
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/Dockerfile.dev
       context: ..
     depends_on:
       redis:
