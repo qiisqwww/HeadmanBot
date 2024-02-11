@@ -6,8 +6,9 @@ from typing import final
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from injector import Injector
+from loguru import logger
 
-from src.bot.poll_attendance.resources import POLL_TEMPLATE, YOU_MUST_REMEMBER_TEMPLATE, update_attendance_buttons
+from src.bot.poll_attendance.resources import POLL_TEMPLATE, update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import student_was_not_polled_warning_template
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
 from src.modules.common.infrastructure.config import DEBUG
@@ -88,12 +89,14 @@ class SendingJob(AsyncJob):
                     POLL_TEMPLATE,
                     reply_markup=update_attendance_buttons(student_info.attendance_noted, attendances, timezone),
                 )
-                await self._bot.send_message(
-                    student_info.telegram_id,
-                    YOU_MUST_REMEMBER_TEMPLATE
-                )
             except TelegramForbiddenError:
-                await self._bot.send_message(
-                    headman_telegram_id,
-                    student_was_not_polled_warning_template(student_info),
-                )
+                try:
+                    await self._bot.send_message(
+                        headman_telegram_id,
+                        student_was_not_polled_warning_template(student_info),
+                    )
+                except Exception as e:
+                    logger.exception(e)
+
+            except Exception as e:
+                logger.exception(e)

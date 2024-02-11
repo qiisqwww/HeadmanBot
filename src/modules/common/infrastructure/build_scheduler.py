@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from aiogram import Bot
 
 from src.modules.attendance.infrastructure.jobs import MakeAttendanceRelevantJob
@@ -14,18 +12,14 @@ __all__ = [
     "build_scheduler",
 ]
 
-if TYPE_CHECKING:
-    from src.modules.common.infrastructure.scheduling import AsyncJob
-
 
 async def build_scheduler(bot: Bot) -> AsyncScheduler:
-    attendance_jobs: list[AsyncJob] = []
-    student_management_jobs: list[AsyncJob] = []
-    common_jobs = [SendingJob(bot, project_container), InformAboutUpdateJob(bot, project_container)]
-
     if not DEBUG:
-        attendance_jobs.append(MakeAttendanceRelevantJob(project_container))
-        student_management_jobs.append(UnnoteAttendanceJob(project_container))
+        attendance_jobs = [MakeAttendanceRelevantJob(project_container)]
+        student_management_jobs = [UnnoteAttendanceJob(project_container)]
+        common_jobs = [SendingJob(bot, project_container), InformAboutUpdateJob(bot, project_container)]
+
+
+        return AsyncScheduler(*attendance_jobs, *student_management_jobs, *common_jobs)
 
     return AsyncScheduler()
-    # return AsyncScheduler(*attendance_jobs, *student_management_jobs, *common_jobs)

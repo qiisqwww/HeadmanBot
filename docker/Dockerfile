@@ -15,17 +15,18 @@ RUN pip install "poetry==$POETRY_VERSION"
 
 # Copy only requirements to cache them in docker layer
 WORKDIR /app
-COPY poetry.lock pyproject.toml /app/
 
 # Set correct timezone.
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY poetry.lock pyproject.toml /app/
 
 # Configurate poetry and install requirement dependencies.
 RUN poetry config virtualenvs.create false \
     && poetry install $([ "$DEBUG" = false ] && echo "--no-dev") --no-interaction --no-ansi
 
 # Copy project into container.
-COPY . /app
+COPY src /app/src
 
 # Start bot with this command. Will be called when docker container will be started.
 CMD [ "python", "-m", "src" ]

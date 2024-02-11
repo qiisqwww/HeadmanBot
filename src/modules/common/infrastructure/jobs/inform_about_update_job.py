@@ -1,24 +1,22 @@
 from asyncio import TaskGroup
 from collections.abc import Callable
-from contextlib import AbstractAsyncContextManager
+from contextlib import AbstractAsyncContextManager, suppress
 from typing import final
 
 from aiogram import Bot
-from aiogram.exceptions import TelegramForbiddenError
 from injector import Injector
 
-from src.modules.student_management.domain.enums import Role
 from src.bot.common.resources.main_menu import main_menu
-
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import GetAllGroupsQuery
 from src.modules.edu_info.domain import Group
 from src.modules.student_management.application.queries import (
+    GetStudentRoleByTelegramIDQuery,
     GetStudentsInfoFromGroupQuery,
-    GetStudentRoleByTelegramIDQuery
 )
 from src.modules.student_management.domain import StudentInfo
+from src.modules.student_management.domain.enums import Role
 
 __all__ = [
     "InformAboutUpdateJob",
@@ -47,7 +45,7 @@ class InformAboutUpdateJob(AsyncJob):
         if DEBUG:
             self._trigger = "interval"
             self._trigger_args = {
-                "seconds": 10
+                "seconds": 10,
             }
 
     async def __call__(self) -> None:
@@ -67,7 +65,7 @@ class InformAboutUpdateJob(AsyncJob):
                         group,
                         get_students_info_from_group_query,
                         get_student_role_by_telegram_id_query,
-                        update_info
+                        update_info,
                     )
 
                 update_info_file.truncate(0)
@@ -78,7 +76,7 @@ class InformAboutUpdateJob(AsyncJob):
         group: Group,
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
         get_student_role_by_telegram_id_query: GetStudentRoleByTelegramIDQuery,
-        update_info: str
+        update_info: str,
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
 
@@ -88,11 +86,9 @@ class InformAboutUpdateJob(AsyncJob):
                 tg.create_task(self._send_to_student(student_info, update_info, student_role))
 
     async def _send_to_student(self, student_info: StudentInfo, update_info: str, student_role: Role) -> None:
-        try:
+        with suppress(Exception):
             await self._bot.send_message(
                 student_info.telegram_id,
                 update_info,
                 reply_markup=main_menu(student_role),
             )
-        except TelegramForbiddenError:
-            pass

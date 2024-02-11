@@ -23,6 +23,6 @@ class StudentInfoRepositoryImpl(PostgresRepositoryImpl, StudentInfoRepository):
 
     async def get_role_by_telegram_id(self, telegram_id: int) -> Role:
         query = """SELECT role FROM student_management.students WHERE telegram_id = $1"""
-        record = await self._con.fetchval(query, telegram_id)
+        value = await self._con.fetchval(query, telegram_id)
 
-        return Role(record)
+        return Role(value)
