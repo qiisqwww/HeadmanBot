@@ -41,6 +41,7 @@ async def attendance_send_callback(
 
     if choosen_lesson is None:
         await callback.message.edit_text("Сегодня пар нет.")
+        return
     group_attendance = await get_visit_status_for_group_students_query.execute(student.group_id, choosen_lesson.id)
 
     new_message = attendance_for_headmen_template(choosen_lesson, group_attendance, timezone)
