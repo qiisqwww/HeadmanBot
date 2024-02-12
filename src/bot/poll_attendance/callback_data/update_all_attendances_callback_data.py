@@ -1,4 +1,3 @@
-from datetime import date
 
 from aiogram.filters.callback_data import CallbackData
 
@@ -11,4 +10,4 @@ __all__ = [
 
 class UpdateAllAttendancesCallbackData(CallbackData, prefix="update_all_attendace_prefix"):  # type: ignore
     new_status: VisitStatus
-    day_of_poll: date
+    # day_of_poll: date

@@ -40,6 +40,7 @@ async def update_attendance(
     await update_all_attendances_command.execute(student.id, callback_data.new_status)
 
     new_attendances = await get_student_attendance_query.execute(student.id)
+    new_attendances.sort()
     new_text = your_all_choice_is_template(callback_data.new_status)
 
     if new_text == callback.message.html_text:

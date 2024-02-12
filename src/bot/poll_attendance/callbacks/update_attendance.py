@@ -45,6 +45,7 @@ async def update_attendance(
     )
 
     new_attendances = await get_student_attendance_query.execute(student.id)
+    new_attendances.sort()
     choosen_attendance = next(filter(lambda attendance: attendance.id == callback_data.attendance_id, new_attendances))
 
     if all(choosen_attendance.status == attendance.status for attendance in new_attendances):
