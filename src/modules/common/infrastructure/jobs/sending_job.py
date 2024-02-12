@@ -82,6 +82,7 @@ class SendingJob(AsyncJob):
         async with self._build_container() as container:
             get_student_attedance_query = container.get(GetStudentAttendanceQuery)
             attendances = await get_student_attedance_query.execute(student_info.id)
+            attendances.sort()
 
             try:
                 await self._bot.send_message(

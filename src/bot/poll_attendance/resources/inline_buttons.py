@@ -1,4 +1,6 @@
 from collections.abc import Iterable
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -15,6 +17,7 @@ __all__ = [
 def update_attendance_buttons(attendance_noted: bool, attendances: Iterable[Attendance], timezone: str) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
+    day_of_poll = datetime.now(tz=ZoneInfo("UTC")).date()
     for attendance in attendances:
         start_time = convert_time_from_utc(attendance.lesson.start_time, timezone)
         if attendance_noted:
@@ -24,6 +27,7 @@ def update_attendance_buttons(attendance_noted: bool, attendances: Iterable[Atte
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.PRESENT,
+                        day_of_poll=day_of_poll,
                     ),
                 )
             else:
@@ -32,21 +36,23 @@ def update_attendance_buttons(attendance_noted: bool, attendances: Iterable[Atte
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.ABSENT,
+                        day_of_poll=day_of_poll,
                     ),
                 )
         else:
             builder.button(
                 text=f"🤷 Неизвестно {start_time.strftime('%H:%M')} {attendance.lesson.name}",
-                callback_data=UpdateAttendanceCallbackData(attendance_id=attendance.id, new_status=VisitStatus.PRESENT),
+                callback_data=UpdateAttendanceCallbackData(attendance_id=attendance.id, new_status=VisitStatus.PRESENT, day_of_poll=day_of_poll,
+),
             )
 
     builder.button(
         text="Буду на всех",
-        callback_data=UpdateAllAttendancesCallbackData(new_status=VisitStatus.PRESENT),
+        callback_data=UpdateAllAttendancesCallbackData(new_status=VisitStatus.PRESENT,  day_of_poll=day_of_poll),
     )
     builder.button(
         text="Меня сегодня не будет",
-        callback_data=UpdateAllAttendancesCallbackData(new_status=VisitStatus.ABSENT),
+        callback_data=UpdateAllAttendancesCallbackData(new_status=VisitStatus.ABSENT,  day_of_poll=day_of_poll),
     )
     builder.adjust(1)
 
