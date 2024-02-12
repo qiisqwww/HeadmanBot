@@ -11,6 +11,7 @@ from loguru import logger
 from src.bot.poll_attendance.resources import POLL_TEMPLATE, update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import student_was_not_polled_warning_template
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
+from src.modules.attendance.domain import StudentInfo
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import FetchUniTimezonByGroupIdQuery, GetAllGroupsQuery
@@ -19,7 +20,6 @@ from src.modules.student_management.application.queries import (
     FindGroupHeadmanQuery,
     GetStudentsInfoFromGroupQuery,
 )
-from src.modules.student_management.domain import StudentInfo
 
 __all__ = [
     "SendingJob",
@@ -40,8 +40,8 @@ class SendingJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 9,
-                "minute": 12,
+                "hour": 7,
+                "minute": 00,
                 "day_of_week": "mon-sat",
             }
 
@@ -55,8 +55,6 @@ class SendingJob(AsyncJob):
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
 
             for group in groups:
-                if group != 10:
-                    continue
                 timezone = await fetch_group_timezone.execute(group.id)
                 await self._send_to_group(
                     group,
@@ -65,6 +63,7 @@ class SendingJob(AsyncJob):
                     timezone,
                 )
 
+    @logger.catch
     async def _send_to_group(
         self,
         group: Group,

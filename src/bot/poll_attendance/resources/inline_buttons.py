@@ -27,7 +27,7 @@ def update_attendance_buttons(attendance_noted: bool, attendances: Iterable[Atte
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.PRESENT,
-                        # day_of_poll=day_of_poll,
+                        day_of_poll=day_of_poll,
                     ),
                 )
             else:
@@ -36,27 +36,27 @@ def update_attendance_buttons(attendance_noted: bool, attendances: Iterable[Atte
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.ABSENT,
-                        # day_of_poll=day_of_poll,
+                        day_of_poll=day_of_poll,
                     ),
                 )
         else:
             builder.button(
                 text=f"🤷 Неизвестно {start_time.strftime('%H:%M')} {attendance.lesson.name}",
                 callback_data=UpdateAttendanceCallbackData(attendance_id=attendance.id, new_status=VisitStatus.PRESENT,
-                                                           # day_of_poll=day_of_poll,
+                                                           day_of_poll=day_of_poll,
 ),
             )
 
     builder.button(
         text="Буду на всех",
         callback_data=UpdateAllAttendancesCallbackData(new_status=VisitStatus.PRESENT,
-                                                       # day_of_poll=day_of_poll
+                                                       day_of_poll=day_of_poll,
                                                        ),
     )
     builder.button(
         text="Меня сегодня не будет",
         callback_data=UpdateAllAttendancesCallbackData(new_status=VisitStatus.ABSENT,
-                                                       # day_of_poll=day_of_poll
+                                                       day_of_poll=day_of_poll,
                                                        ),
     )
     builder.adjust(1)
