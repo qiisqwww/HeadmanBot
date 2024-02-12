@@ -42,12 +42,14 @@ class MakeAttendanceRelevantCommand(UseCase):
 
     async def execute(self) -> None:
         async with self._uow:
-            await self._lesson_repository.delete_all()
-            await self._attendance_repository.delete_all()
+            # await self._lesson_repository.delete_all()
+            # await self._attendance_repository.delete_all()
 
             groups = await self._edu_info_gateway.fetch_all_groups()
 
             for group in groups:
+                if group.id != 10:
+                    continue
                 schedule_api = self._schedule_api(group.university_alias)
 
                 try:

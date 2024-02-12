@@ -40,8 +40,8 @@ class SendingJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 7,
-                "minute": 00,
+                "hour": 9,
+                "minute": 12,
                 "day_of_week": "mon-sat",
             }
 
@@ -55,6 +55,8 @@ class SendingJob(AsyncJob):
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
 
             for group in groups:
+                if group != 10:
+                    continue
                 timezone = await fetch_group_timezone.execute(group.id)
                 await self._send_to_group(
                     group,

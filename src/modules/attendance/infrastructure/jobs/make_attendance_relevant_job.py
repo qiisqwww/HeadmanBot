@@ -23,8 +23,8 @@ class MakeAttendanceRelevantJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 1,
-                "minute": 00,
+                "hour": 9,
+                "minute": 7,
                 "day_of_week": "mon-sun",
             }
 
