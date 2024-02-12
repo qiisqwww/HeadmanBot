@@ -5,6 +5,7 @@ from typing import final
 
 from aiogram import Bot
 from injector import Injector
+from loguru import logger
 
 from src.bot.common.resources.main_menu import main_menu
 from src.modules.common.infrastructure.config import DEBUG
@@ -48,7 +49,9 @@ class InformAboutUpdateJob(AsyncJob):
                 "seconds": 10,
             }
 
+    @logger.catch
     async def __call__(self) -> None:
+        logger.info("Start inform about update job.")
         async with self._build_container() as container:
             get_all_groups_query = container.get(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
@@ -70,7 +73,9 @@ class InformAboutUpdateJob(AsyncJob):
 
                 update_info_file.truncate(0)
                 update_info_file.flush()
+        logger.info("Finish inform about update job.")
 
+    @logger.catch
     async def _send_to_group(
         self,
         group: Group,
@@ -85,6 +90,7 @@ class InformAboutUpdateJob(AsyncJob):
                 student_role: Role = await get_student_role_by_telegram_id_query.execute(student_info.telegram_id)
                 tg.create_task(self._send_to_student(student_info, update_info, student_role))
 
+    @logger.catch
     async def _send_to_student(self, student_info: StudentInfo, update_info: str, student_role: Role) -> None:
         with suppress(Exception):
             await self._bot.send_message(

@@ -3,6 +3,7 @@ from contextlib import AbstractAsyncContextManager
 from typing import final
 
 from injector import Injector
+from loguru import logger
 
 from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
 from src.modules.common.infrastructure.config import DEBUG
@@ -28,7 +29,10 @@ class MakeAttendanceRelevantJob(AsyncJob):
                 "day_of_week": "mon-sun",
             }
 
+    @logger.catch
     async def __call__(self) -> None:
+        logger.info("Start MakeAttendanceRelevantJob.")
         async with self._build_container() as container:
             command = container.get(MakeAttendanceRelevantCommand)
             await command.execute()
+        logger.info("Stop MakeAttendanceRelevantJob.")

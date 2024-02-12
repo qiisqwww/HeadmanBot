@@ -45,7 +45,9 @@ class SendingJob(AsyncJob):
                 "day_of_week": "mon-sat",
             }
 
+    @logger.catch
     async def __call__(self) -> None:
+        logger.info("Start sending job.")
         async with self._build_container() as container:
             get_all_groups_query = container.get(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
@@ -62,6 +64,7 @@ class SendingJob(AsyncJob):
                     find_group_headman_query,
                     timezone,
                 )
+        logger.info("Stop sending job.")
 
     @logger.catch
     async def _send_to_group(
@@ -79,6 +82,7 @@ class SendingJob(AsyncJob):
                 tg.create_task(self._send_to_student(student_info, group_headman.id, timezone))
 
 
+    @logger.catch
     async def _send_to_student(self, student_info: StudentInfo, headman_telegram_id: int, timezone: str) -> None:
         async with self._build_container() as container:
             get_student_attedance_query = container.get(GetStudentAttendanceQuery)
