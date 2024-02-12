@@ -52,7 +52,7 @@ async def attendance_send_callback(
 
     new_message = attendance_for_headmen_template(choosen_lesson, group_attendance, timezone)
 
-    if new_message == callback.message.html_text:
+    if new_message == callback.message.html_text or new_message == callback.message.text:
         await callback.answer(None)
     else:
         await callback.message.edit_text(new_message, reply_markup=choose_lesson_buttons(schedule, timezone))
