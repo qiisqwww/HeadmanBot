@@ -21,5 +21,5 @@ async def test_bmstu_api_group_exists(
         return all_schedule_page
 
     api = BmstuScheduleApi()
-    monkeypatch.setattr(api, "_fetch_all_schedule_soup", fetch_all_schedule_soup_stub)
+    monkeypatch.setattr(api, "_parse_html", fetch_all_schedule_soup_stub)
     assert await api.group_exists(group_name) is exists

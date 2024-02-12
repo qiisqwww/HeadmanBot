@@ -51,7 +51,8 @@ class BmstuScheduleApi(ScheduleAPI):
         return group_name in group_names
 
     async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule]:
-        day = day or datetime.now(tz=self._API_TIMEZONE).date()
+        # day = day or datetime.now(tz=self._API_TIMEZONE).date()
+        day = day or datetime.now(tz=ZoneInfo("Europe/Moscow")).date()
 
         if day.weekday() == self._SUNDAY:
             return []
@@ -63,7 +64,7 @@ class BmstuScheduleApi(ScheduleAPI):
             raise FailedToCheckGroupExistenceError(err_msg) from e
 
         try:
-            all_schedule_soup = BeautifulSoup(all_schedule_bin, "html.parser")
+            all_schedule_soup = self._parse_html(all_schedule_bin)
             isc_url = self._parse_isc_url(all_schedule_soup, group_name)
         except Exception as e:
             err_msg = "Failed to parse isc file location from index schedule page using BMSTU API."
@@ -89,6 +90,9 @@ class BmstuScheduleApi(ScheduleAPI):
             raise ParsingScheduleAPIResponseError(err_msg) from e
 
         return schedule
+
+    def _parse_html(self, html: str) -> BeautifulSoup:
+        return BeautifulSoup(html, "html.parser")
 
     def _parse_isc_url(self, page: BeautifulSoup, group_name: str) -> str:
         group_tags = self._parse_group_tags_soup(page)
