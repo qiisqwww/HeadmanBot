@@ -1,6 +1,5 @@
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery
-from loguru import logger
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.resources import void_inline_buttons
@@ -54,11 +53,7 @@ async def attendance_send_callback(
 
     new_message = attendance_for_headmen_template(choosen_lesson, group_attendance, timezone)
 
-    # if new_message == callback.message.html_text or new_message == callback.message.text:
-    #     await callback.answer(None)
-    # else:
     try:
         await callback.message.edit_text(new_message, reply_markup=choose_lesson_buttons(schedule, timezone))
-    except TelegramBadRequest as e:
-        logger.exception(e)
+    except TelegramBadRequest:
         await callback.answer(None)
