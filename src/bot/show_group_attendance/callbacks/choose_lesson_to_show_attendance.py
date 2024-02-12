@@ -47,7 +47,7 @@ async def attendance_send_callback(
     choosen_lesson = next((lesson for lesson in schedule if lesson.id == callback_data.lesson_id), None)
 
     if choosen_lesson is None:
-        await callback.message.edit_text("Сообщение устарело, попробуйте снова нажать на кнопку 'Узнать посещаемость'", reply_markup=void_inline_buttons)
+        await callback.message.edit_text("Сообщение устарело, попробуйте снова нажать на кнопку 'Узнать посещаемость'", reply_markup=void_inline_buttons())
         return
     group_attendance = await get_visit_status_for_group_students_query.execute(student.group_id, choosen_lesson.id)
 
