@@ -13,7 +13,9 @@ from src.bot.registration.resources.templates import (
 )
 from src.modules.student_management.application.commands import (
     ClearCreateStudentDataCacheCommand,
+    NotFoundStudentCachedDataError,
     RegisterStudentCommand,
+    StudentAlreadyRegisteredError,
 )
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
 
@@ -44,16 +46,44 @@ async def accept_or_deny_callback(
 
     if not callback_data.accepted:
         await clear_create_student_data_command.execute(callback_data.telegram_id)
-        await callback.message.edit_text(REGISTRATION_DENIED_TEMPLATE, reply_markup=void_inline_buttons())
+        await callback.message.edit_text(
+            REGISTRATION_DENIED_TEMPLATE,
+            reply_markup=void_inline_buttons(),
+        )
         await bot.send_message(callback_data.telegram_id, YOU_WERE_DENIED_TEMPLATE)
         return
 
     try:
         student = await register_student_command.execute(callback_data.telegram_id)
     except ScheduleApiError:
-        await callback.message.edit_text(FAILED_TO_FETCH_SCHEDULE_TEMPLATE, reply_markup=void_inline_buttons())
-        await bot.send_message(callback_data.telegram_id, FAILED_TO_FETCH_SCHEDULE_TEMPLATE)
+        await callback.message.edit_text(
+            FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
+            reply_markup=void_inline_buttons(),
+        )
+        await bot.send_message(
+            callback_data.telegram_id,
+            FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
+        )
+        return
+    except StudentAlreadyRegisteredError:
+        await callback.message.edit_text(
+            "Пользователь уже был зарегистрирован.",
+            reply_markup=void_inline_buttons(),
+        )
+        return
+    except NotFoundStudentCachedDataError:
+        await callback.message.edit_text(
+            "Данные пользователя не были найдены в кеше. Они хранятся только 1 неделю",
+            reply_markup=void_inline_buttons(),
+        )
         return
 
-    await bot.send_message(callback_data.telegram_id, YOU_WERE_ACCEPTED_TEMPLATE, reply_markup=main_menu(student.role))
-    await callback.message.edit_text(REGISTRATION_ACCEPTED_TEMPLATE, reply_markup=void_inline_buttons())
+    await bot.send_message(
+        callback_data.telegram_id,
+        YOU_WERE_ACCEPTED_TEMPLATE,
+        reply_markup=main_menu(student.role),
+    )
+    await callback.message.edit_text(
+        REGISTRATION_ACCEPTED_TEMPLATE,
+        reply_markup=void_inline_buttons(),
+    )

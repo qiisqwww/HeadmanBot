@@ -13,5 +13,9 @@ class CacheStudentDataRepository(ABC):
         ...
 
     @abstractmethod
-    async def pop(self, telegram_id: int) -> CreateStudentDTO | None:
+    async def fetch(self, telegram_id: int) -> CreateStudentDTO | None:
+        ...
+
+    @abstractmethod
+    async def delete(self, telegram_id: int) -> None:
         ...

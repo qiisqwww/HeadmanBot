@@ -1,6 +1,10 @@
 from .cache_create_student_data_command import CacheCreateStudentDataCommand
 from .clear_create_student_data_comamnd import ClearCreateStudentDataCacheCommand
-from .register_student_command import RegisterStudentCommand
+from .register_student_command import (
+    NotFoundStudentCachedDataError,
+    RegisterStudentCommand,
+    StudentAlreadyRegisteredError,
+)
 from .unnote_attendance_for_all_command import UnnoteAttendanceForAllCommand
 from .update_student_birthdate_command import UpdateStudentBirthdateCommand
 from .update_student_first_name_command import UpdateStudentFirstNameCommand
@@ -14,4 +18,6 @@ __all__ = [
     "UpdateStudentLastNameCommand",
     "UpdateStudentFirstNameCommand",
     "UpdateStudentBirthdateCommand",
+    "NotFoundStudentCachedDataError",
+    "StudentAlreadyRegisteredError",
 ]
