@@ -1,7 +1,7 @@
-from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
+from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.show_group_attendance.callback_data import ChooseLessonCallbackData
 from src.bot.show_group_attendance.resources import (
     attendance_for_headmen_template,
@@ -47,20 +47,23 @@ async def attendance_send_callback(
         return
 
     choosen_lesson = next(
-        (lesson for lesson in schedule if lesson.id == callback_data.lesson_id), None,
+        (lesson for lesson in schedule if lesson.id == callback_data.lesson_id),
+        None,
     )
 
     group_attendance = await get_visit_status_for_group_students_query.execute(
-        student.group_id, choosen_lesson.id,
+        student.group_id,
+        choosen_lesson.id,
     )
 
     new_message = attendance_for_headmen_template(
-        choosen_lesson, group_attendance, timezone,
+        choosen_lesson,
+        group_attendance,
+        timezone,
     )
 
-    try:
-        await callback.message.edit_text(
-            new_message, reply_markup=choose_lesson_buttons(schedule, timezone),
-        )
-    except TelegramBadRequest:
-        await callback.answer(None)
+    await safe_message_edit(
+        callback,
+        new_message,
+        choose_lesson_buttons(schedule, timezone),
+    )

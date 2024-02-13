@@ -1,6 +1,7 @@
 from aiogram.types import CallbackQuery
 
 from src.bot.common.router import RootRouter, Router
+from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.poll_attendance.callback_data import UpdateAllAttendancesCallbackData
 from src.bot.poll_attendance.resources import (
     update_attendance_buttons,
@@ -43,10 +44,8 @@ async def update_attendance(
     new_attendances.sort()
     new_text = your_all_choice_is_template(callback_data.new_status)
 
-    if new_text == callback.message.html_text:
-        await callback.answer(None)
-    else:
-        await callback.message.edit_text(
-            text=new_text,
-            reply_markup=update_attendance_buttons(True, new_attendances, timezone),
-        )
+    await safe_message_edit(
+        callback,
+        new_text,
+        update_attendance_buttons(True, new_attendances, timezone),
+    )
