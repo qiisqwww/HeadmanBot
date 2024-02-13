@@ -4,6 +4,7 @@ from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.bot.common.convert_time import convert_time_from_utc
+from src.bot.common.trim_inline_text import trim_inline_text
 from src.bot.poll_attendance.callback_data import (
     UpdateAllAttendancesCallbackData,
     UpdateAttendanceCallbackData,
@@ -27,7 +28,9 @@ def update_attendance_buttons(
         if attendance_noted:
             if attendance.status == VisitStatus.ABSENT:
                 builder.button(
-                    text=f"❌ Не посещу {start_time:%H:%M} {attendance.lesson.name}",
+                    text=trim_inline_text(
+                        f"❌ Не посещу {start_time:%H:%M} {attendance.lesson.name}",
+                    ),
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.PRESENT,
@@ -43,7 +46,9 @@ def update_attendance_buttons(
                 )
         else:
             builder.button(
-                text=f"🤷 Неизвестно {start_time.strftime('%H:%M')} {attendance.lesson.name}",
+                text=trim_inline_text(
+                    f"🤷 Неизвестно {start_time.strftime('%H:%M')} {attendance.lesson.name}",
+                ),
                 callback_data=UpdateAttendanceCallbackData(
                     attendance_id=attendance.id,
                     new_status=VisitStatus.PRESENT,

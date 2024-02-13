@@ -13,8 +13,11 @@ __all__ = [
     "attendance_for_headmen_template",
 ]
 
-WHICH_PAIR_TEMPLATE = """
+WHICH_PAIR_TEMPLATE = (
+    """
 Какая пара вас интересует?"""
+    + "&#x200D;" * 20  # Increase message size.
+)
 
 YOU_CAN_NOT_ANSWER_TIME_TEMPLATE = """
 Вы не можете отметиться! Занятия уже начались!"""
@@ -40,8 +43,11 @@ def attendance_for_headmen_template(
     group_attendance: LessonAttendanceForGroup,
     timezone: str,
 ) -> str:
-    start_time = convert_time_from_utc(choosen_lesson.start_time, timezone).strftime(
-        "%H:%M",
+    start_time = (
+        convert_time_from_utc(choosen_lesson.start_time, timezone).strftime(
+            "%H:%M",
+        )
+        + " " * 100  # Increase message size.
     )
     return render_template(
         """{{lesson_name}} {{start_time}}
