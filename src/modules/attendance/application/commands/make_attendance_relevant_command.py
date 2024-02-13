@@ -1,10 +1,19 @@
 from typing import final
 
+from aiogram import Bot
 from injector import inject
 
+from src.bot.common.inform_admins_about_exception import (
+    inform_admins_about_job_exception,
+)
 from src.modules.attendance.application.gateways import EduInfoModuleGateway
-from src.modules.attendance.application.gateways.student_management_gateway import StudentManagementGateway
-from src.modules.attendance.application.repositories import AttendanceRepository, LessonRepository
+from src.modules.attendance.application.gateways.student_management_gateway import (
+    StudentManagementGateway,
+)
+from src.modules.attendance.application.repositories import (
+    AttendanceRepository,
+    LessonRepository,
+)
 from src.modules.common.application import UnitOfWork, UseCase
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
@@ -40,7 +49,7 @@ class MakeAttendanceRelevantCommand(UseCase):
         self._student_management_gateway = student_management_gateway
         self._uow = uow
 
-    async def execute(self) -> None:
+    async def execute(self, bot: Bot) -> None:
         async with self._uow:
             await self._lesson_repository.delete_all()
             await self._attendance_repository.delete_all()
@@ -52,13 +61,26 @@ class MakeAttendanceRelevantCommand(UseCase):
 
                 try:
                     fetched_schedule = await schedule_api.fetch_schedule(group.name)
-                except ScheduleApiError:
+                except ScheduleApiError as e:
+                    await inform_admins_about_job_exception(
+                        bot,
+                        e,
+                        "MakeAttendanceRelevantJob",
+                    )
                     continue
 
                 if fetched_schedule:
-                    group_schedule = await self._lesson_repository.create_for_group(group.id, fetched_schedule)
+                    group_schedule = await self._lesson_repository.create_for_group(
+                        group.id,
+                        fetched_schedule,
+                    )
 
-                    students = await self._student_management_gateway.filter_student_info_by_group_id(group.id)
+                    students = await self._student_management_gateway.filter_student_info_by_group_id(
+                        group.id,
+                    )
 
                     for student_id in students:
-                        await self._attendance_repository.create_for_student(student_id, group_schedule)
+                        await self._attendance_repository.create_for_student(
+                            student_id,
+                            group_schedule,
+                        )

@@ -1,5 +1,8 @@
+from collections.abc import Callable, Coroutine
+from typing import Any
+
 from aiogram import Bot
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, User
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.resources import main_menu, void_inline_buttons
@@ -40,6 +43,10 @@ async def accept_or_deny_callback(
     bot: Bot,
     clear_create_student_data_command: ClearCreateStudentDataCacheCommand,
     register_student_command: RegisterStudentCommand,
+    inform_admins_about_exception: Callable[
+        [Exception, User | None],
+        Coroutine[Any, Any, None],
+    ],
 ) -> None:
     if callback.message is None:
         return
@@ -55,7 +62,7 @@ async def accept_or_deny_callback(
 
     try:
         student = await register_student_command.execute(callback_data.telegram_id)
-    except ScheduleApiError:
+    except ScheduleApiError as e:
         await callback.message.edit_text(
             FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
             reply_markup=void_inline_buttons(),
@@ -64,6 +71,7 @@ async def accept_or_deny_callback(
             callback_data.telegram_id,
             FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
         )
+        await inform_admins_about_exception(e, callback.from_user)
         return
     except StudentAlreadyRegisteredError:
         await callback.message.edit_text(

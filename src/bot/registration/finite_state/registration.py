@@ -1,7 +1,9 @@
+from collections.abc import Callable, Coroutine
 from datetime import date
+from typing import Any
 
 from aiogram import F
-from aiogram.types import Message
+from aiogram.types import Message, User
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
@@ -59,6 +61,10 @@ async def handling_group(
     check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
     find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
     find_group_headman_query: FindGroupHeadmanQuery,
+    inform_admins_about_exception: Callable[
+        [Exception, User | None],
+        Coroutine[Any, Any, None],
+    ],
 ) -> None:
     if message.text is None:
         return
@@ -66,10 +72,14 @@ async def handling_group(
     group_name = message.text
 
     try:
-        group_exists = await check_group_exists_in_uni_query.execute(group_name, await state.university_alias)
-    except ScheduleApiError:
+        group_exists = await check_group_exists_in_uni_query.execute(
+            group_name,
+            await state.university_alias,
+        )
+    except ScheduleApiError as e:
         await message.answer(FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
+        await inform_admins_about_exception(e, message.from_user)
         return
 
     if not group_exists:
@@ -77,7 +87,10 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    group = await find_group_by_name_and_alias_query.execute(group_name, await state.university_alias)
+    group = await find_group_by_name_and_alias_query.execute(
+        group_name,
+        await state.university_alias,
+    )
     if await state.role == Role.STUDENT and group is None:
         await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
@@ -148,6 +161,9 @@ async def handling_name(
     await state.set_state(RegistrationStates.ask_fullame_validity)
 
     await message.answer(
-        asking_fullname_validation_template(await state.last_name, await state.first_name),
+        asking_fullname_validation_template(
+            await state.last_name,
+            await state.first_name,
+        ),
         reply_markup=ask_fullname_validity_buttons(),
     )

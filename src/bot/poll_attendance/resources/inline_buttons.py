@@ -38,7 +38,9 @@ def update_attendance_buttons(
                 )
             else:
                 builder.button(
-                    text=f"✅ Посещу {start_time:%H:%M} {attendance.lesson.name}",
+                    text=trim_inline_text(
+                        f"✅ Посещу {start_time:%H:%M} {attendance.lesson.name}",
+                    ),
                     callback_data=UpdateAttendanceCallbackData(
                         attendance_id=attendance.id,
                         new_status=VisitStatus.ABSENT,
@@ -47,7 +49,7 @@ def update_attendance_buttons(
         else:
             builder.button(
                 text=trim_inline_text(
-                    f"🤷 Неизвестно {start_time.strftime('%H:%M')} {attendance.lesson.name}",
+                    f"🤷 Неизвестно {start_time:%H:%M} {attendance.lesson.name}",
                 ),
                 callback_data=UpdateAttendanceCallbackData(
                     attendance_id=attendance.id,

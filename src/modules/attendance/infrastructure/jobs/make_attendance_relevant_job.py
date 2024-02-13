@@ -2,8 +2,8 @@ from collections.abc import Callable
 from contextlib import AbstractAsyncContextManager
 from typing import final
 
+from aiogram import Bot
 from injector import Injector
-from loguru import logger
 
 from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
 from src.modules.common.infrastructure.config import DEBUG
@@ -17,9 +17,15 @@ __all__ = [
 @final
 class MakeAttendanceRelevantJob(AsyncJob):
     _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
+    _bot: Bot
 
-    def __init__(self, build_container: Callable[[], AbstractAsyncContextManager[Injector]]) -> None:
+    def __init__(
+        self,
+        bot: Bot,
+        build_container: Callable[[], AbstractAsyncContextManager[Injector]],
+    ) -> None:
         self._build_container = build_container
+        self._bot = bot
 
         if not DEBUG:
             self._trigger = "cron"
@@ -29,10 +35,7 @@ class MakeAttendanceRelevantJob(AsyncJob):
                 "day_of_week": "mon-sun",
             }
 
-    @logger.catch
     async def __call__(self) -> None:
-        logger.info("Start MakeAttendanceRelevantJob.")
         async with self._build_container() as container:
             command = container.get(MakeAttendanceRelevantCommand)
-            await command.execute()
-        logger.info("Stop MakeAttendanceRelevantJob.")
+            await command.execute(self._bot)

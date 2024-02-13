@@ -3,11 +3,12 @@ from contextlib import AbstractAsyncContextManager
 from typing import final
 
 from injector import Injector
-from loguru import logger
 
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
-from src.modules.student_management.application.commands import UnnoteAttendanceForAllCommand
+from src.modules.student_management.application.commands import (
+    UnnoteAttendanceForAllCommand,
+)
 
 __all__ = [
     "UnnoteAttendanceJob",
@@ -18,7 +19,10 @@ __all__ = [
 class UnnoteAttendanceJob(AsyncJob):
     _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
 
-    def __init__(self, build_container: Callable[[], AbstractAsyncContextManager[Injector]]) -> None:
+    def __init__(
+        self,
+        build_container: Callable[[], AbstractAsyncContextManager[Injector]],
+    ) -> None:
         self._build_container = build_container
 
         if not DEBUG:
@@ -29,10 +33,7 @@ class UnnoteAttendanceJob(AsyncJob):
                 "day_of_week": "mon-sun",
             }
 
-    @logger.catch
     async def __call__(self) -> None:
-        logger.info("Stop UnnoteAttendanceJob job.")
         async with self._build_container() as container:
             command = container.get(UnnoteAttendanceForAllCommand)
             await command.execute()
-        logger.info("Stop UnnoteAttendanceJob job.")

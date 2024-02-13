@@ -6,20 +6,27 @@ from typing import final
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from injector import Injector
-from loguru import logger
 
+from src.bot.common.inform_admins_about_exception import (
+    inform_admins_about_job_exception,
+)
 from src.bot.poll_attendance.resources import POLL_TEMPLATE, update_attendance_buttons
-from src.bot.poll_attendance.resources.templates import student_was_not_polled_warning_template
+from src.bot.poll_attendance.resources.templates import (
+    student_was_not_polled_warning_template,
+)
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
-from src.modules.attendance.domain import StudentInfo
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
-from src.modules.edu_info.application.queries import FetchUniTimezonByGroupIdQuery, GetAllGroupsQuery
+from src.modules.edu_info.application.queries import (
+    FetchUniTimezonByGroupIdQuery,
+    GetAllGroupsQuery,
+)
 from src.modules.edu_info.domain import Group
 from src.modules.student_management.application.queries import (
     FindGroupHeadmanQuery,
     GetStudentsInfoFromGroupQuery,
 )
+from src.modules.student_management.domain import StudentInfo
 
 __all__ = [
     "SendingJob",
@@ -33,7 +40,11 @@ class SendingJob(AsyncJob):
     _bot: Bot
     _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
 
-    def __init__(self, bot: Bot, build_container: Callable[[], AbstractAsyncContextManager[Injector]]) -> None:
+    def __init__(
+        self,
+        bot: Bot,
+        build_container: Callable[[], AbstractAsyncContextManager[Injector]],
+    ) -> None:
         self._bot = bot
         self._build_container = build_container
 
@@ -45,13 +56,13 @@ class SendingJob(AsyncJob):
                 "day_of_week": "mon-sat",
             }
 
-    @logger.catch
     async def __call__(self) -> None:
-        logger.info("Start sending job.")
         async with self._build_container() as container:
             get_all_groups_query = container.get(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
-            get_students_info_from_group_query = container.get(GetStudentsInfoFromGroupQuery)
+            get_students_info_from_group_query = container.get(
+                GetStudentsInfoFromGroupQuery,
+            )
 
             fetch_group_timezone = container.get(FetchUniTimezonByGroupIdQuery)
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
@@ -64,9 +75,7 @@ class SendingJob(AsyncJob):
                     find_group_headman_query,
                     timezone,
                 )
-        logger.info("Stop sending job.")
 
-    @logger.catch
     async def _send_to_group(
         self,
         group: Group,
@@ -79,30 +88,44 @@ class SendingJob(AsyncJob):
 
         async with TaskGroup() as tg:
             for student_info in students_info:
-                tg.create_task(self._send_to_student(student_info, group_headman.id, timezone))
-
-
-    @logger.catch
-    async def _send_to_student(self, student_info: StudentInfo, headman_telegram_id: int, timezone: str) -> None:
-        async with self._build_container() as container:
-            get_student_attedance_query = container.get(GetStudentAttendanceQuery)
-            attendances = await get_student_attedance_query.execute(student_info.id)
-            attendances.sort()
-
-            try:
-                await self._bot.send_message(
-                    student_info.telegram_id,
-                    POLL_TEMPLATE,
-                    reply_markup=update_attendance_buttons(student_info.attendance_noted, attendances, timezone),
+                tg.create_task(
+                    self._send_to_student(
+                        student_info,
+                        group_headman.telegram_id,
+                        timezone,
+                    ),
                 )
-            except TelegramForbiddenError:
+
+    async def _send_to_student(
+        self,
+        student_info: StudentInfo,
+        headman_telegram_id: int,
+        timezone: str,
+    ) -> None:
+        try:
+            async with self._build_container() as container:
+                get_student_attedance_query = container.get(GetStudentAttendanceQuery)
+                attendances = await get_student_attedance_query.execute(student_info.id)
+                attendances.sort()
+
                 try:
+                    await self._bot.send_message(
+                        student_info.telegram_id,
+                        POLL_TEMPLATE,
+                        reply_markup=update_attendance_buttons(
+                            student_info.attendance_noted,
+                            attendances,
+                            timezone,
+                        ),
+                    )
+                except TelegramForbiddenError:
                     await self._bot.send_message(
                         headman_telegram_id,
                         student_was_not_polled_warning_template(student_info),
                     )
-                except Exception as e:
-                    logger.exception(e)
-
-            except Exception as e:
-                logger.exception(e)
+        except Exception as e:
+            await inform_admins_about_job_exception(
+                self._bot,
+                e,
+                self.__class__.__name__,
+            )

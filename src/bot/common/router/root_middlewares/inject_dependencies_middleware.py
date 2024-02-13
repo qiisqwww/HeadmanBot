@@ -18,7 +18,12 @@ __all__ = [
 
 
 class InjectDependenciesMiddleware(BaseMiddleware):
-    async def __call__(self, handler: HandlerType, event: EventType, data: dict[str, Any]) -> Any:
+    async def __call__(
+        self,
+        handler: HandlerType,
+        event: EventType,
+        data: dict[str, Any],
+    ) -> Any:
         annotations = data["handler"].callback.__annotations__
         container: Injector = data["container"]
 
@@ -29,7 +34,11 @@ class InjectDependenciesMiddleware(BaseMiddleware):
                 data["state"] = ProfileUpdateContext(data["state"])
 
         for service_obj_name, service_type in annotations.items():
-            if service_obj_name == "return" or not issubclass(service_type, UseCase):
+            if (
+                service_obj_name == "return"
+                or not isinstance(service_type, type)
+                or not issubclass(service_type, UseCase)
+            ):
                 continue
 
             impl = container.get(service_type)
