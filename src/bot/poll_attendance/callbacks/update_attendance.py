@@ -1,9 +1,6 @@
-from datetime import datetime
-
 from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
-from src.bot.common.resources.void_inline_buttons import void_inline_buttons
 from src.bot.poll_attendance.callback_data import UpdateAttendanceCallbackData
 from src.bot.poll_attendance.resources import (
     update_attendance_buttons,
@@ -41,10 +38,6 @@ async def update_attendance(
     if callback.message is None or callback.message.text is None:
         return
 
-    if callback_data.day_of_poll != datetime.now().today():
-        await callback.message.edit_text("Сообщение устарело.", reply_markup=void_inline_buttons())
-        return
-
     await update_attendance_command.execute(
         student.id,
         callback_data.attendance_id,
@@ -53,9 +46,16 @@ async def update_attendance(
 
     new_attendances = await get_student_attendance_query.execute(student.id)
     new_attendances.sort()
-    choosen_attendance = next(filter(lambda attendance: attendance.id == callback_data.attendance_id, new_attendances))
+    choosen_attendance = next(
+        filter(
+            lambda attendance: attendance.id == callback_data.attendance_id,
+            new_attendances,
+        ),
+    )
 
-    if all(choosen_attendance.status == attendance.status for attendance in new_attendances):
+    if all(
+        choosen_attendance.status == attendance.status for attendance in new_attendances
+    ):
         new_text = your_all_choice_is_template(choosen_attendance.status)
     else:
         new_text = your_choice_is_template(choosen_attendance, timezone)

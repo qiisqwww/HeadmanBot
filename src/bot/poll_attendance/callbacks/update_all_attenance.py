@@ -1,8 +1,5 @@
-from datetime import datetime
-
 from aiogram.types import CallbackQuery
 
-from src.bot.common.resources import void_inline_buttons
 from src.bot.common.router import RootRouter, Router
 from src.bot.poll_attendance.callback_data import UpdateAllAttendancesCallbackData
 from src.bot.poll_attendance.resources import (
@@ -39,11 +36,6 @@ async def update_attendance(
 ) -> None:
     if callback.message is None or callback.message.text is None:
         return
-
-    if callback_data.day_of_poll != datetime.now().today():
-        await callback.message.edit_text("Сообщение устарело.", reply_markup=void_inline_buttons())
-        return
-
 
     await update_all_attendances_command.execute(student.id, callback_data.new_status)
 

@@ -3,7 +3,6 @@ from .config import (
     DEBUG,
     HTTP_HOST,
     HTTP_PORT,
-    THROTTLING_EXPIRE_TIME,
     THROTTLING_RATE_PER_MINUTE,
     WEBHOOK_PATH,
     WEBHOOK_SECRET,
@@ -22,6 +21,5 @@ __all__ = [
     "HTTP_HOST",
     "HTTP_PORT",
     "WEBHOOK_SECRET",
-    "THROTTLING_EXPIRE_TIME",
     "THROTTLING_RATE_PER_MINUTE",
 ]

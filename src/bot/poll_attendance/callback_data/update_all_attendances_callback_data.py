@@ -1,8 +1,6 @@
-
-from datetime import date
-
 from aiogram.filters.callback_data import CallbackData
 
+from src.bot.common.expirable import Expirerable
 from src.modules.attendance.domain import VisitStatus
 
 __all__ = [
@@ -10,6 +8,7 @@ __all__ = [
 ]
 
 
-class UpdateAllAttendancesCallbackData(CallbackData, prefix="update_all_attendace_prefix"):  # type: ignore
+class UpdateAllAttendancesCallbackData(
+    Expirerable, CallbackData, prefix="update_all_attendace_prefix",
+):
     new_status: VisitStatus
-    day_of_poll: date
