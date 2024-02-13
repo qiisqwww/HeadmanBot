@@ -1,7 +1,6 @@
 from datetime import date
 
-from jinja2 import Template
-
+from src.bot.common.render_template import render_template
 from src.modules.student_management.domain import EduProfileInfo, Student
 
 __all__ = [
@@ -22,7 +21,9 @@ ASK_NEW_NAME_TEMPLATE = "Введите новое имя"
 
 ASK_NEW_SURNAME_TEMPLATE = "Введите новую фамилию"
 
-ASK_NEW_BIRTHDATE_TEMPLATE = "Введите дату рождения (или введите 0, если не хотите ее указывать)"
+ASK_NEW_BIRTHDATE_TEMPLATE = (
+    "Введите дату рождения (или введите 0, если не хотите ее указывать)"
+)
 
 NEW_BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели данные в неккорректном формате"
 
@@ -32,7 +33,7 @@ FAILED_TO_LOAD_EDU_INFO_TEMPLATE = "Не удалось загрузить ин�
 
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
-    template = Template(
+    return render_template(
         "<b>Профиль студента</b>\n\n"
         "Фамилия: {{student.last_name}}\n"
         "Имя: {{student.first_name}}\n"
@@ -40,25 +41,28 @@ def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
         "Группа: {{edu_info.group_name}}\n"
         "Университет: {{edu_info.university_name}}\n"
         "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %}не указана {% endif %}",
-        autoescape=True,
+        student=student,
+        edu_info=edu_info,
     )
-
-    return template.render(student=student, edu_info=edu_info)
 
 
 def asking_name_validation_template(first_name: str) -> str:
-    template = Template("Ваше новое имя: {{first_name}}\n\nДанные верны?", autoescape=True)
-    return template.render(first_name=first_name)
+    return render_template(
+        "Ваше новое имя: {{first_name}}\n\nДанные верны?",
+        first_name=first_name,
+    )
 
 
 def asking_surname_validation_template(last_name: str) -> str:
-    template = Template("Ваша новая фамилия: {{last_name}}\n\nДанные верны?", autoescape=True)
-    return template.render(last_name=last_name)
+    return render_template(
+        "Ваша новая фамилия: {{last_name}}\n\nДанные верны?",
+        last_name=last_name,
+    )
 
 
 def asking_birthdate_validation_template(new_birthdate: date | None) -> str:
-    template = Template(
-        "Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}} {% else %}не указана {% endif %}\n\nДанные верны?",
-        autoescape=True,
+    return render_template(
+        "Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}} {% else %}не указана {% endif %}"
+        "\n\nДанные верны?",
+        new_birthdate=new_birthdate,
     )
-    return template.render(new_birthdate=new_birthdate)

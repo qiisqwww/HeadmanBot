@@ -11,13 +11,16 @@ __all__ = [
     "choose_lesson_buttons",
 ]
 
-def choose_lesson_buttons(lessons: Iterable[Lesson], student_timezone: str) -> InlineKeyboardMarkup:
+
+def choose_lesson_buttons(
+    lessons: Iterable[Lesson], student_timezone: str,
+) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    for idx, lesson in enumerate(lessons):
+    for lesson in lessons:
         start_time = convert_time_from_utc(lesson.start_time, student_timezone)
         builder.button(
-            text=f"({idx + 1}) {lesson.name} {start_time:%H:%M}",
+            text=f"{start_time:%H:%M} {lesson.name}",
             callback_data=ChooseLessonCallbackData(lesson_id=lesson.id),
         )
 

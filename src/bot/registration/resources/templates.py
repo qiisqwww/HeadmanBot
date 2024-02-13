@@ -1,5 +1,4 @@
-from jinja2 import Template
-
+from src.bot.common.render_template import render_template
 from src.modules.student_management.domain import Role
 
 __all__ = [
@@ -38,9 +37,13 @@ __all__ = [
 ]
 
 
-CHOOSE_STUDENT_ROLE_TEMPLATE = "Нажмите на кнопку 'Я студент' или 'Я староста', чтобы выбрать свою роль."
+CHOOSE_STUDENT_ROLE_TEMPLATE = (
+    "Нажмите на кнопку 'Я студент' или 'Я староста', чтобы выбрать свою роль."
+)
 
-INCORRECT_STUDENT_ROLE_TEMPLATE = "Пожалуйста, нажмите на одну из кнопок выше, чтобы выбрать вашу роль."
+INCORRECT_STUDENT_ROLE_TEMPLATE = (
+    "Пожалуйста, нажмите на одну из кнопок выше, чтобы выбрать вашу роль."
+)
 
 REGISTRATION_DENIED_TEMPLATE = "Вы отказали пользователю в регистрации."
 
@@ -56,11 +59,15 @@ YOU_WERE_DENIED_TEMPLATE = """
 
 ASK_UNIVERSITY_TEMPLATE = "Выберите свой университет."
 
-INCORRECT_UNIVERSITY_TEMPLATE = "Нажмите только на одну из кнопок выше, чтобы выбрать ваш университет."
+INCORRECT_UNIVERSITY_TEMPLATE = (
+    "Нажмите только на одну из кнопок выше, чтобы выбрать ваш университет."
+)
 
 ASK_GROUP_TEMPLATE = "Введите название вашей группы"
 
-GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет. Попробуйте ввести группу заново."
+GROUP_DOESNT_EXISTS_TEMPLATE = (
+    "В выбранном университете такой группы нет. Попробуйте ввести группу заново."
+)
 
 ASK_SURNAME_TEMPLATE = "Введите свою фамилию"
 
@@ -70,15 +77,21 @@ ASK_NEW_NAME_TEMPLATE = "Введите новое имя"
 
 ASK_NEW_SURNAME_TEMPLATE = "Введите новую фамилию"
 
-YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = "Ваше заявление на регистрацию старостой было передано администраторам."
+YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = (
+    "Ваше заявление на регистрацию старостой было передано администраторам."
+)
 
-YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE = "Ваше заявление на регистрацию студентом было передано старосте."
+YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE = (
+    "Ваше заявление на регистрацию студентом было передано старосте."
+)
 
 ASK_BIRTHDATE_TEMPLATE = """Введите дату рождения в формате ДД.ММ.ГГГГ.
 Это поможет сделать бота еще удобнее.
 Если вы не хотите указывать свою дату рождения, введите 0"""
 
-BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели некорректные данные. Введите дату в формате ДД.ММ.ГГГГ"
+BIRTHDATE_INCORRECT_TEMPLATE = (
+    "Вы ввели некорректные данные. Введите дату в формате ДД.ММ.ГГГГ"
+)
 
 HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже есть староста."
 
@@ -86,58 +99,82 @@ HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже е�
 GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа не зарегистрирована в боте, попросите своего старосту ее зарегистрировать.
 Попробуйте ввести название группы заново."""
 
-TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длиной не более 255 символов. Попробуйте снова."
+TOO_MUCH_NAME_LENGTH_TEMPLATE = (
+    "Имя должно быть длиной не более 255 символов. Попробуйте снова."
+)
 
-TOO_MUCH_SURNAME_LENGTH_TEMPLATE = "Фамилия должно быть длиной не более 255 символов. Попробуйте снова."
+TOO_MUCH_SURNAME_LENGTH_TEMPLATE = (
+    "Фамилия должно быть длиной не более 255 символов. Попробуйте снова."
+)
 
 WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы желаете изменить?"
 
-FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE = ("Не удалось проверить наличие группы в университете, "
-                                    "попробуйте снова или напишите в @noheadproblemsbot.")
+FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE = (
+    "Не удалось проверить наличие группы в университете, "
+    "попробуйте снова или напишите в @noheadproblemsbot."
+)
 
-FAILED_TO_FETCH_SCHEDULE_TEMPLATE = ("Не удалось загрузить расписание для вашей группы. "
-                            "Попробуйте зарегистрироваться еще раз или напишите в @noheadproblemsbot.")
+FAILED_TO_FETCH_SCHEDULE_TEMPLATE = (
+    "Не удалось загрузить расписание для вашей группы. "
+    "Попробуйте зарегистрироваться еще раз или напишите в @noheadproblemsbot."
+)
+
 
 def successful_role_choose_template(role: Role) -> str:
-    template = Template("Роль была успешно выбрана. Вы - <b>{{role.translation}}</b>.", autoescape=True)
-    return template.render(role=role)
+    return render_template(
+        "Роль была успешно выбрана. Вы - <b>{{role.translation}}</b>.",
+        role=role,
+    )
 
 
 def successful_university_choose_template(university_name: str) -> str:
-    template = Template("Вы успешно выбрали университет <b>{{university_name}}</b>.", autoescape=True)
-    return template.render(university_name=university_name)
-
-
-def student_send_registration_request_template(last_name: str, first_name: str, role: Role, telegram_id: int) -> str:
-    template = Template(
-        "{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{last_name}} {{first_name}}</a> подал заявку на регистарцию в боте.",
-        autoescape=True,
+    return render_template(
+        "Вы успешно выбрали университет <b>{{university_name}}</b>.",
+        university_name=university_name,
     )
-    return template.render(role=role, last_name=last_name, first_name=first_name, telegram_id=telegram_id)
+
+
+def student_send_registration_request_template(
+    last_name: str,
+    first_name: str,
+    role: Role,
+    telegram_id: int,
+) -> str:
+    return render_template(
+        "{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> подал заявку на регистарцию в боте.",
+        role=role,
+        telegram_id=telegram_id,
+        fullname=f"{last_name} {first_name}",
+    )
 
 
 def start_message_template(last_name: str | None, first_name: str) -> str:
-    template = Template(
+    return render_template(
         "Приветствую {% if surname is not none %} {{last_name}} {% endif %} {{first_name}}! "
         "Для начала, давай зарегистрируемся в системе бота.",
-        autoescape=True,
+        last_name=last_name,
+        first_name=first_name,
     )
-    return template.render(last_name=last_name, first_name=first_name)
 
 
 def chosen_lesson_template(lesson_name: str, start_time: str) -> str:
-    template = Template("Вы посетите пару {{lesson_name}}, которая начнётся в {{start_time}}", autoescape=True)
-    return template.render(lesson_name=lesson_name, start_time=start_time)
+    return render_template(
+        "Вы посетите пару {{lesson_name}}, которая начнётся в {{start_time}}",
+        lesson_name=lesson_name,
+        start_time=start_time,
+    )
 
 
 def asking_fullname_validation_template(last_name: str, first_name: str) -> str:
-    template = Template("{{last_name}} {{first_name}}\n\nДанные верны?", autoescape=True)
-    return template.render(last_name=last_name, first_name=first_name)
+    return render_template(
+        "{{last_name}} {{first_name}}\n\nДанные верны?",
+        last_name=last_name,
+        first_name=first_name,
+    )
 
 
 def your_choice_is_template(is_fullname_correct: bool) -> str:
-    template = Template(
+    return render_template(
         "Вы выбрали {% if is_fullname_correct %} '<b>да</b>' {% else %} '<b>нет</b>' {% endif %}",
-        autoescape=True,
+        is_fullname_correct=is_fullname_correct,
     )
-    return template.render(is_fullname_correct=is_fullname_correct)

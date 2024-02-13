@@ -1,11 +1,6 @@
-from jinja2 import Template
-
 from src.bot.common.convert_time import convert_time_from_utc
-from src.modules.attendance.domain import (
-    Lesson,
-    LessonAttendanceForGroup,
-)
-from src.modules.attendance.domain.enums.visit_status import VisitStatus
+from src.bot.common.render_template import render_template
+from src.modules.attendance.domain import Lesson, LessonAttendanceForGroup, VisitStatus
 
 __all__ = [
     "ALL_PAIRS_TEMPLATE",
@@ -40,9 +35,15 @@ CHOOSE_PAIR_TEMPLATE = """
 Выберите пару из списка:"""
 
 
-def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: LessonAttendanceForGroup, timezone: str) -> str:
-    start_time = convert_time_from_utc(choosen_lesson.start_time, timezone).strftime("%H:%M")
-    template: str = Template(
+def attendance_for_headmen_template(
+    choosen_lesson: Lesson,
+    group_attendance: LessonAttendanceForGroup,
+    timezone: str,
+) -> str:
+    start_time = convert_time_from_utc(choosen_lesson.start_time, timezone).strftime(
+        "%H:%M",
+    )
+    return render_template(
         """{{lesson_name}} {{start_time}}
 
 Не отметились:
@@ -61,7 +62,8 @@ def attendance_for_headmen_template(choosen_lesson: Lesson, group_attendance: Le
 {% endfor %}
 
 Что-то еще?""",
-        autoescape=True,trim_blocks=True,
-    ).render(lesson_name=choosen_lesson.name, start_time=start_time, group_attendance=group_attendance,VisitStatus=VisitStatus)
-
-    return template
+        lesson_name=choosen_lesson.name,
+        start_time=start_time,
+        group_attendance=group_attendance,
+        VisitStatus=VisitStatus,
+    )
