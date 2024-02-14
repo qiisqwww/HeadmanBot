@@ -41,6 +41,6 @@ def your_choice_is_template(attendance: Attendance, timezone: str) -> str:
 
 def student_was_not_polled_warning_template(student_info: StudentInfo) -> str:
     template = """
-Студент <a href="tg://user?id={{ student_info.telegram_id }}">{{ student_info.fullname }}</a> не получил рассылку,
+Студент <a href="tg://user?id={{ student_info.telegram_id }}">{{ student_info.last_name }} {{ student_info.first_name}}</a> не получил рассылку,
 так как заблокировал бота."""
     return render_template(template, student_info=student_info)

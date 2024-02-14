@@ -6,11 +6,11 @@ from typing import final
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from injector import Injector
+from loguru import logger
 
 from src.bot.common.inform_admins_about_exception import (
     inform_admins_about_job_exception,
 )
-from src.bot.poll_attendance.resources import POLL_TEMPLATE, update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import (
     student_was_not_polled_warning_template,
 )
@@ -51,8 +51,8 @@ class SendingJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 7,
-                "minute": 00,
+                "hour": 8,
+                "minute": 3,
                 "day_of_week": "mon-sat",
             }
 
@@ -111,19 +111,21 @@ class SendingJob(AsyncJob):
                 try:
                     await self._bot.send_message(
                         student_info.telegram_id,
-                        POLL_TEMPLATE,
-                        reply_markup=update_attendance_buttons(
-                            student_info.attendance_noted,
-                            attendances,
-                            timezone,
-                        ),
+                        "Всем хорошего утра и доброго настроения!!!)",
+                        # reply_markup=update_attendance_buttons(
+                        #     student_info.attendance_noted,
+                        #     attendances,
+                        #     timezone,
+                        # ),
                     )
                 except TelegramForbiddenError:
+                    logger.error(student_info)
                     await self._bot.send_message(
                         headman_telegram_id,
                         student_was_not_polled_warning_template(student_info),
                     )
         except Exception as e:
+            logger.info(student_info)
             await inform_admins_about_job_exception(
                 self._bot,
                 e,
