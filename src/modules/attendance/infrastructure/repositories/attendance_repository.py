@@ -13,14 +13,18 @@ __all__ = [
 class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
     async def create_for_student(self, student_id: int, schedule: list[Lesson]) -> None:
         query = "INSERT INTO attendance.attendances (student_id, lesson_id, status) VALUES($1, $2, $3)"
-        await self._con.executemany(query, ((student_id, lesson.id, VisitStatus.ABSENT) for lesson in schedule))
+        await self._con.executemany(
+            query, ((student_id, lesson.id, VisitStatus.ABSENT) for lesson in schedule),
+        )
 
     async def filter_by_student_id(self, student_id: int) -> list[Attendance]:
         query = """SELECT at.id, at.lesson_id, at.status, le.group_id, le.name, le.start_time
                    FROM attendance.attendances AS at
                    JOIN attendance.lessons AS le
                    ON at.lesson_id = le.id
-                   WHERE student_id = $1"""
+                   WHERE student_id = $1
+                   ORDER BY le.start_time
+                   """
 
         records = await self._con.fetch(query, student_id)
 
@@ -43,7 +47,9 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
         query = "UPDATE attendance.attendances SET status = $1 WHERE id = $2"
         await self._con.execute(query, new_status, attendance_id)
 
-    async def update_status_for_student(self, student_id: int, new_status: VisitStatus) -> None:
+    async def update_status_for_student(
+        self, student_id: int, new_status: VisitStatus,
+    ) -> None:
         query = "UPDATE attendance.attendances SET status = $1 WHERE student_id = $2"
         await self._con.execute(query, new_status, student_id)
 

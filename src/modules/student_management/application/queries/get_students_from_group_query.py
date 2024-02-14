@@ -1,15 +1,19 @@
+from typing import final
+
 from injector import inject
 
 from src.modules.common.application import UseCase
-
-from ...domain import StudentInfo
-from ..repositories import StudentInfoRepository
+from src.modules.student_management.application.repositories import (
+    StudentInfoRepository,
+)
+from src.modules.student_management.domain import StudentInfo
 
 __all__ = [
     "GetStudentsInfoFromGroupQuery",
 ]
 
 
+@final
 class GetStudentsInfoFromGroupQuery(UseCase):
     _repository: StudentInfoRepository
 

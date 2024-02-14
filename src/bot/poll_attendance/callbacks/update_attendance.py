@@ -20,7 +20,6 @@ __all__ = [
 update_attendance_router = Router(
     must_be_registered=True,
 )
-# update_attendance_router.callback_query.middleware(CheckInMiddleware())
 
 
 def include_update_attendance_router(root_router: RootRouter) -> None:
@@ -46,7 +45,6 @@ async def update_attendance(
     )
 
     new_attendances = await get_student_attendance_query.execute(student.id)
-    new_attendances.sort()
     choosen_attendance = next(
         filter(
             lambda attendance: attendance.id == callback_data.attendance_id,

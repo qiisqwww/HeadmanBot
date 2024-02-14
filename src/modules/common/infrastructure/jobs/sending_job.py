@@ -11,7 +11,9 @@ from loguru import logger
 from src.bot.common.inform_admins_about_exception import (
     inform_admins_about_job_exception,
 )
+from src.bot.poll_attendance.resources.inline_buttons import update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import (
+    POLL_TEMPLATE,
     student_was_not_polled_warning_template,
 )
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
@@ -51,8 +53,8 @@ class SendingJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 8,
-                "minute": 3,
+                "hour": 7,
+                "minute": 00,
                 "day_of_week": "mon-sat",
             }
 
@@ -106,17 +108,16 @@ class SendingJob(AsyncJob):
             async with self._build_container() as container:
                 get_student_attedance_query = container.get(GetStudentAttendanceQuery)
                 attendances = await get_student_attedance_query.execute(student_info.id)
-                attendances.sort()
 
                 try:
                     await self._bot.send_message(
                         student_info.telegram_id,
-                        "Всем хорошего утра и доброго настроения!!!)",
-                        # reply_markup=update_attendance_buttons(
-                        #     student_info.attendance_noted,
-                        #     attendances,
-                        #     timezone,
-                        # ),
+                        POLL_TEMPLATE,
+                        reply_markup=update_attendance_buttons(
+                            student_info.attendance_noted,
+                            attendances,
+                            timezone,
+                        ),
                     )
                 except TelegramForbiddenError:
                     logger.error(student_info)

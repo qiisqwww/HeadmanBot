@@ -12,3 +12,7 @@ class StudentInfo:
     first_name: str
     last_name: str
     attendance_noted: bool
+
+    @property
+    def fullname(self) -> str:
+        return f"{self.last_name} {self.first_name}"

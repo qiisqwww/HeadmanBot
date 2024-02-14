@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Any
 
-from ..enums import VisitStatus
+from src.modules.attendance.domain.enums.visit_status import VisitStatus
+
 from .lesson import Lesson
 
 __all__ = [
@@ -15,9 +15,3 @@ class Attendance:
     student_id: int
     lesson: Lesson
     status: VisitStatus
-
-    def __gt__(self, other: Any) -> bool:
-        if not isinstance(other, Attendance):
-            return NotImplemented
-
-        return self.lesson > other.lesson
