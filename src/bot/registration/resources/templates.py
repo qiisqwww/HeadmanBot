@@ -150,7 +150,7 @@ def student_send_registration_request_template(
 
 def start_message_template(last_name: str | None, first_name: str) -> str:
     return render_template(
-        "Приветствую {% if surname is not none %} {{last_name}} {% endif %} {{first_name}}! "
+        "Приветствую {% if last_name is not none %} {{last_name}} {% endif %} {{first_name}}! "
         "Для начала, давай зарегистрируемся в системе бота.",
         last_name=last_name,
         first_name=first_name,
