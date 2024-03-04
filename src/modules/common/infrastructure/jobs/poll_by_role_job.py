@@ -20,13 +20,13 @@ from src.modules.student_management.domain import StudentInfo
 from src.modules.student_management.domain.enums import Role
 
 __all__ = [
-    "InformAboutUpdateJob",
+    "PollByRoleJob",
 ]
 
 
 @final
-class InformAboutUpdateJob(AsyncJob):
-    """Send everyone message with information about previous update."""
+class PollByRoleJob(AsyncJob):
+    """Send to students a notify message basing on their role."""
 
     _bot: Bot
     _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
@@ -42,8 +42,8 @@ class InformAboutUpdateJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 6,
-                "minute": 00,
+                "hour": 8,
+                "minute": 15,
                 "day_of_week": "mon-sat",
             }
 
@@ -58,7 +58,7 @@ class InformAboutUpdateJob(AsyncJob):
                 GetStudentRoleByTelegramIDQuery,
             )
 
-            with open("update_info.html", "r+") as update_info_file:
+            with open("poll_by_role.html", "r+") as update_info_file:
                 update_info = update_info_file.read()
                 if len(update_info) == 0:
                     return
@@ -73,7 +73,7 @@ class InformAboutUpdateJob(AsyncJob):
 
                 update_info_file.truncate(0)
                 update_info_file.flush()
-        logger.info("Finish inform about update job.")
+        logger.info("Finish poll by role job.")
 
     async def _send_to_group(
         self,
@@ -101,9 +101,19 @@ class InformAboutUpdateJob(AsyncJob):
         update_info: str,
         student_role: Role,
     ) -> None:
+        student_text, headman_text = update_info.split("aboba")
+        logger.info(f"Student text: {student_text} | Headman text: {headman_text}")
+
         with suppress(Exception):
-            await self._bot.send_message(
-                student_info.telegram_id,
-                update_info,
-                reply_markup=main_menu(student_role),
-            )
+            # Trust me. I am not going to apologize for this sheet code **BUT IT MUST BE REFACTORED**
+            if student_role == Role.STUDENT:
+                await self._bot.send_message(
+                    student_info.telegram_id,
+                    student_text,
+                )
+
+            if student_role == Role.HEADMAN:
+                await self._bot.send_message(
+                    student_info.telegram_id,
+                    headman_text
+                )
