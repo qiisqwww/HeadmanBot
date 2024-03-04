@@ -42,8 +42,8 @@ class PollByRoleJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 8,
-                "minute": 15,
+                "hour": 9,
+                "minute": 20,
                 "day_of_week": "mon-sat",
             }
 
