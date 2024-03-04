@@ -102,15 +102,14 @@ class PollByRoleJob(AsyncJob):
         student_role: Role,
     ) -> None:
         student_text, headman_text = update_info.split("aboba")
-        logger.info(f"Student text: {student_text} | Headman text: {headman_text}")
 
         with suppress(Exception):
             # Trust me. I am not going to apologize for this sheet code **BUT IT MUST BE REFACTORED**
-            if student_role == Role.STUDENT:
-                await self._bot.send_message(
-                    student_info.telegram_id,
-                    student_text,
-                )
+            # if student_role == Role.STUDENT:
+            #    await self._bot.send_message(
+            #        student_info.telegram_id,
+            #        student_text,
+            #    )
 
             if student_role == Role.HEADMAN:
                 await self._bot.send_message(
