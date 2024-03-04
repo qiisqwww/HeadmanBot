@@ -12,7 +12,7 @@ __all__ = [
 
 def main_menu(role: Role) -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
-    buttons = [KeyboardButton(text=TelegramCommand.HELP), KeyboardButton(text=TelegramCommand.PROFILE)]
+    buttons = [KeyboardButton(text=TelegramCommand.HELP), KeyboardButton(text=TelegramCommand.PROFILE), KeyboardButton(text=TelegramCommand.SHOW_SCHEDULE)]
 
     if role >= Role.VICE_HEADMAN:
         buttons.append(KeyboardButton(text=TelegramCommand.SHOW_GROUP_ATTENDANCE))

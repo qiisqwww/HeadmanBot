@@ -12,3 +12,4 @@ class TelegramCommand(StrEnum):
     HELP = "Помощь"
     PROFILE = "Профиль"
     SHOW_GROUP_ATTENDANCE = "Узнать посещаемость"
+    SHOW_SCHEDULE = "Узнать расписание"
