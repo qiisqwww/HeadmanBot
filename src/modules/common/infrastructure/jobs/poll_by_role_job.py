@@ -4,10 +4,10 @@ from contextlib import AbstractAsyncContextManager, suppress
 from typing import final
 
 from aiogram import Bot
+from aiogram.types import BufferedInputFile
 from injector import Injector
 from loguru import logger
 
-from src.bot.common.resources.main_menu import main_menu
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import GetAllGroupsQuery
@@ -42,8 +42,8 @@ class PollByRoleJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 8,
-                "minute": 15,
+                "hour": 9,
+                "minute": 30,
                 "day_of_week": "mon-sat",
             }
 
@@ -58,7 +58,8 @@ class PollByRoleJob(AsyncJob):
                 GetStudentRoleByTelegramIDQuery,
             )
 
-            with open("poll_by_role.html", "r+") as update_info_file:
+            with open("poll_by_role.html", "r+") as update_info_file, open("ShowInfoImg.png", "rb") as photo:
+                photo_content = photo.read()
                 update_info = update_info_file.read()
                 if len(update_info) == 0:
                     return
@@ -69,6 +70,7 @@ class PollByRoleJob(AsyncJob):
                         get_students_info_from_group_query,
                         get_student_role_by_telegram_id_query,
                         update_info,
+                        photo_content,
                     )
 
                 update_info_file.truncate(0)
@@ -81,6 +83,7 @@ class PollByRoleJob(AsyncJob):
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
         get_student_role_by_telegram_id_query: GetStudentRoleByTelegramIDQuery,
         update_info: str,
+        photo: bytes,
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
 
@@ -92,7 +95,7 @@ class PollByRoleJob(AsyncJob):
                     )
                 )
                 tg.create_task(
-                    self._send_to_student(student_info, update_info, student_role),
+                    self._send_to_student(student_info, update_info, student_role, photo),
                 )
 
     async def _send_to_student(
@@ -100,6 +103,7 @@ class PollByRoleJob(AsyncJob):
         student_info: StudentInfo,
         update_info: str,
         student_role: Role,
+        photo: bytes,
     ) -> None:
         student_text, headman_text = update_info.split("aboba")
 
@@ -112,7 +116,8 @@ class PollByRoleJob(AsyncJob):
             #    )
 
             if student_role == Role.HEADMAN:
-                await self._bot.send_message(
+                await self._bot.send_photo(
                     student_info.telegram_id,
-                    headman_text
+                    photo=BufferedInputFile(photo, "img.png"),
+                    caption=headman_text,
                 )
