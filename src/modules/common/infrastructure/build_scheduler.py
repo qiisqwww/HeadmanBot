@@ -2,7 +2,7 @@ from aiogram import Bot
 
 from src.modules.attendance.infrastructure.jobs import MakeAttendanceRelevantJob
 from src.modules.common.infrastructure.config import DEBUG
-from src.modules.common.infrastructure.jobs import InformAboutUpdateJob, SendingJob
+from src.modules.common.infrastructure.jobs import InformAboutUpdateJob, SendingJob, PollByRoleJob
 from src.modules.common.infrastructure.scheduling import AsyncScheduler
 from src.modules.student_management.infrastructure.jobs import UnnoteAttendanceJob
 
@@ -19,6 +19,7 @@ async def build_scheduler(bot: Bot) -> AsyncScheduler:
     common_jobs = [
         SendingJob(bot, project_container),
         InformAboutUpdateJob(bot, project_container),
+        PollByRoleJob(bot, project_container)
     ]
 
     if DEBUG:

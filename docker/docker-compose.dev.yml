@@ -30,6 +30,7 @@ services:
     volumes:
       - ../logs:/app/logs
       - ../update_info.html:/app/update_info.html
+      - ../poll_by_role.html:/app/poll_by_role.html
     ports: 
       - 8080:8080
 
