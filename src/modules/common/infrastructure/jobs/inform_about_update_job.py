@@ -42,8 +42,8 @@ class InformAboutUpdateJob(AsyncJob):
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 20,
-                "minute": 00,
+                "hour": 6,
+                "minute": 55,
                 "day_of_week": "mon-sat",
             }
 
