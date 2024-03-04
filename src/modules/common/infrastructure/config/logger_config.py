@@ -10,6 +10,7 @@ __all__ = [
 def configurate_logger() -> None:
     logger.add(
         LOGGING_PATH,
+        level="INFO",
         compression="zip",
         rotation="500 MB",
         enqueue=True,
