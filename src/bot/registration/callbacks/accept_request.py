@@ -9,6 +9,7 @@ from src.bot.common.resources import main_menu, void_inline_buttons
 from src.bot.registration.callback_data import AccessCallbackData
 from src.bot.registration.resources.templates import (
     FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
+    HELP_FOR_HEADMAN,
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
@@ -20,6 +21,7 @@ from src.modules.student_management.application.commands import (
     RegisterStudentCommand,
     StudentAlreadyRegisteredError,
 )
+from src.modules.student_management.domain.enums.role import Role
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
 
 __all__ = [
@@ -91,6 +93,13 @@ async def accept_or_deny_callback(
         YOU_WERE_ACCEPTED_TEMPLATE,
         reply_markup=main_menu(student.role),
     )
+
+    if student.role == Role.HEADMAN:
+        await bot.send_message(
+            callback_data.telegram_id,
+            HELP_FOR_HEADMAN,
+            reply_markup=main_menu(student.role),
+        )
     await callback.message.edit_text(
         REGISTRATION_ACCEPTED_TEMPLATE,
         reply_markup=void_inline_buttons(),
