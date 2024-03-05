@@ -24,3 +24,7 @@ class UniversityRepository(ABC):
     @abstractmethod
     async def fetch_university_timezone_by_group_id(self, group_id: int) -> str:
         ...
+
+    @abstractmethod
+    async def fetch_uni_alias_by_group_id(self, group_id: int) -> UniversityAlias:
+        ...
