@@ -13,6 +13,7 @@ CALENDAR_PATH: Final[Path] = Path("./tests/unit/bmstu_api/assets/БМТ1-23Б.ic
 GROUP_NAME: Final[str] = "БМТ1-23Б"
 MOSCOW_UTC_OFFSET: Final[int] = 3
 
+
 @pytest.fixture(scope="session")
 def isc_calendar() -> str:
     with CALENDAR_PATH.open() as fout:
@@ -23,35 +24,92 @@ def isc_calendar() -> str:
 @pytest.mark.parametrize(
     "day,schedule",
     [
-        (date(year=2024, month=2, day=9), [
-           Schedule(lesson_name="Интегралы и дифференциальные уравнения",
-                    start_time=time(hour=8 - MOSCOW_UTC_OFFSET, minute=30, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="Интегралы и дифференциальные уравнения",
-                    start_time=time(hour=10 - MOSCOW_UTC_OFFSET, minute=15, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="Инженерная графика",
-                    start_time=time(hour=12 - MOSCOW_UTC_OFFSET, minute=00, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="Инженерная графика",
-                    start_time=time(hour=13 - MOSCOW_UTC_OFFSET, minute=50, tzinfo=ZoneInfo("UTC"))),
-           ]),
-        (date(year=2024, month=2, day=9 + 7), [
-           Schedule(lesson_name="Интегралы и дифференциальные уравнения",
-                    start_time=time(hour=10 - MOSCOW_UTC_OFFSET, minute=15, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="Инженерная графика",
-                    start_time=time(hour=12 - MOSCOW_UTC_OFFSET, minute=00, tzinfo=ZoneInfo("UTC"))),
-           ]),
-        (date(year=2024, month=2, day=10), [
-           Schedule(lesson_name="ФКиС 8.00 Измайлово",
-                    start_time=time(hour=8 - MOSCOW_UTC_OFFSET, minute=30, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="Линейная алгебра и функции нескольких переменных",
-                    start_time=time(hour=10 - MOSCOW_UTC_OFFSET, minute=15, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="История России",
-                    start_time=time(hour=12 - MOSCOW_UTC_OFFSET, minute=00, tzinfo=ZoneInfo("UTC"))),
-           Schedule(lesson_name="Иностранный язык",
-                    start_time=time(hour=13 - MOSCOW_UTC_OFFSET, minute=50, tzinfo=ZoneInfo("UTC"))),
-           ]),
+        (
+            date(year=2024, month=3, day=5),
+            [
+                Schedule(
+                    lesson_name="Общая биология",
+                    start_time=time(
+                        hour=15 - MOSCOW_UTC_OFFSET,
+                        minute=40,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="",
+                ),
+                Schedule(
+                    lesson_name="Общая биология",
+                    start_time=time(
+                        hour=17 - MOSCOW_UTC_OFFSET,
+                        minute=25,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="",
+                ),
+            ],
+        ),
+        (
+            date(year=2024, month=3, day=5 + 7),
+            [
+                Schedule(
+                    lesson_name="Общая биология",
+                    start_time=time(
+                        hour=15 - MOSCOW_UTC_OFFSET,
+                        minute=40,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="каф. БМТ1",
+                ),
+                Schedule(
+                    lesson_name="Общая биология",
+                    start_time=time(
+                        hour=17 - MOSCOW_UTC_OFFSET,
+                        minute=25,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="",
+                ),
+            ],
+        ),
+        (
+            date(year=2024, month=3, day=6),
+            [
+                Schedule(
+                    lesson_name="Химия",
+                    start_time=time(
+                        hour=8 - MOSCOW_UTC_OFFSET,
+                        minute=30,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="327.1",
+                ),
+                Schedule(
+                    lesson_name="Химия",
+                    start_time=time(
+                        hour=10 - MOSCOW_UTC_OFFSET,
+                        minute=15,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="каф. ФН5",
+                ),
+                Schedule(
+                    lesson_name="Элективный курс по физической культуре и спорту",
+                    start_time=time(
+                        hour=12 - MOSCOW_UTC_OFFSET,
+                        minute=00,
+                        tzinfo=ZoneInfo("UTC"),
+                    ),
+                    classroom="каф. ФВ",
+                ),
+            ],
+        ),
     ],
 )
-async def test_fetch_bmt1_23b_schedule(day: date, schedule: list[Schedule], monkeypatch: MonkeyPatch, isc_calendar: str) -> None:
+async def test_fetch_bmt1_23b_schedule(
+    day: date,
+    schedule: list[Schedule],
+    monkeypatch: MonkeyPatch,
+    isc_calendar: str,
+) -> None:
     api = BmstuScheduleApi()
 
     async def fetch_isc(*_) -> str:

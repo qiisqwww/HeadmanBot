@@ -29,7 +29,6 @@ class BmstuScheduleApi(ScheduleAPI):
     _SUNDAY: Final[int] = 6
     _API_TIMEZONE: Final[tzinfo] = ZoneInfo("UTC")
 
-
     def __init__(self) -> None:
         ...
 
@@ -50,7 +49,11 @@ class BmstuScheduleApi(ScheduleAPI):
 
         return group_name in group_names
 
-    async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule]:
+    async def fetch_schedule(
+        self,
+        group_name: str,
+        day: date | None = None,
+    ) -> list[Schedule]:
         # day = day or datetime.now(tz=self._API_TIMEZONE).date()
         day = day or datetime.now(tz=ZoneInfo("Europe/Moscow")).date()
 
@@ -76,15 +79,25 @@ class BmstuScheduleApi(ScheduleAPI):
             err_msg = "Failed to fetch isc file with schedule using MIREA API."
             raise FailedToFetchScheduleError(err_msg) from e
 
-
         try:
-            calendar: Calendar = Calendar.from_ical(isc_file) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            events: list[Event] = recurring_ical_events.of(calendar).at(day) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            schedule = [Schedule(
-                    lesson_name=str(event["SUMMARY"]), # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
-                    start_time=event["DTSTART"].dt.timetz(), # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+            calendar: Calendar = Calendar.from_ical(
+                isc_file,
+            )  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            events: list[Event] = recurring_ical_events.of(calendar).at(
+                day,
+            )  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            schedule = [
+                Schedule(
+                    lesson_name=str(
+                        event["SUMMARY"],
+                    ),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+                    start_time=event[
+                        "DTSTART"
+                    ].dt.timetz(),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+                    classroom=str(event.get("LOCATION", "")),
                 )
-                for event in events]
+                for event in events
+            ]
         except Exception as e:
             err_msg = "Failed to parse schedule from isc file using BMSTU API"
             raise ParsingScheduleAPIResponseError(err_msg) from e
@@ -106,17 +119,21 @@ class BmstuScheduleApi(ScheduleAPI):
             err_msg = f"Failed to find location of isc file for group '{group_name}'"
             raise GroupNotFoundError(err_msg)
 
-        return  f"https://lks.bmstu.ru{group_schedule_url}.ics"
+        return f"https://lks.bmstu.ru{group_schedule_url}.ics"
 
     @aiohttp_retry(attempts=3)
     async def _fetch_all_schedule(self) -> str:
-        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session, session.get(self._ALL_SCHEDULE_URL) as response:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session, session.get(
+            self._ALL_SCHEDULE_URL,
+        ) as response:
             response_payload: str = await response.text()
         return response_payload
 
     @aiohttp_retry(attempts=3)
     async def _fetch_isc(self, url: str) -> str:
-        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(url) as response:
+        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(
+            url,
+        ) as response:
             payload: str = await response.text()
         return payload
 

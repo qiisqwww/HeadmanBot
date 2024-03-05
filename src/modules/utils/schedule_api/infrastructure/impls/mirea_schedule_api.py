@@ -7,7 +7,6 @@ from aiohttp import ClientSession
 from icalendar import Calendar, Event
 from pydantic import ValidationError
 
-from src.modules.common.infrastructure.config.config import DEBUG
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
@@ -63,9 +62,6 @@ class MireaScheduleApi(ScheduleAPI):
         day: date | None = None,
     ) -> list[Schedule] | NoReturn:
         day = day or datetime.now(tz=self._API_TIMEZONE).date()
-
-        if DEBUG:
-            day = datetime(year=2024, month=2, day=10, tzinfo=self._API_TIMEZONE).date()
 
         try:
             isc_link_location_bin = await self._fetch_isc_link_location(group_name)
@@ -128,7 +124,11 @@ class MireaScheduleApi(ScheduleAPI):
             start_datetime: datetime = event["DTSTART"].dt
             start_time = start_datetime.astimezone(self._RESULT_TIMEZONE).timetz()
             schedule.append(
-                Schedule(lesson_name=str(event["SUMMARY"]), start_time=start_time),
+                Schedule(
+                    lesson_name=str(event["SUMMARY"]),
+                    start_time=start_time,
+                    classroom=str(event["LOCATION"]),
+                ),
             )
 
         return schedule

@@ -51,3 +51,15 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
 
         value: str = await self._con.fetchval(query, group_id)
         return value
+
+    async def fetch_uni_alias_by_group_id(self, group_id: int) -> UniversityAlias:
+        query = """
+                SELECT uni.alias
+                FROM edu_info.universities AS uni
+                JOIN edu_info.groups AS gr
+                ON uni.id = gr.university_id
+                WHERE gr.id = $1
+        """
+
+        value: UniversityAlias = await self._con.fetchval(query, group_id)
+        return value

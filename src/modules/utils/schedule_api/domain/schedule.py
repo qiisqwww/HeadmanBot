@@ -10,3 +10,4 @@ __all__ = [
 class Schedule:
     lesson_name: str
     start_time: time
+    classroom: str
