@@ -44,6 +44,6 @@ async def get_attendance_command(
         return
 
     await message.answer(
-        schedule_list_template(schedule, timezone),
+        schedule_list_template(schedule, timezone, "сегодня"),
         reply_markup=show_schedule_buttons(),
     )

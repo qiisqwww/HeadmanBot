@@ -54,6 +54,6 @@ async def show_today_schedule_callback(
 
     await safe_message_edit(
         callback,
-        schedule_list_template(schedule, timezone),
+        schedule_list_template(schedule, timezone, "сегодня"),
         reply_markup=show_schedule_buttons(),
     )
