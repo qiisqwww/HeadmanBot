@@ -11,11 +11,11 @@ def show_schedule_buttons() -> InlineKeyboardMarkup:
 
     builder.button(text="Cегодня", callback_data="show_schedule_today")
     builder.button(text="Завтра", callback_data="show_schedule_tomorrow")
-    # builder.button(text="Назад", callback_data="show_schedule_back")
     # builder.button(text="Текущая неделя")
+    # builder.button(text="Следующая неделя")
     # builder.button(text="Текущий месяц")
     # builder.button(text="Текущий семестр")
-    # builder.button(text="Назад")
+    # builder.button(text="Назад", callback_data="show_schedule_back")
 
     builder.adjust(1)
 

@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from aiogram.types import Message
 
 from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
 from src.bot.show_schedule.resources.inline_buttons import show_schedule_buttons
+from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import (
     FetchUniAliasByGroupIdQuery,
 )
@@ -44,6 +47,12 @@ async def get_attendance_command(
         return
 
     await message.answer(
-        schedule_list_template(schedule, timezone, "сегодня"),
+        schedule_list_template(
+            schedule,
+            timezone,
+            "сегодня",
+            datetime.now().weekday(),
+            uni_alias != UniversityAlias.BMSTU,
+        ),
         reply_markup=show_schedule_buttons(),
     )

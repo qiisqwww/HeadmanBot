@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from aiogram import F
 from aiogram.types import CallbackQuery
 
@@ -8,6 +10,7 @@ from src.bot.show_schedule.resources.templates import (
     NO_LESSONS_TODAY_TEMPLATE,
     schedule_list_template,
 )
+from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import (
     FetchUniAliasByGroupIdQuery,
 )
@@ -54,6 +57,12 @@ async def show_today_schedule_callback(
 
     await safe_message_edit(
         callback,
-        schedule_list_template(schedule, timezone, "сегодня"),
+        schedule_list_template(
+            schedule,
+            timezone,
+            "сегодня",
+            datetime.now().weekday(),
+            uni_alias != UniversityAlias.BMSTU,
+        ),
         reply_markup=show_schedule_buttons(),
     )

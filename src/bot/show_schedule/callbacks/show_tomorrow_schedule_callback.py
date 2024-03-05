@@ -10,6 +10,7 @@ from src.bot.show_schedule.resources.templates import (
     NO_LESSONS_TODAY_TEMPLATE,
     schedule_list_template,
 )
+from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import (
     FetchUniAliasByGroupIdQuery,
 )
@@ -46,10 +47,10 @@ async def show_tomorrow_schedule_callback(
 
     uni_alias = await fetch_uni_alias_query.execute(student.group_id)
     group_name = await fetch_group_name_query.execute(student.group_id)
-    tomorrow = (datetime.today() + timedelta(days=1)).date()
+    tomorrow = datetime.today() + timedelta(days=1)
     schedule = await ScheduleApiImpl(uni_alias).fetch_schedule(
         group_name.group_name,
-        day=tomorrow,
+        day=tomorrow.date(),
     )
 
     if not schedule:
@@ -58,6 +59,12 @@ async def show_tomorrow_schedule_callback(
 
     await safe_message_edit(
         callback,
-        schedule_list_template(schedule, timezone, "завтра"),
+        schedule_list_template(
+            schedule,
+            timezone,
+            "завтра",
+            tomorrow.weekday(),
+            uni_alias != UniversityAlias.BMSTU,
+        ),
         reply_markup=show_schedule_buttons(),
     )
