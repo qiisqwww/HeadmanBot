@@ -43,7 +43,9 @@ async def get_attendance_command(
     schedule = await ScheduleApiImpl(uni_alias).fetch_schedule(group_name.group_name)
 
     if not schedule:
-        await message.answer(NO_LESSONS_TODAY_TEMPLATE)
+        await message.answer(
+            NO_LESSONS_TODAY_TEMPLATE, reply_markup=show_schedule_buttons(),
+        )
         return
 
     await message.answer(

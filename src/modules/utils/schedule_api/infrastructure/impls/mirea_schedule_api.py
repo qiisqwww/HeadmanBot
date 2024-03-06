@@ -122,6 +122,10 @@ class MireaScheduleApi(ScheduleAPI):
 
         for event in events:
             start_datetime: datetime = event["DTSTART"].dt
+
+            if not isinstance(start_datetime, datetime):
+                continue
+
             start_time = start_datetime.astimezone(self._RESULT_TIMEZONE).timetz()
             schedule.append(
                 Schedule(

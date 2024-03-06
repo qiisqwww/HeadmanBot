@@ -11,7 +11,7 @@ from src.bot.common.render_template import render_template
 from src.modules.utils.schedule_api.domain.schedule import Schedule
 
 NO_LESSONS_TODAY_TEMPLATE = """
-Сегодня нет пар!"""
+В этот день нет пар!"""
 
 
 def get_name_of_day(weekday: int) -> str:
