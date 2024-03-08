@@ -93,3 +93,9 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def update_birthdate_by_id(self, student_id: int, new_birthdate: date | None) -> None:
         query = "UPDATE student_management.students SET birthdate = $1 WHERE id = $2"
         await self._con.execute(query, new_birthdate, student_id)
+
+    async def get_students_count(self) -> int:
+        query = "SELECT COUNT(*) FROM student_management.students"
+        count = await self._con.fetchval(query)
+
+        return count

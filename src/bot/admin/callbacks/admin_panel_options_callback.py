@@ -10,6 +10,7 @@ from src.bot.admin.resources.templates import (
     users_count_template,
     group_list_template
 )
+from src.modules.student_management.application.queries import GetStudentsCountQuery
 
 __all__ = [
     "include_admin_panel_options_router",
@@ -26,12 +27,15 @@ def include_admin_panel_options_router(root_router: RootRouter) -> None:
 
 @admin_panel_options_router.callback_query(UsersCountCallbackData.filter())
 async def get_role_from_user(
-    callback: CallbackQuery
+    callback: CallbackQuery,
+    get_students_count_query: GetStudentsCountQuery
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
-    await callback.message.answer(users_count_template(666))  # need to make a query
+    users_count = await get_students_count_query.execute()
+
+    await callback.message.answer(users_count_template(users_count))
 
 
 @admin_panel_options_router.callback_query(GroupsListCallbackData.filter())
