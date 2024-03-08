@@ -13,6 +13,10 @@ __all__ = [
 admin_panel_command_router = Router()
 
 
+def include_admin_panel_command_router(root_router: RootRouter) -> None:
+    root_router.include_router(admin_panel_command_router)
+
+
 @admin_panel_command_router.message(CommandFilter(TelegramCommand.ADMIN))
 async def admin_panel_command(message: Message) -> None:
     if message.from_user is None:
@@ -24,5 +28,4 @@ async def admin_panel_command(message: Message) -> None:
     )
 
 
-def include_admin_panel_command_router(root_router: RootRouter) -> None:
-    root_router.include_router(admin_panel_command_router)
+
