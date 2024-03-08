@@ -25,9 +25,10 @@ def admin_panel_buttons() -> InlineKeyboardMarkup:
         callback_data=GroupsListCallbackData()
     )
     builder.button(
-        text="Назначить администратора (в разработке)"
+        text="Назначить администратора (в разработке)",
+        callback_data=MakeNewAdminCallbackData()
     )
 
     builder.adjust(1)
 
-    return builder.as_markup(resize_keyboard=True)
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

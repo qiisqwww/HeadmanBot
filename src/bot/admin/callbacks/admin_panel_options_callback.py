@@ -15,7 +15,9 @@ __all__ = [
     "include_admin_panel_options_router",
 ]
 
-admin_panel_options_router = Router()
+admin_panel_options_router = Router(
+    must_be_registered=True
+)
 
 
 def include_admin_panel_options_router(root_router: RootRouter) -> None:
