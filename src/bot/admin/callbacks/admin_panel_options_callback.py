@@ -11,6 +11,7 @@ from src.bot.admin.resources.templates import (
     group_list_template
 )
 from src.modules.student_management.application.queries import GetStudentsCountQuery
+from src.modules.edu_info.application.queries import GetAllGroupsQuery
 
 __all__ = [
     "include_admin_panel_options_router",
@@ -40,12 +41,15 @@ async def get_role_from_user(
 
 @admin_panel_options_router.callback_query(GroupsListCallbackData.filter())
 async def get_role_from_user(
-    callback: CallbackQuery
+    callback: CallbackQuery,
+    get_all_groups_query: GetAllGroupsQuery
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
-    await callback.message.answer(group_list_template())  # here will be a logic of getting group list
+    groups = await get_all_groups_query.execute()
+
+    await callback.message.answer(group_list_template(groups))
 
 
 @admin_panel_options_router.callback_query(MakeNewAdminCallbackData.filter())  # InDev
