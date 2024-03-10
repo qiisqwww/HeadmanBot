@@ -50,3 +50,7 @@ class StudentRepository(ABC):
     @abstractmethod
     async def update_birthdate_by_id(self, student_id: int, new_birthdate: date | None) -> None:
         ...
+
+    @abstractmethod
+    async def get_students_count(self) -> int:
+        ...
