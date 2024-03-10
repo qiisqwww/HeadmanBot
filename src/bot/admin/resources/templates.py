@@ -1,4 +1,4 @@
-from src.modules.edu_info.domain.models.group import Group
+from src.modules.edu_info.domain.models import GroupAdminInfo
 from src.bot.common.render_template import render_template
 
 __all__ = [
@@ -18,12 +18,14 @@ def users_count_template(users_count: int) -> str:
     )
 
 
-def group_list_template(groups: list[Group]) -> str:  # a logic must be added
+def group_list_template(groups: list[GroupAdminInfo]) -> str:
     return render_template(
         """<b>Информация по группам:</b>
         
 {% for group in groups -%}
 Группа <i>{{group.name}}</i>
+Староста <i><a href="tg://user?id={{ group.headman_first_name }}">{{ group.headman_last_name }}</a></i>
+
 {% endfor %}""",
         groups=groups
     )

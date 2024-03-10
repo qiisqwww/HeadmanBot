@@ -21,5 +21,9 @@ class StudentManagementContract(ABC):
         """
 
     @abstractmethod
+    async def get_headman_by_group_id(self, group_id: int) -> dict:
+        ...
+
+    @abstractmethod
     async def note_student_attendance(self, student_id: int) -> None:
         ...
