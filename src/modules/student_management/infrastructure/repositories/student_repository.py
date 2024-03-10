@@ -95,7 +95,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         await self._con.execute(query, new_birthdate, student_id)
 
     async def get_students_count(self) -> int:
-        query = "SELECT COUNT(*) FROM student_management.students"
+        query = "SELECT COUNT(id) FROM student_management.students"
         count = await self._con.fetchval(query)
 
         return count

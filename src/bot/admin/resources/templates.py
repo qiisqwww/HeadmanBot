@@ -1,4 +1,5 @@
-from src.modules.student_management.domain.models import Group
+from src.modules.edu_info.domain.models.group import Group
+from src.bot.common.render_template import render_template
 
 __all__ = [
     "ADMIN_PANEL_TEMPLATE",
@@ -11,13 +12,18 @@ ADMIN_PANEL_TEMPLATE = "<b>Выбери необходимую опцию из �
 
 
 def users_count_template(users_count: int) -> str:
-    return f"Количество пользователей: {users_count}"
+    return render_template(
+        """Количество пользователей: {{users_count}}""",
+        users_count=users_count
+    )
 
 
 def group_list_template(groups: list[Group]) -> str:  # a logic must be added
-    template = "<b>Информация по группам:</b>\n\n"
-
-    for group in groups:
-        template += f"Группа <i>{group.name}</i>"
-
-    return template
+    return render_template(
+        """<b>Информация по группам:</b>
+        
+{% for group in groups -%}
+Группа <i>{{group.name}}</i>
+{% endfor %}""",
+        groups=groups
+    )

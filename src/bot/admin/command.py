@@ -2,6 +2,8 @@ from aiogram.types import Message
 
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.router import RootRouter, Router
+from src.modules.student_management.domain.enums import Role
+from src.modules.common.infrastructure import DEBUG
 from .resources.templates import ADMIN_PANEL_TEMPLATE
 from .resources.inline_buttons import admin_panel_buttons
 
@@ -11,7 +13,8 @@ __all__ = [
 ]
 
 admin_panel_command_router = Router(
-    must_be_registered=True
+    must_be_registered=True,
+    minimum_role=Role.ADMIN if not DEBUG else Role.STUDENT
 )
 
 
