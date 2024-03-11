@@ -13,7 +13,7 @@ from src.bot.admin.resources.templates import (
 from src.modules.student_management.domain.enums import Role
 from src.modules.common.infrastructure import DEBUG
 from src.modules.student_management.application.queries import GetStudentsCountQuery
-from src.modules.edu_info.application.queries import GetAllGroupsQuery
+from src.modules.edu_info.application.queries import GetGroupInfoForAdminsQuery
 
 __all__ = [
     "include_admin_panel_options_router",
@@ -46,7 +46,7 @@ async def get_users_count(
 @admin_panel_options_router.callback_query(GroupsListCallbackData.filter())
 async def get_groups_list(
     callback: CallbackQuery,
-    get_all_groups_query: GetAllGroupsQuery
+    get_all_groups_query: GetGroupInfoForAdminsQuery
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return

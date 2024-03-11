@@ -17,11 +17,11 @@ from .repositories import (
 )
 
 __all__ = [
-    "assemble_attendace_module",
+    "assemble_attendance_module",
 ]
 
 
-def assemble_attendace_module(binder: Binder) -> None:
+def assemble_attendance_module(binder: Binder) -> None:
     binder.bind(AttendanceRepository, AttendanceRepositoryImpl, singleton)
     binder.bind(LessonRepository, LessonRepositoryImpl, singleton)
     binder.bind(GroupAttendanceRepository, GroupAttendanceRepositoryImpl, singleton)

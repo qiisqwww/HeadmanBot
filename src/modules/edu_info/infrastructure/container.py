@@ -15,11 +15,12 @@ from .repositories import (
     GroupRepositoryImpl,
     UniversityRepositoryImpl,
 )
+from src.modules.edu_info.application.gateways import StudentManagementGateway
+from src.modules.edu_info.infrastructure.gateways import StudentManagementGatewayImpl
 
 __all__ = [
     "assemble_edu_info_module",
 ]
-
 
 
 def assemble_edu_info_module(binder: Binder) -> None:
@@ -28,4 +29,6 @@ def assemble_edu_info_module(binder: Binder) -> None:
     binder.bind(EduInfoRepository, EduInfoRepositoryImpl, singleton)
     binder.bind(GroupInfoRepository, GroupInfoRepositoryImpl, singleton)
 
+    binder.bind(StudentManagementGateway, StudentManagementGatewayImpl, singleton)
     binder.bind(EduInfoModuleContract, EduInfoModuleContractImpl, singleton)
+
