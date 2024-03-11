@@ -22,7 +22,7 @@ def group_list_template(groups: list[GroupAdminInfo]) -> str:
     return render_template(
         """<b>Информация по группам:</b>
 
-{% for group in groups | sort -%}
+{% for group in groups | sort(attribute='name') -%}
 Группа <i>{{group.name}}</i>
 Староста <i><a href="tg://user?id={{ group.headman_telegram_id }}">{{ group.headman_last_name }} {{ group.headman_first_name }}</a></i>
 
