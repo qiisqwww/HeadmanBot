@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS edu_info.groups (
 CREATE TABLE IF NOT EXISTS student_management.students (
     id BIGSERIAL PRIMARY KEY,
     telegram_id BIGINT NOT NULL UNIQUE,
-    group_id BIGINT,
+    group_id BIGINT REFERENCES edu_info.groups(id) ON DELETE CASCADE,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     role role NOT NULL,
@@ -43,14 +43,14 @@ CREATE TABLE IF NOT EXISTS student_management.students (
 
 CREATE TABLE IF NOT EXISTS attendance.lessons (
     id BIGSERIAL PRIMARY KEY,
-    group_id BIGINT,
+    group_id BIGINT REFERENCES edu_info.groups(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     start_time TIME NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS attendance.attendances (
     id BIGSERIAL PRIMARY KEY,
-    student_id BIGINT,
+    student_id BIGINT REFERENCES student_management.students(id) ON DELETE CASCADE,
     lesson_id BIGINT REFERENCES attendance.lessons(id),
     status visit_status NOT NULL
 );

@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-09T15:05:41.725Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.21 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="veXz0vQ1S-LCkpFZXzrN" version="22.1.21" type="device">
+<mxfile host="Electron" modified="2024-03-12T10:33:00.500Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="lsQwMLTL3nRqhAzTQaac" version="24.0.4" type="device">
   <diagram name="Page-1" id="I7l6lQvvWda5FWBGYfNw">
-    <mxGraphModel dx="621" dy="1783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+    <mxGraphModel dx="334" dy="1694" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -25,7 +25,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="y6h4AQpJSSWqRq5FOGXV-2" value="lessons" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1950" y="60" width="350" height="150" as="geometry" />
+          <mxGeometry x="1951" y="60" width="350" height="150" as="geometry" />
         </mxCell>
         <mxCell id="y6h4AQpJSSWqRq5FOGXV-3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="y6h4AQpJSSWqRq5FOGXV-2" vertex="1">
           <mxGeometry y="30" width="350" height="30" as="geometry" />
@@ -48,7 +48,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="y6h4AQpJSSWqRq5FOGXV-8" value="group_id bigint" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="y6h4AQpJSSWqRq5FOGXV-6" vertex="1">
+        <mxCell id="y6h4AQpJSSWqRq5FOGXV-8" value="group_id bigint ON DELETE CASCADE" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="y6h4AQpJSSWqRq5FOGXV-6" vertex="1">
           <mxGeometry x="30" width="320" height="30" as="geometry">
             <mxRectangle width="320" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -103,7 +103,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="WtD-Y87o_4bAseDayTya-146" value="student_id bigint" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="WtD-Y87o_4bAseDayTya-144" vertex="1">
+        <mxCell id="WtD-Y87o_4bAseDayTya-146" value="student_id bigint ON DELETE CASCADE" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="WtD-Y87o_4bAseDayTya-144" vertex="1">
           <mxGeometry x="30" width="460" height="30" as="geometry">
             <mxRectangle width="460" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -158,7 +158,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="wIKcch3GfV04wdJaZ94m-6" value="university_id bigint" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="wIKcch3GfV04wdJaZ94m-4" vertex="1">
+        <mxCell id="wIKcch3GfV04wdJaZ94m-6" value="university_id bigint ON DELETE CASCADE" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="wIKcch3GfV04wdJaZ94m-4" vertex="1">
           <mxGeometry x="30" width="260" height="30" as="geometry">
             <mxRectangle width="260" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -200,7 +200,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-TC-ZagWVs9rCI9R5vII-3" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;group_id bigint&lt;/span&gt;" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;" parent="-TC-ZagWVs9rCI9R5vII-1" vertex="1">
+        <mxCell id="-TC-ZagWVs9rCI9R5vII-3" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;group_id bigint ON DELETE CASCADE&lt;/span&gt;" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;" parent="-TC-ZagWVs9rCI9R5vII-1" vertex="1">
           <mxGeometry x="30" width="230" height="30" as="geometry">
             <mxRectangle width="230" height="30" as="alternateBounds" />
           </mxGeometry>
