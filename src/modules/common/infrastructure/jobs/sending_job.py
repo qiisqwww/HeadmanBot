@@ -28,6 +28,7 @@ from src.modules.student_management.application.queries import (
     FindGroupHeadmanQuery,
     GetStudentsInfoFromGroupQuery,
 )
+from src.modules.student_management.application.commands import DeleteStudentByTGIDCommand
 from src.modules.student_management.domain import StudentInfo
 
 __all__ = [
@@ -65,6 +66,7 @@ class SendingJob(AsyncJob):
             get_students_info_from_group_query = container.get(
                 GetStudentsInfoFromGroupQuery,
             )
+            delete_student_by_tg_id = container.get(DeleteStudentByTGIDCommand)
 
             fetch_group_timezone = container.get(FetchUniTimezonByGroupIdQuery)
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
@@ -73,6 +75,7 @@ class SendingJob(AsyncJob):
                 timezone = await fetch_group_timezone.execute(group.id)
                 await self._send_to_group(
                     group,
+                    delete_student_by_tg_id,
                     get_students_info_from_group_query,
                     find_group_headman_query,
                     timezone,
@@ -81,6 +84,7 @@ class SendingJob(AsyncJob):
     async def _send_to_group(
         self,
         group: Group,
+        delete_student_by_tg_id: DeleteStudentByTGIDCommand,
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
         find_group_headman_query: FindGroupHeadmanQuery,
         timezone: str,
@@ -93,6 +97,7 @@ class SendingJob(AsyncJob):
                 tg.create_task(
                     self._send_to_student(
                         student_info,
+                        delete_student_by_tg_id,
                         group_headman.telegram_id,
                         timezone,
                     ),
@@ -101,13 +106,14 @@ class SendingJob(AsyncJob):
     async def _send_to_student(
         self,
         student_info: StudentInfo,
+        delete_student_by_tg_id: DeleteStudentByTGIDCommand,
         headman_telegram_id: int,
         timezone: str,
     ) -> None:
         try:
             async with self._build_container() as container:
-                get_student_attedance_query = container.get(GetStudentAttendanceQuery)
-                attendances = await get_student_attedance_query.execute(student_info.id)
+                get_student_attendance_query = container.get(GetStudentAttendanceQuery)
+                attendances = await get_student_attendance_query.execute(student_info.id)
 
                 try:
                     await self._bot.send_message(
@@ -125,6 +131,9 @@ class SendingJob(AsyncJob):
                         headman_telegram_id,
                         student_was_not_polled_warning_template(student_info),
                     )
+
+                    await delete_student_by_tg_id.execute(student_info.telegram_id)
+
         except Exception as e:
             logger.info(student_info)
             await inform_admins_about_job_exception(
