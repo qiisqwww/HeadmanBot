@@ -1,4 +1,7 @@
 from .cache_create_student_data_command import CacheCreateStudentDataCommand
+from .clear_create_student_data_cache_if_exists_command import (
+    ClearCreateStudentDataCacheIfExistsCommand,
+)
 from .clear_create_student_data_comamnd import ClearCreateStudentDataCacheCommand
 from .register_student_command import (
     NotFoundStudentCachedDataError,
@@ -20,4 +23,5 @@ __all__ = [
     "UpdateStudentBirthdateCommand",
     "NotFoundStudentCachedDataError",
     "StudentAlreadyRegisteredError",
+    "ClearCreateStudentDataCacheIfExistsCommand",
 ]
