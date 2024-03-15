@@ -8,10 +8,12 @@ __all__ = [
     "ProfileUpdateContext",
 ]
 
+
 class NewProfileData(TypedDict, total=False):
     new_first_name: str
     new_last_name: str
     new_birthdate: date | None
+
 
 class ProfileUpdateContext:
     """Just adapter to FSMContext."""

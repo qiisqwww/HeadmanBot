@@ -1,9 +1,9 @@
 from .profile_update_context import ProfileUpdateContext
 from .registration_context import RegistrationContext
-from .delete_user_context import DeleteUserContext
+from .delete_student_context import DeleteStudentContext
 
 __all__ = [
     "RegistrationContext",
     "ProfileUpdateContext",
-    "DeleteUserContext"
+    "DeleteStudentContext"
 ]

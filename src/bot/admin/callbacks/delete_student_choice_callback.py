@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
-from src.bot.common.contextes import DeleteUserContext
+from src.bot.common.contextes import DeleteStudentContext
 from src.bot.admin.delete_student_states import DeleteStudentStates
 from src.bot.admin.callback_data import (
     DeleteByTGIDCallbackData,
@@ -32,7 +32,7 @@ def include_delete_student_choice_router(root_router: RootRouter) -> None:
 @delete_student_choice_router.callback_query(DeleteByTGIDCallbackData.filter())
 async def ask_user_telegram_id(
         callback: CallbackQuery,
-        state: DeleteUserContext
+        state: DeleteStudentContext
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
@@ -46,7 +46,7 @@ async def ask_user_telegram_id(
 @delete_student_choice_router.callback_query(DeleteByNameAndGroupCallbackData.filter())
 async def ask_user_fullname_group_name(
         callback: CallbackQuery,
-        state: DeleteUserContext
+        state: DeleteStudentContext
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return

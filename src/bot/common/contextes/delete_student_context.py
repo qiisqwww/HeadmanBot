@@ -2,11 +2,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
 __all__ = [
-    "DeleteUserContext",
+    "DeleteStudentContext",
 ]
 
 
-class DeleteUserContext:
+class DeleteStudentContext:
     """Just adapter to FSMContext."""
 
     _context: FSMContext

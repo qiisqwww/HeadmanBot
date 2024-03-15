@@ -1,7 +1,7 @@
 from aiogram.types import Message
 
 from src.bot.common import RootRouter, Router
-from src.bot.common.contextes import DeleteUserContext
+from src.bot.common.contextes import DeleteStudentContext
 from src.bot.admin.delete_student_states import DeleteStudentStates
 from src.bot.admin.resources.templates import (
     STUDENT_WAS_DELETED_TEMPLATE,
@@ -32,7 +32,7 @@ def include_delete_user_finite_state_router(root_router: RootRouter) -> None:
 async def ask_student_telegram_id(
         message: Message,
         delete_user_by_tg_id_command: DeleteUserByTGIDCommand,
-        state: DeleteUserContext,
+        state: DeleteStudentContext,
 ) -> None:
     if message is None or message.from_user is None:
         return
@@ -40,7 +40,7 @@ async def ask_student_telegram_id(
     try:
         await delete_user_by_tg_id_command.execute(int(message.text))
     except NotFoundStudentError:
-        await message.answer(STUDENT_WAS_DELETED_TEMPLATE)
+        await message.answer(STUDENT_DOES_NOT_EXIST_TEMPLATE)
         await state.set_state(DeleteStudentStates.waiting_telegram_id)
 
         return
@@ -53,9 +53,12 @@ async def ask_student_telegram_id(
 @delete_user_finite_state_router.message(DeleteStudentStates.waiting_fullname_group)
 async def ask_student_fullname_group_name(
         message: Message,
-        state: DeleteUserContext
+        state: DeleteStudentContext
 ) -> None:
     if message is None or message.from_user is None:
         return
+
+    last_name, first_name, group_name = message.text.split(" ")
+
 
     await state.clear()

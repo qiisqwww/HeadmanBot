@@ -24,6 +24,10 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
+    async def find_by_fullname_and_group_id(self, last_name: str, first_name: str, group_id: int) -> Student:
+        ...
+
+    @abstractmethod
     async def create(
         self,
         student_data: CreateStudentDTO,
@@ -57,6 +61,15 @@ class StudentRepository(ABC):
 
     @abstractmethod
     async def delete_by_telegram_id(self, telegram_id: int) -> None:
+        ...
+
+    @abstractmethod
+    async def delete_by_fullname_and_group_id(
+            self,
+            first_name: str,
+            last_name: str,
+            group_id: int
+    ) -> None:
         ...
 
     @abstractmethod

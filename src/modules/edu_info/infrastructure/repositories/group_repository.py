@@ -66,5 +66,5 @@ class GroupRepositoryImpl(PostgresRepositoryImpl, GroupRepository):
         return [self._mapper.to_domain(record) for record in records]
 
     async def delete_by_id(self, group_id: int) -> None:
-        query = "DELETE FROM edu_info.groups WHERE id = ?"
+        query = "DELETE FROM edu_info.groups WHERE id = $1"
         await self._con.execute(query, group_id)
