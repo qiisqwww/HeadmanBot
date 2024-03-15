@@ -2,13 +2,13 @@ from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
 from src.bot.admin.callback_data import (
-    UsersCountCallbackData,
+    StudentsCountCallbackData,
     GroupsListCallbackData,
     MakeNewAdminCallbackData,
-    DeleteUserCallbackData
+    DeleteStudentCallbackData
 )
 from src.bot.admin.resources.templates import (
-    DELETE_USER_CHOICE_TEMPLATE,
+    DELETE_STUDENT_CHOICE_TEMPLATE,
     users_count_template,
     group_list_template
 )
@@ -32,7 +32,7 @@ def include_admin_panel_options_router(root_router: RootRouter) -> None:
     root_router.include_router(admin_panel_options_router)
 
 
-@admin_panel_options_router.callback_query(UsersCountCallbackData.filter())
+@admin_panel_options_router.callback_query(StudentsCountCallbackData.filter())
 async def get_users_count(
     callback: CallbackQuery,
     get_students_count_query: GetStudentsCountQuery
@@ -60,13 +60,13 @@ async def get_groups_list(
     await callback.answer(None)
 
 
-@admin_panel_options_router.callback_query(DeleteUserCallbackData.filter())
+@admin_panel_options_router.callback_query(DeleteStudentCallbackData.filter())
 async def send_delete_user_scenario_choice(callback: CallbackQuery) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
     await callback.message.answer(
-        text=DELETE_USER_CHOICE_TEMPLATE,
+        text=DELETE_STUDENT_CHOICE_TEMPLATE,
         reply_markup=delete_user_choice_buttons()
     )
 

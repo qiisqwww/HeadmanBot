@@ -3,10 +3,11 @@ from src.modules.edu_info.domain.models import GroupAdminInfo
 
 __all__ = [
     "ADMIN_PANEL_TEMPLATE",
-    "DELETE_USER_CHOICE_TEMPLATE",
-    "INPUT_USER_TG_ID_TEMPLATE",
+    "DELETE_STUDENT_CHOICE_TEMPLATE",
+    "INPUT_STUDENT_TG_ID_TEMPLATE",
     "INPUT_FULLNAME_GROUP_TEMPLATE",
-    "USER_WAS_DELETED_TEMPLATE",
+    "STUDENT_WAS_DELETED_TEMPLATE",
+    "STUDENT_DOES_NOT_EXIST_TEMPLATE",
     "users_count_template",
     "group_list_template",
 ]
@@ -14,19 +15,21 @@ __all__ = [
 
 ADMIN_PANEL_TEMPLATE = "<b>Выбери необходимую опцию из предложенных ниже:</b>"
 
-DELETE_USER_CHOICE_TEMPLATE = "Каким способом нужно удалить пользователя?"
+DELETE_STUDENT_CHOICE_TEMPLATE = "Каким способом нужно удалить студента?"
 
-INPUT_USER_TG_ID_TEMPLATE = "Отправь telegram ID пользователя"
+INPUT_STUDENT_TG_ID_TEMPLATE = "Отправь telegram ID студента"
 
-INPUT_FULLNAME_GROUP_TEMPLATE = "Отправь Фамилию, Имя и Название группы пользователя через пробел"
+INPUT_FULLNAME_GROUP_TEMPLATE = "Отправь Фамилию, Имя и Название группы студента через пробел"
 
-USER_WAS_DELETED_TEMPLATE = "Пользователь был успешно удален"
+STUDENT_WAS_DELETED_TEMPLATE = "Студент был успешно удален"
+
+STUDENT_DOES_NOT_EXIST_TEMPLATE = "Пользователя с такими данными не существует. Попробуй еще раз."
 
 
-def users_count_template(users_count: int) -> str:
+def users_count_template(students_count: int) -> str:
     return render_template(
-        """Количество пользователей: {{users_count}}""",
-        users_count=users_count,
+        """Количество студентов: {{students_count}}""",
+        students_count=students_count,
     )
 
 

@@ -9,7 +9,12 @@ from src.modules.student_management.domain.enums import Role
 
 __all__ = [
     "DeleteUserByTGIDCommand",
+    "NotFoundStudentError"
 ]
+
+
+class NotFoundStudentError(Exception):
+    """Raise if administrator is trying to delete user who not exists"""
 
 
 @final
@@ -28,6 +33,9 @@ class DeleteUserByTGIDCommand(UseCase):
 
     async def execute(self, telegram_id: int) -> None:
         student = await self._repository.find_by_telegram_id(telegram_id)
+
+        if student is None:
+            raise NotFoundStudentError(f"Not found student with telegram ID {telegram_id}")
 
         if student.role == Role.HEADMAN:
             await self._gateway.delete_group_by_id(student.group_id)

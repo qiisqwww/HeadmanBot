@@ -1,9 +1,9 @@
 from aiogram.filters.callback_data import CallbackData
 
 __all__ = [
-    "DeleteUserCallbackData",
+    "DeleteStudentCallbackData",
 ]
 
 
-class DeleteUserCallbackData(CallbackData, prefix="delete_user_callback_data"):  # type: ignore
+class DeleteStudentCallbackData(CallbackData, prefix="delete_student_callback_data"):  # type: ignore
     ...

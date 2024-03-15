@@ -4,8 +4,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from src.bot.admin.callback_data import (
     GroupsListCallbackData,
     MakeNewAdminCallbackData,
-    UsersCountCallbackData,
-    DeleteUserCallbackData,
+    StudentsCountCallbackData,
+    DeleteStudentCallbackData,
     DeleteByTGIDCallbackData,
     DeleteByNameAndGroupCallbackData
 )
@@ -21,7 +21,7 @@ def admin_panel_buttons() -> InlineKeyboardMarkup:
 
     builder.button(
         text="Узнать количество пользователей",
-        callback_data=UsersCountCallbackData(),
+        callback_data=StudentsCountCallbackData(),
     )
     builder.button(
         text="Получить информацию по всем группам",
@@ -29,7 +29,7 @@ def admin_panel_buttons() -> InlineKeyboardMarkup:
     )
     builder.button(
         text="Удалить пользоватля",
-        callback_data=DeleteUserCallbackData()
+        callback_data=DeleteStudentCallbackData()
     )
     builder.button(
         text="Назначить администратора (в разработке)",
