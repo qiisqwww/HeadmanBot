@@ -3,12 +3,15 @@ from src.modules.edu_info.domain.models import GroupAdminInfo
 
 __all__ = [
     "ADMIN_PANEL_TEMPLATE",
+    "DELETE_USER_CHOICE_TEMPLATE",
     "users_count_template",
     "group_list_template",
 ]
 
 
 ADMIN_PANEL_TEMPLATE = "<b>Выбери необходимую опцию из предложенных ниже:</b>"
+
+DELETE_USER_CHOICE_TEMPLATE = "Каким способом нужно удалить пользователя?"
 
 
 def users_count_template(users_count: int) -> str:

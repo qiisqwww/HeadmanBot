@@ -5,11 +5,14 @@ from src.bot.admin.callback_data import (
     UsersCountCallbackData,
     GroupsListCallbackData,
     MakeNewAdminCallbackData,
+    DeleteUserCallbackData
 )
 from src.bot.admin.resources.templates import (
+    DELETE_USER_CHOICE_TEMPLATE,
     users_count_template,
     group_list_template
 )
+from src.bot.admin.resources.inline_buttons import delete_user_choice_buttons
 from src.modules.student_management.domain.enums import Role
 from src.modules.common.infrastructure import DEBUG
 from src.modules.student_management.application.queries import GetStudentsCountQuery
@@ -57,10 +60,19 @@ async def get_groups_list(
     await callback.answer(None)
 
 
+@admin_panel_options_router.callback_query(DeleteUserCallbackData.filter())
+async def send_delete_user_scenario_choice(callback: CallbackQuery) -> None:
+    if callback.message is None or callback.message.from_user is None:
+        return
+
+    await callback.answer(
+        text=DELETE_USER_CHOICE_TEMPLATE,
+        reply_markup=delete_user_choice_buttons()
+    )
+
+
 @admin_panel_options_router.callback_query(MakeNewAdminCallbackData.filter())  # InDev
-async def made_user_admin(
-    callback: CallbackQuery
-) -> None:
+async def made_user_admin(callback: CallbackQuery) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
