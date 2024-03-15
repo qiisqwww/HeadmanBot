@@ -65,10 +65,12 @@ async def send_delete_user_scenario_choice(callback: CallbackQuery) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
-    await callback.answer(
+    await callback.message.answer(
         text=DELETE_USER_CHOICE_TEMPLATE,
         reply_markup=delete_user_choice_buttons()
     )
+
+    await callback.answer(None)
 
 
 @admin_panel_options_router.callback_query(MakeNewAdminCallbackData.filter())  # InDev

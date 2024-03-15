@@ -4,6 +4,8 @@ from src.modules.edu_info.domain.models import GroupAdminInfo
 __all__ = [
     "ADMIN_PANEL_TEMPLATE",
     "DELETE_USER_CHOICE_TEMPLATE",
+    "INPUT_USER_TG_ID_TEMPLATE",
+    "INPUT_FULLNAME_GROUP_TEMPLATE",
     "users_count_template",
     "group_list_template",
 ]
@@ -12,6 +14,10 @@ __all__ = [
 ADMIN_PANEL_TEMPLATE = "<b>Выбери необходимую опцию из предложенных ниже:</b>"
 
 DELETE_USER_CHOICE_TEMPLATE = "Каким способом нужно удалить пользователя?"
+
+INPUT_USER_TG_ID_TEMPLATE = "Отправь telegram ID пользователя"
+
+INPUT_FULLNAME_GROUP_TEMPLATE = "Отправь Фамилию, Имя и Название группы пользователя через пробел"
 
 
 def users_count_template(users_count: int) -> str:
