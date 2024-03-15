@@ -9,10 +9,8 @@ from .unnote_attendance_for_all_command import UnnoteAttendanceForAllCommand
 from .update_student_birthdate_command import UpdateStudentBirthdateCommand
 from .update_student_first_name_command import UpdateStudentFirstNameCommand
 from .update_student_last_name_command import UpdateStudentLastNameCommand
-from .delete_student_by_tg_id_command import (
-    DeleteUserByTGIDCommand,
-    NotFoundStudentError
-)
+from .delete_student_by_tg_id_command import DeleteStudentByTGIDCommand
+from .delete_student_by_fullname_group_command import DeleteStudentByFullnameGroupCommand
 
 __all__ = [
     "CacheCreateStudentDataCommand",
@@ -24,6 +22,6 @@ __all__ = [
     "UpdateStudentBirthdateCommand",
     "NotFoundStudentCachedDataError",
     "StudentAlreadyRegisteredError",
-    "NotFoundStudentError",
-    "DeleteUserByTGIDCommand"
+    "DeleteStudentByFullnameGroupCommand",
+    "DeleteStudentByTGIDCommand"
 ]

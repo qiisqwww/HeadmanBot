@@ -8,6 +8,8 @@ __all__ = [
     "INPUT_FULLNAME_GROUP_TEMPLATE",
     "STUDENT_WAS_DELETED_TEMPLATE",
     "STUDENT_DOES_NOT_EXIST_TEMPLATE",
+    "GROUP_DOES_NOT_EXIST_TEMPLATE",
+    "ONLY_THREE_FIELDS_TEMPLATE",
     "users_count_template",
     "group_list_template",
 ]
@@ -23,7 +25,11 @@ INPUT_FULLNAME_GROUP_TEMPLATE = "Отправь Фамилию, Имя и Наз
 
 STUDENT_WAS_DELETED_TEMPLATE = "Студент был успешно удален"
 
-STUDENT_DOES_NOT_EXIST_TEMPLATE = "Пользователя с такими данными не существует. Попробуй еще раз."
+STUDENT_DOES_NOT_EXIST_TEMPLATE = "Пользователя с такими данными не существует. Попробуй еще раз"
+
+GROUP_DOES_NOT_EXIST_TEMPLATE = "В боте не зарегестрировано студента с ввеенной группой. Попробуй еще раз"
+
+ONLY_THREE_FIELDS_TEMPLATE = "Нужно ввести только 3 значения: Фамилию, Имя и Название группы ЧЕРЕЗ ПРОБЕЛ"
 
 
 def users_count_template(students_count: int) -> str:

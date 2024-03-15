@@ -9,12 +9,12 @@ from src.modules.student_management.application.gateways import EduInfoModuleGat
 from src.modules.student_management.domain.enums import Role
 
 __all__ = [
-    "DeleteUserByTGIDCommand"
+    "DeleteStudentByTGIDCommand"
 ]
 
 
 @final
-class DeleteUserByTGIDCommand(UseCase):
+class DeleteStudentByTGIDCommand(UseCase):
     _repository: StudentRepository
     _gateway: EduInfoModuleGateway
 

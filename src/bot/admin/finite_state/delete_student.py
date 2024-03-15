@@ -5,10 +5,16 @@ from src.bot.common.contextes import DeleteStudentContext
 from src.bot.admin.delete_student_states import DeleteStudentStates
 from src.bot.admin.resources.templates import (
     STUDENT_WAS_DELETED_TEMPLATE,
-    STUDENT_DOES_NOT_EXIST_TEMPLATE
+    STUDENT_DOES_NOT_EXIST_TEMPLATE,
+    GROUP_DOES_NOT_EXIST_TEMPLATE,
+    ONLY_THREE_FIELDS_TEMPLATE
 )
 from src.modules.student_management.application.commands import (
-    DeleteUserByTGIDCommand,
+    DeleteStudentByFullnameGroupCommand,
+    DeleteStudentByTGIDCommand
+)
+from src.modules.student_management.application.exceptions import (
+    NotFoundGroupError,
     NotFoundStudentError
 )
 from src.modules.student_management.domain.enums import Role
@@ -31,7 +37,7 @@ def include_delete_user_finite_state_router(root_router: RootRouter) -> None:
 @delete_user_finite_state_router.message(DeleteStudentStates.waiting_telegram_id)
 async def ask_student_telegram_id(
         message: Message,
-        delete_user_by_tg_id_command: DeleteUserByTGIDCommand,
+        delete_user_by_tg_id_command: DeleteStudentByTGIDCommand,
         state: DeleteStudentContext,
 ) -> None:
     if message is None or message.from_user is None:
@@ -53,12 +59,34 @@ async def ask_student_telegram_id(
 @delete_user_finite_state_router.message(DeleteStudentStates.waiting_fullname_group)
 async def ask_student_fullname_group_name(
         message: Message,
+        delete_student_by_fullname_group_command: DeleteStudentByFullnameGroupCommand,
         state: DeleteStudentContext
 ) -> None:
     if message is None or message.from_user is None:
         return
 
-    last_name, first_name, group_name = message.text.split(" ")
+    data = message.split(" ")
+    if len(data) != 3:
+        await message.answer(ONLY_THREE_FIELDS_TEMPLATE)
 
+        await state.set_state(DeleteStudentStates.waiting_fullname_group)
+        return
+
+    last_name, first_name, group_name = data
+
+    try:
+        await delete_student_by_fullname_group_command.execute(first_name, last_name, group_name)
+    except NotFoundGroupError:
+        await message.answer(GROUP_DOES_NOT_EXIST_TEMPLATE)
+
+        await state.set_state(DeleteStudentStates.waiting_fullname_group)
+        return
+    except NotFoundStudentError:
+        await message.answer(STUDENT_DOES_NOT_EXIST_TEMPLATE)
+
+        await state.set_state(DeleteStudentStates.waiting_fullname_group)
+        return
+
+    await message.answer(STUDENT_WAS_DELETED_TEMPLATE)
 
     await state.clear()
