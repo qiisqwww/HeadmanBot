@@ -79,5 +79,3 @@ async def made_user_admin(callback: CallbackQuery) -> None:
         return
 
     await callback.answer(None)
-
-    return

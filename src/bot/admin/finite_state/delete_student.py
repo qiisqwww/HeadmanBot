@@ -9,6 +9,7 @@ from src.bot.admin.resources.templates import (
     GROUP_DOES_NOT_EXIST_TEMPLATE,
     ONLY_THREE_FIELDS_TEMPLATE
 )
+
 from src.modules.student_management.application.commands import (
     DeleteStudentByFullnameGroupCommand,
     DeleteStudentByTGIDCommand
@@ -65,7 +66,7 @@ async def ask_student_fullname_group_name(
     if message is None or message.from_user is None:
         return
 
-    data = message.split(" ")
+    data = message.text.split()
     if len(data) != 3:
         await message.answer(ONLY_THREE_FIELDS_TEMPLATE)
 

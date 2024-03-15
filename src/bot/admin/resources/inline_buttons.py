@@ -7,12 +7,14 @@ from src.bot.admin.callback_data import (
     StudentsCountCallbackData,
     DeleteStudentCallbackData,
     DeleteByTGIDCallbackData,
-    DeleteByNameAndGroupCallbackData
+    DeleteByNameAndGroupCallbackData,
+    CancelActionCallbackData
 )
 
 __all__ = [
     "admin_panel_buttons",
-    "delete_user_choice_buttons"
+    "delete_user_choice_buttons",
+    "cancel_button"
 ]
 
 
@@ -28,7 +30,7 @@ def admin_panel_buttons() -> InlineKeyboardMarkup:
         callback_data=GroupsListCallbackData()
     )
     builder.button(
-        text="Удалить пользоватля",
+        text="Удалить пользователя",
         callback_data=DeleteStudentCallbackData()
     )
     builder.button(
@@ -54,5 +56,15 @@ def delete_user_choice_buttons() -> InlineKeyboardMarkup:
     )
 
     builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+def cancel_button() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Отмена",
+        callback_data=CancelActionCallbackData()
+    )
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

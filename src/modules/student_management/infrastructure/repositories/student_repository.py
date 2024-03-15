@@ -110,7 +110,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
 
     async def delete_by_telegram_id(self, telegram_id: int) -> None:
         query = "DELETE FROM student_management.students WHERE telegram_id = $1"
-        await self._con.execute(query)
+        await self._con.execute(query, telegram_id)
 
     async def delete_by_fullname_and_group_id(
             self,
@@ -119,9 +119,9 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
             group_id: int
     ) -> None:
         query = """DELETE FROM student_management.students
-                WHERE first_name = $1, last_name = $2, group_id = $3"""
-        await self._con.execute(query)
+                WHERE first_name = $1 AND last_name = $2 AND group_id = $3"""
+        await self._con.execute(query, first_name, last_name, group_id)
 
     async def delete_all_by_group_id(self, group_id: int) -> None:
         query = "DELETE FROM student_management.students WHERE group_id = $1"
-        await self._con.execute(query)
+        await self._con.execute(query, group_id)

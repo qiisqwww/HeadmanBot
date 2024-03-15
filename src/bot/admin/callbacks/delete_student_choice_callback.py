@@ -11,6 +11,7 @@ from src.bot.admin.resources.templates import (
     INPUT_STUDENT_TG_ID_TEMPLATE,
     INPUT_FULLNAME_GROUP_TEMPLATE
 )
+from src.bot.admin.resources.inline_buttons import cancel_button
 from src.modules.student_management.domain.enums import Role
 from src.modules.common.infrastructure import DEBUG
 
@@ -37,7 +38,10 @@ async def ask_user_telegram_id(
     if callback.message is None or callback.message.from_user is None:
         return
 
-    await callback.message.answer(INPUT_STUDENT_TG_ID_TEMPLATE)
+    await callback.message.answer(
+        text=INPUT_STUDENT_TG_ID_TEMPLATE,
+        reply_markup=cancel_button()
+    )
     await state.set_state(DeleteStudentStates.waiting_telegram_id)
 
     await callback.answer(None)
@@ -51,7 +55,10 @@ async def ask_user_fullname_group_name(
     if callback.message is None or callback.message.from_user is None:
         return
 
-    await callback.message.answer(INPUT_FULLNAME_GROUP_TEMPLATE)
+    await callback.message.answer(
+        text=INPUT_FULLNAME_GROUP_TEMPLATE,
+        reply_markup=cancel_button()
+    )
     await state.set_state(DeleteStudentStates.waiting_fullname_group)
 
     await callback.answer(None)
