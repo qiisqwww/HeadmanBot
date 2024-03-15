@@ -6,6 +6,7 @@ __all__ = [
     "DELETE_USER_CHOICE_TEMPLATE",
     "INPUT_USER_TG_ID_TEMPLATE",
     "INPUT_FULLNAME_GROUP_TEMPLATE",
+    "USER_WAS_DELETED_TEMPLATE",
     "users_count_template",
     "group_list_template",
 ]
@@ -18,6 +19,8 @@ DELETE_USER_CHOICE_TEMPLATE = "Каким способом нужно удали
 INPUT_USER_TG_ID_TEMPLATE = "Отправь telegram ID пользователя"
 
 INPUT_FULLNAME_GROUP_TEMPLATE = "Отправь Фамилию, Имя и Название группы пользователя через пробел"
+
+USER_WAS_DELETED_TEMPLATE = "Пользователь был успешно удален"
 
 
 def users_count_template(users_count: int) -> str:
