@@ -89,3 +89,8 @@ class EduInfoModuleContract(ABC):
         group_info['name']: str -> group name
         group_info['university_alias']: UniversityAlias -> university alias
         """
+
+    @abstractmethod
+    async def delete_group_by_id(self, group_id: int) -> None:
+        """Deletes group in edu_info.groups by group id
+        """

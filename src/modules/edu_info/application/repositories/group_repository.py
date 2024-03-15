@@ -29,3 +29,7 @@ class GroupRepository(ABC):
     @abstractmethod
     async def all(self) -> list[Group]:
         ...
+
+    @abstractmethod
+    async def delete_by_id(self, group_id: int) -> None:
+        ...

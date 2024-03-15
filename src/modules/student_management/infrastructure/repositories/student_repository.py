@@ -99,3 +99,11 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         count = await self._con.fetchval(query)
 
         return count
+
+    async def delete_by_telegram_id(self, telegram_id: int) -> None:
+        query = "DELETE FROM student_management.students WHERE telegram_id = ?"
+        await self._con.execute(query)
+
+    async def delete_all_by_group_id(self, group_id: int) -> None:
+        query = "DELETE FROM student_management.students WHERE group_id = ?"
+        await self._con.execute(query)
