@@ -83,7 +83,7 @@ async def accept_or_deny_callback(
         return
     except NotFoundStudentCachedDataError:
         await callback.message.edit_text(
-            "Данные пользователя не были найдены в кеше. Они хранятся только 1 неделю",
+            'Данные пользователя не были найдены в кеше. Либо пользователь их удалил (нажал "Зарегистрироваться заново"), либо прошла 1 неделя.',
             reply_markup=void_inline_buttons(),
         )
         return

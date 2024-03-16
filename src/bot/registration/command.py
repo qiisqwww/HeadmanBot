@@ -4,6 +4,9 @@ from aiogram.types import Message
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.router import RootRouter, Router
+from src.modules.student_management.application.commands import (
+    ClearCreateStudentDataCacheIfExistsCommand,
+)
 
 from .registration_states import RegistrationStates
 from .resources import restart_button, role_buttons
@@ -16,14 +19,24 @@ __all__ = [
 start_command_router = Router()
 
 
-@start_command_router.message(or_f(CommandFilter(TelegramCommand.START), CommandFilter(TelegramCommand.RESTART)))
-async def start_command(message: Message, state: RegistrationContext) -> None:
+@start_command_router.message(
+    or_f(CommandFilter(TelegramCommand.START), CommandFilter(TelegramCommand.RESTART)),
+)
+async def start_command(
+    message: Message,
+    state: RegistrationContext,
+    clear_cached_student_data_command: ClearCreateStudentDataCacheIfExistsCommand,
+) -> None:
     if message.from_user is None:
         return
 
     await state.clear()
+    await clear_cached_student_data_command.execute(message.from_user.id)
 
-    start_message = start_message_template(message.from_user.last_name, message.from_user.first_name)
+    start_message = start_message_template(
+        message.from_user.last_name,
+        message.from_user.first_name,
+    )
     await message.answer(start_message, reply_markup=restart_button())
 
     await message.answer(CHOOSE_STUDENT_ROLE_TEMPLATE, reply_markup=role_buttons())
