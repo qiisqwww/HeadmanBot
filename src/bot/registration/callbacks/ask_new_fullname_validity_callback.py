@@ -5,6 +5,7 @@ from src.bot.common.contextes import RegistrationContext
 from src.bot.common.resources import void_inline_buttons
 from src.bot.common.resources.templates import your_choice_is_template
 from src.bot.common.router import RootRouter, Router
+from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.registration.callback_data import AskNewFullnameValidityCallbackData
 from src.bot.registration.registration_states import RegistrationStates
 from src.bot.registration.resources import accept_or_deny_buttons
@@ -36,7 +37,9 @@ def include_ask_new_fullname_validity_router(root_router: RootRouter) -> None:
     root_router.include_router(ask_new_fullname_validity_router)
 
 
-@ask_new_fullname_validity_router.callback_query(AskNewFullnameValidityCallbackData.filter())
+@ask_new_fullname_validity_router.callback_query(
+    AskNewFullnameValidityCallbackData.filter(),
+)
 async def ask_new_fullname_validity_callback(
     callback: CallbackQuery,
     callback_data: AskNewFullnameValidityCallbackData,
@@ -52,21 +55,30 @@ async def ask_new_fullname_validity_callback(
     if callback.message.from_user is None:
         return
 
-    await callback.message.edit_text(
+    await safe_message_edit(
+        callback,
         your_choice_is_template(callback_data.is_fullname_correct),
         reply_markup=void_inline_buttons(),
     )
 
     if not callback_data.is_fullname_correct:
-        await callback.message.answer("Введите фамилию.", reply_markup=void_inline_buttons())
+        await callback.message.answer(
+            "Введите фамилию.", reply_markup=void_inline_buttons(),
+        )
         await state.set_state(RegistrationStates.waiting_surname)
         return
 
     match await state.role:
         case Role.STUDENT:
-            await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE, reply_markup=void_inline_buttons())
+            await callback.message.answer(
+                YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
+                reply_markup=void_inline_buttons(),
+            )
         case Role.HEADMAN:
-            await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE, reply_markup=void_inline_buttons())
+            await callback.message.answer(
+                YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
+                reply_markup=void_inline_buttons(),
+            )
 
     student_data = await state.get_data()
     await cache_student_data_command.execute(CreateStudentDTO(**student_data))
@@ -82,12 +94,16 @@ async def ask_new_fullname_validity_callback(
         for admin_id in ADMIN_IDS:
             await bot.send_message(
                 admin_id,
-                student_send_registration_request_template(last_name,first_name, role, telegram_id),
+                student_send_registration_request_template(
+                    last_name, first_name, role, telegram_id,
+                ),
                 reply_markup=accept_or_deny_buttons(telegram_id),
             )
         return
 
-    group = await find_group_by_name_and_alias_query.execute(await state.group_name, await state.university_alias)
+    group = await find_group_by_name_and_alias_query.execute(
+        await state.group_name, await state.university_alias,
+    )
 
     if group is None:
         raise RuntimeError
@@ -100,6 +116,8 @@ async def ask_new_fullname_validity_callback(
     await state.set_state(RegistrationStates.on_verification)
     await bot.send_message(
         headman.telegram_id,
-        student_send_registration_request_template(last_name,first_name, role, telegram_id),
+        student_send_registration_request_template(
+            last_name, first_name, role, telegram_id,
+        ),
         reply_markup=accept_or_deny_buttons(telegram_id),
     )

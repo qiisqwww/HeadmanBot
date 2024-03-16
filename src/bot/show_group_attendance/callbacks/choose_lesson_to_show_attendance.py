@@ -43,7 +43,7 @@ async def attendance_send_callback(
     schedule = await get_today_schedule_query.execute(student.group_id)
 
     if not schedule:
-        await callback.message.edit_text("Сегодня пар нет.")
+        await safe_message_edit(callback, "Сегодня пар нет.")
         return
 
     choosen_lesson = next(
