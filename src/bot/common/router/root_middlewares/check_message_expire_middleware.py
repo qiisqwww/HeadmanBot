@@ -6,6 +6,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 
 from src.bot.common.resources.void_inline_buttons import void_inline_buttons
+from src.bot.common.safe_message_edit import safe_message_edit
 
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
@@ -28,11 +29,16 @@ class CheckMessageExpireMiddleware(BaseMiddleware):
         if not hasattr(data["callback_data"], "created_at"):
             return await handler(event, data)
 
-        if data["callback_data"].created_at != datetime.today().date():
-            await event.message.edit_text(
-                "Сообщение устарело",
-                reply_markup=void_inline_buttons(),
-            )
+        if (
+            isinstance(event, CallbackQuery)
+            and data["callback_data"].created_at != datetime.today().date()
+        ):
+            if event.message is not None:
+                await safe_message_edit(
+                    event,
+                    "Сообщение устарело",
+                    reply_markup=void_inline_buttons(),
+                )
             return None
 
         return await handler(event, data)
