@@ -34,7 +34,7 @@ STUDENT_DOES_NOT_EXIST_TEMPLATE = (
 )
 
 GROUP_DOES_NOT_EXIST_TEMPLATE = (
-    "В боте не зарегестрировано студента с введенной группой. Попробуй еще раз"
+    "В боте не зарегистрировано студента с введенной группой. Попробуй еще раз"
 )
 
 ONLY_THREE_FIELDS_TEMPLATE = (

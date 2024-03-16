@@ -54,7 +54,8 @@ async def show_tomorrow_schedule_callback(
     )
 
     if not schedule:
-        await callback.message.edit_text(
+        await safe_message_edit(
+            callback,
             NO_LESSONS_TODAY_TEMPLATE,
             reply_markup=show_schedule_buttons(),
         )
