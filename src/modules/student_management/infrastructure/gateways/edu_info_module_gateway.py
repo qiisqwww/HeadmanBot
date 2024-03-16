@@ -67,3 +67,6 @@ class EduInfoModuleGatewayImpl(EduInfoModuleGateway):
             group_name=edu_info[0],
             university_name=edu_info[1],
         )
+
+    async def delete_group_by_id(self, group_id: int) -> None:
+        await self._contract.delete_group_by_id(group_id)

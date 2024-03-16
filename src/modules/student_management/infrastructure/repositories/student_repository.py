@@ -42,6 +42,14 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         record = await self._con.fetchrow(query, group_id, role)
         return None if record is None else self._mapper.to_domain(record)
 
+    async def find_by_fullname_and_group_id(self, first_name: str, last_name: str, group_id: int) -> Student:
+        query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, attendance_noted
+                    FROM student_management.students
+                    WHERE first_name = $1 AND last_name = $2 AND group_id = $3"""
+
+        record = await self._con.fetchrow(query, first_name, last_name, group_id)
+        return None if record is None else self._mapper.to_domain(record)
+
     async def create(
         self,
         student_data: CreateStudentDTO,
@@ -99,3 +107,21 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         count = await self._con.fetchval(query)
 
         return count
+
+    async def delete_by_telegram_id(self, telegram_id: int) -> None:
+        query = "DELETE FROM student_management.students WHERE telegram_id = $1"
+        await self._con.execute(query, telegram_id)
+
+    async def delete_by_fullname_and_group_id(
+            self,
+            first_name: str,
+            last_name: str,
+            group_id: int
+    ) -> None:
+        query = """DELETE FROM student_management.students
+                WHERE first_name = $1 AND last_name = $2 AND group_id = $3"""
+        await self._con.execute(query, first_name, last_name, group_id)
+
+    async def delete_all_by_group_id(self, group_id: int) -> None:
+        query = "DELETE FROM student_management.students WHERE group_id = $1"
+        await self._con.execute(query, group_id)

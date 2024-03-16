@@ -82,3 +82,6 @@ class EduInfoModuleContractImpl(EduInfoModuleContract):
 
     async def fetch_all_groups_info(self) -> list[dict[str, str]]:
         return [asdict(group) for group in await self._group_info_repository.fetch_all()]
+
+    async def delete_group_by_id(self, group_id: int) -> None:
+        await self._group_repository.delete_by_id(group_id)

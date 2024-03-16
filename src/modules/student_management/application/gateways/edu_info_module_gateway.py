@@ -43,3 +43,7 @@ class EduInfoModuleGateway(ABC):
     @abstractmethod
     async def get_edu_profile_info(self, group_id: int) -> EduProfileInfo | None:
         ...
+
+    @abstractmethod
+    async def delete_group_by_id(self, group_id: int) -> None:
+        ...

@@ -8,10 +8,12 @@ __all__ = [
     "ProfileUpdateContext",
 ]
 
+
 class NewProfileData(TypedDict, total=False):
     new_first_name: str
     new_last_name: str
     new_birthdate: date | None
+
 
 class ProfileUpdateContext:
     """Just adapter to FSMContext."""
@@ -24,7 +26,7 @@ class ProfileUpdateContext:
     @property
     async def new_first_name(self) -> str:
         new_first_name = (await self.get_data()).get("new_first_name", None)
-        assert new_first_name is not None, "You must have settted new_first_name before."
+        assert new_first_name is not None, "You must have settled new_first_name before."
         return new_first_name
 
     async def set_new_first_name(self, new_first_name: str) -> None:
@@ -33,7 +35,7 @@ class ProfileUpdateContext:
     @property
     async def new_last_name(self) -> str:
         new_last_name = (await self.get_data()).get("new_last_name", None)
-        assert new_last_name is not None, "You must have settted new_last_name before."
+        assert new_last_name is not None, "You must have settled new_last_name before."
         return new_last_name
 
     async def set_new_last_name(self, new_last_name: str) -> None:
@@ -50,7 +52,7 @@ class ProfileUpdateContext:
         await self._context.set_state(state)
 
     async def get_data(self) -> NewProfileData:
-        return await self._context.get_data() # pyright: ignore[reportGeneralTypeIssues]
+        return await self._context.get_data()  # pyright: ignore[reportGeneralTypeIssues]
 
     async def clear(self) -> None:
         await self._context.set_state(state=None)
