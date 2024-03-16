@@ -20,11 +20,20 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
-    async def find_by_group_id_and_role(self, group_id: int, role: Role) -> Student | None:
+    async def find_by_group_id_and_role(
+        self,
+        group_id: int,
+        role: Role,
+    ) -> Student | None:
         ...
 
     @abstractmethod
-    async def find_by_fullname_and_group_id(self, last_name: str, first_name: str, group_id: int) -> Student:
+    async def find_by_fullname_and_group_id(
+        self,
+        last_name: str,
+        first_name: str,
+        group_id: int,
+    ) -> Student | None:
         ...
 
     @abstractmethod
@@ -36,7 +45,11 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
-    async def update_attendance_noted_by_id(self, student_id: int, new_attendance_noted: bool) -> None:
+    async def update_attendance_noted_by_id(
+        self,
+        student_id: int,
+        new_attendance_noted: bool,
+    ) -> None:
         ...
 
     @abstractmethod
@@ -44,7 +57,11 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
-    async def update_first_name_by_id(self, student_id: int, new_first_name: str) -> None:
+    async def update_first_name_by_id(
+        self,
+        student_id: int,
+        new_first_name: str,
+    ) -> None:
         ...
 
     @abstractmethod
@@ -52,7 +69,11 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
-    async def update_birthdate_by_id(self, student_id: int, new_birthdate: date | None) -> None:
+    async def update_birthdate_by_id(
+        self,
+        student_id: int,
+        new_birthdate: date | None,
+    ) -> None:
         ...
 
     @abstractmethod
@@ -65,13 +86,17 @@ class StudentRepository(ABC):
 
     @abstractmethod
     async def delete_by_fullname_and_group_id(
-            self,
-            first_name: str,
-            last_name: str,
-            group_id: int
+        self,
+        first_name: str,
+        last_name: str,
+        group_id: int,
     ) -> None:
         ...
 
     @abstractmethod
     async def delete_all_by_group_id(self, group_id: int) -> None:
+        ...
+
+    @abstractmethod
+    async def set_role_by_id(self, student_id: int, role: Role) -> None:
         ...

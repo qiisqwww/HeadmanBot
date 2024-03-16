@@ -16,7 +16,6 @@ bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
 
 dispatcher = Dispatcher(
     storage=MemoryStorage(),
-    bot=bot,
     project_container=project_container,
 )
 dispatcher.include_router(build_root_router())

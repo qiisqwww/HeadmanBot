@@ -34,7 +34,11 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         record = await self._con.fetchrow(query, telegram_id)
         return None if record is None else self._mapper.to_domain(record)
 
-    async def find_by_group_id_and_role(self, group_id: int, role: Role) -> Student | None:
+    async def find_by_group_id_and_role(
+        self,
+        group_id: int,
+        role: Role,
+    ) -> Student | None:
         query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, attendance_noted
                    FROM student_management.students
                    WHERE group_id = $1 AND role = $2"""
@@ -42,7 +46,12 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         record = await self._con.fetchrow(query, group_id, role)
         return None if record is None else self._mapper.to_domain(record)
 
-    async def find_by_fullname_and_group_id(self, first_name: str, last_name: str, group_id: int) -> Student:
+    async def find_by_fullname_and_group_id(
+        self,
+        last_name: str,
+        first_name: str,
+        group_id: int,
+    ) -> Student | None:
         query = """SELECT id, telegram_id, first_name, last_name, role, group_id, birthdate, attendance_noted
                     FROM student_management.students
                     WHERE first_name = $1 AND last_name = $2 AND group_id = $3"""
@@ -86,11 +95,21 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         query = "UPDATE student_management.students SET attendance_noted = $1"
         await self._con.execute(query, new_attendance_noted)
 
-    async def update_attendance_noted_by_id(self, student_id: int, new_attendance_noted: bool) -> None:
-        query = "UPDATE student_management.students SET attendance_noted = $1 WHERE id = $2"
+    async def update_attendance_noted_by_id(
+        self,
+        student_id: int,
+        new_attendance_noted: bool,
+    ) -> None:
+        query = (
+            "UPDATE student_management.students SET attendance_noted = $1 WHERE id = $2"
+        )
         await self._con.execute(query, new_attendance_noted, student_id)
 
-    async def update_first_name_by_id(self, student_id: int, new_first_name: str) -> None:
+    async def update_first_name_by_id(
+        self,
+        student_id: int,
+        new_first_name: str,
+    ) -> None:
         query = "UPDATE student_management.students SET first_name = $1 WHERE id = $2"
         await self._con.execute(query, new_first_name, student_id)
 
@@ -98,13 +117,17 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         query = "UPDATE student_management.students SET last_name = $1 WHERE id = $2"
         await self._con.execute(query, new_last_name, student_id)
 
-    async def update_birthdate_by_id(self, student_id: int, new_birthdate: date | None) -> None:
+    async def update_birthdate_by_id(
+        self,
+        student_id: int,
+        new_birthdate: date | None,
+    ) -> None:
         query = "UPDATE student_management.students SET birthdate = $1 WHERE id = $2"
         await self._con.execute(query, new_birthdate, student_id)
 
     async def get_students_count(self) -> int:
         query = "SELECT COUNT(id) FROM student_management.students"
-        count = await self._con.fetchval(query)
+        count: int = await self._con.fetchval(query)
 
         return count
 
@@ -113,10 +136,10 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         await self._con.execute(query, telegram_id)
 
     async def delete_by_fullname_and_group_id(
-            self,
-            first_name: str,
-            last_name: str,
-            group_id: int
+        self,
+        first_name: str,
+        last_name: str,
+        group_id: int,
     ) -> None:
         query = """DELETE FROM student_management.students
                 WHERE first_name = $1 AND last_name = $2 AND group_id = $3"""
@@ -125,3 +148,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def delete_all_by_group_id(self, group_id: int) -> None:
         query = "DELETE FROM student_management.students WHERE group_id = $1"
         await self._con.execute(query, group_id)
+
+    async def set_role_by_id(self, student_id: int, role: Role) -> None:
+        query = "UPDATE student_management.students SET role=$1 WHERE id = $2"
+        await self._con.fetch(query, str(role), student_id)

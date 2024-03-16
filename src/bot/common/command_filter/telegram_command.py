@@ -11,6 +11,6 @@ class TelegramCommand(StrEnum):
     RESTART = "Начать регистрацию заново"
     HELP = "Помощь"
     PROFILE = "Профиль"
-    SHOW_GROUP_ATTENDANCE = "Узнать посещаемость"
     SHOW_SCHEDULE = "Узнать расписание"
     ADMIN = "/admin"
+    GROUP_PANEL = "Группа"
