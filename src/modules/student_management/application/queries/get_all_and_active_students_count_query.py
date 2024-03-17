@@ -5,11 +5,11 @@ from src.modules.common.application import UseCase
 from ..repositories import StudentRepository
 
 __all__ = [
-    "GetStudentsCountQuery",
+    "GetAllAndActiveStudentsCountQuery",
 ]
 
 
-class GetStudentsCountQuery(UseCase):
+class GetAllAndActiveStudentsCountQuery(UseCase):
     _repository: StudentRepository
 
     @inject

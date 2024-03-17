@@ -7,7 +7,7 @@ from .get_edu_profile_info_query import GetEduProfileInfoQuery
 from .get_students_from_group_query import GetStudentsInfoFromGroupQuery
 from .get_university_by_alias_query import GetUniversityByAliasQuery
 from .get_student_role_by_telegram_id_query import GetStudentRoleByTelegramIDQuery
-from .get_students_count_query import GetStudentsCountQuery
+from .get_all_and_active_students_count_query import GetAllAndActiveStudentsCountQuery
 
 __all__ = [
     "FindStudentByTelegramIdQuery",
@@ -19,5 +19,5 @@ __all__ = [
     "GetEduProfileInfoQuery",
     "GetStudentsInfoFromGroupQuery",
     "GetStudentRoleByTelegramIDQuery",
-    "GetStudentsCountQuery"
+    "GetAllAndActiveStudentsCountQuery"
 ]
