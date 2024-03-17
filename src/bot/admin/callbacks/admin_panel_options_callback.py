@@ -9,7 +9,7 @@ from src.bot.admin.callback_data import (
 )
 from src.bot.admin.resources.templates import (
     DELETE_STUDENT_CHOICE_TEMPLATE,
-    users_count_template,
+    students_count_template,
     group_list_template
 )
 from src.bot.admin.resources.inline_buttons import delete_user_choice_buttons
@@ -40,9 +40,9 @@ async def get_users_count(
     if callback.message is None or callback.message.from_user is None:
         return
 
-    users_count = await get_students_count_query.execute()
+    students_count = await get_students_count_query.execute()
 
-    await callback.message.answer(users_count_template(users_count))
+    await callback.message.answer(students_count_template(students_count))
     await callback.answer(None)
 
 
