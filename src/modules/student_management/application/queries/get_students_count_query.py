@@ -16,5 +16,5 @@ class GetStudentsCountQuery(UseCase):
     def __init__(self, repository: StudentRepository) -> None:
         self._repository = repository
 
-    async def execute(self) -> int:
-        return await self._repository.get_students_count()
+    async def execute(self) -> list[int]:
+        return [await self._repository.get_students_count(), await self._repository.get_active_students_count()]

@@ -127,9 +127,11 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
 
     async def get_students_count(self) -> int:
         query = "SELECT COUNT(id) FROM student_management.students"
-        count: int = await self._con.fetchval(query)
+        return await self._con.fetchval(query)
 
-        return count
+    async def get_active_students_count(self) -> int:
+        query = "SELECT COUNT(id) FROM student_management.students WHERE attendance_noted = True"
+        return await self._con.fetchval(query)
 
     async def delete_by_telegram_id(self, telegram_id: int) -> None:
         query = "DELETE FROM student_management.students WHERE telegram_id = $1"

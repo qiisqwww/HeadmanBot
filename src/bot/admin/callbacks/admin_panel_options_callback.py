@@ -40,9 +40,9 @@ async def get_users_count(
     if callback.message is None or callback.message.from_user is None:
         return
 
-    students_count = await get_students_count_query.execute()
+    students_count, active_students_count = await get_students_count_query.execute()
 
-    await callback.message.answer(students_count_template(students_count))
+    await callback.message.answer(students_count_template(students_count, active_students_count))
     await callback.answer(None)
 
 
