@@ -27,3 +27,15 @@ class AttendanceModuleGatewayImpl(AttendanceModuleGateway):
         group_name: str,
     ) -> None:
         await self._contract.create_attendance(student_id, university_alias, group_id, group_name)
+
+    async def delete_attendance_by_student_id(self, student_id: int) -> None:
+        await self._contract.delete_attendance_by_student_id(student_id)
+
+    async def delete_attendance_by_lesson_id(self, lesson_id: int) -> None:
+        await self._contract.delete_attendance_by_lesson_id(lesson_id)
+
+    async def get_lessons_id_by_group_id(self, group_id: int) -> list[int] | None:
+        return await self._contract.get_lessons_id_by_group_id(group_id)
+
+    async def delete_lessons_by_group_id(self, group_id: int) -> None:
+        return await self._contract.delete_lessons_by_group_id(group_id)

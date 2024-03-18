@@ -17,3 +17,19 @@ class AttendanceModuleContract(ABC):
         group_name: str,
     ) -> None:
         ...
+
+    @abstractmethod
+    async def delete_attendance_by_student_id(self, student_id: int) -> None:
+        ...
+
+    @abstractmethod
+    async def delete_attendance_by_lesson_id(self, lesson_id: int) -> None:
+        ...
+
+    @abstractmethod
+    async def get_lessons_id_by_group_id(self, group_id: int) -> list[int] | None:
+        ...
+
+    @abstractmethod
+    async def delete_lessons_by_group_id(self, group_id: int) -> None:
+        ...

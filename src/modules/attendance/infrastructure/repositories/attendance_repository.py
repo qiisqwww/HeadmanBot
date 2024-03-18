@@ -56,3 +56,11 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
     async def delete_all(self) -> None:
         query = "TRUNCATE TABLE attendance.attendances"
         await self._con.execute(query)
+
+    async def delete_attendance_by_student_id(self, student_id: int) -> None:
+        query = "DELETE FROM attendance.attendances WHERE student_id = $1"
+        await self._con.execute(query, student_id)
+
+    async def delete_attendance_by_lesson_id(self, lesson_id: int) -> None:
+        query = "DELETE FROM attendance.attendances WHERE lesson_id = $1"
+        await self._con.execute(query, lesson_id)
