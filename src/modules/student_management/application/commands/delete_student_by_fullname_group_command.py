@@ -51,12 +51,7 @@ class DeleteStudentByFullnameGroupCommand(UseCase):
             await self._edu_info_module_gateway.delete_group_by_id(group.id)
             await self._repository.delete_all_by_group_id(group.id)
 
-            lessons = await self._attendance_module_gateway.get_lessons_id_by_group_id(student.group_id)
-            if lessons is None:
-                return
-            for lesson_id in lessons:
-                await self._attendance_module_gateway.delete_attendance_by_lesson_id(lesson_id)
-
+            await self._attendance_module_gateway.delete_attendance_by_group_id(student.group_id)
             await self._attendance_module_gateway.delete_lessons_by_group_id(student.group_id)
 
             return

@@ -33,8 +33,5 @@ class AttendanceRepository(ABC):
         ...
 
     @abstractmethod
-    async def delete_attendance_by_lesson_id(self, student_id: int) -> None:
+    async def delete_attendance_by_group_id(self, group_id: int) -> None:
         ...
-
-
-
