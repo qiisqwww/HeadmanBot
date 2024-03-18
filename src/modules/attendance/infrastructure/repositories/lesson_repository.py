@@ -46,10 +46,10 @@ class LessonRepositoryImpl(PostgresRepositoryImpl, LessonRepository):
         await self._con.execute(query)
 
     async def get_lessons_id_by_group_id(self, group_id: int) -> list[int] | None:
-        query = "SELECT lesson_id FROM attendance.lessons WHERE group_id = $1"
+        query = "SELECT id FROM attendance.lessons WHERE group_id = $1"
         records = await self._con.fetch(query, group_id)
 
-        return None if records is None else [record["lesson_id"] for record in records]
+        return None if records is None else [record["id"] for record in records]
 
     async def delete_lessons_by_group_id(self, group_id: int) -> None:
         query = "DELETE FROM attendance.lessons WHERE group_id = $1"
