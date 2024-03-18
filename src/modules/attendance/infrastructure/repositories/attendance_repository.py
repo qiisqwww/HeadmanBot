@@ -62,6 +62,6 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
         await self._con.execute(query, student_id)
 
     async def delete_attendance_by_group_id(self, group_id: int) -> None:
-        query = """DELETE FROM attendances.attendance WHERE lesson_id IN 
-        (SELECT id FROM attendances.lessons WHERE group_id = $1)"""
+        query = """DELETE FROM attendance.attendances WHERE lesson_id IN 
+        (SELECT id FROM attendance.lessons WHERE group_id = $1)"""
         await self._con.execute(query, group_id)

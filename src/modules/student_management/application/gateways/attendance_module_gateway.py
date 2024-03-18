@@ -30,9 +30,5 @@ class AttendanceModuleGateway(ABC):
         ...
 
     @abstractmethod
-    async def get_lessons_id_by_group_id(self, group_id: int) -> list[int] | None:
-        ...
-
-    @abstractmethod
     async def delete_lessons_by_group_id(self, group_id: int) -> None:
         ...
