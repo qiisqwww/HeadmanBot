@@ -136,6 +136,7 @@ class SendingJob(AsyncJob):
 
         except Exception as e:
             logger.info(student_info)
+            await delete_student_by_tg_id.execute(student_info.telegram_id)
             await inform_admins_about_job_exception(
                 self._bot,
                 e,

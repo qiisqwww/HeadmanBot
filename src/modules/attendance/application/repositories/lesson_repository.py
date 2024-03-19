@@ -20,3 +20,7 @@ class LessonRepository(ABC):
     @abstractmethod
     async def delete_all(self) -> None:
         ...
+
+    @abstractmethod
+    async def delete_lessons_by_group_id(self, group_id: int) -> None:
+        ...

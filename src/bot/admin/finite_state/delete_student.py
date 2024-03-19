@@ -38,7 +38,7 @@ def include_delete_user_finite_state_router(root_router: RootRouter) -> None:
 @delete_user_finite_state_router.message(DeleteStudentStates.waiting_telegram_id)
 async def ask_student_telegram_id(
     message: Message,
-    delete_user_by_tg_id_command: DeleteStudentByTGIDCommand,
+    delete_student_by_tg_id_command: DeleteStudentByTGIDCommand,
     state: DeleteStudentContext,
 ) -> None:
     if message.text is None or message.from_user is None:
@@ -52,7 +52,7 @@ async def ask_student_telegram_id(
         return
 
     try:
-        await delete_user_by_tg_id_command.execute(telegram_id)
+        await delete_student_by_tg_id_command.execute(telegram_id)
     except NotFoundStudentError:
         await message.answer(STUDENT_DOES_NOT_EXIST_TEMPLATE)
         await state.set_state(DeleteStudentStates.waiting_telegram_id)
