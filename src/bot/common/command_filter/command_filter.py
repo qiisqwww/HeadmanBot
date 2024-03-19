@@ -11,7 +11,7 @@ __all__ = [
 
 
 @final
-class CommandFilter(BaseFilter): # type: ignore [misc]
+class CommandFilter(BaseFilter):  # type: ignore [misc]
     _command: TelegramCommand
 
     def __init__(self, command: TelegramCommand) -> None:

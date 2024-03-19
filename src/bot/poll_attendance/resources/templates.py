@@ -5,7 +5,6 @@ from src.modules.student_management.domain import StudentInfo
 
 __all__ = [
     "POLL_TEMPLATE",
-    "YOU_MUST_REMEMBER_TEMPLATE",
     "your_all_choice_is_template",
     "your_choice_is_template",
     "student_was_not_polled_warning_template",
@@ -13,11 +12,6 @@ __all__ = [
 
 
 POLL_TEMPLATE = "На какие сегодняшие пары ты придешь?"
-
-YOU_MUST_REMEMBER_TEMPLATE = """
-Помни, что только ты <i>сам</i> решаешь, отмечаться в боте честно или обманывать своего старосту. Однако ты должен понимать,
-что в таком случае подставляешь его, потому призываем не злоупотреблять доверием старосты и указывать только правду.
-"""
 
 
 def your_all_choice_is_template(status: VisitStatus) -> str:

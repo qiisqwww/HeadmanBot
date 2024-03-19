@@ -30,10 +30,10 @@ YOU_CAN_NOT_ANSWER_DAY_TEMPLATE = """
 Вы не можете отметиться за другой день!"""
 
 ALL_PAIRS_TEMPLATE = """
-Вы посетите все пары"""
+Вы выбрали <b>посетить все пары</b>"""
 
 NO_PAIRS_TEMPLATE = """
-Вы не посетите пары """
+Вы выбрали <b>не посещать пары</b>"""
 
 NO_LESSONS_TODAY_TEMPLATE = """
 Сегодня нет пар!"""
@@ -59,12 +59,12 @@ FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE = (
 
 
 def attendance_for_headmen_template(
-    choosen_lesson: Lesson,
+    chosen_lesson: Lesson,
     group_attendance: LessonAttendanceForGroup,
     timezone: str,
 ) -> str:
     start_time = (
-        convert_time_from_utc(choosen_lesson.start_time, timezone).strftime(
+        convert_time_from_utc(chosen_lesson.start_time, timezone).strftime(
             "%H:%M",
         )
         + " " * 100  # Increase message size.
@@ -88,7 +88,7 @@ def attendance_for_headmen_template(
 {% endfor %}
 
 Что-то еще?""",
-        lesson_name=choosen_lesson.name,
+        lesson_name=chosen_lesson.name,
         start_time=start_time,
         group_attendance=group_attendance,
         VisitStatus=VisitStatus,

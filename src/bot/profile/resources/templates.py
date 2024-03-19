@@ -28,7 +28,8 @@ NEW_BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели данные в неккор
 
 WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы хотите отредактировать?"
 
-FAILED_TO_LOAD_EDU_INFO_TEMPLATE = "Не удалось загрузить информацию о пользователе. Попробробуйте снова или напишете в @noheadproblemsbot."
+FAILED_TO_LOAD_EDU_INFO_TEMPLATE = """Не удалось загрузить информацию о пользователе. 
+Попробробуйте снова или напишете в @noheadproblemsbot."""
 
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
@@ -61,7 +62,8 @@ def asking_surname_validation_template(last_name: str) -> str:
 
 def asking_birthdate_validation_template(new_birthdate: date | None) -> str:
     return render_template(
-        "Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}} {% else %}не указана {% endif %}"
+        """Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}} 
+        {% else %}не указана {% endif %}"""
         "\n\nДанные верны?",
         new_birthdate=new_birthdate,
     )
