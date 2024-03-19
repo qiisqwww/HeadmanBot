@@ -81,6 +81,10 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
+    async def get_active_students_count(self) -> int:
+        ...
+
+    @abstractmethod
     async def delete_by_telegram_id(self, telegram_id: int) -> None:
         ...
 

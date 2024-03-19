@@ -11,7 +11,7 @@ __all__ = [
     "GROUP_DOES_NOT_EXIST_TEMPLATE",
     "ONLY_THREE_FIELDS_TEMPLATE",
     "ACTION_WAS_CANCELLED_TEMPLATE",
-    "users_count_template",
+    "students_count_template",
     "group_list_template",
     "INCORRECT_DATA_ERROR_TEMPLATE",
 ]
@@ -46,10 +46,12 @@ ACTION_WAS_CANCELLED_TEMPLATE = "Действие было отменено"
 INCORRECT_DATA_ERROR_TEMPLATE = "Неверные формат данных. Ввведите число."
 
 
-def users_count_template(students_count: int) -> str:
+def students_count_template(students_count: int, active_students_count: int) -> str:
     return render_template(
-        """Количество студентов: {{students_count}}""",
+        """Количество студентов: <i>{{students_count}}</i>
+        Количество активных сегодня студентов: <i>{{active_students_count}}</i>""",
         students_count=students_count,
+        active_students_count=active_students_count
     )
 
 

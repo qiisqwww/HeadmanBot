@@ -9,13 +9,13 @@ from src.bot.admin.callback_data import (
 )
 from src.bot.admin.resources.templates import (
     DELETE_STUDENT_CHOICE_TEMPLATE,
-    users_count_template,
+    students_count_template,
     group_list_template
 )
 from src.bot.admin.resources.inline_buttons import delete_user_choice_buttons
 from src.modules.student_management.domain.enums import Role
 from src.modules.common.infrastructure import DEBUG
-from src.modules.student_management.application.queries import GetStudentsCountQuery
+from src.modules.student_management.application.queries import GetAllAndActiveStudentsCountQuery
 from src.modules.edu_info.application.queries import GetGroupInfoForAdminsQuery
 
 __all__ = [
@@ -35,14 +35,14 @@ def include_admin_panel_options_router(root_router: RootRouter) -> None:
 @admin_panel_options_router.callback_query(StudentsCountCallbackData.filter())
 async def get_users_count(
     callback: CallbackQuery,
-    get_students_count_query: GetStudentsCountQuery
+    get_students_count_query: GetAllAndActiveStudentsCountQuery
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
-    users_count = await get_students_count_query.execute()
+    students_count, active_students_count = await get_students_count_query.execute()
 
-    await callback.message.answer(users_count_template(users_count))
+    await callback.message.answer(students_count_template(students_count, active_students_count))
     await callback.answer(None)
 
 
