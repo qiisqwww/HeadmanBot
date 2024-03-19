@@ -11,6 +11,10 @@ __all__ = [
     "YOU_CAN_NOT_ANSWER_TIME_TEMPLATE",
     "YOU_CAN_NOT_ANSWER_DAY_TEMPLATE",
     "attendance_for_headmen_template",
+    "YOU_WAS_GRADED_TO_VICEHEADMAN_TEMPLATE",
+    "STUDENT_WAS_NOT_FOUND_TEMPLATE",
+    "YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE",
+    "FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE",
 ]
 
 WHICH_PAIR_TEMPLATE = (
@@ -36,6 +40,22 @@ NO_LESSONS_TODAY_TEMPLATE = """
 
 CHOOSE_PAIR_TEMPLATE = """
 Выберите пару из списка:"""
+
+YOU_WAS_GRADED_TO_VICEHEADMAN_TEMPLATE = """Вы были повышены до заместителя старосты.
+Вы теперь можете просматривать посещаемость группы. Для просмотра посещаемости нажмите на кнопку "Группа".
+"""
+
+YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE = "С вас была снята роль заместителя старосты."
+
+STUDENT_WAS_NOT_FOUND_TEMPLATE = "Пользователь не был найден, попробуйте заново."
+
+FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE = (
+    'Можно дать роль заместителя старосты только пользователю с ролью "студент".'
+)
+
+FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE = (
+    'Можно снять роль заместителя старосты только пользователю с ролью "зам старосты".'
+)
 
 
 def attendance_for_headmen_template(

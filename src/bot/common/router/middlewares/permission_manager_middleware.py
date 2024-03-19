@@ -27,7 +27,12 @@ class PermissionManagerMiddleware(BaseMiddleware):
         self._min_role = min_role
         super().__init__()
 
-    async def __call__(self, handler: HandlerType, event: EventType, data: dict[str, Any]) -> Any:
+    async def __call__(
+        self,
+        handler: HandlerType,
+        event: EventType,
+        data: dict[str, Any],
+    ) -> Any:
         student = data["student"]
 
         if student.role < self._min_role:

@@ -1,9 +1,12 @@
 from aiogram import Bot, F
 from aiogram.types import Message
 
+from src.bot.common.resources import main_menu
 from src.bot.common.router import RootRouter, Router
 from src.bot.headman_panel.headman_panel_states import HeadmanPanelStates
-from src.bot.headman_panel.resources.inline_buttons import group_panel_menu
+from src.bot.headman_panel.resources.templates import (
+    YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE,
+)
 from src.modules.student_management.application.commands import (
     UnmakeStudentViceHeadmanCommand,
 )
@@ -25,9 +28,9 @@ def include_profile_update_router(root_router: RootRouter) -> None:
     HeadmanPanelStates.waiting_surname_and_name_for_unset,
 )
 async def unset_vice_headman(
-    bot: Bot,
     message: Message,
     student: Student,
+    bot: Bot,
     unmake_student_vice_headman_command: UnmakeStudentViceHeadmanCommand,
 ) -> None:
     if message.text is None:
@@ -42,6 +45,6 @@ async def unset_vice_headman(
 
     await bot.send_message(
         prev_vice_headman_id,
-        "Вы были понижены",
-        reply_markup=group_panel_menu(Role.STUDENT),
+        YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE,
+        reply_markup=main_menu(Role.STUDENT),
     )

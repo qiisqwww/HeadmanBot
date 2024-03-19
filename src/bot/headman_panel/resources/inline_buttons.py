@@ -11,12 +11,46 @@ from src.bot.headman_panel.callback_data import (
     ShowAttendanceCallbackData,
     UnsetViceHeadmanCallbackData,
 )
+from src.bot.headman_panel.callback_data.choose_student_to_downgrade_callback_data import (
+    ChooseStudentToDowngradeCallbackData,
+)
+from src.bot.headman_panel.callback_data.choose_student_to_enchance_callback_data import (
+    ChooseStudentToEnhanceCallbackData,
+)
 from src.modules.attendance.domain import Lesson
 from src.modules.student_management.domain.enums.role import Role
+from src.modules.student_management.domain.models.student_info import StudentInfo
 
 __all__ = [
     "group_panel_menu",
 ]
+
+
+def select_student(
+    students: list[StudentInfo],
+    enchance_to_vice_headman: bool,
+) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    CallbackDataClass = (
+        ChooseStudentToEnhanceCallbackData
+        if enchance_to_vice_headman
+        else ChooseStudentToDowngradeCallbackData
+    )
+
+    students.sort(key=lambda s: s.fullname)
+
+    for student in students:
+        builder.button(
+            text=f"{student.last_name} {student.first_name}",
+            callback_data=CallbackDataClass(
+                student_id=student.id,
+                telegram_id=student.telegram_id,
+            ),
+        )
+
+    builder.adjust(1)
+    return builder.as_markup(resize_keyboard=True)
 
 
 def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
@@ -38,7 +72,6 @@ def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
         )
 
     builder.adjust(1)
-
     return builder.as_markup(resize_keyboard=True)
 
 

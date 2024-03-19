@@ -6,6 +6,8 @@ from src.modules.common.application import UseCase
 from src.modules.student_management.application.repositories import StudentRepository
 from src.modules.student_management.domain.enums.role import Role
 
+from .exceptions import CannotGrantRoleToNonStudentError, StudentNotFoundError
+
 __all__ = [
     "MakeStudentViceHeadmanCommand",
 ]
@@ -24,23 +26,16 @@ class MakeStudentViceHeadmanCommand(UseCase):
 
     async def execute(
         self,
-        group_id: int,
-        last_name: str,
-        first_name: str,
-    ) -> int | None:
-        student = await self._repository.find_by_fullname_and_group_id(
-            last_name,
-            first_name,
-            group_id,
+        student_id: int,
+    ) -> None:
+        student = await self._repository.find_by_id(
+            student_id,
         )
 
         if student is None:
-            print("Not registered")
-            return None
+            raise StudentNotFoundError
 
         if student.role != Role.STUDENT:
-            print("Can grant vice headman only for poor students.")
-            return None
+            raise CannotGrantRoleToNonStudentError
 
         await self._repository.set_role_by_id(student.id, Role.VICE_HEADMAN)
-        return student.id
