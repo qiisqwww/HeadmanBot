@@ -55,4 +55,5 @@ def something_went_wrong_for_admin_in_job_template(
     )
 
 
-SOMETHING_WENT_WRONG_FOR_STUDENT_TEMPLATE = "Что-то пошло не так, попробуйте снова или сообщите администраторам об ошибке в @noheadproblemsbot."
+SOMETHING_WENT_WRONG_FOR_STUDENT_TEMPLATE = """Что-то пошло не так. 
+Попробуйте снова или сообщите администраторам об ошибке в @noheadproblemsbot."""

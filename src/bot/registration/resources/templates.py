@@ -111,8 +111,8 @@ BIRTHDATE_INCORRECT_TEMPLATE = (
 HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже есть староста."
 
 
-GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа не зарегистрирована в боте, попросите своего старосту ее зарегистрировать.
-Попробуйте ввести название группы заново."""
+GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте. 
+Попросите своего старосту зарегестрироваться, или введите название группы заново."""
 
 TOO_MUCH_NAME_LENGTH_TEMPLATE = (
     "Имя должно быть длиной не более 255 символов. Попробуйте снова."
@@ -156,7 +156,8 @@ def student_send_registration_request_template(
     telegram_id: int,
 ) -> str:
     return render_template(
-        "{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> подал заявку на регистарцию в боте.",
+        """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> 
+        подал заявку на регистарцию в боте.""",
         role=role,
         telegram_id=telegram_id,
         fullname=f"{last_name} {first_name}",

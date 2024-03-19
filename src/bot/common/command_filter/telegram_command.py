@@ -12,5 +12,5 @@ class TelegramCommand(StrEnum):
     HELP = "Помощь"
     PROFILE = "Профиль"
     SHOW_SCHEDULE = "Узнать расписание"
-    ADMIN = "/admin"
+    ADMIN = "Админ панель"
     GROUP_PANEL = "Группа"
