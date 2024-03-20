@@ -19,7 +19,7 @@ from src.bot.headman_panel.callback_data.choose_student_to_enchance_callback_dat
 )
 from src.modules.attendance.domain import Lesson
 from src.modules.student_management.domain.enums.role import Role
-from src.modules.student_management.domain.models.student_info import StudentInfo
+from src.modules.student_management.domain.models.student import Student
 
 __all__ = [
     "group_panel_menu",
@@ -27,10 +27,15 @@ __all__ = [
 
 
 def select_student(
-    students: list[StudentInfo],
+    students: list[Student],
     enchance_to_vice_headman: bool,
 ) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
+
+    if enchance_to_vice_headman:
+        students = list(filter(lambda s: s.role == Role.STUDENT, students))
+    else:
+        students = list(filter(lambda s: s.role == Role.VICE_HEADMAN, students))
 
     CallbackDataClass = (
         ChooseStudentToEnhanceCallbackData

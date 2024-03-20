@@ -33,3 +33,7 @@ class Student:
 
     def __hash__(self) -> int:
         return hash(self.id)
+
+    @property
+    def fullname(self) -> str:
+        return f"{self.last_name} {self.first_name}"

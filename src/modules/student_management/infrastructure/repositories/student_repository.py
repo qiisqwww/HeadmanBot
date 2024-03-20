@@ -154,3 +154,8 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def set_role_by_id(self, student_id: int, role: Role) -> None:
         query = "UPDATE student_management.students SET role=$1 WHERE id = $2"
         await self._con.fetch(query, str(role), student_id)
+
+    async def filter_by_group_id(self, group_id: int) -> list[Student]:
+        query = "SELECT * FROM student_management.students WHERE group_id = $1"
+        records = await self._con.fetch(query, group_id)
+        return [self._mapper.to_domain(record) for record in records]

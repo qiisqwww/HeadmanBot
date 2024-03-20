@@ -28,6 +28,13 @@ class StudentRepository(ABC):
         ...
 
     @abstractmethod
+    async def filter_by_group_id(
+        self,
+        group_id: int,
+    ) -> list[Student]:
+        ...
+
+    @abstractmethod
     async def find_by_fullname_and_group_id(
         self,
         last_name: str,
