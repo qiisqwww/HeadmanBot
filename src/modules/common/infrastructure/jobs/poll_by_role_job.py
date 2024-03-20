@@ -8,6 +8,7 @@ from aiogram.types import BufferedInputFile
 from injector import Injector
 from loguru import logger
 
+from src.bot.common.resources.main_menu import main_menu
 from src.modules.common.infrastructure.config import DEBUG
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import GetAllGroupsQuery
@@ -58,7 +59,9 @@ class PollByRoleJob(AsyncJob):
                 GetStudentRoleByTelegramIDQuery,
             )
 
-            with open("poll_by_role.html", "r+") as update_info_file, open("ShowInfoImg.png", "rb") as photo:
+            with open("poll_by_role.html", "r+") as update_info_file, open(
+                "ShowInfoImg.png", "rb",
+            ) as photo:
                 photo_content = photo.read()
                 update_info = update_info_file.read()
                 if len(update_info) == 0:
@@ -95,7 +98,9 @@ class PollByRoleJob(AsyncJob):
                     )
                 )
                 tg.create_task(
-                    self._send_to_student(student_info, update_info, student_role, photo),
+                    self._send_to_student(
+                        student_info, update_info, student_role, photo,
+                    ),
                 )
 
     async def _send_to_student(
@@ -120,4 +125,5 @@ class PollByRoleJob(AsyncJob):
                     student_info.telegram_id,
                     photo=BufferedInputFile(photo, "img.png"),
                     caption=headman_text,
+                    reply_markup=main_menu(Role.HEADMAN),
                 )
