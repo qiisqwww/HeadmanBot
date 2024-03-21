@@ -80,9 +80,7 @@ INCORRECT_UNIVERSITY_TEMPLATE = (
 
 ASK_GROUP_TEMPLATE = "Введите название вашей группы"
 
-GROUP_DOESNT_EXISTS_TEMPLATE = (
-    "В выбранном университете такой группы нет. Попробуйте ввести группу заново, используя заглавные буквы"
-)
+GROUP_DOESNT_EXISTS_TEMPLATE = "В выбранном университете такой группы нет. Попробуйте ввести группу заново, используя заглавные буквы"
 
 ASK_SURNAME_TEMPLATE = "Введите свою фамилию"
 
@@ -111,7 +109,7 @@ BIRTHDATE_INCORRECT_TEMPLATE = (
 HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже есть староста."
 
 
-GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте. 
+GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте.
 Попросите своего старосту зарегестрироваться, или введите название группы заново."""
 
 TOO_MUCH_NAME_LENGTH_TEMPLATE = (
@@ -156,8 +154,8 @@ def student_send_registration_request_template(
     telegram_id: int,
 ) -> str:
     return render_template(
-        """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> 
-        подал заявку на регистарцию в боте.""",
+        """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a>
+подал заявку на регистарцию в боте.""",
         role=role,
         telegram_id=telegram_id,
         fullname=f"{last_name} {first_name}",

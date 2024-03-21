@@ -131,7 +131,7 @@ class MireaScheduleApi(ScheduleAPI):
                 Schedule(
                     lesson_name=str(event["SUMMARY"]),
                     start_time=start_time,
-                    classroom=str(event["LOCATION"]),
+                    classroom=str(event.get("LOCATION", "")),
                 ),
             )
 
