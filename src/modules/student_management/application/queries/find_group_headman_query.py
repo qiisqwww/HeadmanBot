@@ -22,7 +22,8 @@ class FindGroupHeadmanQuery(UseCase):
 
     async def execute(self, group_id: int) -> Student:
         headman = await self._repository.find_by_group_id_and_role(
-            group_id, Role.HEADMAN,
+            group_id,
+            Role.HEADMAN,
         )
 
         if headman is None:

@@ -24,11 +24,13 @@ from src.modules.edu_info.application.queries import (
     GetAllGroupsQuery,
 )
 from src.modules.edu_info.domain import Group
+from src.modules.student_management.application.commands import (
+    DeleteStudentByTGIDCommand,
+)
 from src.modules.student_management.application.queries import (
     FindGroupHeadmanQuery,
     GetStudentsInfoFromGroupQuery,
 )
-from src.modules.student_management.application.commands import DeleteStudentByTGIDCommand
 from src.modules.student_management.domain import StudentInfo
 
 __all__ = [
@@ -72,14 +74,21 @@ class SendingJob(AsyncJob):
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
 
             for group in groups:
-                timezone = await fetch_group_timezone.execute(group.id)
-                await self._send_to_group(
-                    group,
-                    delete_student_by_tg_id,
-                    get_students_info_from_group_query,
-                    find_group_headman_query,
-                    timezone,
-                )
+                try:
+                    timezone = await fetch_group_timezone.execute(group.id)
+                    await self._send_to_group(
+                        group,
+                        delete_student_by_tg_id,
+                        get_students_info_from_group_query,
+                        find_group_headman_query,
+                        timezone,
+                    )
+                except Exception as e:
+                    await inform_admins_about_job_exception(
+                        self._bot,
+                        e,
+                        self.__class__.__name__,
+                    )
 
     async def _send_to_group(
         self,
@@ -113,7 +122,9 @@ class SendingJob(AsyncJob):
         try:
             async with self._build_container() as container:
                 get_student_attendance_query = container.get(GetStudentAttendanceQuery)
-                attendances = await get_student_attendance_query.execute(student_info.id)
+                attendances = await get_student_attendance_query.execute(
+                    student_info.id,
+                )
 
                 try:
                     await self._bot.send_message(
@@ -136,7 +147,10 @@ class SendingJob(AsyncJob):
 
         except Exception as e:
             logger.info(student_info)
-            await delete_student_by_tg_id.execute(student_info.telegram_id)
+            try:
+                await delete_student_by_tg_id.execute(student_info.telegram_id)
+            except:
+                logger.info("User already been deleted")
             await inform_admins_about_job_exception(
                 self._bot,
                 e,
