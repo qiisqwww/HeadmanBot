@@ -24,17 +24,20 @@ class DeleteStudentByFullnameGroupCommand(UseCase):
     _repository: StudentRepository
     _edu_info_module_gateway: EduInfoModuleGateway
     _attendance_module_gateway: AttendanceModuleGateway
+    _uow: UnitOfWork
 
     @inject
     def __init__(
             self,
             repository: StudentRepository,
             edu_info_module_gateway: EduInfoModuleGateway,
-            attendance_module_gateway: AttendanceModuleGateway
+            attendance_module_gateway: AttendanceModuleGateway,
+            uow: UnitOfWork
     ) -> None:
         self._repository = repository
         self._edu_info_module_gateway = edu_info_module_gateway
         self._attendance_module_gateway = attendance_module_gateway
+        self._uow = uow
 
     async def execute(self, first_name: str, last_name: str, group_name: str) -> None:
         async with self._uow:
