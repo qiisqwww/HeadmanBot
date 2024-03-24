@@ -2,7 +2,7 @@ from typing import final
 
 from injector import inject
 
-from src.modules.common.application import UseCase
+from src.modules.common.application import UseCase, UnitOfWork
 from src.modules.student_management.application.repositories import StudentRepository
 from src.modules.student_management.application.exceptions import (
     NotFoundStudentError,
@@ -24,37 +24,41 @@ class DeleteStudentByFullnameGroupCommand(UseCase):
     _repository: StudentRepository
     _edu_info_module_gateway: EduInfoModuleGateway
     _attendance_module_gateway: AttendanceModuleGateway
+    _uow: UnitOfWork
 
     @inject
     def __init__(
             self,
             repository: StudentRepository,
             edu_info_module_gateway: EduInfoModuleGateway,
-            attendance_module_gateway: AttendanceModuleGateway
+            attendance_module_gateway: AttendanceModuleGateway,
+            uow: UnitOfWork
     ) -> None:
         self._repository = repository
         self._edu_info_module_gateway = edu_info_module_gateway
         self._attendance_module_gateway = attendance_module_gateway
+        self._uow = uow
 
     async def execute(self, first_name: str, last_name: str, group_name: str) -> None:
-        group = await self._edu_info_module_gateway.find_group_by_name(group_name)
+        async with self._uow:
+            group = await self._edu_info_module_gateway.find_group_by_name(group_name)
 
-        if group is None:
-            raise NotFoundGroupError(f"Not found group with name {group_name}")
+            if group is None:
+                raise NotFoundGroupError(f"Not found group with name {group_name}")
 
-        student = await self._repository.find_by_fullname_and_group_id(first_name, last_name, group.id)
+            student = await self._repository.find_by_fullname_and_group_id(first_name, last_name, group.id)
 
-        if student is None:
-            raise NotFoundStudentError(f"Not found student with input data")
+            if student is None:
+                raise NotFoundStudentError(f"Not found student with input data")
 
-        if student.role == Role.HEADMAN:
-            await self._edu_info_module_gateway.delete_group_by_id(group.id)
-            await self._repository.delete_all_by_group_id(group.id)
+            if student.role == Role.HEADMAN:
+                await self._edu_info_module_gateway.delete_group_by_id(group.id)
+                await self._repository.delete_all_by_group_id(group.id)
 
-            await self._attendance_module_gateway.delete_attendance_by_group_id(student.group_id)
-            await self._attendance_module_gateway.delete_lessons_by_group_id(student.group_id)
+                await self._attendance_module_gateway.delete_attendance_by_group_id(student.group_id)
+                await self._attendance_module_gateway.delete_lessons_by_group_id(student.group_id)
 
-            return
+                return
 
-        await self._repository.delete_by_fullname_and_group_id(student.first_name, student.last_name, group.id)
-        await self._attendance_module_gateway.delete_attendance_by_student_id(student.id)
+            await self._repository.delete_by_fullname_and_group_id(student.first_name, student.last_name, group.id)
+            await self._attendance_module_gateway.delete_attendance_by_student_id(student.id)
