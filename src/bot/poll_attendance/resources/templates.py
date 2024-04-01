@@ -19,7 +19,7 @@ def your_all_choice_is_template(status: VisitStatus) -> str:
         case VisitStatus.PRESENT:
             return "Вы выбрали <b>посетить все пары</b>. Отличный выбор."
         case VisitStatus.ABSENT:
-            return "Вы выбрали <b>не посещать пары</b>. Ничего страшного, прийдете в следующий раз."
+            return "Вы выбрали <b>не посещать пары</b>. Ничего страшного, придете в следующий раз."
 
 
 def your_choice_is_template(attendance: Attendance, timezone: str) -> str:
