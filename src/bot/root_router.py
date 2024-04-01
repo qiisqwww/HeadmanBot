@@ -5,6 +5,7 @@ from .help import include_help_command_router
 from .poll_attendance import include_poll_attendance_routers
 from .profile import include_profile_router
 from .registration import include_registration_routers
+from .show_attendance import include_show_attendance_router
 from .show_schedule import include_show_schedule
 
 __all__ = [
@@ -22,5 +23,6 @@ def build_root_router() -> RootRouter:
     include_show_schedule(root_router)
     include_admin_router(root_router)
     include_group_panel_router(root_router)
+    include_show_attendance_router(root_router)
 
     return root_router

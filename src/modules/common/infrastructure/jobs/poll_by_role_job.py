@@ -60,7 +60,8 @@ class PollByRoleJob(AsyncJob):
             )
 
             with open("poll_by_role.html", "r+") as update_info_file, open(
-                "ShowInfoImg.png", "rb",
+                "ShowInfoImg.png",
+                "rb",
             ) as photo:
                 photo_content = photo.read()
                 update_info = update_info_file.read()
@@ -99,7 +100,10 @@ class PollByRoleJob(AsyncJob):
                 )
                 tg.create_task(
                     self._send_to_student(
-                        student_info, update_info, student_role, photo,
+                        student_info,
+                        update_info,
+                        student_role,
+                        photo,
                     ),
                 )
 
@@ -120,7 +124,7 @@ class PollByRoleJob(AsyncJob):
             #        student_text,
             #    )
 
-            if student_role == Role.HEADMAN:
+            if student_role >= Role.HEADMAN:
                 await self._bot.send_photo(
                     student_info.telegram_id,
                     photo=BufferedInputFile(photo, "img.png"),
