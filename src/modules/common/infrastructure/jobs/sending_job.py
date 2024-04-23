@@ -46,9 +46,9 @@ class SendingJob(AsyncJob):
     _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
 
     def __init__(
-        self,
-        bot: Bot,
-        build_container: Callable[[], AbstractAsyncContextManager[Injector]],
+            self,
+            bot: Bot,
+            build_container: Callable[[], AbstractAsyncContextManager[Injector]],
     ) -> None:
         self._bot = bot
         self._build_container = build_container
@@ -91,12 +91,12 @@ class SendingJob(AsyncJob):
                     )
 
     async def _send_to_group(
-        self,
-        group: Group,
-        delete_student_by_tg_id: DeleteStudentByTGIDCommand,
-        get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
-        find_group_headman_query: FindGroupHeadmanQuery,
-        timezone: str,
+            self,
+            group: Group,
+            delete_student_by_tg_id: DeleteStudentByTGIDCommand,
+            get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
+            find_group_headman_query: FindGroupHeadmanQuery,
+            timezone: str,
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
         group_headman = await find_group_headman_query.execute(group.id)
@@ -113,11 +113,11 @@ class SendingJob(AsyncJob):
                 )
 
     async def _send_to_student(
-        self,
-        student_info: StudentInfo,
-        delete_student_by_tg_id: DeleteStudentByTGIDCommand,
-        headman_telegram_id: int,
-        timezone: str,
+            self,
+            student_info: StudentInfo,
+            delete_student_by_tg_id: DeleteStudentByTGIDCommand,
+            headman_telegram_id: int,
+            timezone: str,
     ) -> None:
         try:
             async with self._build_container() as container:
@@ -125,6 +125,8 @@ class SendingJob(AsyncJob):
                 attendances = await get_student_attendance_query.execute(
                     student_info.id,
                 )
+
+                if len(attendances) == 0: return
 
                 try:
                     await self._bot.send_message(
