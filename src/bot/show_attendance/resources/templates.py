@@ -31,6 +31,26 @@ def attendance_for_headmen_template(
     group_attendance: LessonAttendanceForGroup,
     timezone: str,
 ) -> str:
+    not_checked_students = tuple(
+        filter(
+            lambda s: not s.attendance_noted,
+            group_attendance.attendance[VisitStatus.ABSENT],
+        ),
+    )
+
+    will_arrive_students = group_attendance.attendance[VisitStatus.PRESENT]
+
+    will_not_arrive_students = tuple(
+        filter(
+            lambda s: s.attendance_noted,
+            group_attendance.attendance[VisitStatus.ABSENT],
+        ),
+    )
+
+    all_students_count = len(group_attendance.attendance[VisitStatus.ABSENT]) + len(
+        group_attendance.attendance[VisitStatus.PRESENT],
+    )
+
     start_time = (
         convert_time_from_utc(chosen_lesson.start_time, timezone).strftime(
             "%H:%M",
@@ -40,24 +60,26 @@ def attendance_for_headmen_template(
     return render_template(
         """{{lesson_name}} {{start_time}}
 
-Не отметились:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] | sort(attribute='fullname') | rejectattr('attendance_noted') -%}
+Не отметились <b>({{ not_checked_students|length }}/{{ all_students_count }})</b>:
+{% for student in not_checked_students | sort(attribute='fullname') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
 
-Придут:
-{% for student in group_attendance.attendance[VisitStatus.PRESENT] | sort(attribute='fullname') -%}
+Придут <b>({{ will_arrive_students|length }}/{{ all_students_count }})</b>:
+{% for student in will_arrive_students | sort(attribute='fullname') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
 
-Не придут:
-{% for student in group_attendance.attendance[VisitStatus.ABSENT] | sort(attribute='fullname') | selectattr('attendance_noted') -%}
+Не придут <b>({{ will_not_arrive_students|length }}/{{ all_students_count }})</b>:
+{% for student in will_not_arrive_students | sort(attribute='fullname') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
 
 Что-то еще?""",
         lesson_name=chosen_lesson.name,
         start_time=start_time,
-        group_attendance=group_attendance,
-        VisitStatus=VisitStatus,
+        all_students_count=all_students_count,
+        not_checked_students=not_checked_students,
+        will_arrive_students=will_arrive_students,
+        will_not_arrive_students=will_not_arrive_students,
     )
