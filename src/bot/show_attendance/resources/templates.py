@@ -31,14 +31,20 @@ def attendance_for_headmen_template(
     group_attendance: LessonAttendanceForGroup,
     timezone: str,
 ) -> str:
+    all_students_count = len(group_attendance.attendance[VisitStatus.ABSENT]) + len(
+        group_attendance.attendance[VisitStatus.PRESENT],
+    )
+
     not_checked_students = tuple(
         filter(
             lambda s: not s.attendance_noted,
             group_attendance.attendance[VisitStatus.ABSENT],
         ),
     )
+    not_checked_students_percent = len(not_checked_students)*100/all_students_count
 
     will_arrive_students = group_attendance.attendance[VisitStatus.PRESENT]
+    will_arrive_students_percent = len(will_arrive_students)*100/all_students_count
 
     will_not_arrive_students = tuple(
         filter(
@@ -46,10 +52,7 @@ def attendance_for_headmen_template(
             group_attendance.attendance[VisitStatus.ABSENT],
         ),
     )
-
-    all_students_count = len(group_attendance.attendance[VisitStatus.ABSENT]) + len(
-        group_attendance.attendance[VisitStatus.PRESENT],
-    )
+    will_not_arrive_students_percent = len(will_not_arrive_students)*100/all_students_count
 
     start_time = (
         convert_time_from_utc(chosen_lesson.start_time, timezone).strftime(
@@ -60,17 +63,17 @@ def attendance_for_headmen_template(
     return render_template(
         """{{lesson_name}} {{start_time}}
 
-Не отметились <b>({{ not_checked_students|length }}/{{ all_students_count }})</b>:
+Не отметились {{ not_checked_students_percent }}% <b>({{ not_checked_students|length }}/{{ all_students_count }})</b>:
 {% for student in not_checked_students | sort(attribute='fullname') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
 
-Придут <b>({{ will_arrive_students|length }}/{{ all_students_count }})</b>:
+Придут {{ will_arrive_students_percent }}% <b>({{ will_arrive_students|length }}/{{ all_students_count }})</b>:
 {% for student in will_arrive_students | sort(attribute='fullname') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
 
-Не придут <b>({{ will_not_arrive_students|length }}/{{ all_students_count }})</b>:
+Не придут {{ will_not_arrive_students_percent }}% <b>({{ will_not_arrive_students|length }}/{{ all_students_count }})</b>:
 {% for student in will_not_arrive_students | sort(attribute='fullname') -%}
     <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
 {% endfor %}
@@ -79,7 +82,10 @@ def attendance_for_headmen_template(
         lesson_name=chosen_lesson.name,
         start_time=start_time,
         all_students_count=all_students_count,
+        not_checked_students_percent=not_checked_students_percent,
         not_checked_students=not_checked_students,
+        will_arrive_students_percent=will_arrive_students_percent,
         will_arrive_students=will_arrive_students,
+        will_not_arrive_students_percent=will_not_arrive_students_percent,
         will_not_arrive_students=will_not_arrive_students,
     )
