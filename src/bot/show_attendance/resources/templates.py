@@ -41,10 +41,10 @@ def attendance_for_headmen_template(
             group_attendance.attendance[VisitStatus.ABSENT],
         ),
     )
-    not_checked_students_percent = len(not_checked_students)*100/all_students_count
+    not_checked_students_percent = int(len(not_checked_students)*100/all_students_count)
 
     will_arrive_students = group_attendance.attendance[VisitStatus.PRESENT]
-    will_arrive_students_percent = len(will_arrive_students)*100/all_students_count
+    will_arrive_students_percent = int(len(will_arrive_students)*100/all_students_count)
 
     will_not_arrive_students = tuple(
         filter(
@@ -52,7 +52,7 @@ def attendance_for_headmen_template(
             group_attendance.attendance[VisitStatus.ABSENT],
         ),
     )
-    will_not_arrive_students_percent = len(will_not_arrive_students)*100/all_students_count
+    will_not_arrive_students_percent = int(len(will_not_arrive_students)*100/all_students_count)
 
     start_time = (
         convert_time_from_utc(chosen_lesson.start_time, timezone).strftime(
