@@ -19,3 +19,4 @@ db.sql
 *.pem 
 *.key
 *.crt
+.vscode

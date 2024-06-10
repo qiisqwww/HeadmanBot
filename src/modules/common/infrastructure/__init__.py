@@ -7,14 +7,12 @@ from .config import (
     WEBHOOK_PATH,
     WEBHOOK_SECRET,
     WEBHOOK_URL,
-    configurate_logger,
+    configure_logger,
 )
-from .container import project_container
 
 __all__ = [
-    "project_container",
     "BOT_TOKEN",
-    "configurate_logger",
+    "configure_logger",
     "DEBUG",
     "WEBHOOK_PATH",
     "WEBHOOK_URL",

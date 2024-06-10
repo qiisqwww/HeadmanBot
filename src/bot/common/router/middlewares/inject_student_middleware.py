@@ -1,5 +1,5 @@
 from collections.abc import Awaitable, Callable
-from typing import Any, TypeAlias
+from typing import TYPE_CHECKING, Any, TypeAlias
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
@@ -17,6 +17,9 @@ __all__ = [
     "InjectStudentMiddleware",
 ]
 
+if TYPE_CHECKING:
+    from src.modules.common.infrastructure.container import Container
+
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
@@ -32,8 +35,8 @@ class InjectStudentMiddleware(BaseMiddleware):
         if event.from_user is None:
             return None
 
-        container: Injector = data["container"]
-        find_student_query = container.get(FindStudentByTelegramIdQuery)
+        container: Container = data["container"]
+        find_student_query = container.get_dependency(FindStudentByTelegramIdQuery)
 
         if data.get("student", None) is None:
             student = await find_student_query.execute(event.from_user.id)

@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import Path  # noqa: EXE002
 
 from .env import BoolEnv, IntEnv, IntListEnv, StrEnv
 
@@ -19,7 +19,6 @@ __all__ = [
     "WEBHOOK_URL",
     "WEBHOOK_PATH",
     "WEBHOOK_SECRET",
-    "THROTTLING_EXPIRE_TIME",
     "THROTTLING_RATE_PER_MINUTE",
 ]
 

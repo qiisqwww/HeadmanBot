@@ -5,9 +5,7 @@ from aiogram import Bot
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
 
-from src.bot.common.inform_admins_about_exception import (
-    inform_admins_about_job_exception,
-)
+from src.modules.common.infrastructure.bot_notifier import BotNotifierImpl
 
 from .async_job import AsyncJob
 
@@ -43,8 +41,8 @@ class AsyncScheduler:
             try:
                 await job()
             except Exception as e:
-                await inform_admins_about_job_exception(
-                    bot,
+                notifier = BotNotifierImpl(bot)
+                await notifier.notify_about_job_exception(
                     e,
                     job_name,
                 )

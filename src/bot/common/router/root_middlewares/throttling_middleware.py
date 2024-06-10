@@ -16,7 +16,7 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    from injector import Injector
+    from src.modules.common.infrastructure.container import Container
 
 
 class ThrottlingMiddleware(BaseMiddleware):
@@ -30,9 +30,9 @@ class ThrottlingMiddleware(BaseMiddleware):
             logger.error("Void event.")
             return None
 
-        container: Injector = data["container"]
+        container: Container = data["container"]
 
-        can_perform_action_command = container.get(CanPerformActionCommand)
+        can_perform_action_command = container.get_dependency(CanPerformActionCommand)
         can_perform_action = await can_perform_action_command.execute(telegram_id)
 
         if can_perform_action:

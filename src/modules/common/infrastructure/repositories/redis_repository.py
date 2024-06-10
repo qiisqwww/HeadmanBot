@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 else:
     RedisConnection: TypeAlias = Redis
 
+
 class RedisRepositoryImpl:
     _con: RedisConnection
 

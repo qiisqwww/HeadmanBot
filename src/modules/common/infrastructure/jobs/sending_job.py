@@ -1,23 +1,19 @@
 from asyncio import TaskGroup
-from collections.abc import Callable
-from contextlib import AbstractAsyncContextManager
 from typing import final
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
-from injector import Injector
 from loguru import logger
 
-from src.bot.common.inform_admins_about_exception import (
-    inform_admins_about_job_exception,
-)
 from src.bot.poll_attendance.resources.inline_buttons import update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import (
     POLL_TEMPLATE,
     student_was_not_polled_warning_template,
 )
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
+from src.modules.common.application.bot_notifier import BotNotifier
 from src.modules.common.infrastructure.config import DEBUG
+from src.modules.common.infrastructure.container import Container
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import (
     FetchUniTimezonByGroupIdQuery,
@@ -43,15 +39,13 @@ class SendingJob(AsyncJob):
     """Send everyone message which allow user to choose lessons which will be visited."""
 
     _bot: Bot
-    _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
+    _build_container: Container
 
     def __init__(
-            self,
-            bot: Bot,
-            build_container: Callable[[], AbstractAsyncContextManager[Injector]],
+        self,
+        bot: Bot,
     ) -> None:
         self._bot = bot
-        self._build_container = build_container
 
         if not DEBUG:
             self._trigger = "cron"
@@ -62,16 +56,17 @@ class SendingJob(AsyncJob):
             }
 
     async def __call__(self) -> None:
-        async with self._build_container() as container:
-            get_all_groups_query = container.get(GetAllGroupsQuery)
+        async with Container() as container:
+            get_all_groups_query = container.get_dependency(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
-            get_students_info_from_group_query = container.get(
+            get_students_info_from_group_query = container.get_dependency(
                 GetStudentsInfoFromGroupQuery,
             )
-            delete_student_by_tg_id = container.get(DeleteStudentByTGIDCommand)
+            delete_student_by_tg_id = container.get_dependency(DeleteStudentByTGIDCommand)
 
-            fetch_group_timezone = container.get(FetchUniTimezonByGroupIdQuery)
-            find_group_headman_query = container.get(FindGroupHeadmanQuery)
+            fetch_group_timezone = container.get_dependency(FetchUniTimezonByGroupIdQuery)
+            find_group_headman_query = container.get_dependency(FindGroupHeadmanQuery)
+            notifier = container.get_dependency(BotNotifier)
 
             for group in groups:
                 try:
@@ -84,19 +79,18 @@ class SendingJob(AsyncJob):
                         timezone,
                     )
                 except Exception as e:
-                    await inform_admins_about_job_exception(
-                        self._bot,
+                    await notifier.notify_about_job_exception(
                         e,
                         self.__class__.__name__,
                     )
 
     async def _send_to_group(
-            self,
-            group: Group,
-            delete_student_by_tg_id: DeleteStudentByTGIDCommand,
-            get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
-            find_group_headman_query: FindGroupHeadmanQuery,
-            timezone: str,
+        self,
+        group: Group,
+        delete_student_by_tg_id: DeleteStudentByTGIDCommand,
+        get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
+        find_group_headman_query: FindGroupHeadmanQuery,
+        timezone: str,
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
         group_headman = await find_group_headman_query.execute(group.id)
@@ -113,20 +107,21 @@ class SendingJob(AsyncJob):
                 )
 
     async def _send_to_student(
-            self,
-            student_info: StudentInfo,
-            delete_student_by_tg_id: DeleteStudentByTGIDCommand,
-            headman_telegram_id: int,
-            timezone: str,
+        self,
+        student_info: StudentInfo,
+        delete_student_by_tg_id: DeleteStudentByTGIDCommand,
+        headman_telegram_id: int,
+        timezone: str,
     ) -> None:
-        try:
-            async with self._build_container() as container:
-                get_student_attendance_query = container.get(GetStudentAttendanceQuery)
+        async with Container() as container:
+            try:
+                get_student_attendance_query = container.get_dependency(GetStudentAttendanceQuery)
                 attendances = await get_student_attendance_query.execute(
                     student_info.id,
                 )
 
-                if len(attendances) == 0: return
+                if len(attendances) == 0:
+                    return
 
                 try:
                     await self._bot.send_message(
@@ -147,14 +142,15 @@ class SendingJob(AsyncJob):
 
                     await delete_student_by_tg_id.execute(student_info.telegram_id)
 
-        except Exception as e:
-            logger.info(student_info)
-            try:
-                await delete_student_by_tg_id.execute(student_info.telegram_id)
-            except:
-                logger.info("User already been deleted")
-            await inform_admins_about_job_exception(
-                self._bot,
-                e,
-                self.__class__.__name__,
-            )
+            except Exception as e:
+                notifier = container.get_dependency(BotNotifier)
+                logger.info(student_info)
+                try:
+                    await delete_student_by_tg_id.execute(student_info.telegram_id)
+                except:
+                    logger.info("User already been deleted")
+
+                await notifier.notify_about_job_exception(
+                    e,
+                    self.__class__.__name__,
+                )

@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    from injector import Injector
+    from src.modules.common.infrastructure.container import Container
 
 
 class PermissionManagerMiddleware(BaseMiddleware):
@@ -39,8 +39,8 @@ class PermissionManagerMiddleware(BaseMiddleware):
             await event.answer(YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE)
             return None
 
-        container: Injector = data["container"]
-        fetch_timezone_query = container.get(FetchUniTimezonByGroupIdQuery)
+        container: Container = data["container"]
+        fetch_timezone_query = container.get_dependency(FetchUniTimezonByGroupIdQuery)
 
         timezone = await fetch_timezone_query.execute(student.group_id)
         data["timezone"] = timezone

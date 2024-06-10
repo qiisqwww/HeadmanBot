@@ -1,5 +1,5 @@
 # Choose image for project. It will be downloaded from https://hub.docker.com/
-FROM python:3.11-alpine
+FROM python:3.12.4-alpine3.20
 
 
 ENV PYTHONFAULTHANDLER=1 \

@@ -1,12 +1,10 @@
-from collections.abc import Callable
-from contextlib import AbstractAsyncContextManager
 from typing import final
 
 from aiogram import Bot
-from injector import Injector
 
 from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
 from src.modules.common.infrastructure.config import DEBUG
+from src.modules.common.infrastructure.container import Container
 from src.modules.common.infrastructure.scheduling import AsyncJob
 
 __all__ = [
@@ -16,15 +14,9 @@ __all__ = [
 
 @final
 class MakeAttendanceRelevantJob(AsyncJob):
-    _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
     _bot: Bot
 
-    def __init__(
-        self,
-        bot: Bot,
-        build_container: Callable[[], AbstractAsyncContextManager[Injector]],
-    ) -> None:
-        self._build_container = build_container
+    def __init__(self, bot: Bot) -> None:
         self._bot = bot
 
         if not DEBUG:
@@ -36,6 +28,6 @@ class MakeAttendanceRelevantJob(AsyncJob):
             }
 
     async def __call__(self) -> None:
-        async with self._build_container() as container:
-            command = container.get(MakeAttendanceRelevantCommand)
+        async with Container() as container:
+            command = container.get_dependency(MakeAttendanceRelevantCommand)
             await command.execute(self._bot)

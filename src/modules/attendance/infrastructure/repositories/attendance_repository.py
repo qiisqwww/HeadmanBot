@@ -14,7 +14,8 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
     async def create_for_student(self, student_id: int, schedule: list[Lesson]) -> None:
         query = "INSERT INTO attendance.attendances (student_id, lesson_id, status) VALUES($1, $2, $3)"
         await self._con.executemany(
-            query, ((student_id, lesson.id, VisitStatus.ABSENT) for lesson in schedule),
+            query,
+            ((student_id, lesson.id, VisitStatus.ABSENT) for lesson in schedule),
         )
 
     async def filter_by_student_id(self, student_id: int) -> list[Attendance]:
@@ -48,7 +49,9 @@ class AttendanceRepositoryImpl(PostgresRepositoryImpl, AttendanceRepository):
         await self._con.execute(query, new_status, attendance_id)
 
     async def update_status_for_student(
-        self, student_id: int, new_status: VisitStatus,
+        self,
+        student_id: int,
+        new_status: VisitStatus,
     ) -> None:
         query = "UPDATE attendance.attendances SET status = $1 WHERE student_id = $2"
         await self._con.execute(query, new_status, student_id)

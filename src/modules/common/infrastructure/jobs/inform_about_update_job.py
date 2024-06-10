@@ -1,14 +1,12 @@
 from asyncio import TaskGroup
-from collections.abc import Callable
-from contextlib import AbstractAsyncContextManager, suppress
+from contextlib import suppress
 from typing import final
 
 from aiogram import Bot
-from injector import Injector
-from loguru import logger
 
 from src.bot.common.resources.main_menu import main_menu
 from src.modules.common.infrastructure.config import DEBUG
+from src.modules.common.infrastructure.container import Container
 from src.modules.common.infrastructure.scheduling import AsyncJob
 from src.modules.edu_info.application.queries import GetAllGroupsQuery
 from src.modules.edu_info.domain import Group
@@ -29,15 +27,9 @@ class InformAboutUpdateJob(AsyncJob):
     """Send everyone message with information about previous update."""
 
     _bot: Bot
-    _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
 
-    def __init__(
-        self,
-        bot: Bot,
-        build_container: Callable[[], AbstractAsyncContextManager[Injector]],
-    ) -> None:
+    def __init__(self, bot: Bot) -> None:
         self._bot = bot
-        self._build_container = build_container
 
         if not DEBUG:
             self._trigger = "cron"
@@ -48,13 +40,13 @@ class InformAboutUpdateJob(AsyncJob):
             }
 
     async def __call__(self) -> None:
-        async with self._build_container() as container:
-            get_all_groups_query = container.get(GetAllGroupsQuery)
+        async with Container() as container:
+            get_all_groups_query = container.get_dependency(GetAllGroupsQuery)
             groups = await get_all_groups_query.execute()
-            get_students_info_from_group_query = container.get(
+            get_students_info_from_group_query = container.get_dependency(
                 GetStudentsInfoFromGroupQuery,
             )
-            get_student_role_by_telegram_id_query = container.get(
+            get_student_role_by_telegram_id_query = container.get_dependency(
                 GetStudentRoleByTelegramIDQuery,
             )
 
@@ -73,7 +65,6 @@ class InformAboutUpdateJob(AsyncJob):
 
                 update_info_file.truncate(0)
                 update_info_file.flush()
-        logger.info("Finish inform about update job.")
 
     async def _send_to_group(
         self,
@@ -86,10 +77,8 @@ class InformAboutUpdateJob(AsyncJob):
 
         async with TaskGroup() as tg:
             for student_info in students_info:
-                student_role: Role = (
-                    await get_student_role_by_telegram_id_query.execute(
-                        student_info.telegram_id,
-                    )
+                student_role: Role = await get_student_role_by_telegram_id_query.execute(
+                    student_info.telegram_id,
                 )
                 tg.create_task(
                     self._send_to_student(student_info, update_info, student_role),

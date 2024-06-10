@@ -25,6 +25,7 @@ from src.bot.registration.resources.templates import (
     asking_fullname_validation_template,
 )
 from src.bot.registration.validation import is_valid_name_len
+from src.modules.common.application.bot_notifier import BotNotifier
 from src.modules.student_management.application.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndAliasQuery,
@@ -61,10 +62,7 @@ async def handling_group(
     check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
     find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
     find_group_headman_query: FindGroupHeadmanQuery,
-    inform_admins_about_exception: Callable[
-        [Exception, User | None],
-        Coroutine[Any, Any, None],
-    ],
+    notifier: BotNotifier,
 ) -> None:
     if message.text is None:
         return
@@ -79,7 +77,7 @@ async def handling_group(
     except ScheduleApiError as e:
         await message.answer(FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
-        await inform_admins_about_exception(e, message.from_user)
+        await notifier.notify_about_exception(e, message.from_user)
         return
 
     if not group_exists:

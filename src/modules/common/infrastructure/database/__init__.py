@@ -1,7 +1,5 @@
-from .postgres import get_postgres_pool
-from .redis import get_redis_pool
+from .database_connection import DatabaseConnection
 
 __all__ = [
-    "get_redis_pool",
-    "get_postgres_pool",
+    "DatabaseConnection",
 ]

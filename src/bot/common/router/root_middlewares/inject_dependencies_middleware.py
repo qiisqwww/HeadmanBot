@@ -1,16 +1,12 @@
 from collections.abc import Awaitable, Callable
-from typing import Any, TypeAlias
+from typing import Any
 
 from aiogram import BaseMiddleware
+from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
-from injector import Injector
 
-from src.modules.common.application import UseCase
-
-from ...contextes import ProfileUpdateContext, RegistrationContext
-
-EventType: TypeAlias = Message | CallbackQuery
-HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
+type EventType = Message | CallbackQuery
+type HandlerType = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
     "InjectDependenciesMiddleware",
@@ -25,23 +21,19 @@ class InjectDependenciesMiddleware(BaseMiddleware):
         data: dict[str, Any],
     ) -> Any:
         annotations = data["handler"].callback.__annotations__
-        container: Injector = data["container"]
+        container = data["container"]
 
-        if "state" in annotations:
-            if annotations["state"] == RegistrationContext:
-                data["state"] = RegistrationContext(data["state"])
-            elif annotations["state"] == ProfileUpdateContext:
-                data["state"] = ProfileUpdateContext(data["state"])
+        if "state" in annotations and annotations["state"] is not FSMContext:
+            data["state"] = annotations["state"](data["state"])
 
         for service_obj_name, service_type in annotations.items():
-            if (
-                service_obj_name == "return"
-                or not isinstance(service_type, type)
-                or not issubclass(service_type, UseCase)
-            ):
+            if service_obj_name == "return":
                 continue
 
-            impl = container.get(service_type)
+            if not container.has_dependency(service_type):
+                continue
+
+            impl = container.get_dependency(service_type)
             data[service_obj_name] = impl
 
         return await handler(event, data)
