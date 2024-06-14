@@ -12,17 +12,17 @@ __all__ = [
 
 
 async def build_scheduler(bot: Bot) -> AsyncScheduler:
-    attendance_jobs = [MakeAttendanceRelevantJob(bot)]
+    attendance_jobs = [MakeAttendanceRelevantJob()]
     student_management_jobs = [UnnoteAttendanceJob(bot)]
     common_jobs = [
         SendingJob(bot),
-        InformAboutUpdateJob(bot),
+        InformAboutUpdateJob(),
         PollByRoleJob(bot),
     ]
 
-    if DEBUG:
-        common_jobs = []
-        attendance_jobs = []
-        student_management_jobs = []
+    # if DEBUG:
+    #     common_jobs = []
+    #     attendance_jobs = []
+    #     student_management_jobs = []
 
     return AsyncScheduler(bot, *attendance_jobs, *student_management_jobs, *common_jobs)

@@ -26,11 +26,7 @@ __all__ = [
 class InformAboutUpdateJob(AsyncJob):
     """Send everyone message with information about previous update."""
 
-    _bot: Bot
-
-    def __init__(self, bot: Bot) -> None:
-        self._bot = bot
-
+    def __init__(self) -> None:
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
@@ -61,6 +57,7 @@ class InformAboutUpdateJob(AsyncJob):
                         get_students_info_from_group_query,
                         get_student_role_by_telegram_id_query,
                         update_info,
+                        container.get_dependency(Bot),
                     )
 
                 update_info_file.truncate(0)
@@ -72,6 +69,7 @@ class InformAboutUpdateJob(AsyncJob):
         get_students_info_from_group_query: GetStudentsInfoFromGroupQuery,
         get_student_role_by_telegram_id_query: GetStudentRoleByTelegramIDQuery,
         update_info: str,
+        bot: Bot,
     ) -> None:
         students_info = await get_students_info_from_group_query.execute(group.id)
 
@@ -81,7 +79,7 @@ class InformAboutUpdateJob(AsyncJob):
                     student_info.telegram_id,
                 )
                 tg.create_task(
-                    self._send_to_student(student_info, update_info, student_role),
+                    self._send_to_student(student_info, update_info, student_role, bot),
                 )
 
     async def _send_to_student(
@@ -89,9 +87,10 @@ class InformAboutUpdateJob(AsyncJob):
         student_info: StudentInfo,
         update_info: str,
         student_role: Role,
+        bot: Bot,
     ) -> None:
         with suppress(Exception):
-            await self._bot.send_message(
+            await bot.send_message(
                 student_info.telegram_id,
                 update_info,
                 reply_markup=main_menu(student_role),

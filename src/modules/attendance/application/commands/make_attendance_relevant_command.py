@@ -1,6 +1,5 @@
 from typing import final
 
-from aiogram import Bot
 from injector import inject
 
 from src.modules.attendance.application.gateways import EduInfoModuleGateway
@@ -10,7 +9,6 @@ from src.modules.attendance.application.gateways.student_management_gateway impo
 from src.modules.attendance.application.repositories import (
     AttendanceRepository,
     LessonRepository,
-    attendance_repository,
 )
 from src.modules.common.application import UnitOfWork, UseCase
 from src.modules.common.application.bot_notifier import BotNotifier
@@ -51,7 +49,7 @@ class MakeAttendanceRelevantCommand(UseCase):
         self._uow = uow
         self._notifier = notifier
 
-    async def execute(self, bot: Bot) -> None:
+    async def execute(self) -> None:
         async with self._uow:
             await self._lesson_repository.delete_all()
             await self._attendance_repository.delete_all()

@@ -1,5 +1,5 @@
-from .database_connection import DatabaseConnection
+from .database_connection import DbContext
 
 __all__ = [
-    "DatabaseConnection",
+    "DbContext",
 ]

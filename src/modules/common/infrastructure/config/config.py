@@ -1,6 +1,6 @@
 from pathlib import Path  # noqa: EXE002
 
-from .env import BoolEnv, IntEnv, IntListEnv, StrEnv
+from .env import Env, EnvList
 
 __all__ = [
     "DEBUG",
@@ -20,30 +20,32 @@ __all__ = [
     "WEBHOOK_PATH",
     "WEBHOOK_SECRET",
     "THROTTLING_RATE_PER_MINUTE",
+    "UVICORN_WORKERS_COUNT",
 ]
 
-DEBUG: bool = bool(BoolEnv("DEBUG"))
-BOT_TOKEN: str = StrEnv("BOT_TOKEN")
-LOGGING_PATH: Path = Path(StrEnv("LOGGING_PATH"))
+DEBUG = Env("DEBUG", bool)
+BOT_TOKEN = Env("BOT_TOKEN", str)
+LOGGING_PATH = Env("LOGGING_PATH", Path)
 
 
-ADMIN_IDS: list[int] = IntListEnv("ADMIN_IDS")
+ADMIN_IDS = EnvList("ADMIN_IDS", int)
 
 
-DB_USER: str = StrEnv("DB_USER")
-DB_PASS: str = StrEnv("DB_PASS")
-DB_NAME: str = StrEnv("DB_NAME")
-DB_PORT: int = IntEnv("DB_PORT")
-DB_HOST: str = StrEnv("DB_HOST")
+DB_USER = Env("DB_USER", str)
+DB_PASS = Env("DB_PASS", str)
+DB_NAME = Env("DB_NAME", str)
+DB_PORT = Env("DB_PORT", str)
+DB_HOST = Env("DB_HOST", str)
 
-REDIS_HOST: str = StrEnv("REDIS_HOST")
-REDIS_PORT: int = IntEnv("REDIS_PORT")
+REDIS_HOST = Env("REDIS_HOST", str)
+REDIS_PORT = Env("REDIS_PORT", int)
 
-HTTP_HOST: str = StrEnv("HTTP_HOST")
-HTTP_PORT: int = IntEnv("HTTP_PORT")
+HTTP_HOST = Env("HTTP_HOST", str)
+HTTP_PORT = Env("HTTP_PORT", int)
+UVICORN_WORKERS_COUNT = Env("HTTP_PORT", int)
 
-WEBHOOK_PATH: str = StrEnv("WEBHOOK_PATH")
-WEBHOOK_URL: str = StrEnv("WEBHOOK_URL")
-WEBHOOK_SECRET: str = StrEnv("WEBHOOK_SECRET")
+WEBHOOK_PATH = Env("WEBHOOK_PATH", str)
+WEBHOOK_URL = Env("WEBHOOK_URL", str)
+WEBHOOK_SECRET = Env("WEBHOOK_SECRET", str)
 
-THROTTLING_RATE_PER_MINUTE: int = IntEnv("THROTTLING_RATE_PER_MINUTE")
+THROTTLING_RATE_PER_MINUTE = Env("THROTTLING_RATE_PER_MINUTE", int)

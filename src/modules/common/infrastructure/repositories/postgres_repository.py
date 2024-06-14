@@ -1,6 +1,6 @@
 from injector import inject
 
-from src.modules.common.infrastructure.database import DatabaseConnection
+from src.modules.common.infrastructure.database import DbContext
 
 __all__ = [
     "PostgresRepositoryImpl",
@@ -8,8 +8,8 @@ __all__ = [
 
 
 class PostgresRepositoryImpl:
-    _con: DatabaseConnection
+    _con: DbContext
 
     @inject
-    def __init__(self, con: DatabaseConnection) -> None:
+    def __init__(self, con: DbContext) -> None:
         self._con = con

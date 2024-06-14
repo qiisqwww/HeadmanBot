@@ -1,31 +1,63 @@
+import sys
+from asyncio import get_event_loop
 from collections.abc import Iterable, Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar, Final, NoReturn, Self
 
-from loguru import logger
-from asyncpg import Record
-from asyncpg.pool import PoolConnectionProxy
+from asyncpg import Record, create_pool
+from asyncpg.pool import Pool, PoolConnectionProxy
 from asyncpg.transaction import Transaction
-from ..config import DEBUG
+from loguru import logger
+
+from src.modules.common.infrastructure.config.config import (
+    DB_HOST,
+    DB_NAME,
+    DB_PASS,
+    DB_PORT,
+    DB_USER,
+    DEBUG,
+)
 
 __all__ = [
-    "DatabaseConnection",
+    "DbContext",
 ]
 
 if TYPE_CHECKING:
-    type Connection = PoolConnectionProxy[Record]
+    type DatabaseConnection = PoolConnectionProxy[Record]
+    type DatabaseConnectionPool = Pool[Record]
 else:
-    type Connection = PoolConnectionProxy
+    type DatabaseConnection = PoolConnectionProxy
+    type DatabaseConnectionPool = Pool
 
 
-class DatabaseConnection:
-    _con: Connection
+class DbContext:
+    _db_pool: ClassVar[DatabaseConnectionPool]
+    _DATABASE_URL: Final[str] = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-    def __init__(self, con: Connection) -> None:
-        self._con = con
+    _con: DatabaseConnection
 
-    @property
-    def connection(self) -> Connection:
-        return self._con
+    def __init__(self) -> None:
+        """Don't use default constructor. Please, use instead new classmethod."""
+        msg = "Use classmethod new instead of __init__"
+        raise RuntimeWarning(msg)
+
+    @classmethod
+    async def init(cls: type[Self]) -> None:
+        await cls._create_pool()
+
+    @classmethod
+    async def new(cls: type[Self]) -> Self:
+        """Create new DbContext instead of __init__ method."""
+        new_connection = cls.__new__(cls)
+        new_connection._con = await cls._db_pool.acquire()  # noqa: SLF001 , PGH003# pyright: ignore
+        return new_connection
+
+    async def close(self) -> None:
+        await self._db_pool.release(self._con)
+
+    @classmethod
+    async def close_pool(cls: type[Self]) -> None:
+        """Close pool for finalization resources."""
+        await cls._db_pool.close()
 
     async def transaction(self) -> Transaction:
         return self._con.transaction()
@@ -71,7 +103,7 @@ class DatabaseConnection:
     async def execute(
         self,
         query: str,
-        *args: Any,
+        *args: object,
         timeout: float | None = None,
     ) -> str:
         if DEBUG:
@@ -86,3 +118,15 @@ class DatabaseConnection:
         query = " ".join(query.split())
 
         logger.debug(f"SQL query: {query}")
+
+    @classmethod
+    async def _create_pool(cls: type[Self]) -> None:
+        gotten_pool = await create_pool(cls._DATABASE_URL, record_class=Record)
+        logger.error(gotten_pool)
+        logger.error(id(gotten_pool))
+
+        if gotten_pool is None:
+            logger.error("Cannot connect to postgres.")
+            sys.exit(-1)
+
+        cls._db_pool = gotten_pool

@@ -2,10 +2,8 @@ from os import getenv
 
 __all__ = [
     "UndefinedEnvError",
-    "StrEnv",
-    "BoolEnv",
-    "IntEnv",
-    "IntListEnv",
+    "Env",
+    "EnvList",
 ]
 
 
@@ -17,36 +15,19 @@ class UndefinedEnvError(Exception):
         super().__init__(msg)
 
 
-class StrEnv(str):
-    def __new__(cls, env_name: str):
-        env = getenv(env_name, None)
-        if env is None:
-            raise UndefinedEnvError(env_name)
-        obj = str.__new__(cls, env)
-        return obj
+def Env[T](env_name: str, variable_type: type[T]) -> T:
+    env = getenv(env_name, None)
+
+    if env is None:
+        raise UndefinedEnvError(env_name)
+
+    return variable_type(env)
 
 
-class BoolEnv:
-    def __new__(cls, env_name: str):
-        env = getenv(env_name, None)
-        if env is None:
-            raise UndefinedEnvError(env_name)
-        return env.lower() in ("true", "1")
+def EnvList[T](env_name: str, list_item_type: type[T]) -> list[T]:
+    env = getenv(env_name, None)
 
+    if env is None:
+        raise UndefinedEnvError(env_name)
 
-class IntEnv(int):
-    def __new__(cls, env_name: str):
-        env = getenv(env_name, None)
-        if env is None:
-            raise UndefinedEnvError(env_name)
-        obj = super().__new__(cls, int(env))
-        return obj
-
-
-class IntListEnv(list[int]):
-    def __init__(self, env_name: str) -> None:
-        env = getenv(env_name, None)
-        if env is None:
-            raise UndefinedEnvError(env_name)
-
-        super().__init__(map(int, env.split()))
+    return map(list_item_type, env.split())

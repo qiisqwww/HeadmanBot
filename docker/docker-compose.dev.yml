@@ -33,7 +33,7 @@ services:
       - ../poll_by_role.html:/app/poll_by_role.html
       - ../ShowInfoImg.png:/app/ShowInfoImg.png
     ports: 
-      - 8080:8080
+      - 8000:8000
 
   postgres:
     image: postgres:16.1-alpine3.19

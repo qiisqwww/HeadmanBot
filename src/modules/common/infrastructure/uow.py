@@ -5,9 +5,7 @@ from asyncpg.transaction import Transaction
 from injector import inject
 
 from src.modules.common.application import UnitOfWork
-from src.modules.common.infrastructure.database.database_connection import (
-    DatabaseConnection,
-)
+from src.modules.common.infrastructure.database.database_connection import DbContext
 
 __all__ = [
     "UnitOfWorkImpl",
@@ -17,14 +15,14 @@ __all__ = [
 @final
 class UnitOfWorkImpl(UnitOfWork):
     _transaction: Transaction
-    _con: DatabaseConnection
+    _ctx: DbContext
 
     @inject
-    def __init__(self, con: DatabaseConnection) -> None:
-        self._con = con
+    def __init__(self, ctx: DbContext) -> None:
+        self._ctx = ctx
 
     async def __aenter__(self) -> None:
-        self._transaction = await self._con.transaction()
+        self._transaction = await self._ctx.transaction()
         await self._transaction.start()
 
     async def __aexit__(

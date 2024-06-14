@@ -1,4 +1,5 @@
 import sys
+
 from loguru import logger
 
 from .config import DEBUG, LOGGING_PATH
