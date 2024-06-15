@@ -122,8 +122,6 @@ class DbContext:
     @classmethod
     async def _create_pool(cls: type[Self]) -> None:
         gotten_pool = await create_pool(cls._DATABASE_URL, record_class=Record)
-        logger.error(gotten_pool)
-        logger.error(id(gotten_pool))
 
         if gotten_pool is None:
             logger.error("Cannot connect to postgres.")

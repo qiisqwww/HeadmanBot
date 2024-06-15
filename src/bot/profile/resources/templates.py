@@ -33,6 +33,7 @@ FAILED_TO_LOAD_EDU_INFO_TEMPLATE = """Не удалось загрузить и�
 
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
+    formatted_date = None if student.birthdate is None else student.birthdate.strftime("%d.%m.%Y")
     return render_template(
         "<b>Профиль студента</b>\n\n"
         "Фамилия: {{student.last_name}}\n"
@@ -40,8 +41,9 @@ def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
         "Роль: {{student.role.translation}}\n"
         "Группа: {{edu_info.group_name}}\n"
         "Университет: {{edu_info.university_name}}\n"
-        "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %}не указана {% endif %}",
+        "Дата рождения: {% if birthdate is not none %} {{birthdate}} {% else %}не указана {% endif %}",
         student=student,
+        birthdate=formatted_date,
         edu_info=edu_info,
     )
 
@@ -61,9 +63,10 @@ def asking_surname_validation_template(last_name: str) -> str:
 
 
 def asking_birthdate_validation_template(new_birthdate: date | None) -> str:
+    formatted_date = None if new_birthdate is None else new_birthdate.strftime("%d.%m.%Y")
     return render_template(
-        """Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}} 
+        """Ваша новая дата рождения: {% if new_birthdate is not none %} {{new_birthdate}}
         {% else %}не указана {% endif %}"""
         "\n\nДанные верны?",
-        new_birthdate=new_birthdate,
+        new_birthdate=formatted_date,
     )

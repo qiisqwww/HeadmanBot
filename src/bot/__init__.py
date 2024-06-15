@@ -1,7 +1,8 @@
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
-from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.types import FSInputFile
+from redis.asyncio import Redis
 
 from src.modules.common.infrastructure import (
     DEBUG,
@@ -9,19 +10,17 @@ from src.modules.common.infrastructure import (
     WEBHOOK_URL,
 )
 from src.modules.common.infrastructure.bot_notifier import BotNotifierImpl
-from src.modules.common.infrastructure.config import BOT_TOKEN
+from src.modules.common.infrastructure.config import BOT_TOKEN, REDIS_HOST, REDIS_PORT
 from src.modules.common.infrastructure.container import Container
 
 from .root_router import build_root_router
 
 __all__ = [
     "dispatcher",
-    "bot",
     "init_bot_webhook",
 ]
 
 WEBHOOK_SSL_CERT = "headman_bot.crt"
-bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
 
 
 async def init_bot_webhook() -> None:
@@ -35,8 +34,8 @@ async def init_bot_webhook() -> None:
 
 
 dispatcher = Dispatcher(
-    storage=MemoryStorage(),
+    storage=RedisStorage(Redis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}?decode_responses=True")),
     container=Container,
-    notifier=BotNotifierImpl(bot),
+    notifier=BotNotifierImpl(),
 )
 dispatcher.include_router(build_root_router())

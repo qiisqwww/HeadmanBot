@@ -57,8 +57,11 @@ services:
   redis:
     image: redis:7.2.3
     restart: on-failure
+    volumes:
+      - headman_bot_redis_dev_data:/data
     ports:
       - 6379:6379
 
 volumes:
   headman_bot_postgres_dev_data:
+  headman_bot_redis_dev_data:

@@ -1,4 +1,5 @@
 from datetime import date
+from os import nice
 from typing import TypedDict
 
 from aiogram.fsm.context import FSMContext
@@ -46,13 +47,21 @@ class ProfileUpdateContext:
         return (await self.get_data()).get("new_birthdate", None)
 
     async def set_new_birthdate(self, new_birthdate: date | None) -> None:
-        await self._context.update_data(new_birthdate=new_birthdate)
+        if new_birthdate is None:
+            await self._context.update_data(new_birthdate=new_birthdate)
+        else:
+            await self._context.update_data(new_birthdate=new_birthdate.isoformat())
 
     async def set_state(self, state: StateType = None) -> None:
         await self._context.set_state(state)
 
     async def get_data(self) -> NewProfileData:
-        return await self._context.get_data()  # pyright: ignore[reportGeneralTypeIssues]
+        res = await self._context.get_data()  # pyright: ignore[reportGeneralTypeIssues]
+
+        if res.get("new_birthdate", None) is not None:
+            res["new_birthdate"] = date.fromisoformat(res["new_birthdate"])
+
+        return res
 
     async def clear(self) -> None:
         await self._context.set_state(state=None)

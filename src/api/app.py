@@ -2,21 +2,27 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
 
+from aiogram import Bot
+from aiogram.enums import ParseMode
 from aiogram.types import Update
 from fastapi import FastAPI, Request
 
-from src.bot import bot, dispatcher
+from src.bot import dispatcher
 from src.modules.common.infrastructure import (
     DEBUG,
     WEBHOOK_PATH,
     configure_logger,
 )
 from src.modules.common.infrastructure.build_scheduler import build_scheduler
+from src.modules.common.infrastructure.config.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import Container
 
 __all__ = [
     "app",
 ]
+
+
+bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
 
 
 @asynccontextmanager
