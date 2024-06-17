@@ -17,6 +17,7 @@ services:
       - 80:80
 
   headman_bot:
+    command: python -m src
     env_file:
       - ../.env/.dev.env
     build: 
@@ -24,9 +25,11 @@ services:
       context: ..
     depends_on:
       redis:
-        condition: service_started
+        condition: service_healthy
       postgres:
           condition: service_healthy
+      celery_worker:
+        condition: service_healthy
     volumes:
       - ../logs:/app/logs
       - ../update_info.html:/app/update_info.html
@@ -61,6 +64,53 @@ services:
       - headman_bot_redis_dev_data:/data
     ports:
       - 6379:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  celery_worker:
+    command: celery -A src.celery.worker.worker worker -B --loglevel=info
+    env_file:
+      - ../.env/.dev.env
+    build: 
+      dockerfile: ./docker/Dockerfile.dev
+      context: ..
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+          condition: service_healthy
+    healthcheck:
+      test: celery -A src.celery.worker.worker status
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ../logs:/app/logs
+      - ../update_info.html:/app/update_info.html
+      - ../poll_by_role.html:/app/poll_by_role.html
+      - ../ShowInfoImg.png:/app/ShowInfoImg.png
+
+  flower:
+    command: celery -A src.celery.worker.worker flower --port=5555
+    env_file:
+      - ../.env/.dev.env
+    build: 
+      dockerfile: ./docker/Dockerfile.dev
+      context: ..
+    depends_on:
+      celery_worker:
+        condition: service_healthy
+    volumes:
+      - ../logs:/app/logs
+      - ../update_info.html:/app/update_info.html
+      - ../poll_by_role.html:/app/poll_by_role.html
+      - ../ShowInfoImg.png:/app/ShowInfoImg.png
+    ports:
+      - 5555:5555
+  
 
 volumes:
   headman_bot_postgres_dev_data:

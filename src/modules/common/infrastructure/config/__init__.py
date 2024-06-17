@@ -1,6 +1,8 @@
 from .config import (
     ADMIN_IDS,
     BOT_TOKEN,
+    CELERY_BROKER_URL,
+    CELERY_RESULT_BACKEND,
     DB_HOST,
     DB_NAME,
     DB_PASS,
@@ -40,4 +42,6 @@ __all__ = [
     "WEBHOOK_SECRET",
     "THROTTLING_RATE_PER_MINUTE",
     "UVICORN_WORKERS_COUNT",
+    "CELERY_BROKER_URL",
+    "CELERY_RESULT_BACKEND",
 ]

@@ -41,7 +41,7 @@ class AsyncScheduler:
             try:
                 await job()
             except Exception as e:
-                notifier = BotNotifierImpl(bot)
+                notifier = BotNotifierImpl()
                 await notifier.notify_about_job_exception(
                     e,
                     job_name,

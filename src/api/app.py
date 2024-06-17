@@ -30,8 +30,6 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, Any]:
     configure_logger()
 
     await Container.init(bot)
-    # scheduler = await build_scheduler(bot)
-    # scheduler.start()
 
     yield
 

@@ -26,6 +26,3 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 
 # Copy project into container.
 COPY src /app/src
-
-# Start bot with this command. Will be called when docker container will be started.
-CMD python -m src
