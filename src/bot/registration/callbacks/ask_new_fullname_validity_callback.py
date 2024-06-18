@@ -63,7 +63,8 @@ async def ask_new_fullname_validity_callback(
 
     if not callback_data.is_fullname_correct:
         await callback.message.answer(
-            "Введите фамилию.", reply_markup=void_inline_buttons(),
+            "Введите фамилию.",
+            reply_markup=void_inline_buttons(),
         )
         await state.set_state(RegistrationStates.waiting_surname)
         return
@@ -95,14 +96,19 @@ async def ask_new_fullname_validity_callback(
             await bot.send_message(
                 admin_id,
                 student_send_registration_request_template(
-                    last_name, first_name, role, telegram_id,
+                    last_name,
+                    first_name,
+                    role,
+                    telegram_id,
+                    callback.from_user.username,
                 ),
                 reply_markup=accept_or_deny_buttons(telegram_id),
             )
         return
 
     group = await find_group_by_name_and_alias_query.execute(
-        await state.group_name, await state.university_alias,
+        await state.group_name,
+        await state.university_alias,
     )
 
     if group is None:
@@ -117,7 +123,11 @@ async def ask_new_fullname_validity_callback(
     await bot.send_message(
         headman.telegram_id,
         student_send_registration_request_template(
-            last_name, first_name, role, telegram_id,
+            last_name,
+            first_name,
+            role,
+            telegram_id,
+            callback.from_user.username,
         ),
         reply_markup=accept_or_deny_buttons(telegram_id),
     )
