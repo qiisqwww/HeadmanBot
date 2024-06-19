@@ -1,7 +1,7 @@
-from .show_today_schedule_callback import include_show_today_schedule_callback
-from .show_tomorrow_schedule_callback import include_show_tomorrow_schedule_callback
+from .show_schedule_day_callback import include_show_schedule_day_callback_router
+from .show_schedule_week_callback import include_show_schedule_week_callback_router
 
 __all__ = [
-    "include_show_tomorrow_schedule_callback",
-    "include_show_today_schedule_callback",
+    "include_show_schedule_day_callback_router",
+    "include_show_schedule_week_callback_router"
 ]

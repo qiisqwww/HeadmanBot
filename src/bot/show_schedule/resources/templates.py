@@ -1,21 +1,24 @@
-__all__ = [
-    "CHOOSE_SCHEDULE_PERIOD_TEMPLATE",
-    "NO_LESSONS_TODAY_TEMPLATE",
-    "schedule_list_template",
-]
-
-
 from datetime import datetime, time, timedelta
 
 from src.bot.common.convert_time import convert_time_from_utc
 from src.bot.common.render_template import render_template
 from src.modules.utils.schedule_api.domain.schedule import Schedule
 
+__all__ = [
+    "CHOOSE_SCHEDULE_PERIOD_TEMPLATE",
+    "NO_LESSONS_TODAY_TEMPLATE",
+    "schedule_list_template",
+    "CHOOSE_DAY_TEMPLATE"
+]
+
 CHOOSE_SCHEDULE_PERIOD_TEMPLATE = """
 Выберите опцию из представленных ниже, чтобы получить расписание:"""
 
 NO_LESSONS_TODAY_TEMPLATE = """
 В этот день нет пар!"""
+
+CHOOSE_DAY_TEMPLATE = """
+Выберите день, чтобы получить расписание"""
 
 
 def get_name_of_day(weekday: int) -> str:
