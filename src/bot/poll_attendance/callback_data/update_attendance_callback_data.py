@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
-from src.bot.common.expirable import Expirerable
+from src.bot.common.expireable import Expireable
 from src.modules.attendance.domain import VisitStatus
 
 __all__ = [
@@ -9,7 +9,7 @@ __all__ = [
 
 
 class UpdateAttendanceCallbackData(
-    Expirerable,
+    Expireable,
     CallbackData,
     prefix="update_attendace_prefix",
 ):

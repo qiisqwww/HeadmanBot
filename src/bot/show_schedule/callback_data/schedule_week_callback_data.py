@@ -3,13 +3,13 @@ from aiogram.filters.callback_data import CallbackData
 from src.bot.common.expireable import Expireable
 
 __all__ = [
-    "ChooseLessonCallbackData",
+    "ScheduleWeekCallbackData",
 ]
 
 
-class ChooseLessonCallbackData(
+class ScheduleWeekCallbackData(
     Expireable,
     CallbackData,
-    prefix="choose_lesson_for_headman",
+    prefix="choose_schedule_week_callback_data",
 ):
-    lesson_id: int
+    weeks_to_add: int

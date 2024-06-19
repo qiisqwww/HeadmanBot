@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
-from src.bot.common.expirable import Expirerable
+from src.bot.common.expireable import Expireable
 
 __all__ = [
     "ChooseStudentToEnhanceCallbackData",
@@ -8,7 +8,7 @@ __all__ = [
 
 
 class ChooseStudentToEnhanceCallbackData(
-    Expirerable,
+    Expireable,
     CallbackData,
     prefix="choose_student_for_enchancing_role",
 ):
