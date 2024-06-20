@@ -16,6 +16,7 @@ from src.modules.student_management.domain.models.student import Student
 
 __all__ = [
     "group_panel_menu",
+    "select_student"
 ]
 
 

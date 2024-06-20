@@ -15,6 +15,8 @@ from src.bot.registration.resources.templates import (
     REGISTRATION_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
+    USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
+    USER_REGISTRATION_TIME_OUT_TEMPLATE
 )
 from src.modules.student_management.application.commands import (
     ClearCreateStudentDataCacheCommand,
@@ -81,14 +83,14 @@ async def accept_or_deny_callback(
     except StudentAlreadyRegisteredError:
         await safe_message_edit(
             callback,
-            "Пользователь уже был зарегистрирован.",
+            USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
             reply_markup=void_inline_buttons(),
         )
         return
     except NotFoundStudentCachedDataError:
         await safe_message_edit(
             callback,
-            'Данные пользователя не были найдены в кеше. Либо пользователь их удалил (нажал "Зарегистрироваться заново"), либо прошла 1 неделя.',
+            USER_REGISTRATION_TIME_OUT_TEMPLATE,
             reply_markup=void_inline_buttons(),
         )
         return

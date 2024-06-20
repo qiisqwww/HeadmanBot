@@ -11,6 +11,8 @@ from src.bot.headman_panel.resources.templates import (
     FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE,
     STUDENT_WAS_NOT_FOUND_TEMPLATE,
     YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE,
+    CHOOSE_USER_TO_DOWNGRADE_TEMPLATE,
+    USER_WAS_SUCCESSFULLY_DOWNGRADED
 )
 from src.modules.student_management.application.commands import (
     UnmakeStudentViceHeadmanCommand,
@@ -67,12 +69,10 @@ async def unset_vice_headman(
         filter(lambda s: s.id != callback_data.student_id, students_list),
     )
     await callback.message.edit_text(
-        "Выберите пользователя, которого хотите понизить до студента.",
+        CHOOSE_USER_TO_DOWNGRADE_TEMPLATE,
         reply_markup=select_student(students_list, False),
     )
-    await callback.message.answer(
-        "У пользователя была успешна убрана роль зама старосты",
-    )
+    await callback.message.answer(USER_WAS_SUCCESSFULLY_DOWNGRADED)
 
     await bot.send_message(
         callback_data.telegram_id,

@@ -4,7 +4,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.bot.show_schedule.callback_data import (
     ScheduleWeekCallbackData,
-    ScheduleDayCallbackData
+    ScheduleDayCallbackData,
+    BackToWeekChoiceListCallbackData
 )
 
 __all__ = [
@@ -62,7 +63,7 @@ def show_choose_day_buttons(weeks_to_add: int = 0) -> InlineKeyboardMarkup:
             )
         )
         week_runner = week_runner + timedelta(days=1)
-    builder.button(text="← Вернуться назад", callback_data="back_to_week_choice_list")
+    builder.button(text="← Вернуться назад", callback_data=BackToWeekChoiceListCallbackData())
 
     builder.adjust(1)
     return builder.as_markup(resize_keyboard=True)

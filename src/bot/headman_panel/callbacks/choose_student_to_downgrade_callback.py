@@ -5,6 +5,7 @@ from src.bot.headman_panel.callback_data.unset_vice_headman_callback_data import
     UnsetViceHeadmanCallbackData,
 )
 from src.bot.headman_panel.resources.inline_buttons import select_student
+from src.bot.headman_panel.resources.templates import CHOOSE_USER_TO_DOWNGRADE_TEMPLATE
 from src.modules.student_management.application.queries import GetStudentsFromGroupQuery
 from src.modules.student_management.domain import Role, Student
 
@@ -36,7 +37,7 @@ async def choose_student_to_downgrade_callback(
 
     students_list = await get_student_by_group.execute(student.group_id)
     await callback.message.answer(
-        "Выберите пользователя, которого хотите понизить до студента.",
+        CHOOSE_USER_TO_DOWNGRADE_TEMPLATE,
         reply_markup=select_student(students_list, enchance_to_vice_headman=False),
     )
 

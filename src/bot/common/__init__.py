@@ -1,4 +1,4 @@
-from .command_filter import CommandFilter, TelegramCommand
+from .command_filter import CommandFilter, TelegramCommand, CallbackData
 from .router import RootRouter, Router
 
 __all__ = [
@@ -6,4 +6,5 @@ __all__ = [
     "RootRouter",
     "CommandFilter",
     "TelegramCommand",
+    "CallbackData"
 ]
