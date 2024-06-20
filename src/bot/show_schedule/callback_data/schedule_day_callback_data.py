@@ -15,3 +15,4 @@ class ScheduleDayCallbackData(
     prefix="choose_schedule_day_callback_data",
 ):
     chosen_day: date
+    weeks_to_add: int

@@ -21,7 +21,7 @@ CHOOSE_DAY_TEMPLATE = """
 Выберите день, чтобы получить расписание"""
 
 
-def get_name_of_day(weekday: int) -> str:
+def get_full_name_of_day(weekday: int) -> str:
     match weekday:
         case 0:
             return "понедельник"
@@ -80,6 +80,6 @@ def schedule_list_template(
         end_time=end_time,
         timezone=timezone,
         day=day,
-        day_of_week=get_name_of_day(weekday),
+        day_of_week=get_full_name_of_day(weekday),
         has_classrooms=has_classrooms,
     )
