@@ -47,6 +47,8 @@ async def show_chosen_day_schedule_callback(
         day=chosen_day,
     )
 
+    # TODO: УБЕДИТЬСЯ, ЧТО НЕ НУЖНО ИСПОЛЬЗОВАТЬ ТУТ REPLY_MARKUP!!!
+
     if not schedule:
         await safe_message_edit(
             callback,

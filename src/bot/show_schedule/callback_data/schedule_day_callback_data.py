@@ -1,4 +1,4 @@
-import datetime
+from datetime import date
 
 from aiogram.filters.callback_data import CallbackData
 
@@ -14,4 +14,4 @@ class ScheduleDayCallbackData(
     CallbackData,
     prefix="choose_schedule_day_callback_data",
 ):
-    chosen_day: datetime.date
+    chosen_day: date
