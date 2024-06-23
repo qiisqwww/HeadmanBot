@@ -5,5 +5,8 @@ __all__ = [
 ]
 
 
-class DeleteByNameAndGroupCallbackData(CallbackData, prefix="delete_user_by_name_and_group_callback_data"):  # type: ignore
+class DeleteByNameAndGroupCallbackData(
+    CallbackData,
+    prefix="delete_user_by_name_and_group_callback_data"
+):  # type: ignore
     ...

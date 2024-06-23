@@ -10,7 +10,7 @@ __all__ = [
 class ChooseStudentToEnhanceCallbackData(
     Expireable,
     CallbackData,
-    prefix="choose_student_for_enchancing_role",
+    prefix="choose_student_for_enhancing_role",
 ):
     student_id: int
     telegram_id: int

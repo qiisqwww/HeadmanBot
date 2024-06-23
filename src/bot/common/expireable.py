@@ -9,3 +9,4 @@ __all__ = [
 
 class Expireable(BaseModel):
     created_at: date = Field(default_factory=lambda: datetime.today().date())
+

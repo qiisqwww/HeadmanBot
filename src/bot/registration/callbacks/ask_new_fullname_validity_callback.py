@@ -7,7 +7,7 @@ from src.bot.common.resources.templates import your_choice_is_template
 from src.bot.common.router import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.registration.callback_data import AskNewFullnameValidityCallbackData
-from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources import accept_or_deny_buttons
 from src.bot.registration.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,

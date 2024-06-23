@@ -4,7 +4,7 @@ from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.resources import void_inline_buttons
 from src.bot.registration.callback_data import ChooseRoleCallbackData
-from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources import university_list_buttons
 from src.bot.registration.resources.templates import (
     ASK_UNIVERSITY_TEMPLATE,

@@ -1,6 +1,6 @@
 from aiogram.types import Message
 
-from src.bot.admin.delete_student_states import DeleteStudentStates
+from src.bot.admin.finite_state.delete_student_states import DeleteStudentStates
 from src.bot.admin.resources.templates import (
     GROUP_DOES_NOT_EXIST_TEMPLATE,
     INCORRECT_DATA_ERROR_TEMPLATE,

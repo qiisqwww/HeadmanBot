@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
@@ -9,9 +7,6 @@ from src.bot.show_schedule.resources import (
     show_choose_day_buttons
 )
 from src.bot.show_schedule.callback_data import ScheduleWeekCallbackData
-from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
-from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
-from src.modules.student_management.domain import Student
 
 __all__ = [
     "include_show_schedule_week_callback_router",
