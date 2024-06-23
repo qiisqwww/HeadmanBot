@@ -8,7 +8,8 @@ __all__ = [
     "CHOOSE_SCHEDULE_PERIOD_TEMPLATE",
     "NO_LESSONS_TODAY_TEMPLATE",
     "schedule_list_template",
-    "CHOOSE_DAY_TEMPLATE"
+    "CHOOSE_DATE_TEMPLATE",
+    "INPUT_CERTAIN_DATE_TEMPLATE"
 ]
 
 CHOOSE_SCHEDULE_PERIOD_TEMPLATE = """
@@ -17,8 +18,14 @@ CHOOSE_SCHEDULE_PERIOD_TEMPLATE = """
 NO_LESSONS_TODAY_TEMPLATE = """
 В этот день нет пар!"""
 
-CHOOSE_DAY_TEMPLATE = """
+CHOOSE_DATE_TEMPLATE = """
 Выберите день, чтобы получить расписание"""
+
+INPUT_CERTAIN_DATE_TEMPLATE = """
+Введите конкретную дату в формате ДД.ММ.ГГ, чтобы получить расписание на нее"""
+
+INCORRECT_DATE_FORMAT_TEMPLATE = """
+Вы ввели дату в некорректном формате. Попробуйте снова"""
 
 
 def get_full_name_of_day(weekday: int) -> str:

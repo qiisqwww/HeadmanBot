@@ -4,14 +4,15 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.bot.show_schedule.callback_data import (
     ScheduleWeekCallbackData,
-    ScheduleDayCallbackData,
+    ScheduleDateCallbackData,
     BackToWeekChoiceListCallbackData,
     ScheduleCertainDayCallbackData
 )
 
 __all__ = [
     "show_choose_period_buttons",
-    "show_choose_day_buttons"
+    "show_choose_day_buttons",
+    "show_get_back_button"
 ]
 
 
@@ -38,7 +39,7 @@ def get_short_name_of_day(weekday: int) -> str:
 def show_choose_period_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    builder.button(text="Сегодня", callback_data=ScheduleDayCallbackData(
+    builder.button(text="Сегодня", callback_data=ScheduleDateCallbackData(
         chosen_day=date.today(),
         weeks_to_add=0
     ))
@@ -59,7 +60,7 @@ def show_choose_day_buttons(weeks_to_add: int = 0) -> InlineKeyboardMarkup:
     for i in range(7):
         builder.button(
             text=get_short_name_of_day(i) + " | " + week_runner.__str__(),
-            callback_data=ScheduleDayCallbackData(
+            callback_data=ScheduleDateCallbackData(
                 chosen_day=week_runner,
                 weeks_to_add=weeks_to_add
             )
@@ -67,5 +68,12 @@ def show_choose_day_buttons(weeks_to_add: int = 0) -> InlineKeyboardMarkup:
         week_runner = week_runner + timedelta(days=1)
     builder.button(text="← Вернуться назад", callback_data=BackToWeekChoiceListCallbackData())
 
+    builder.adjust(1)
+    return builder.as_markup(resize_keyboard=True)
+
+
+def show_get_back_button() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="← Вернуться назад", callback_data=BackToWeekChoiceListCallbackData())
     builder.adjust(1)
     return builder.as_markup(resize_keyboard=True)

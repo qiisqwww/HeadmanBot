@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.show_schedule.resources import (
-    CHOOSE_DAY_TEMPLATE,
+    CHOOSE_DATE_TEMPLATE,
     show_choose_day_buttons
 )
 from src.bot.show_schedule.callback_data import ScheduleWeekCallbackData
@@ -37,6 +37,6 @@ async def show_chosen_week_schedule_callback(
 
     await safe_message_edit(
         callback,
-        CHOOSE_DAY_TEMPLATE,
+        CHOOSE_DATE_TEMPLATE,
         show_choose_day_buttons(callback_data.weeks_to_add)
     )

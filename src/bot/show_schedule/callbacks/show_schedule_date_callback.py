@@ -9,7 +9,7 @@ from src.bot.show_schedule.resources import (
     schedule_list_template,
     show_choose_day_buttons
 )
-from src.bot.show_schedule.callback_data import ScheduleDayCallbackData
+from src.bot.show_schedule.callback_data import ScheduleDateCallbackData
 from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
 from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
@@ -17,23 +17,23 @@ from src.modules.student_management.domain import Student
 from src.modules.utils.schedule_api.infrastructure.schedule_api import ScheduleApiImpl
 
 __all__ = [
-    "include_show_schedule_day_callback_router",
+    "include_show_schedule_date_callback_router",
 ]
 
 
-show_schedule_day_callback_router = Router(
+show_schedule_date_callback_router = Router(
     must_be_registered=True,
 )
 
 
-def include_show_schedule_day_callback_router(root_router: RootRouter) -> None:
-    root_router.include_router(show_schedule_day_callback_router)
+def include_show_schedule_date_callback_router(root_router: RootRouter) -> None:
+    root_router.include_router(show_schedule_date_callback_router)
 
 
-@show_schedule_day_callback_router.callback_query(ScheduleDayCallbackData.filter())
-async def show_chosen_day_schedule_callback(
+@show_schedule_date_callback_router.callback_query(ScheduleDateCallbackData.filter())
+async def show_chosen_date_schedule_callback(
     callback: CallbackQuery,
-    callback_data: ScheduleDayCallbackData,
+    callback_data: ScheduleDateCallbackData,
     student: Student,
     timezone: str,
     fetch_uni_alias_query: FetchUniAliasByGroupIdQuery,
@@ -63,7 +63,7 @@ async def show_chosen_day_schedule_callback(
         schedule_list_template(
             schedule,
             timezone,
-            "сегодня" if chosen_day.__str__() == date.today().__str__() else chosen_day.__str__(),
+            "сегодня" if chosen_day == date.today() else str(chosen_day),
             chosen_day.weekday(),
             uni_alias != UniversityAlias.BMSTU,
         ),

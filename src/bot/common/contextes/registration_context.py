@@ -11,6 +11,7 @@ __all__ = [
     "RegistrationContext",
 ]
 
+
 class RegistrationData(TypedDict, total=False):
     telegram_id: int
     role: Role
@@ -98,4 +99,4 @@ class RegistrationContext:
         await self._context.set_data({})
 
     async def get_data(self) -> RegistrationData:
-        return await self._context.get_data() # pyright: ignore[reportGeneralTypeIssues]
+        return await self._context.get_data()  # pyright: ignore[reportGeneralTypeIssues]
