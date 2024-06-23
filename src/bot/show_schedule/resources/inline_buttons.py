@@ -59,7 +59,7 @@ def show_choose_day_buttons(weeks_to_add: int = 0) -> InlineKeyboardMarkup:
     week_runner = day_of_week - timedelta(days=day_of_week.weekday() % 7)
     for i in range(7):
         builder.button(
-            text=get_short_name_of_day(i) + " | " + week_runner.__str__(),
+            text=get_short_name_of_day(i) + " | " + str(week_runner),
             callback_data=ScheduleDateCallbackData(
                 chosen_day=week_runner,
                 weeks_to_add=weeks_to_add

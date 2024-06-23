@@ -22,7 +22,9 @@ __all__ = [
     "include_show_schedule_certain_date_router",
 ]
 
-show_schedule_certain_date_router = Router()
+show_schedule_certain_date_router = Router(
+    must_be_registered=True
+)
 
 
 def include_show_schedule_certain_date_router(root_router: RootRouter) -> None:
@@ -44,6 +46,7 @@ async def handling_certain_date(
     try:
         day, month, year = map(int, message.text.split("."))
         certain_date = date(year=year, month=month, day=day)
+
         uni_alias = await fetch_uni_alias_query.execute(student.group_id)
         group_name = await fetch_group_name_query.execute(student.group_id)
         schedule = await ScheduleApiImpl(uni_alias).fetch_schedule(
@@ -52,10 +55,10 @@ async def handling_certain_date(
         )
 
         if not schedule:
-            await message.edit_text(NO_LESSONS_TODAY_TEMPLATE, reply_markup=show_get_back_button())
+            await message.answer(NO_LESSONS_TODAY_TEMPLATE, reply_markup=show_get_back_button())
             return
 
-        await message.edit_text(
+        await message.answer(
             schedule_list_template(
                 schedule,
                 timezone,
