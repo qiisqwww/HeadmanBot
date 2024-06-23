@@ -5,7 +5,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from src.bot.show_schedule.callback_data import (
     ScheduleWeekCallbackData,
     ScheduleDayCallbackData,
-    BackToWeekChoiceListCallbackData
+    BackToWeekChoiceListCallbackData,
+    ScheduleCertainDayCallbackData
 )
 
 __all__ = [
@@ -44,6 +45,7 @@ def show_choose_period_buttons() -> InlineKeyboardMarkup:
     builder.button(text="Текущая неделя", callback_data=ScheduleWeekCallbackData(weeks_to_add=0))
     builder.button(text="Следующая неделя", callback_data=ScheduleWeekCallbackData(weeks_to_add=1))
     builder.button(text="Неделя после следующей", callback_data=ScheduleWeekCallbackData(weeks_to_add=2))
+    builder.button(text="Ввести дату вручную", callback_data=ScheduleCertainDayCallbackData())
 
     builder.adjust(1)
     return builder.as_markup(resize_keyboard=True)
