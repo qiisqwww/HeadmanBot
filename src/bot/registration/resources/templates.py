@@ -35,6 +35,8 @@ __all__ = [
     "FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE",
     "FAILED_TO_FETCH_SCHEDULE_TEMPLATE",
     "HELP_FOR_HEADMAN",
+    "USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE",
+    "USER_REGISTRATION_TIME_OUT_TEMPLATE"
 ]
 
 
@@ -116,6 +118,13 @@ FAILED_TO_FETCH_SCHEDULE_TEMPLATE = (
     "Не удалось загрузить расписание для вашей группы. "
     "Попробуйте зарегистрироваться еще раз или напишите в @noheadproblemsbot."
 )
+
+USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE = """
+Пользователь уже был зарегестрирован"""
+
+USER_REGISTRATION_TIME_OUT_TEMPLATE = """
+Данные пользователя не были найдены в кеше. Либо пользователь их удалил (нажал "Зарегистрироваться заново"), 
+либо прошла 1 неделя."""
 
 
 def successful_role_choose_template(role: Role) -> str:

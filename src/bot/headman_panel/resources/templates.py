@@ -7,6 +7,11 @@ __all__ = [
     "STUDENT_WAS_NOT_FOUND_TEMPLATE",
     "YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE",
     "FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE",
+    "CHOOSE_USER_TO_DOWNGRADE_TEMPLATE",
+    "CHOOSE_USER_TO_ENHANCE_TEMPLATE",
+    "FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE",
+    "USER_WAS_SUCCESSFULLY_ENHANCED",
+    "USER_WAS_SUCCESSFULLY_DOWNGRADED"
 ]
 
 
@@ -38,3 +43,15 @@ FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE = (
 FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE = (
     'Можно снять роль заместителя старосты только пользователю с ролью "зам старосты".'
 )
+
+CHOOSE_USER_TO_DOWNGRADE_TEMPLATE = """
+Выберите пользователя, которого хотите понизить до студента."""
+
+CHOOSE_USER_TO_ENHANCE_TEMPLATE = """
+Выберите пользователя, которого хотите повысить до зама старосты."""
+
+USER_WAS_SUCCESSFULLY_ENHANCED = """
+Пользователю была успешна выдана роль заместителя старосты"""
+
+USER_WAS_SUCCESSFULLY_DOWNGRADED = """
+У пользователя была успешна убрана роль зама старосты"""

@@ -8,7 +8,7 @@ from src.modules.student_management.application.commands import (
     ClearCreateStudentDataCacheIfExistsCommand,
 )
 
-from .registration_states import RegistrationStates
+from src.bot.registration.finite_state.registration_states import RegistrationStates
 from .resources import restart_button, role_buttons
 from .resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
 

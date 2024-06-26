@@ -7,7 +7,7 @@ from aiogram.types import Message, User
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
-from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources import ask_fullname_validity_buttons
 from src.bot.registration.resources.templates import (
     ASK_BIRTHDATE_TEMPLATE,
@@ -158,7 +158,7 @@ async def handling_name(
         return
 
     await state.set_first_name(message.text)
-    await state.set_state(RegistrationStates.ask_fullame_validity)
+    await state.set_state(RegistrationStates.ask_fullname_validity)
 
     await message.answer(
         asking_fullname_validation_template(

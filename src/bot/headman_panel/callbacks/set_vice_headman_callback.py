@@ -9,6 +9,8 @@ from src.bot.headman_panel.resources.templates import (
     FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE,
     STUDENT_WAS_NOT_FOUND_TEMPLATE,
     YOU_WAS_GRADED_TO_VICEHEADMAN_TEMPLATE,
+    CHOOSE_USER_TO_ENHANCE_TEMPLATE,
+    USER_WAS_SUCCESSFULLY_ENHANCED
 )
 from src.modules.student_management.application.commands.exceptions import (
     CannotGrantRoleToNonStudentError,
@@ -62,12 +64,10 @@ async def set_vice_headman(
         filter(lambda s: s.id != callback_data.student_id, students_list),
     )
     await callback.message.edit_text(
-        "Выберите пользователя, которого хотите повысить до зама старосты.",
+        CHOOSE_USER_TO_ENHANCE_TEMPLATE,
         reply_markup=select_student(students_list, True),
     )
-    await callback.message.answer(
-        "Пользователю была успешна выдана роль заместителя старосты",
-    )
+    await callback.message.answer(USER_WAS_SUCCESSFULLY_ENHANCED)
 
     await bot.send_message(
         callback_data.telegram_id,

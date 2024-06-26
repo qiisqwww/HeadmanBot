@@ -10,7 +10,7 @@ from src.bot.profile.callback_data import (
     AskUpdatedNameValidityCallbackData,
     AskUpdatedSurnameValidityCallbackData,
 )
-from src.bot.profile.profile_update_states import ProfileUpdateStates
+from src.bot.profile.finite_state.profile_update_states import ProfileUpdateStates
 from src.bot.profile.resources.inline_buttons import profile_buttons
 from src.bot.profile.resources.templates import (
     ASK_NEW_BIRTHDATE_TEMPLATE,

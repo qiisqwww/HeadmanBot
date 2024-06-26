@@ -1,20 +1,35 @@
-__all__ = [
-    "NO_LESSONS_TODAY_TEMPLATE",
-    "schedule_list_template",
-]
-
-
 from datetime import datetime, time, timedelta
 
 from src.bot.common.convert_time import convert_time_from_utc
 from src.bot.common.render_template import render_template
 from src.modules.utils.schedule_api.domain.schedule import Schedule
 
+__all__ = [
+    "CHOOSE_SCHEDULE_PERIOD_TEMPLATE",
+    "NO_LESSONS_TODAY_TEMPLATE",
+    "schedule_list_template",
+    "CHOOSE_DATE_TEMPLATE",
+    "INPUT_CERTAIN_DATE_TEMPLATE",
+    "INCORRECT_DATE_FORMAT_TEMPLATE"
+]
+
+CHOOSE_SCHEDULE_PERIOD_TEMPLATE = """
+Выберите опцию из представленных ниже, чтобы получить расписание:"""
+
 NO_LESSONS_TODAY_TEMPLATE = """
 В этот день нет пар!"""
 
+CHOOSE_DATE_TEMPLATE = """
+Выберите день, чтобы получить расписание"""
 
-def get_name_of_day(weekday: int) -> str:
+INPUT_CERTAIN_DATE_TEMPLATE = """
+Введите конкретную дату в формате ДД.ММ.ГГ, чтобы получить расписание на нее"""
+
+INCORRECT_DATE_FORMAT_TEMPLATE = """
+Вы ввели дату в некорректном формате. Попробуйте снова"""
+
+
+def get_full_name_of_day(weekday: int) -> str:
     match weekday:
         case 0:
             return "понедельник"
@@ -73,6 +88,6 @@ def schedule_list_template(
         end_time=end_time,
         timezone=timezone,
         day=day,
-        day_of_week=get_name_of_day(weekday),
+        day_of_week=get_full_name_of_day(weekday),
         has_classrooms=has_classrooms,
     )

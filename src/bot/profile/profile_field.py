@@ -4,6 +4,7 @@ __all__ = [
     "ProfileField",
 ]
 
+
 @unique
 class ProfileField(Enum):
     FIRST_NAME = auto()

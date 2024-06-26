@@ -7,12 +7,13 @@ from src.bot.common.resources.templates import your_choice_is_template
 from src.bot.common.router import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.registration.callback_data import AskNewFullnameValidityCallbackData
-from src.bot.registration.registration_states import RegistrationStates
+from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources import accept_or_deny_buttons
 from src.bot.registration.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     student_send_registration_request_template,
+    ASK_SURNAME_TEMPLATE
 )
 from src.modules.common.infrastructure.config import ADMIN_IDS
 from src.modules.student_management.application.commands import (
@@ -63,7 +64,7 @@ async def ask_new_fullname_validity_callback(
 
     if not callback_data.is_fullname_correct:
         await callback.message.answer(
-            "Введите фамилию.",
+            ASK_SURNAME_TEMPLATE,
             reply_markup=void_inline_buttons(),
         )
         await state.set_state(RegistrationStates.waiting_surname)

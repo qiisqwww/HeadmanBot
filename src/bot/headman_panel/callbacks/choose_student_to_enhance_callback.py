@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery
 from src.bot.common import RootRouter, Router
 from src.bot.headman_panel.callback_data import SetViceHeadmanCallbackData
 from src.bot.headman_panel.resources.inline_buttons import select_student
+from src.bot.headman_panel.resources.templates import CHOOSE_USER_TO_ENHANCE_TEMPLATE
 from src.modules.student_management.application.queries import GetStudentsFromGroupQuery
 from src.modules.student_management.domain import Role, Student
 
@@ -32,7 +33,7 @@ async def choose_student_to_enhance_callback(
 
     students_list = await get_student_by_group.execute(student.group_id)
     await callback.message.answer(
-        "Выберите пользователя, которого хотите повысить до зама старосты.",
+        CHOOSE_USER_TO_ENHANCE_TEMPLATE,
         reply_markup=select_student(students_list, enchance_to_vice_headman=True),
     )
 

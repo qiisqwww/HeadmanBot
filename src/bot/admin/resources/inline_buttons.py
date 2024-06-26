@@ -59,6 +59,7 @@ def delete_user_choice_buttons() -> InlineKeyboardMarkup:
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
+
 def cancel_button() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 

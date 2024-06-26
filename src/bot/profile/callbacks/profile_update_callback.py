@@ -10,7 +10,7 @@ from src.bot.profile.callback_data import (
     ProfileUpdateNameCallbackData,
     ProfileUpdateSurnameCallbackData,
 )
-from src.bot.profile.profile_update_states import ProfileUpdateStates
+from src.bot.profile.finite_state.profile_update_states import ProfileUpdateStates
 from src.bot.profile.resources.inline_buttons import (
     get_back_button,
     profile_buttons,

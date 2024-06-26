@@ -46,7 +46,7 @@ def headman_menu() -> ReplyKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-def viceheadman_menu() -> ReplyKeyboardMarkup:
+def vice_headman_menu() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
 
     builder.row(KeyboardButton(text=TelegramCommand.SHOW_ATTENDANCE))
@@ -85,6 +85,6 @@ def main_menu(role: Role) -> ReplyKeyboardMarkup:
         case Role.HEADMAN:
             return headman_menu()
         case Role.VICE_HEADMAN:
-            return viceheadman_menu()
+            return vice_headman_menu()
         case Role.STUDENT:
             return student_menu()
