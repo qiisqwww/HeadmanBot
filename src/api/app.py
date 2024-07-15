@@ -13,7 +13,6 @@ from src.modules.common.infrastructure import (
     WEBHOOK_PATH,
     configure_logger,
 )
-from src.modules.common.infrastructure.build_scheduler import build_scheduler
 from src.modules.common.infrastructure.config.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import Container
 

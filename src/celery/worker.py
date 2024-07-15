@@ -9,6 +9,7 @@ from src.modules.common.application import NoArgsUseCase
 from src.modules.common.infrastructure.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
 from src.modules.common.infrastructure.config.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import Container
+from src.modules.common.infrastructure.jobs.sending_job import AskAttendanceCommand
 
 worker = Celery(__name__)
 worker.conf.broker_url = CELERY_BROKER_URL
@@ -17,7 +18,7 @@ worker.conf.timezone = "Europe/Moscow"
 worker.autodiscover_tasks()
 
 
-def execute_action(action: type[NoArgsUseCase], bot_token: str = BOT_TOKEN) -> None:
+def execute_command(action: type[NoArgsUseCase], bot_token: str = BOT_TOKEN) -> None:
     async def _async_wrapper() -> None:
         await Container.init(Bot(bot_token))
         async with Container() as container:
@@ -29,8 +30,13 @@ def execute_action(action: type[NoArgsUseCase], bot_token: str = BOT_TOKEN) -> N
 
 
 @worker.task(name="Make attendance relevant")
-def make_attendance_relevant() -> None:
-    execute_action(MakeAttendanceRelevantCommand)
+def make_attendance_relevant_task() -> None:
+    execute_command(MakeAttendanceRelevantCommand)
+
+
+@worker.task(name="Ask attendance")
+def ask_attendance_task() -> None:
+    execute_command(AskAttendanceCommand)
 
 
 worker.conf.beat_schedule = {
@@ -38,8 +44,13 @@ worker.conf.beat_schedule = {
         "task": "Make attendance relevant",
         "schedule": crontab(hour="1", minute="0", day_of_week="mon-sun"),
     },
+    "ask_attendance": {
+        "task": "Ask attendance",
+        "schedule": crontab(hour="7", minute="0", day_of_week="mon-sat"),
+    },
 }
 
 
 def start_tasks_for_debug() -> None:
-    make_attendance_relevant.delay()
+    make_attendance_relevant_task.delay()
+    ask_attendance_task.delay()

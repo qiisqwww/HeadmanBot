@@ -83,7 +83,7 @@ services:
       postgres:
           condition: service_healthy
     healthcheck:
-      test: celery -A src.celery.worker status
+      test: celery status
       interval: 3s
       timeout: 5s
       retries: 10

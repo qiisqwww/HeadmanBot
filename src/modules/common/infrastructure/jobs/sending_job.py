@@ -1,10 +1,14 @@
 from asyncio import TaskGroup
-from typing import final
+import asyncio
+from typing import final, Any
 
+from injector import inject
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 from loguru import logger
 
+from src.modules.attendance.application.repositories import AttendanceRepository
+from src.modules.common.application import NoArgsUseCase
 from src.bot.poll_attendance.resources.inline_buttons import update_attendance_buttons
 from src.bot.poll_attendance.resources.templates import (
     POLL_TEMPLATE,
@@ -19,6 +23,7 @@ from src.modules.edu_info.application.queries import (
     FetchUniTimezonByGroupIdQuery,
     GetAllGroupsQuery,
 )
+from src.modules.edu_info.application.repositories.university_repository import UniversityRepository
 from src.modules.edu_info.domain import Group
 from src.modules.student_management.application.commands import (
     DeleteStudentByTGIDCommand,
@@ -27,7 +32,12 @@ from src.modules.student_management.application.queries import (
     FindGroupHeadmanQuery,
     GetStudentsInfoFromGroupQuery,
 )
+from src.modules.student_management.application.repositories.student_info_repository import StudentInfoRepository
+from src.modules.student_management.application.repositories.student_repository import StudentRepository
 from src.modules.student_management.domain import StudentInfo
+
+from src.modules.edu_info.application.repositories import GroupRepository
+from src.modules.student_management.domain.enums.role import Role
 
 __all__ = [
     "SendingJob",
@@ -154,3 +164,94 @@ class SendingJob(AsyncJob):
                     e,
                     self.__class__.__name__,
                 )
+
+
+@final
+class AskAttendanceCommand(NoArgsUseCase):
+    # FIXME(neo): split to several commands and call them from Facade.
+    _group_repository: GroupRepository
+    _university_repository: UniversityRepository
+    _student_info_repository: StudentInfoRepository
+    _student_repository: StudentRepository
+
+    _bot: Bot
+
+    @inject
+    def __init__(
+        self,
+        group_repository: GroupRepository,
+        university_repository: UniversityRepository,
+        student_repository: StudentRepository,
+        student_info_repository: StudentInfoRepository,
+        bot: Bot,
+    ) -> None:
+        self._group_repository = group_repository
+        self._university_repository = university_repository
+        self._student_info_repository = student_info_repository
+        self._student_repository = student_repository
+
+        self._bot = bot
+
+    async def execute(self) -> Any:
+        groups = await self._group_repository.all()
+
+        for group in groups:
+            group_timezone = await self._university_repository.fetch_university_timezone_by_group_id(group.id)
+            students = await self._student_info_repository.filter_by_group_id(group.id)
+            headman = await self._student_repository.find_by_group_id_and_role(group.id, Role.HEADMAN)
+            headman_telegram_id = headman.telegram_id
+
+            tasks = [
+                self._send_to_student_wrapper(student, group_timezone, headman_telegram_id) for student in students
+            ]
+            asyncio.gather(*tasks)
+
+    async def _send_to_student_wrapper(
+        self,
+        student_info: StudentInfo,
+        timezone: str,
+        headman_telegram_id: int,
+    ) -> None:
+        async with Container() as container:
+            attendance_repository = container.get_dependency(AttendanceRepository)
+            student_repository = container.get_dependency(StudentRepository)
+            await self._send_to_student(
+                student_info,
+                timezone,
+                headman_telegram_id,
+                attendance_repository,
+                student_repository,
+            )
+
+    async def _send_to_student(
+        self,
+        student_info: StudentInfo,
+        timezone: str,
+        headman_telegram_id: int,
+        attendance_repository: AttendanceRepository,
+        student_repository: StudentRepository,
+    ) -> None:
+        attendances = await attendance_repository.filter_by_student_id(student_info.id)
+
+        if len(attendances) == 0:
+            return
+
+        try:
+            await self._bot.send_message(
+                student_info.telegram_id,
+                POLL_TEMPLATE,
+                reply_markup=update_attendance_buttons(
+                    student_info.attendance_noted,
+                    attendances,
+                    timezone,
+                ),
+            )
+
+        except TelegramForbiddenError:
+            logger.error(student_info)
+            await self._bot.send_message(
+                headman_telegram_id,
+                student_was_not_polled_warning_template(student_info),
+            )
+
+            await student_repository.delete_by_telegram_id(student_info.telegram_id)
