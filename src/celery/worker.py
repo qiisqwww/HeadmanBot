@@ -7,7 +7,7 @@ from celery.schedules import crontab
 from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
 from src.modules.common.application import NoArgsUseCase
 from src.modules.common.infrastructure.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
-from src.modules.common.infrastructure.config.config import BOT_TOKEN, DEBUG
+from src.modules.common.infrastructure.config.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import Container
 
 worker = Celery(__name__)
@@ -17,9 +17,9 @@ worker.conf.timezone = "Europe/Moscow"
 worker.autodiscover_tasks()
 
 
-def execute_action(action: type[NoArgsUseCase]) -> None:
+def execute_action(action: type[NoArgsUseCase], bot_token: str = BOT_TOKEN) -> None:
     async def _async_wrapper() -> None:
-        await Container.init(Bot(BOT_TOKEN))
+        await Container.init(Bot(bot_token))
         async with Container() as container:
             command = container.get_dependency(action)
             await command.execute()
@@ -36,7 +36,7 @@ def make_attendance_relevant() -> None:
 worker.conf.beat_schedule = {
     "make_attendance_relevant": {
         "task": "Make attendance relevant",
-        "schedule": crontab(hour="19", minute="55"),
+        "schedule": crontab(hour="1", minute="0", day_of_week="mon-sun"),
     },
 }
 
