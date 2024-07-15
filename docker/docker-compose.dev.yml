@@ -71,7 +71,7 @@ services:
       retries: 10
 
   celery_worker:
-    command: celery -A src.celery.worker.worker worker -B --loglevel=info
+    command: celery -A src.celery.worker.worker worker  --loglevel=info
     env_file:
       - ../.env/.dev.env
     build: 
@@ -83,7 +83,30 @@ services:
       postgres:
           condition: service_healthy
     healthcheck:
-      test: celery -A src.celery.worker.worker status
+      test: celery -A src.celery.worker status
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ../logs:/app/logs
+      - ../update_info.html:/app/update_info.html
+      - ../poll_by_role.html:/app/poll_by_role.html
+      - ../ShowInfoImg.png:/app/ShowInfoImg.png
+
+  celery_beat:
+    command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
+    env_file:
+      - ../.env/.dev.env
+    build: 
+      dockerfile: ./docker/Dockerfile.dev
+      context: ..
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+          condition: service_healthy
+    healthcheck:
+      test: celery -A src.celery.worker status
       interval: 3s
       timeout: 5s
       retries: 10
@@ -102,6 +125,8 @@ services:
       context: ..
     depends_on:
       celery_worker:
+        condition: service_healthy
+      celery_beat:
         condition: service_healthy
     volumes:
       - ../logs:/app/logs

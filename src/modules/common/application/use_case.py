@@ -5,5 +5,5 @@ __all__ = [
 ]
 
 
-class UseCase(ABC):
+class UseCase(ABC):  # noqa: B024
     ...

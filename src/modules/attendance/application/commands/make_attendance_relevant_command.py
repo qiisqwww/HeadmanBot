@@ -10,7 +10,7 @@ from src.modules.attendance.application.repositories import (
     AttendanceRepository,
     LessonRepository,
 )
-from src.modules.common.application import UnitOfWork, UseCase
+from src.modules.common.application import NoArgsUseCase, UnitOfWork
 from src.modules.common.application.bot_notifier import BotNotifier
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
@@ -21,7 +21,7 @@ __all__ = [
 
 
 @final
-class MakeAttendanceRelevantCommand(UseCase):
+class MakeAttendanceRelevantCommand(NoArgsUseCase):
     _attendance_repository: AttendanceRepository
     _lesson_repository: LessonRepository
     _edu_info_gateway: EduInfoModuleGateway
