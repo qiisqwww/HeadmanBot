@@ -15,3 +15,4 @@ class TelegramCommand(StrEnum):
     SHOW_ATTENDANCE = "Узнать посещаемость"
     ADMIN = "Админ панель"
     GROUP_PANEL = "Группа"
+    CHANGE_GROUP = "Сменить группу"

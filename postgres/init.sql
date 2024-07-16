@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS student_management.students (
     group_id BIGINT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    role role NOT NULL,
+    role role,
     birthdate DATE NULL,
     attendance_noted BOOLEAN NOT NULL
 );
