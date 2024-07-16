@@ -12,7 +12,9 @@ __all__ = [
     "include_change_group_callback_router",
 ]
 
-change_group_callback_router = Router()
+change_group_callback_router = Router(
+    must_be_registered=True
+)
 
 
 def include_change_group_callback_router(root_router: RootRouter) -> None:

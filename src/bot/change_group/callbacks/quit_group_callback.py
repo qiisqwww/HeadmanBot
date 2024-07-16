@@ -11,7 +11,9 @@ __all__ = [
     "include_quit_group_callback_router",
 ]
 
-quit_group_callback_router = Router()
+quit_group_callback_router = Router(
+    must_be_registered=True
+)
 
 
 def include_quit_group_callback_router(root_router: RootRouter) -> None:

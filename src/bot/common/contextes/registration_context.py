@@ -33,7 +33,7 @@ class RegistrationContext:
     @property
     async def telegram_id(self) -> int:
         telegram_id = (await self.get_data()).get("telegram_id", None)
-        assert telegram_id is not None, "You must have setted telegram_id before."
+        assert telegram_id is not None, "You must have set telegram_id before."
         return telegram_id
 
     async def set_telegram_id(self, telegram_id: int) -> None:
@@ -42,7 +42,7 @@ class RegistrationContext:
     @property
     async def role(self) -> Role:
         role = (await self.get_data()).get("role", None)
-        assert role is not None, "You must have setted role before."
+        assert role is not None, "You must have set role before."
         return role
 
     async def set_role(self, role: Role) -> None:
@@ -51,7 +51,7 @@ class RegistrationContext:
     @property
     async def group_name(self) -> str:
         group_name = (await self.get_data()).get("group_name", None)
-        assert group_name is not None, "You must have setted group_name before."
+        assert group_name is not None, "You must have set group_name before."
         return group_name
 
     async def set_group_name(self, group_name: str) -> None:
@@ -60,7 +60,7 @@ class RegistrationContext:
     @property
     async def last_name(self) -> str:
         last_name = (await self.get_data()).get("last_name", None)
-        assert last_name is not None, "You must have setted last_name before."
+        assert last_name is not None, "You must have set last_name before."
         return last_name
 
     async def set_last_name(self, last_name: str) -> None:
@@ -69,7 +69,7 @@ class RegistrationContext:
     @property
     async def first_name(self) -> str:
         first_name =  (await self.get_data()).get("first_name", None)
-        assert first_name is not None, "You must have setted first_name before."
+        assert first_name is not None, "You must have set first_name before."
         return first_name
 
     async def set_first_name(self, first_name: str) -> None:
@@ -78,7 +78,7 @@ class RegistrationContext:
     @property
     async def university_alias(self) -> UniversityAlias:
         university_alias = (await self.get_data()).get("university_alias", None)
-        assert university_alias is not None, "You must have setted university_alias before."
+        assert university_alias is not None, "You must have set university_alias before."
         return university_alias
 
     async def set_university_alias(self, university_alias: UniversityAlias) -> None:

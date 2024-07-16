@@ -7,8 +7,10 @@ from src.bot.change_group.callback_data import (
     ChangeGroupCallbackData,
     CancelActionCallbackData,
     QuitGroupCallbackData,
-    GetBackCallbackData
+    GetBackCallbackData,
+    ChooseRoleCallbackData
 )
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "change_group_buttons",
@@ -19,9 +21,15 @@ __all__ = [
 def change_group_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    builder.button(text="Изменить группу", callback_data=ChangeGroupCallbackData())
-    builder.button(text="Выйти из группы", callback_data=QuitGroupCallbackData())
-    builder.button(text="Отмена", callback_data=CancelActionCallbackData())
+    builder.button(
+        text="Изменить группу", callback_data=ChangeGroupCallbackData()
+    )
+    builder.button(
+        text="Выйти из группы", callback_data=QuitGroupCallbackData()
+    )
+    builder.button(
+        text="Отмена", callback_data=CancelActionCallbackData()
+    )
 
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
@@ -30,5 +38,24 @@ def change_group_buttons() -> InlineKeyboardMarkup:
 def get_back_button() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    builder.button(text="Вернуться назад", callback_data=GetBackCallbackData())
+    builder.button(
+        text="Вернуться назад", callback_data=GetBackCallbackData()
+    )
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def role_buttons() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Я студент", callback_data=ChooseRoleCallbackData(role=Role.STUDENT),
+    )
+    builder.button(
+        text="Я староста", callback_data=ChooseRoleCallbackData(role=Role.HEADMAN),
+    )
+    builder.button(
+        text="Вернуться назад", callback_data=GetBackCallbackData()
+    )
+    builder.adjust(2)
+
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)

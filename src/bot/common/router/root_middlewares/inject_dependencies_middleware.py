@@ -7,7 +7,11 @@ from injector import Injector
 
 from src.modules.common.application import UseCase
 
-from ...contextes import ProfileUpdateContext, RegistrationContext
+from ...contextes import (
+    ProfileUpdateContext,
+    RegistrationContext,
+    ChangeGroupContext,
+)
 
 EventType: TypeAlias = Message | CallbackQuery
 HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
@@ -32,6 +36,8 @@ class InjectDependenciesMiddleware(BaseMiddleware):
                 data["state"] = RegistrationContext(data["state"])
             elif annotations["state"] == ProfileUpdateContext:
                 data["state"] = ProfileUpdateContext(data["state"])
+            elif annotations["state"] == ChangeGroupContext:
+                data["state"] = ChangeGroupContext(data["state"])
 
         for service_obj_name, service_type in annotations.items():
             if (

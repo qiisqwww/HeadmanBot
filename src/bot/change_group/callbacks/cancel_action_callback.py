@@ -9,7 +9,9 @@ __all__ = [
     "include_cancel_action_router",
 ]
 
-cancel_action_router = Router()
+cancel_action_router = Router(
+    must_be_registered=True
+)
 
 
 def include_cancel_action_router(root_router: RootRouter) -> None:

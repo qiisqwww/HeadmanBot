@@ -74,12 +74,12 @@ async def ask_new_fullname_validity_callback(
         case Role.STUDENT:
             await callback.message.answer(
                 YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-                reply_markup=void_inline_buttons(),
+                reply_markup=void_inline_buttons(),  # TODO: Проверить необходимость вывода этой кнопки
             )
         case Role.HEADMAN:
             await callback.message.answer(
                 YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
-                reply_markup=void_inline_buttons(),
+                reply_markup=void_inline_buttons(),  # TODO: Проверить необходимость вывода этой кнопки
             )
 
     student_data = await state.get_data()
