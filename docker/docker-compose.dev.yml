@@ -44,7 +44,7 @@ services:
     volumes:
       - headman_bot_postgres_dev_data:/var/lib/postgresql/data
       - ../postgres/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ../postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../postgres/migrations/migration_create_base_tables.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5432:5432
     healthcheck:

@@ -1,3 +1,6 @@
+from src.bot.common.render_template import render_template
+from src.modules.student_management.domain.enums import Role
+
 __all__ = [
     "CHANGE_OR_QUIT_TEMPLATE",
     "ACTION_CANCELLED_TEMPLATE",
@@ -8,7 +11,10 @@ __all__ = [
     "GROUP_DOESNT_REGISTERED_TEMPLATE",
     "HEADMAN_ALREADY_EXISTS_TEMPLATE",
     "CHOOSE_NEW_ROLE_TEMPLATE",
-    "CHOOSE_BUTTONS_ABOVE_TEMPLATE"
+    "CHOOSE_BUTTONS_ABOVE_TEMPLATE",
+    "YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE",
+    "YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE",
+    "successful_role_choose_template"
 ]
 
 
@@ -36,3 +42,14 @@ HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже е�
 CHOOSE_NEW_ROLE_TEMPLATE = "Вы староста или студент?"
 
 CHOOSE_BUTTONS_ABOVE_TEMPLATE = "Выберите одну из кнопок в сообщении выше, чтобы выбрать роль."
+
+YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE = "Ваше заявление на регистрацию старостой было передано администраторам."
+
+YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE = "Ваше заявление на регистрацию студентом было передано старосте."
+
+
+def successful_role_choose_template(role: Role) -> str:
+    return render_template(
+        "Роль была успешно выбрана. Вы - <b>{{role.translation}}</b>.",
+        role=role,
+    )

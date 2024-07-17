@@ -18,6 +18,7 @@ from .unnote_attendance_for_all_command import UnnoteAttendanceForAllCommand
 from .update_student_birthdate_command import UpdateStudentBirthdateCommand
 from .update_student_first_name_command import UpdateStudentFirstNameCommand
 from .update_student_last_name_command import UpdateStudentLastNameCommand
+from .expel_user_from_group_command import ExpelUserFromGroupCommand
 
 __all__ = [
     "CacheCreateStudentDataCommand",
@@ -34,4 +35,5 @@ __all__ = [
     "ClearCreateStudentDataCacheIfExistsCommand",
     "MakeStudentViceHeadmanCommand",
     "UnmakeStudentViceHeadmanCommand",
+    "ExpelUserFromGroupCommand"
 ]

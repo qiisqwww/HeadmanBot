@@ -159,3 +159,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
         query = "SELECT * FROM student_management.students WHERE group_id = $1"
         records = await self._con.fetch(query, group_id)
         return [self._mapper.to_domain(record) for record in records]
+
+    async def expel_user_from_group_by_id(self, student_id: int) -> None:
+        query = "UPDATE student_management.students SET group_id = NULL WHERE id = $1"
+        await self._con.execute(query, student_id)

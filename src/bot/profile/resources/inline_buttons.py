@@ -11,6 +11,9 @@ from src.bot.profile.callback_data import (
     ProfileUpdateCallbackData,
     ProfileUpdateNameCallbackData,
     ProfileUpdateSurnameCallbackData,
+    QuitGroupCallbackData,
+    EnterGroupCallbackData,
+    SureToLeaveGroupCallbackData
 )
 from src.bot.profile.profile_field import ProfileField
 
@@ -19,10 +22,11 @@ __all__ = [
     "profile_buttons",
     "get_back_button",
     "is_field_correct_buttons",
+    "sure_to_leave_group_buttons"
 ]
 
 
-def profile_update_choice_buttons() -> InlineKeyboardMarkup:
+def profile_update_choice_buttons(has_group: bool, is_headman: bool) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(
@@ -37,7 +41,21 @@ def profile_update_choice_buttons() -> InlineKeyboardMarkup:
         text="Редактировать дату рождения",
         callback_data=ProfileUpdateBirthdateCallbackData(),
     )
-    builder.button(text="Вернуться в профиль", callback_data=GetBackToProfileCallbackData())
+    if not is_headman:
+        if has_group:
+            builder.button(
+                text="Выйти из группы",
+                callback_data=QuitGroupCallbackData()
+            )
+        else:
+            builder.button(
+                text="Войти в группу",
+                callback_data=EnterGroupCallbackData()
+            )
+    builder.button(
+        text="Вернуться в профиль",
+        callback_data=GetBackToProfileCallbackData()
+    )
     builder.adjust(1)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
@@ -52,13 +70,13 @@ def get_back_button() -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
-
 def profile_buttons() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(text="Редактировать профиль", callback_data=ProfileUpdateCallbackData())
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
 
 def make_ask_validity_callback_data(field: ProfileField, is_field_correct: bool) -> CallbackData:
     match field:
@@ -68,6 +86,7 @@ def make_ask_validity_callback_data(field: ProfileField, is_field_correct: bool)
             return AskUpdatedSurnameValidityCallbackData(is_field_correct=is_field_correct)
         case ProfileField.BIRTHDATE:
             return AskUpdatedBirthdateValidityCallbackData(is_field_correct=is_field_correct)
+
 
 def is_field_correct_buttons(field: ProfileField) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
@@ -79,6 +98,22 @@ def is_field_correct_buttons(field: ProfileField) -> InlineKeyboardMarkup:
     builder.button(
         text="Нет",
         callback_data=make_ask_validity_callback_data(field, False),
+    )
+    builder.adjust(2)
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def sure_to_leave_group_buttons() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Да",
+        callback_data=SureToLeaveGroupCallbackData(is_user_sure=True)
+    )
+    builder.button(
+        text="Нет",
+        callback_data=SureToLeaveGroupCallbackData(is_user_sure=False)
     )
     builder.adjust(2)
 

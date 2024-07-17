@@ -8,3 +8,4 @@ __all__ = [
 class ChangeGroupStates(StatesGroup):
     waiting_new_group = State()
     waiting_new_role = State()
+    on_verification = State()

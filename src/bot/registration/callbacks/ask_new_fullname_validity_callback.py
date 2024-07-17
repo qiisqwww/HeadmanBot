@@ -72,15 +72,9 @@ async def ask_new_fullname_validity_callback(
 
     match await state.role:
         case Role.STUDENT:
-            await callback.message.answer(
-                YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-                reply_markup=void_inline_buttons(),  # TODO: Проверить необходимость вывода этой кнопки
-            )
+            await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE)
         case Role.HEADMAN:
-            await callback.message.answer(
-                YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
-                reply_markup=void_inline_buttons(),  # TODO: Проверить необходимость вывода этой кнопки
-            )
+            await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE)
 
     student_data = await state.get_data()
     await cache_student_data_command.execute(CreateStudentDTO(**student_data))

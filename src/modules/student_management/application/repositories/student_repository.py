@@ -111,3 +111,7 @@ class StudentRepository(ABC):
     @abstractmethod
     async def set_role_by_id(self, student_id: int, role: Role) -> None:
         ...
+
+    @abstractmethod
+    async def expel_user_from_group_by_id(self, student_id: int) -> None:
+        ...

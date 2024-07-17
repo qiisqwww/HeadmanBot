@@ -42,14 +42,14 @@ class RegisterStudentCommand(UseCase):
     @inject
     def __init__(
         self,
-        student_repostory: StudentRepository,
+        student_repository: StudentRepository,
         cache_student_data_repository: CacheStudentDataRepository,
         edu_info_module_gateway: EduInfoModuleGateway,
         attendance_module_gateway: AttendanceModuleGateway,
         uow: UnitOfWork,
     ) -> None:
         self._cache_student_repository = cache_student_data_repository
-        self._student_repository = student_repostory
+        self._student_repository = student_repository
         self._edu_info_module_gateway = edu_info_module_gateway
         self._attendance_module_gateway = attendance_module_gateway
         self._uow = uow
