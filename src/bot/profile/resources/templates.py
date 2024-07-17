@@ -39,16 +39,16 @@ SURE_TO_LEAVE_GROUP_TEMPLATE = """Вы уверены, что хотите вы�
 SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE = """Вы успешно вышли из группы"""
 
 
-# TODO: разобраться в ошибке, из-за которой не выводится "отсутствует" у группы и университета
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
     return render_template(
         "<b>Профиль студента</b>\n\n"
         "Фамилия: {{student.last_name}}\n"
         "Имя: {{student.first_name}}\n"
         "Роль: {{student.role.translation}}\n"
-        "Группа: {% if edu_info.group_name is not none %} {{edu_info.group_name}}\n{% else %} отсутствует\n{% endif %}"  
-        "Университет: {{edu_info.university_name}}\n"
-        "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %} не указана {% endif %}",
+        "Группа: {% if edu_info.group_name is not none %} {{edu_info.group_name}}\n{% else %} Отсутствует\n{% endif %}"  
+        "Университет: {% if edu_info.university_name is not none %} {{edu_info.university_name}}\n{% else %} "
+        "Отсутствует\n{% endif %}"
+        "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %} Не указана {% endif %}",
         student=student,
         edu_info=edu_info,
     )
