@@ -4,7 +4,7 @@ from typing import final
 from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.student_management.application.repositories import (
     CreateStudentDTO,
-    StudentRepository,
+    StudentRepository, StudentEnterGroupDTO,
 )
 from src.modules.student_management.domain import Role, Student
 from src.modules.student_management.infrastructure.mappers import StudentMapper
@@ -163,3 +163,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def expel_user_from_group_by_id(self, student_id: int) -> None:
         query = "UPDATE student_management.students SET group_id = NULL WHERE id = $1"
         await self._con.execute(query, student_id)
+
+    async def enter_group_by_telegram_id(self, student_data: StudentEnterGroupDTO, group_id: int) -> None:
+        query_update = "UPDATE student_management.students SET group_id = $1, role = $2 WHERE telegram_id = $3"
+        await self._con.execute(query_update, group_id, student_data.role, student_data.telegram_id)

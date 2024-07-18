@@ -1,9 +1,9 @@
 from aiogram.filters.callback_data import CallbackData
 
 __all__ = [
-    "QuitGroupCallbackData",
+    "LeaveGroupCallbackData",
 ]
 
 
-class QuitGroupCallbackData(CallbackData, prefix="quit_user's_group"):  # type: ignore
+class LeaveGroupCallbackData(CallbackData, prefix="quit_user's_group"):  # type: ignore
     ...

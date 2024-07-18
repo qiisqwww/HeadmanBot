@@ -10,7 +10,7 @@ from src.modules.common.application import UseCase
 from ...contextes import (
     ProfileUpdateContext,
     RegistrationContext,
-    ChangeGroupContext,
+    EnterGroupContext,
 )
 
 EventType: TypeAlias = Message | CallbackQuery
@@ -36,8 +36,8 @@ class InjectDependenciesMiddleware(BaseMiddleware):
                 data["state"] = RegistrationContext(data["state"])
             elif annotations["state"] == ProfileUpdateContext:
                 data["state"] = ProfileUpdateContext(data["state"])
-            elif annotations["state"] == ChangeGroupContext:
-                data["state"] = ChangeGroupContext(data["state"])
+            elif annotations["state"] == EnterGroupContext:
+                data["state"] = EnterGroupContext(data["state"])
 
         for service_obj_name, service_type in annotations.items():
             if (

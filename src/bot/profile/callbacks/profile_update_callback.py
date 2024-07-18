@@ -65,6 +65,7 @@ async def profile_update(
 @profile_menu_router.callback_query(GetBackToProfileCallbackData.filter())
 async def back_to_profile(
     callback: CallbackQuery,
+    state: ProfileUpdateContext,
     student: Student,
     get_edu_profile_info_query: GetEduProfileInfoQuery,
 ) -> None:
@@ -78,6 +79,8 @@ async def back_to_profile(
         profile_info(student, edu_info),
         reply_markup=profile_buttons(),
     )
+
+    await state.clear()
 
 
 @profile_menu_router.callback_query(ProfileUpdateNameCallbackData.filter())

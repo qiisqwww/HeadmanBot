@@ -7,7 +7,6 @@ from .profile import include_profile_router
 from .registration import include_registration_routers
 from .show_attendance import include_show_attendance_router
 from .show_schedule import include_show_schedule
-from .change_group import include_change_group_router
 
 __all__ = [
     "build_root_router",

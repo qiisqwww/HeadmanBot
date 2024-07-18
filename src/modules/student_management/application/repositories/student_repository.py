@@ -4,6 +4,7 @@ from datetime import date
 from src.modules.student_management.domain import Role, Student
 
 from .create_student_dto import CreateStudentDTO
+from .student_enter_group_dto import StudentEnterGroupDTO
 
 __all__ = [
     "StudentRepository",
@@ -114,4 +115,8 @@ class StudentRepository(ABC):
 
     @abstractmethod
     async def expel_user_from_group_by_id(self, student_id: int) -> None:
+        ...
+
+    @abstractmethod
+    async def enter_group_by_telegram_id(self, student_data: StudentEnterGroupDTO, group_id: int) -> None:
         ...

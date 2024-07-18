@@ -3,9 +3,9 @@ from aiogram.filters.callback_data import CallbackData
 from src.modules.student_management.domain import Role
 
 __all__ = [
-    "ChooseRoleCallbackData",
+    "ChooseNewRoleCallbackData",
 ]
 
 
-class ChooseRoleCallbackData(CallbackData, prefix="choose_role_callback"):  # type: ignore
+class ChooseNewRoleCallbackData(CallbackData, prefix="choose_new_role"):  # type: ignore
     role: Role

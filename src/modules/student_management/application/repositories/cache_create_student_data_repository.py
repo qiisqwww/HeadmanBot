@@ -3,11 +3,11 @@ from abc import ABC, abstractmethod
 from .create_student_dto import CreateStudentDTO
 
 __all__ = [
-    "CacheStudentDataRepository",
+    "CacheCreateStudentDataRepository",
 ]
 
 
-class CacheStudentDataRepository(ABC):
+class CacheCreateStudentDataRepository(ABC):
     @abstractmethod
     async def cache(self, data: CreateStudentDTO) -> None:
         ...

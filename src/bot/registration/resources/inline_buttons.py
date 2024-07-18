@@ -4,7 +4,7 @@ from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.bot.registration.callback_data import (
-    AccessCallbackData,
+    AcceptRegistrationCallbackData,
     AskNewFullnameValidityCallbackData,
     ChooseRoleCallbackData,
     UniversityCallbackData,
@@ -51,11 +51,11 @@ def accept_or_deny_buttons(student_id: int) -> InlineKeyboardMarkup:
 
     builder.button(
         text="Одобрить",
-        callback_data=AccessCallbackData(telegram_id=student_id, accepted=True),
+        callback_data=AcceptRegistrationCallbackData(telegram_id=student_id, accepted=True),
     )
     builder.button(
         text="Отказать",
-        callback_data=AccessCallbackData(telegram_id=student_id, accepted=False),
+        callback_data=AcceptRegistrationCallbackData(telegram_id=student_id, accepted=False),
     )
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
