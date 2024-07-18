@@ -5,7 +5,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from src.modules.common.infrastructure.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import project_container
 
-from .root_router import build_root_router
+from .build_root_router import build_root_router
 
 __all__ = [
     "dispatcher",

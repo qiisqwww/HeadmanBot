@@ -9,8 +9,9 @@ from src.modules.student_management.application.commands import (
 )
 
 from src.bot.registration.finite_state.registration_states import RegistrationStates
-from .resources import restart_button, role_buttons
-from .resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
+from src.bot.registration.resources.inline_buttons import role_buttons
+from src.bot.registration.resources.reply_buttons import restart_button
+from src.bot.registration.resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
 
 __all__ = [
     "include_start_command_router",

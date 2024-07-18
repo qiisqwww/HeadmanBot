@@ -4,11 +4,11 @@ from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
-from src.bot.show_schedule.resources import (
+from src.bot.show_schedule.resources.templates import (
     NO_LESSONS_TODAY_TEMPLATE,
-    schedule_list_template,
-    show_choose_day_buttons
+    schedule_list_template
 )
+from src.bot.show_schedule.resources.inline_buttons import show_choose_day_buttons
 from src.bot.show_schedule.callback_data import ScheduleDateCallbackData
 from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery

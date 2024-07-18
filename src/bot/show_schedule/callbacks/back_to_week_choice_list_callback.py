@@ -1,12 +1,9 @@
 from aiogram.types import CallbackQuery
-from aiogram import F
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
-from src.bot.show_schedule.resources import (
-    CHOOSE_SCHEDULE_PERIOD_TEMPLATE,
-    show_choose_period_buttons
-)
+from src.bot.show_schedule.resources.templates import CHOOSE_SCHEDULE_PERIOD_TEMPLATE
+from src.bot.show_schedule.resources.inline_buttons import show_choose_period_buttons
 from src.bot.show_schedule.callback_data import BackToWeekChoiceListCallbackData
 
 __all__ = [

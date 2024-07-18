@@ -8,7 +8,7 @@ from aiogram.types import Message, User
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
 from src.bot.registration.finite_state.registration_states import RegistrationStates
-from src.bot.registration.resources import ask_fullname_validity_buttons
+from src.bot.registration.resources.inline_buttons import ask_fullname_validity_buttons
 from src.bot.registration.resources.templates import (
     ASK_BIRTHDATE_TEMPLATE,
     ASK_NAME_TEMPLATE,

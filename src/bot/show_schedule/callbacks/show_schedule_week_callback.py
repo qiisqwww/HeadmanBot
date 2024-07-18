@@ -2,10 +2,8 @@ from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
-from src.bot.show_schedule.resources import (
-    CHOOSE_DATE_TEMPLATE,
-    show_choose_day_buttons
-)
+from src.bot.show_schedule.resources.templates import CHOOSE_DATE_TEMPLATE
+from src.bot.show_schedule.resources.inline_buttons import show_choose_day_buttons
 from src.bot.show_schedule.callback_data import ScheduleWeekCallbackData
 
 __all__ = [

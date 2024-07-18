@@ -9,11 +9,12 @@ from src.modules.student_management.application.queries.get_edu_profile_info_que
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import ScheduleCertainDateContext
 from src.bot.show_schedule.finite_state.schedule_date_states import ScheduleDateStates
-from src.bot.show_schedule.resources import (
+from src.bot.show_schedule.resources.templates import (
     INCORRECT_DATE_FORMAT_TEMPLATE,
     NO_LESSONS_TODAY_TEMPLATE,
-    schedule_list_template,
-    show_get_back_button)
+    schedule_list_template
+)
+from src.bot.show_schedule.resources.inline_buttons import show_get_back_button
 from src.modules.utils.schedule_api.infrastructure.schedule_api import ScheduleApiImpl
 from src.modules.common.domain.university_alias import UniversityAlias
 

@@ -1,9 +1,8 @@
 from aiogram.types import Message
 
 from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
+from src.bot.headman_panel.resources.inline_buttons import group_panel_menu
 from src.modules.student_management.domain import Role, Student
-
-from .resources import group_panel_menu
 
 __all__ = [
     "include_group_panel_command_router",
