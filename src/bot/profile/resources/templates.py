@@ -36,6 +36,8 @@ __all__ = [
     "USER_GROUP_ENTER_TIME_OUT_TEMPLATE",
     "ENTER_DENIED_TEMPLATE",
     "ENTER_ACCEPTED_TEMPLATE",
+    "HEADMAN_ALREADY_EXISTS_TEMPLATE",
+    "GROUP_DOESNT_REGISTERED_TEMPLATE"
 ]
 
 
@@ -83,6 +85,13 @@ FAILED_TO_FETCH_SCHEDULE_TEMPLATE = (
     "Не удалось загрузить расписание для вашей группы. "
     "Попробуйте войти еще раз или напишите в @noheadproblemsbot."
 )
+
+HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже есть староста."
+
+GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте.
+Попросите своего старосту зарегестрироваться, или введите название группы заново."""
+
+
 
 HELP_FOR_HEADMAN = """
 <b>Как пользоваться ботом:</b>

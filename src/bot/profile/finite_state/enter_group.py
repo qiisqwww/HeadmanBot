@@ -13,6 +13,8 @@ from src.bot.profile.resources.templates import (
     CHOOSE_BUTTONS_ABOVE_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
+    HEADMAN_ALREADY_EXISTS_TEMPLATE,
+    GROUP_DOESNT_REGISTERED_TEMPLATE,
     student_send_registration_request_template
 )
 from src.bot.profile.resources.inline_buttons import get_back_button, accept_or_deny_buttons
@@ -93,6 +95,34 @@ async def new_group_handler(
         await state.set_state(ProfileUpdateStates.waiting_new_group)
         return
 
+    group = await find_group_by_name_and_alias_query.execute(
+        group_name,
+        await state.university_alias,
+    )
+    role = await state.role
+
+    # Группа существует, в ней есть староста, а пользователь староста
+    if group is not None and role == Role.HEADMAN:
+        group_headman = await find_group_headman_query.execute(group.id)
+        if group_headman is not None:
+            await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
+            await state.set_state(ProfileUpdateStates.waiting_new_group)
+            return
+
+    # Группа не существует, а пользователь студент
+    if group is None and role == Role.STUDENT:
+        await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
+        await state.set_state(ProfileUpdateStates.waiting_new_group)
+        return
+
+    # Групппа существует, но в ней нет старосты, а пользователь студент
+    if group is not None and role == Role.STUDENT:
+        group_headman = await find_group_headman_query.execute(group.id)
+        if group_headman is None:
+            await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
+            await state.set_state(ProfileUpdateStates.waiting_new_group)
+            return
+
     await state.set_telegram_id(student.telegram_id)
     await state.set_group_name(group_name)
 
@@ -123,11 +153,6 @@ async def new_group_handler(
                 reply_markup=accept_or_deny_buttons(student.telegram_id),
             )
         return
-
-    group = await find_group_by_name_and_alias_query.execute(
-        await state.group_name,
-        await state.university_alias,
-    )
 
     if group is None:
         raise RuntimeError
