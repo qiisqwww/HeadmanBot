@@ -3,7 +3,7 @@ from datetime import date
 from aiogram import F
 from aiogram.types import Message
 
-from src.modules.student_management.domain import Student
+from src.modules.student_management.domain import Student, Role
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
 from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
 from src.bot.common import RootRouter, Router
@@ -24,7 +24,8 @@ __all__ = [
 ]
 
 show_schedule_certain_date_router = Router(
-    must_be_registered=True
+    must_be_registered=True,
+    minimum_role=Role.STUDENT
 )
 
 

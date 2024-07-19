@@ -3,6 +3,7 @@ from aiogram.types import Message
 from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
 from src.bot.show_schedule.resources.templates import CHOOSE_SCHEDULE_PERIOD_TEMPLATE
 from src.bot.show_schedule.resources.inline_buttons import show_choose_period_buttons
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "include_show_schedule_command_router",
@@ -11,6 +12,7 @@ __all__ = [
 
 show_schedule_command_router = Router(
     must_be_registered=True,
+    minimum_role=Role.STUDENT
 )
 
 

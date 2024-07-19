@@ -5,6 +5,7 @@ from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.show_schedule.resources.templates import CHOOSE_SCHEDULE_PERIOD_TEMPLATE
 from src.bot.show_schedule.resources.inline_buttons import show_choose_period_buttons
 from src.bot.show_schedule.callback_data import BackToWeekChoiceListCallbackData
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "include_back_to_week_choice_list_callback_router",
@@ -13,6 +14,7 @@ __all__ = [
 
 back_to_week_choice_list_callback_router = Router(
     must_be_registered=True,
+    minimum_role=Role.STUDENT
 )
 
 

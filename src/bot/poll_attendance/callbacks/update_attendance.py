@@ -7,7 +7,7 @@ from src.bot.poll_attendance.resources.templates import your_all_choice_is_templ
 from src.bot.poll_attendance.resources.inline_buttons import  update_attendance_buttons
 from src.modules.attendance.application.commands import UpdateAttendanceCommand
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
-from src.modules.student_management.domain import Student
+from src.modules.student_management.domain import Student, Role
 
 __all__ = [
     "include_update_attendance_router",
@@ -16,6 +16,7 @@ __all__ = [
 
 update_attendance_router = Router(
     must_be_registered=True,
+    minimum_role=Role.STUDENT
 )
 
 

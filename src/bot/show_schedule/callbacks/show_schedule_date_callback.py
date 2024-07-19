@@ -13,7 +13,7 @@ from src.bot.show_schedule.callback_data import ScheduleDateCallbackData
 from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
 from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
-from src.modules.student_management.domain import Student
+from src.modules.student_management.domain import Student, Role
 from src.modules.utils.schedule_api.infrastructure.schedule_api import ScheduleApiImpl
 
 __all__ = [
@@ -23,6 +23,7 @@ __all__ = [
 
 show_schedule_date_callback_router = Router(
     must_be_registered=True,
+    minimum_role=Role.STUDENT
 )
 
 
