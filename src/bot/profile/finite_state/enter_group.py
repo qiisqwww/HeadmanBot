@@ -15,9 +15,9 @@ from src.bot.profile.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     HEADMAN_ALREADY_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
-    student_send_registration_request_template
+    student_send_enter_group_request_template
 )
-from src.bot.profile.resources.inline_buttons import get_back_button, accept_or_deny_buttons
+from src.bot.profile.resources.inline_buttons import get_back_button, accept_or_deny_enter_group_buttons
 from src.modules.student_management.application.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndAliasQuery,
@@ -143,14 +143,14 @@ async def new_group_handler(
         for admin_id in ADMIN_IDS:
             await bot.send_message(
                 admin_id,
-                student_send_registration_request_template(
+                student_send_enter_group_request_template(
                     student.last_name,
                     student.first_name,
                     role,
                     student.telegram_id,
                     message.from_user.username,
                 ),
-                reply_markup=accept_or_deny_buttons(student.telegram_id),
+                reply_markup=accept_or_deny_enter_group_buttons(student.telegram_id),
             )
         return
 
@@ -165,13 +165,13 @@ async def new_group_handler(
     await state.set_state(ProfileUpdateStates.on_verification)
     await bot.send_message(
         headman.telegram_id,
-        student_send_registration_request_template(
+        student_send_enter_group_request_template(
             student.last_name,
             student.first_name,
             role,
             student.telegram_id,
             message.from_user.username,
         ),
-        reply_markup=accept_or_deny_buttons(student.telegram_id),
+        reply_markup=accept_or_deny_enter_group_buttons(student.telegram_id),
     )
 

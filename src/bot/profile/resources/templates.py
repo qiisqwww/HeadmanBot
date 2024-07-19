@@ -10,7 +10,8 @@ __all__ = [
     "asking_birthdate_validation_template",
     "successful_university_choose_template",
     "successful_role_choose_template",
-    "student_send_registration_request_template",
+    "student_send_enter_group_request_template",
+    "student_send_leave_group_request_template",
     "ASK_NEW_SURNAME_TEMPLATE",
     "ASK_NEW_NAME_TEMPLATE",
     "ASK_NEW_BIRTHDATE_TEMPLATE",
@@ -37,7 +38,12 @@ __all__ = [
     "ENTER_DENIED_TEMPLATE",
     "ENTER_ACCEPTED_TEMPLATE",
     "HEADMAN_ALREADY_EXISTS_TEMPLATE",
-    "GROUP_DOESNT_REGISTERED_TEMPLATE"
+    "GROUP_DOESNT_REGISTERED_TEMPLATE",
+    "SUCCESSFULLY_DID_NOT_LEFT_THE_GROUP_TEMPLATE",
+    "YOUR_APPLY_TO_LEAVE_WAS_SENT_TO_HEADMAN_TEMPLATE",
+    "LEAVE_DENIED_TEMPLATE",
+    "LEAVE_ACCEPTED_TEMPLATE",
+    "USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE"
 ]
 
 
@@ -57,13 +63,24 @@ FAILED_TO_LOAD_EDU_INFO_TEMPLATE = """Не удалось загрузить и�
 
 SURE_TO_LEAVE_GROUP_TEMPLATE = """Вы уверены, что хотите выйти из группы?"""
 
-SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE = """Вы успешно вышли из группы"""
+YOUR_APPLY_TO_LEAVE_WAS_SENT_TO_HEADMAN_TEMPLATE = """Ваше заявление на выход из группы было отправлено вашей старосте
+"""
+
+SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE = """Староста одобрил ваш запрос на выход из группы."""
+
+SUCCESSFULLY_DID_NOT_LEFT_THE_GROUP_TEMPLATE = """Староста отклонил ваш запрос на выход из группы.
+
+Если вы считаете, что это была ошибка, обратитесь к своему старосте или
+напишите в службу обратной связи --- @noheadproblemsbot"""
 
 DID_NOT_LEFT_THE_GROUP_TEMPLATE = "Вы выбрали не выходить из группы"
 
 INPUT_GROUP_NAME_TEMPLATE = """Введите название группы, в которую хотите войти"""
 
 INPUT_YOUR_UNIVERSITY_TEMPLATE = "Выберите ваш университет"
+
+USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE = """Пользователь, пожелавший выйти не найден. 
+Его запрос автоматически отклонен"""
 
 FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE = (
     "Не удалось проверить наличие группы в университете, попробуйте снова или напишите в @noheadproblemsbot."
@@ -91,8 +108,6 @@ HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже е�
 GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте.
 Попросите своего старосту зарегестрироваться, или введите название группы заново."""
 
-
-
 HELP_FOR_HEADMAN = """
 <b>Как пользоваться ботом:</b>
 
@@ -114,6 +129,10 @@ YOU_WERE_DENIED_TEMPLATE = """
 напишите в службу обратной связи --- @noheadproblemsbot"""
 
 ENTER_DENIED_TEMPLATE = "Вы отказали пользователю во входе."
+
+LEAVE_DENIED_TEMPLATE = "Вы отказали пользователю в выходе."
+
+LEAVE_ACCEPTED_TEMPLATE = "Пользователь успешно вышел из группы."
 
 ENTER_ACCEPTED_TEMPLATE = "Пользователь был успешно добавлен в группу."
 
@@ -179,7 +198,7 @@ def successful_role_choose_template(role: Role) -> str:
     )
 
 
-def student_send_registration_request_template(
+def student_send_enter_group_request_template(
     last_name: str,
     first_name: str,
     role: Role,
@@ -189,6 +208,23 @@ def student_send_registration_request_template(
     return render_template(
         """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> @{{ username }}
 подал заявку на вход в группу в боте.""",
+        role=role,
+        telegram_id=telegram_id,
+        fullname=f"{last_name} {first_name}",
+        username=username if username is not None else "",
+    )
+
+
+def student_send_leave_group_request_template(
+    last_name: str,
+    first_name: str,
+    role: Role,
+    telegram_id: int,
+    username: str | None,
+) -> str:
+    return render_template(
+        """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> @{{ username }}
+подал заявку на выход из вашей группы в боте.""",
         role=role,
         telegram_id=telegram_id,
         fullname=f"{last_name} {first_name}",

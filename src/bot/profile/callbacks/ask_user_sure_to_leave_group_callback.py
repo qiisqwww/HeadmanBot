@@ -1,11 +1,17 @@
+from aiogram import Bot
 from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.profile.callback_data import SureToLeaveGroupCallbackData
-from src.bot.profile.resources.templates import SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE, DID_NOT_LEFT_THE_GROUP_TEMPLATE
+from src.bot.profile.resources.templates import (
+    YOUR_APPLY_TO_LEAVE_WAS_SENT_TO_HEADMAN_TEMPLATE,
+    DID_NOT_LEFT_THE_GROUP_TEMPLATE,
+    student_send_leave_group_request_template
+)
+from src.bot.profile.resources.inline_buttons import accept_or_deny_leave_group_buttons
 from src.modules.student_management.domain.models import Student
-from src.modules.student_management.application.commands import ExpelUserFromGroupCommand
+from src.modules.student_management.application.queries import FindGroupHeadmanQuery
 
 
 __all__ = [
@@ -26,13 +32,30 @@ async def ask_user_sure_to_leave_group(
         callback: CallbackQuery,
         callback_data: SureToLeaveGroupCallbackData,
         student: Student,
-        expel_user_from_group_command: ExpelUserFromGroupCommand
+        bot: Bot,
+        find_group_headman_query: FindGroupHeadmanQuery,
+
 ) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 
-    if callback_data.is_user_sure:
-        await expel_user_from_group_command.execute(student.id)
-        await safe_message_edit(callback, SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE)
-    else:
+    if not callback_data.is_user_sure:
         await safe_message_edit(callback, DID_NOT_LEFT_THE_GROUP_TEMPLATE)
+        return
+
+    await safe_message_edit(callback, YOUR_APPLY_TO_LEAVE_WAS_SENT_TO_HEADMAN_TEMPLATE)
+
+    group_headman = await find_group_headman_query.execute(student.group_id)
+    await bot.send_message(
+        group_headman.telegram_id,
+        student_send_leave_group_request_template(
+            student.last_name,
+            student.first_name,
+            student.role,
+            student.telegram_id,
+            callback.from_user.username
+        ),
+        reply_markup=accept_or_deny_leave_group_buttons(student.telegram_id)
+    )
+
+

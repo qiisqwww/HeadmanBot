@@ -42,7 +42,7 @@ def include_accept_student_enter_group_callback_router(root_router: RootRouter) 
 
 
 @accept_student_enter_group_callback_router.callback_query(AcceptStudentEnterGroupCallbackData.filter())
-async def accept_or_deny_callback(
+async def accept_or_deny_enter_group_callback(
     callback: CallbackQuery,
     callback_data: AcceptStudentEnterGroupCallbackData,
     bot: Bot,
@@ -60,8 +60,7 @@ async def accept_or_deny_callback(
         await clear_student_enter_group_data_command.execute(callback_data.telegram_id)
         await safe_message_edit(
             callback,
-            ENTER_DENIED_TEMPLATE,
-            reply_markup=void_inline_buttons(),
+            ENTER_DENIED_TEMPLATE
         )
         await bot.send_message(callback_data.telegram_id, YOU_WERE_DENIED_TEMPLATE)
         return

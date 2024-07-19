@@ -12,6 +12,7 @@ from .sure_to_leave_group_callback_data import SureToLeaveGroupCallbackData
 from .choose_new_role_callback_data import ChooseNewRoleCallbackData
 from .choose_new_uni_callback_data import ChooseUniCallbackData
 from .accept_student_enter_group_callback_data import AcceptStudentEnterGroupCallbackData
+from .accept_student_leave_group_callback_data import AcceptStudentLeaveGroupCallbackData
 
 __all__ = [
     "AskUpdatedNameValidityCallbackData",
@@ -28,4 +29,5 @@ __all__ = [
     "ChooseNewRoleCallbackData",
     "ChooseUniCallbackData",
     "AcceptStudentEnterGroupCallbackData",
+    "AcceptStudentLeaveGroupCallbackData"
 ]

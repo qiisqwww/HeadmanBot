@@ -18,7 +18,8 @@ from src.bot.profile.callback_data import (
     SureToLeaveGroupCallbackData,
     ChooseNewRoleCallbackData,
     ChooseUniCallbackData,
-    AcceptStudentEnterGroupCallbackData
+    AcceptStudentEnterGroupCallbackData,
+    AcceptStudentLeaveGroupCallbackData
 )
 from src.bot.profile.profile_field import ProfileField
 from src.modules.student_management.domain import Role, UniversityInfo
@@ -31,7 +32,8 @@ __all__ = [
     "sure_to_leave_group_buttons",
     "role_buttons",
     "university_list_buttons",
-    "accept_or_deny_buttons"
+    "accept_or_deny_enter_group_buttons",
+    "accept_or_deny_leave_group_buttons"
 ]
 
 
@@ -167,16 +169,31 @@ def university_list_buttons(
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
-def accept_or_deny_buttons(student_id: int) -> InlineKeyboardMarkup:
+def accept_or_deny_enter_group_buttons(telegram_id: int) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(
         text="Одобрить",
-        callback_data=AcceptStudentEnterGroupCallbackData(telegram_id=student_id, accepted=True),
+        callback_data=AcceptStudentEnterGroupCallbackData(telegram_id=telegram_id, accepted=True),
     )
     builder.button(
         text="Отказать",
-        callback_data=AcceptStudentEnterGroupCallbackData(telegram_id=student_id, accepted=False),
+        callback_data=AcceptStudentEnterGroupCallbackData(telegram_id=telegram_id, accepted=False),
+    )
+
+    return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
+
+
+def accept_or_deny_leave_group_buttons(telegram_id: int) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="Одобрить",
+        callback_data=AcceptStudentLeaveGroupCallbackData(telegram_id=telegram_id, accepted=True),
+    )
+    builder.button(
+        text="Отказать",
+        callback_data=AcceptStudentLeaveGroupCallbackData(telegram_id=telegram_id, accepted=False),
     )
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
