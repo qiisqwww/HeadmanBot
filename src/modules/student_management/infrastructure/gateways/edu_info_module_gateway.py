@@ -57,15 +57,12 @@ class EduInfoModuleGatewayImpl(EduInfoModuleGateway):
         group_info = await self._contract.create_group(group_name, university_id)
         return Group(**group_info)
 
-    async def get_edu_profile_info(self, group_id: int) -> EduProfileInfo | None:
+    async def get_edu_profile_info(self, group_id: int) -> EduProfileInfo:
         edu_info = await self._contract.get_group_name_and_uni_name(group_id)
 
-        if edu_info is None:
-            return None
-
         return EduProfileInfo(
-            group_name=edu_info[0],
-            university_name=edu_info[1],
+            group_name=None if edu_info is None else edu_info[0],
+            university_name=None if edu_info is None else edu_info[1]
         )
 
     async def delete_group_by_id(self, group_id: int) -> None:

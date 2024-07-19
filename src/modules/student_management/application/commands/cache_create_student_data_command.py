@@ -1,7 +1,7 @@
 from injector import inject
 
 from src.modules.common.application import UseCase
-from src.modules.student_management.application.repositories import CacheStudentDataRepository, CreateStudentDTO
+from src.modules.student_management.application.repositories import CacheCreateStudentDataRepository, CreateStudentDTO
 
 __all__ = [
     "CacheCreateStudentDataCommand",
@@ -9,10 +9,10 @@ __all__ = [
 
 
 class CacheCreateStudentDataCommand(UseCase):
-    _repository: CacheStudentDataRepository
+    _repository: CacheCreateStudentDataRepository
 
     @inject
-    def __init__(self, repository: CacheStudentDataRepository) -> None:
+    def __init__(self, repository: CacheCreateStudentDataRepository) -> None:
         self._repository = repository
 
     async def execute(self, data: CreateStudentDTO) -> None:

@@ -36,7 +36,8 @@ __all__ = [
     "FAILED_TO_FETCH_SCHEDULE_TEMPLATE",
     "HELP_FOR_HEADMAN",
     "USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE",
-    "USER_REGISTRATION_TIME_OUT_TEMPLATE"
+    "USER_REGISTRATION_TIME_OUT_TEMPLATE",
+
 ]
 
 
@@ -99,7 +100,6 @@ ASK_BIRTHDATE_TEMPLATE = """Введите дату рождения в форм
 BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели некорректные данные. Введите дату в формате ДД.ММ.ГГГГ"
 
 HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже есть староста."
-
 
 GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте.
 Попросите своего старосту зарегестрироваться, или введите название группы заново."""

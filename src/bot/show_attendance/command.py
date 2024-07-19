@@ -15,21 +15,21 @@ from src.modules.student_management.domain import Role, Student
 from .resources.inline_buttons import choose_lesson_buttons
 
 __all__ = [
-    "include_get_attendance_router",
+    "include_get_attendance_command_router",
 ]
 
 
-get_attendance_router = Router(
+get_attendance_command_router = Router(
     must_be_registered=True,
     minimum_role=Role.VICE_HEADMAN,
 )
 
 
-def include_get_attendance_router(root_router: RootRouter) -> None:
-    root_router.include_router(get_attendance_router)
+def include_get_attendance_command_router(root_router: RootRouter) -> None:
+    root_router.include_router(get_attendance_command_router)
 
 
-@get_attendance_router.message(CommandFilter(TelegramCommand.SHOW_ATTENDANCE))
+@get_attendance_command_router.message(CommandFilter(TelegramCommand.SHOW_ATTENDANCE))
 async def get_attendance_command(
     message: Message,
     student: Student,

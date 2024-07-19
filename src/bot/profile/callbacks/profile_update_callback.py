@@ -33,8 +33,7 @@ __all__ = [
 
 
 profile_menu_router = Router(
-    must_be_registered=True,
-    minimum_role=Role.STUDENT,
+    must_be_registered=True
 )
 
 
@@ -43,14 +42,21 @@ def include_profile_menu_router(root_router: RootRouter) -> None:
 
 
 @profile_menu_router.callback_query(ProfileUpdateCallbackData.filter())
-async def profile_update(callback: CallbackQuery, state: ProfileUpdateContext) -> None:
+async def profile_update(
+        callback: CallbackQuery,
+        state: ProfileUpdateContext,
+        student: Student
+) -> None:
     if callback.message is None:
         return
 
     await safe_message_edit(
         callback,
         WHAT_DO_YOU_WANNA_EDIT_TEMPLATE,
-        profile_update_choice_buttons(),
+        profile_update_choice_buttons(
+            has_group=student.group_id is not None,
+            is_headman=student.role == Role.HEADMAN
+        )
     )
 
     await state.clear()
@@ -59,6 +65,7 @@ async def profile_update(callback: CallbackQuery, state: ProfileUpdateContext) -
 @profile_menu_router.callback_query(GetBackToProfileCallbackData.filter())
 async def back_to_profile(
     callback: CallbackQuery,
+    state: ProfileUpdateContext,
     student: Student,
     get_edu_profile_info_query: GetEduProfileInfoQuery,
 ) -> None:
@@ -72,6 +79,8 @@ async def back_to_profile(
         profile_info(student, edu_info),
         reply_markup=profile_buttons(),
     )
+
+    await state.clear()
 
 
 @profile_menu_router.callback_query(ProfileUpdateNameCallbackData.filter())

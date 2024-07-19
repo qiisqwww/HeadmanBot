@@ -8,7 +8,7 @@ from src.bot.common.router import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.registration.callback_data import AskNewFullnameValidityCallbackData
 from src.bot.registration.finite_state.registration_states import RegistrationStates
-from src.bot.registration.resources import accept_or_deny_buttons
+from src.bot.registration.resources.inline_buttons import accept_or_deny_buttons
 from src.bot.registration.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
@@ -16,9 +16,7 @@ from src.bot.registration.resources.templates import (
     ASK_SURNAME_TEMPLATE
 )
 from src.modules.common.infrastructure.config import ADMIN_IDS
-from src.modules.student_management.application.commands import (
-    CacheCreateStudentDataCommand,
-)
+from src.modules.student_management.application.commands import CacheCreateStudentDataCommand
 from src.modules.student_management.application.queries import (
     FindGroupByNameAndAliasQuery,
     FindGroupHeadmanQuery,
@@ -72,15 +70,9 @@ async def ask_new_fullname_validity_callback(
 
     match await state.role:
         case Role.STUDENT:
-            await callback.message.answer(
-                YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-                reply_markup=void_inline_buttons(),
-            )
+            await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE)
         case Role.HEADMAN:
-            await callback.message.answer(
-                YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
-                reply_markup=void_inline_buttons(),
-            )
+            await callback.message.answer(YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE)
 
     student_data = await state.get_data()
     await cache_student_data_command.execute(CreateStudentDTO(**student_data))

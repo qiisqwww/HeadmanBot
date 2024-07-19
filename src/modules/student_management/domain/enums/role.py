@@ -12,6 +12,7 @@ class Role(StrEnum):
     HEADMAN = "HEADMAN"
     VICE_HEADMAN = "VICE HEADMAN"
     STUDENT = "STUDENT"
+    IS_REGISTERED = "IS REGISTERED"
 
     @property
     def translation(self) -> str:
@@ -20,6 +21,7 @@ class Role(StrEnum):
             Role.HEADMAN: "Староста",
             Role.VICE_HEADMAN: "Заместитель старосты",
             Role.STUDENT: "Студент",
+            Role.IS_REGISTERED: "Отсутствует"
         }
 
         return translations[self]
@@ -31,6 +33,7 @@ class Role(StrEnum):
             "HEADMAN": 3,
             "VICE_HEADMAN": 2,
             "STUDENT": 1,
+            "IS_REGISTERED": 0,
         }
 
         return roles_weight[self.name]

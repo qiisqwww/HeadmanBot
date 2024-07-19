@@ -14,7 +14,7 @@ class Router(AiogramRouter):
     def __init__(
         self,
         must_be_registered: bool | None = False,
-        minimum_role: Role = Role.STUDENT,
+        minimum_role: Role = Role.IS_REGISTERED,
         name: str | None = None,
     ) -> None:
         super().__init__(name=name)

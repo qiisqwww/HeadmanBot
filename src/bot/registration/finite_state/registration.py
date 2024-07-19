@@ -8,7 +8,7 @@ from aiogram.types import Message, User
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
 from src.bot.registration.finite_state.registration_states import RegistrationStates
-from src.bot.registration.resources import ask_fullname_validity_buttons
+from src.bot.registration.resources.inline_buttons import ask_fullname_validity_buttons
 from src.bot.registration.resources.templates import (
     ASK_BIRTHDATE_TEMPLATE,
     ASK_NAME_TEMPLATE,
@@ -87,19 +87,32 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
+    """Логика ниже была переработана для учета той ситуации, когда группа уже существует в базе, но студенты 
+    регистрируются в ней с нуля. 
+    Таким образом, старостой в группу МОЖНО зарегаться если группа существует,
+    и нельзя только, если староста уже есть."""
     group = await find_group_by_name_and_alias_query.execute(
         group_name,
         await state.university_alias,
     )
-    if await state.role == Role.STUDENT and group is None:
+    role = await state.role
+
+    if group is not None and role == Role.HEADMAN:
+        group_headman = await find_group_headman_query.execute(group.id)
+        if group_headman is not None:
+            await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
+            await state.set_state(RegistrationStates.waiting_group)
+            return
+
+    if group is None and role == Role.STUDENT:
         await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    if group is not None and await state.role == Role.HEADMAN:
+    if group is not None and role == Role.STUDENT:
         group_headman = await find_group_headman_query.execute(group.id)
-        if group_headman is not None:
-            await message.answer(HEADMAN_ALREADY_EXISTS_TEMPLATE)
+        if group_headman is None:
+            await message.answer(GROUP_DOESNT_REGISTERED_TEMPLATE)
             await state.set_state(RegistrationStates.waiting_group)
             return
 
@@ -109,7 +122,7 @@ async def handling_group(
 
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_birthdate)
-async def handling_birthmonth(message: Message, state: RegistrationContext) -> None:
+async def handling_birth_month(message: Message, state: RegistrationContext) -> None:
     if message.text is None:
         return
 
@@ -167,3 +180,4 @@ async def handling_name(
         ),
         reply_markup=ask_fullname_validity_buttons(),
     )
+    

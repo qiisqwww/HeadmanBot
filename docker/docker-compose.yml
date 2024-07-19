@@ -35,7 +35,8 @@ services:
     volumes:
       - /var/lib/headman_bot_db:/var/lib/postgresql/data
       - ../postgres/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ../postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../postgres/migrate.sh:/docker-entrypoint-initdb.d/init.sh
+      - ../postgres/migrations:/docker-entrypoint-initdb.d/migrations
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s

@@ -1,26 +1,26 @@
 from aiogram.types import Message
 
 from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
-from src.bot.show_schedule.resources import (
-    show_choose_period_buttons,
-    CHOOSE_SCHEDULE_PERIOD_TEMPLATE
-)
+from src.bot.show_schedule.resources.templates import CHOOSE_SCHEDULE_PERIOD_TEMPLATE
+from src.bot.show_schedule.resources.inline_buttons import show_choose_period_buttons
+from src.modules.student_management.domain import Role
 
 __all__ = [
-    "include_get_schedule_command",
+    "include_show_schedule_command_router",
 ]
 
 
-get_schedule_command_router = Router(
+show_schedule_command_router = Router(
     must_be_registered=True,
+    minimum_role=Role.STUDENT
 )
 
 
-def include_get_schedule_command(root_router: RootRouter) -> None:
-    root_router.include_router(get_schedule_command_router)
+def include_show_schedule_command_router(root_router: RootRouter) -> None:
+    root_router.include_router(show_schedule_command_router)
 
 
-@get_schedule_command_router.message(CommandFilter(TelegramCommand.SHOW_SCHEDULE))
+@show_schedule_command_router.message(CommandFilter(TelegramCommand.SHOW_SCHEDULE))
 async def get_attendance_command(message: Message) -> None:
     await message.answer(
         CHOOSE_SCHEDULE_PERIOD_TEMPLATE,

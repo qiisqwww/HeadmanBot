@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 else:
     DatabaseConnection: TypeAlias = PoolConnectionProxy
 
+
 @final
 class UnitOfWorkImpl(UnitOfWork):
     _transaction: Transaction

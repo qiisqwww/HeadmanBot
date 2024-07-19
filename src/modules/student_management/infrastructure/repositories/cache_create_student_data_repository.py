@@ -2,18 +2,18 @@ from typing import Final, final
 
 from src.modules.common.infrastructure.repositories import RedisRepositoryImpl
 from src.modules.student_management.application.repositories import (
-    CacheStudentDataRepository,
+    CacheCreateStudentDataRepository,
     CreateStudentDTO,
 )
 from src.modules.student_management.infrastructure.mappers import CreateStudentDTOMapper
 
 __all__ = [
-    "CacheStudentDataRepositoryImpl",
+    "CacheCreateStudentDataRepositoryImpl",
 ]
 
 
 @final
-class CacheStudentDataRepositoryImpl(RedisRepositoryImpl, CacheStudentDataRepository):
+class CacheCreateStudentDataRepositoryImpl(RedisRepositoryImpl, CacheCreateStudentDataRepository):
     _mapper: CreateStudentDTOMapper = CreateStudentDTOMapper()
     _SECONDS_TO_EXPIRE: Final[int] = 24 * 60 * 60 * 7  # 1 week
 

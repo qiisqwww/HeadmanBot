@@ -16,7 +16,9 @@ from src.bot.profile.resources.templates import (
 )
 from src.bot.profile.validation import is_valid_name_len, is_valid_surname_len
 
-__all__ = ["include_profile_update_router"]
+__all__ = [
+    "include_profile_update_router"
+]
 
 
 profile_update_router = Router(

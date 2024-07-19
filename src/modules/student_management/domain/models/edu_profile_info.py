@@ -7,5 +7,5 @@ __all__ = [
 
 @dataclass(slots=True, frozen=True)
 class EduProfileInfo:
-    group_name: str
-    university_name: str
+    group_name: str | None
+    university_name: str | None

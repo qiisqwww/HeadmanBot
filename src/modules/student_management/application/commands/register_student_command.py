@@ -8,14 +8,14 @@ from src.modules.student_management.application.gateways import (
     EduInfoModuleGateway,
 )
 from src.modules.student_management.application.repositories import (
-    CacheStudentDataRepository,
+    CacheCreateStudentDataRepository,
     StudentRepository,
 )
 from src.modules.student_management.domain import Role, Student
 
 __all__ = [
     "StudentAlreadyRegisteredError",
-    "NotFoundStudentCachedDataError",
+    "NotFoundStudentRegistrationCachedDataError",
     "RegisterStudentCommand",
 ]
 
@@ -26,14 +26,14 @@ class StudentAlreadyRegisteredError(RuntimeError):
     """
 
 
-class NotFoundStudentCachedDataError(RuntimeError):
+class NotFoundStudentRegistrationCachedDataError(RuntimeError):
     """Cached student data for its creation was not found.
     May be because of expire date.
     """
 
 
 class RegisterStudentCommand(UseCase):
-    _cache_student_repository: CacheStudentDataRepository
+    _cache_student_repository: CacheCreateStudentDataRepository
     _student_repository: StudentRepository
     _edu_info_module_gateway: EduInfoModuleGateway
     _attendance_module_gateway: AttendanceModuleGateway
@@ -42,14 +42,14 @@ class RegisterStudentCommand(UseCase):
     @inject
     def __init__(
         self,
-        student_repostory: StudentRepository,
-        cache_student_data_repository: CacheStudentDataRepository,
+        student_repository: StudentRepository,
+        cache_student_data_repository: CacheCreateStudentDataRepository,
         edu_info_module_gateway: EduInfoModuleGateway,
         attendance_module_gateway: AttendanceModuleGateway,
         uow: UnitOfWork,
     ) -> None:
         self._cache_student_repository = cache_student_data_repository
-        self._student_repository = student_repostory
+        self._student_repository = student_repository
         self._edu_info_module_gateway = edu_info_module_gateway
         self._attendance_module_gateway = attendance_module_gateway
         self._uow = uow
@@ -67,7 +67,7 @@ class RegisterStudentCommand(UseCase):
 
                 if student is not None:
                     raise StudentAlreadyRegisteredError
-                raise NotFoundStudentCachedDataError
+                raise NotFoundStudentRegistrationCachedDataError
 
             student_university = (
                 await self._edu_info_module_gateway.get_university_info_by_alias(

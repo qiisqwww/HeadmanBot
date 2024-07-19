@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.resources import void_inline_buttons
+from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.registration.callback_data import UniversityCallbackData
 from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources.templates import (
@@ -33,13 +34,13 @@ async def get_university_from_user(
     if callback.message is None:
         return
 
-    choosen_uni = await get_university_query.execute(callback_data.university_alias)
+    chosen_uni = await get_university_query.execute(callback_data.university_alias)
 
     await state.set_university_alias(callback_data.university_alias)
 
-    await callback.message.delete()
-    await callback.message.answer(
-        successful_university_choose_template(choosen_uni.name),
+    await safe_message_edit(
+        callback,
+        successful_university_choose_template(chosen_uni.name),
         reply_markup=void_inline_buttons(),
     )
     await callback.message.answer(ASK_GROUP_TEMPLATE)

@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-09T15:05:41.725Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.21 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="veXz0vQ1S-LCkpFZXzrN" version="22.1.21" type="device">
+<mxfile host="Electron" modified="2024-07-16T09:55:50.621Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="_UGV8gMLJG-HkvLaMmbe" version="24.5.3" type="device">
   <diagram name="Page-1" id="I7l6lQvvWda5FWBGYfNw">
-    <mxGraphModel dx="621" dy="1783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+    <mxGraphModel dx="587" dy="1843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -265,7 +265,7 @@
             <mxRectangle width="30" height="70" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="aSk6BCNAQgE7BCrj78pr-21" value="role enum NOT NULL&lt;br&gt;(&#39;STUDENT&#39;, &#39;VICE HEADMAN&#39;, &lt;br&gt;&#39;HEADMAN&#39;, &#39;ADMIN&#39;)" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="aSk6BCNAQgE7BCrj78pr-19" vertex="1">
+        <mxCell id="aSk6BCNAQgE7BCrj78pr-21" value="role enum&lt;br&gt;(&#39;STUDENT&#39;, &#39;VICE HEADMAN&#39;, &lt;br&gt;&#39;HEADMAN&#39;, &#39;ADMIN&#39;)" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="aSk6BCNAQgE7BCrj78pr-19" vertex="1">
           <mxGeometry x="30" width="230" height="70" as="geometry">
             <mxRectangle width="230" height="70" as="alternateBounds" />
           </mxGeometry>

@@ -7,47 +7,47 @@ from aiogram.types import CallbackQuery, User
 from src.bot.common import RootRouter, Router
 from src.bot.common.resources import main_menu, void_inline_buttons
 from src.bot.common.safe_message_edit import safe_message_edit
-from src.bot.registration.callback_data import AccessCallbackData
-from src.bot.registration.resources.templates import (
+from src.bot.profile.callback_data import AcceptStudentEnterGroupCallbackData
+from src.bot.profile.resources.templates import (
     FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
     HELP_FOR_HEADMAN,
-    REGISTRATION_ACCEPTED_TEMPLATE,
-    REGISTRATION_DENIED_TEMPLATE,
+    ENTER_ACCEPTED_TEMPLATE,
+    ENTER_DENIED_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
-    USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
-    USER_REGISTRATION_TIME_OUT_TEMPLATE
+    USER_HAS_ALREADY_ENTERED_GROUP_TEMPLATE,
+    USER_GROUP_ENTER_TIME_OUT_TEMPLATE
 )
 from src.modules.student_management.application.commands import (
-    ClearCreateStudentDataCacheCommand,
-    NotFoundStudentCachedDataError,
-    RegisterStudentCommand,
-    StudentAlreadyRegisteredError,
+    NotFoundStudentEnterGroupCachedDataError,
+    StudentAlreadyEnteredGroupError,
+    StudentEnterGroupCommand,
+    ClearStudentEnterGroupDataCommand
 )
 from src.modules.student_management.domain.enums.role import Role
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
 
 __all__ = [
-    "include_access_callback_router",
+    "include_accept_student_enter_group_callback_router",
 ]
 
 
-access_callback_router = Router(
-    must_be_registered=None,
+accept_student_enter_group_callback_router = Router(
+    must_be_registered=True,
 )
 
 
-def include_access_callback_router(root_router: RootRouter) -> None:
-    root_router.include_router(access_callback_router)
+def include_accept_student_enter_group_callback_router(root_router: RootRouter) -> None:
+    root_router.include_router(accept_student_enter_group_callback_router)
 
 
-@access_callback_router.callback_query(AccessCallbackData.filter())
-async def accept_or_deny_callback(
+@accept_student_enter_group_callback_router.callback_query(AcceptStudentEnterGroupCallbackData.filter())
+async def accept_or_deny_enter_group_callback(
     callback: CallbackQuery,
-    callback_data: AccessCallbackData,
+    callback_data: AcceptStudentEnterGroupCallbackData,
     bot: Bot,
-    clear_create_student_data_command: ClearCreateStudentDataCacheCommand,
-    register_student_command: RegisterStudentCommand,
+    clear_student_enter_group_data_command: ClearStudentEnterGroupDataCommand,
+    student_enter_group_command: StudentEnterGroupCommand,
     inform_admins_about_exception: Callable[
         [Exception, User | None],
         Coroutine[Any, Any, None],
@@ -57,17 +57,16 @@ async def accept_or_deny_callback(
         return
 
     if not callback_data.accepted:
-        await clear_create_student_data_command.execute(callback_data.telegram_id)
+        await clear_student_enter_group_data_command.execute(callback_data.telegram_id)
         await safe_message_edit(
             callback,
-            REGISTRATION_DENIED_TEMPLATE,
-            reply_markup=void_inline_buttons(),
+            ENTER_DENIED_TEMPLATE
         )
         await bot.send_message(callback_data.telegram_id, YOU_WERE_DENIED_TEMPLATE)
         return
 
     try:
-        student = await register_student_command.execute(callback_data.telegram_id)
+        student = await student_enter_group_command.execute(callback_data.telegram_id)
     except ScheduleApiError as e:
         await safe_message_edit(
             callback,
@@ -80,17 +79,17 @@ async def accept_or_deny_callback(
         )
         await inform_admins_about_exception(e, callback.from_user)
         return
-    except StudentAlreadyRegisteredError:
+    except StudentAlreadyEnteredGroupError:
         await safe_message_edit(
             callback,
-            USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
+            USER_HAS_ALREADY_ENTERED_GROUP_TEMPLATE,
             reply_markup=void_inline_buttons(),
         )
         return
-    except NotFoundStudentCachedDataError:
+    except NotFoundStudentEnterGroupCachedDataError:
         await safe_message_edit(
             callback,
-            USER_REGISTRATION_TIME_OUT_TEMPLATE,
+            USER_GROUP_ENTER_TIME_OUT_TEMPLATE,
             reply_markup=void_inline_buttons(),
         )
         return
@@ -109,6 +108,6 @@ async def accept_or_deny_callback(
         )
     await safe_message_edit(
         callback,
-        REGISTRATION_ACCEPTED_TEMPLATE,
+        ENTER_ACCEPTED_TEMPLATE,
         void_inline_buttons(),
     )

@@ -5,18 +5,20 @@ from src.modules.student_management.application.gateways import (
     EduInfoModuleGateway,
 )
 from src.modules.student_management.application.repositories import (
-    CacheStudentDataRepository,
+    CacheCreateStudentDataRepository,
     StudentInfoRepository,
     StudentRepository,
+    CacheStudentEnterGroupDataRepository
 )
 from src.modules.student_management.contract import StudentManagementContract
 
 from .contract import StudentManagementContractImpl
 from .gateways import AttendanceModuleGatewayImpl, EduInfoModuleGatewayImpl
 from .repositories import (
-    CacheStudentDataRepositoryImpl,
+    CacheCreateStudentDataRepositoryImpl,
     StudentInfoRepositoryImpl,
     StudentRepositoryImpl,
+    CacheStudentEnterGroupRepositoryImpl
 )
 
 __all__ = [
@@ -26,7 +28,8 @@ __all__ = [
 
 def assemble_student_management_module(binder: Binder) -> None:
     binder.bind(StudentRepository, StudentRepositoryImpl, singleton)
-    binder.bind(CacheStudentDataRepository, CacheStudentDataRepositoryImpl, singleton)
+    binder.bind(CacheCreateStudentDataRepository, CacheCreateStudentDataRepositoryImpl, singleton)
+    binder.bind(CacheStudentEnterGroupDataRepository, CacheStudentEnterGroupRepositoryImpl, singleton)
     binder.bind(StudentInfoRepository, StudentInfoRepositoryImpl, singleton)
 
     binder.bind(EduInfoModuleGateway, EduInfoModuleGatewayImpl, singleton)
