@@ -8,6 +8,7 @@ from src.bot.show_schedule.callback_data import (
     BackToWeekChoiceListCallbackData,
     ScheduleCertainDayCallbackData
 )
+from src.modules.common.domain import UniversityAlias
 
 __all__ = [
     "show_choose_period_buttons",
@@ -36,7 +37,7 @@ def get_short_name_of_day(weekday: int) -> str:
             pass
 
 
-def show_choose_period_buttons() -> InlineKeyboardMarkup:
+def show_choose_period_buttons(uni: UniversityAlias) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(text="Сегодня", callback_data=ScheduleDateCallbackData(
@@ -47,6 +48,7 @@ def show_choose_period_buttons() -> InlineKeyboardMarkup:
     builder.button(text="Следующая неделя", callback_data=ScheduleWeekCallbackData(weeks_to_add=1))
     builder.button(text="Неделя после следующей", callback_data=ScheduleWeekCallbackData(weeks_to_add=2))
     builder.button(text="Ввести дату вручную", callback_data=ScheduleCertainDayCallbackData())
+    builder.button(text="Карта РТУ МИРЭА", url="https://map.mirea.ru/") if uni == UniversityAlias.MIREA else ...
 
     builder.adjust(1)
     return builder.as_markup(resize_keyboard=True)

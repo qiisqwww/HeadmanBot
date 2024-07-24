@@ -5,7 +5,8 @@ from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.show_schedule.resources.templates import CHOOSE_SCHEDULE_PERIOD_TEMPLATE
 from src.bot.show_schedule.resources.inline_buttons import show_choose_period_buttons
 from src.bot.show_schedule.callback_data import BackToWeekChoiceListCallbackData
-from src.modules.student_management.domain import Role
+from src.modules.student_management.domain import Role, Student
+from src.modules.edu_info.application.queries import FetchUniAliasByGroupIdQuery
 
 __all__ = [
     "include_back_to_week_choice_list_callback_router",
@@ -23,12 +24,17 @@ def include_back_to_week_choice_list_callback_router(root_router: RootRouter) ->
 
 
 @back_to_week_choice_list_callback_router.callback_query(BackToWeekChoiceListCallbackData.filter())
-async def back_to_week_choice_list(callback: CallbackQuery) -> None:
+async def back_to_week_choice_list(
+        callback: CallbackQuery,
+        student: Student,
+        fetch_uni_alias_by_group_id_query: FetchUniAliasByGroupIdQuery
+) -> None:
     if callback.message is None:
         return
 
+    uni_alias = await fetch_uni_alias_by_group_id_query.execute(student.group_id)
     await safe_message_edit(
         callback,
         CHOOSE_SCHEDULE_PERIOD_TEMPLATE,
-        show_choose_period_buttons()
+        show_choose_period_buttons(uni_alias)
     )
