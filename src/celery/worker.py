@@ -9,7 +9,7 @@ from src.modules.common.application import NoArgsUseCase
 from src.modules.common.infrastructure.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
 from src.modules.common.infrastructure.config.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import Container
-from src.modules.common.infrastructure.jobs.sending_job import AskAttendanceCommand
+from src.modules.common.infrastructure.jobs import AskAttendanceCommand
 
 worker = Celery(__name__)
 worker.conf.broker_url = CELERY_BROKER_URL
