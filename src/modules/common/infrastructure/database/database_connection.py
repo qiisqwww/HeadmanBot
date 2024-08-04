@@ -2,10 +2,10 @@ import sys
 from collections.abc import Iterable, Sequence
 from typing import TYPE_CHECKING, Any, ClassVar, Final, Self
 
+from loguru import logger
 from asyncpg import Record, create_pool
 from asyncpg.pool import Pool, PoolConnectionProxy
 from asyncpg.transaction import Transaction
-from loguru import logger
 
 from src.modules.common.infrastructure.config.config import (
     DB_HOST,
@@ -47,6 +47,7 @@ class DbContext:
     async def new(cls: type[Self]) -> Self:
         """Create new DbContext instead of __init__ method."""
         new_connection = cls.__new__(cls)
+        logger.error(f"POOOL ID={id(cls._db_pool)}")
         new_connection._con = await cls._db_pool.acquire()  # noqa: SLF001 , PGH003# pyright: ignore
         return new_connection
 

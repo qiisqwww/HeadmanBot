@@ -8,9 +8,9 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    type RedisConnection = Redis[str]
+    RedisConnection = Redis[str]
 else:
-    type RedisConnection = Redis
+    RedisConnection = Redis
 
 
 class RedisRepositoryImpl:

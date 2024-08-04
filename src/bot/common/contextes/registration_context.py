@@ -99,9 +99,6 @@ class RegistrationContext:
         await self._context.set_data({})
 
     async def get_data(self) -> RegistrationData:
-<<<<<<< HEAD
-        return await self._context.get_data()  # pyright: ignore[reportGeneralTypeIssues]
-=======
         res = await self._context.get_data()
 
         if res.get("role", None) is not None:
@@ -111,4 +108,3 @@ class RegistrationContext:
             res["university_alias"] = UniversityAlias(res["university_alias"])
 
         return res  # pyright: ignore[reportReturnType]
->>>>>>> create_connection_abstraction
