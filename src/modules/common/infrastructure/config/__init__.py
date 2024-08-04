@@ -1,6 +1,8 @@
 from .config import (
     ADMIN_IDS,
     BOT_TOKEN,
+    CELERY_BROKER_URL,
+    CELERY_RESULT_BACKEND,
     DB_HOST,
     DB_NAME,
     DB_PASS,
@@ -13,11 +15,12 @@ from .config import (
     REDIS_HOST,
     REDIS_PORT,
     THROTTLING_RATE_PER_MINUTE,
+    UVICORN_WORKERS_COUNT,
     WEBHOOK_PATH,
     WEBHOOK_SECRET,
     WEBHOOK_URL,
 )
-from .logger_config import configurate_logger
+from .logger_config import configure_logger
 
 __all__ = [
     "BOT_TOKEN",
@@ -31,11 +34,14 @@ __all__ = [
     "DB_HOST",
     "REDIS_PORT",
     "REDIS_HOST",
-    "configurate_logger",
+    "configure_logger",
     "WEBHOOK_PATH",
     "WEBHOOK_URL",
     "HTTP_HOST",
     "HTTP_PORT",
     "WEBHOOK_SECRET",
     "THROTTLING_RATE_PER_MINUTE",
+    "UVICORN_WORKERS_COUNT",
+    "CELERY_BROKER_URL",
+    "CELERY_RESULT_BACKEND",
 ]

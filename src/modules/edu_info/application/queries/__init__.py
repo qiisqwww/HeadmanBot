@@ -7,5 +7,5 @@ __all__ = [
     "GetAllGroupsQuery",
     "FetchUniTimezonByGroupIdQuery",
     "FetchUniAliasByGroupIdQuery",
-    "GetGroupInfoForAdminsQuery"
+    "GetGroupInfoForAdminsQuery",
 ]

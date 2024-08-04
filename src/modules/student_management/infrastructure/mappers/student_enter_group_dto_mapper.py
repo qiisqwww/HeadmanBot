@@ -25,5 +25,5 @@ class StudentEnterGroupDTOMapper:
             role=Role(data["role"]),
             group_name=data["group_name"],
             telegram_id=int(data["telegram_id"]),
-            university_alias=UniversityAlias(data["university_alias"])
+            university_alias=UniversityAlias(data["university_alias"]),
         )

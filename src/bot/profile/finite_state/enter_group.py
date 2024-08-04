@@ -1,37 +1,36 @@
 from collections.abc import Callable, Coroutine
 from typing import Any
 
-from aiogram import F, Bot
+from aiogram import Bot, F
 from aiogram.types import Message, User
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import EnterGroupContext
 from src.bot.profile.finite_state.profile_update_states import ProfileUpdateStates
+from src.bot.profile.resources.inline_buttons import accept_or_deny_enter_group_buttons, get_back_button
 from src.bot.profile.resources.templates import (
+    CHOOSE_BUTTONS_ABOVE_TEMPLATE,
     FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE,
     GROUP_DOESNT_EXISTS_TEMPLATE,
-    CHOOSE_BUTTONS_ABOVE_TEMPLATE,
-    YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
-    YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
-    HEADMAN_ALREADY_EXISTS_TEMPLATE,
     GROUP_DOESNT_REGISTERED_TEMPLATE,
-    student_send_enter_group_request_template
+    HEADMAN_ALREADY_EXISTS_TEMPLATE,
+    YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
+    YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
+    student_send_enter_group_request_template,
 )
-from src.bot.profile.resources.inline_buttons import get_back_button, accept_or_deny_enter_group_buttons
+from src.modules.common.infrastructure.config import ADMIN_IDS
+from src.modules.student_management.application.commands import CacheStudentEnterGroupDataCommand
 from src.modules.student_management.application.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndAliasQuery,
-    FindGroupHeadmanQuery
+    FindGroupHeadmanQuery,
 )
-from src.modules.student_management.application.commands import CacheStudentEnterGroupDataCommand
-from src.modules.student_management.domain import Student, Role
 from src.modules.student_management.application.repositories import StudentEnterGroupDTO
+from src.modules.student_management.domain import Role, Student
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
-from src.modules.common.infrastructure.config import ADMIN_IDS
-
 
 __all__ = [
-    "include_enter_group_router"
+    "include_enter_group_router",
 ]
 
 
@@ -46,15 +45,13 @@ def include_enter_group_router(root_router: RootRouter) -> None:
 
 @enter_group_router.message(F.text, ProfileUpdateStates.waiting_new_role)
 async def new_role_mistake_handler(message: Message) -> None:
-    """Works if user send a message instead of tapping on buttons"""
-
+    """Works if user send a message instead of tapping on buttons."""
     await message.answer(CHOOSE_BUTTONS_ABOVE_TEMPLATE)
 
 
 @enter_group_router.message(F.text, ProfileUpdateStates.waiting_new_uni)
 async def new_uni_mistake_handler(message: Message) -> None:
-    """Works if user send a message instead of tapping on buttons"""
-
+    """Works if user send a message instead of tapping on buttons."""
     await message.answer(CHOOSE_BUTTONS_ABOVE_TEMPLATE)
 
 
@@ -71,7 +68,7 @@ async def new_group_handler(
         inform_admins_about_exception: Callable[
             [Exception, User | None],
             Coroutine[Any, Any, None],
-        ]
+        ],
 ) -> None:
     if message.text is None:
         return
@@ -82,7 +79,7 @@ async def new_group_handler(
     try:
         group_exists = await check_group_exists_in_uni_query.execute(
             group_name,
-            university_alias
+            university_alias,
         )
     except ScheduleApiError as e:
         await message.answer(FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE, reply_markup=get_back_button())
@@ -159,7 +156,8 @@ async def new_group_handler(
     headman = await find_group_headman_query.execute(group.id)
 
     if headman is None:
-        raise RuntimeError("Group already must have a headman")
+        msg = "Group already must have a headman"
+        raise RuntimeError(msg)
 
     await state.clear()
     await state.set_state(ProfileUpdateStates.on_verification)

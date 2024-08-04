@@ -1,13 +1,24 @@
+import sys
+
 from loguru import logger
 
 from .config import DEBUG, LOGGING_PATH
 
 __all__ = [
-    "configurate_logger",
+    "configure_logger",
 ]
 
 
-def configurate_logger() -> None:
+def configure_logger() -> None:
+    logger.remove()
+    logger.add(
+        sys.stdout,
+        level="DEBUG",
+        colorize=True,
+        enqueue=True,
+        backtrace=DEBUG,
+        diagnose=DEBUG,
+    )
     logger.add(
         LOGGING_PATH,
         level="INFO",

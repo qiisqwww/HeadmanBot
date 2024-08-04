@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import date, tzinfo
-from typing import Final, NoReturn
+from typing import Final
 from zoneinfo import ZoneInfo
 
 from aiohttp import ClientTimeout
@@ -22,9 +22,9 @@ class ScheduleAPI(ABC):
         ...
 
     @abstractmethod
-    async def group_exists(self, group_name: str) -> bool | NoReturn:
+    async def group_exists(self, group_name: str) -> bool:
         """Check group existence using university API."""
 
     @abstractmethod
-    async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule] | NoReturn:
+    async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule]:
         """Fetch schedule for selected weekday or for today by default. Work in range of current week."""

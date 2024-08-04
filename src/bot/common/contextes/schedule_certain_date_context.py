@@ -1,7 +1,6 @@
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
-
 __all__ = [
     "ScheduleCertainDateContext",
 ]

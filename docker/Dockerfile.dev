@@ -1,5 +1,5 @@
 # Choose image for project. It will be downloaded from https://hub.docker.com/
-FROM python:3.11-alpine
+FROM python:3.12-alpine
 
 
 ENV PYTHONFAULTHANDLER=1 \
@@ -25,8 +25,4 @@ COPY poetry.lock pyproject.toml /app/
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 
 # Copy project into container.
-COPY src /app/src
-
-# Start bot with this command. Will be called when docker container will be started.
-CMD [ "python", "-m", "src" ]
-
+COPY . .

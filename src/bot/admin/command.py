@@ -2,11 +2,11 @@ from aiogram.types import Message
 
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.router import RootRouter, Router
-from src.modules.student_management.domain.enums import Role
 from src.modules.common.infrastructure import DEBUG
-from .resources.templates import ADMIN_PANEL_TEMPLATE
-from .resources.inline_buttons import admin_panel_buttons
+from src.modules.student_management.domain.enums import Role
 
+from .resources.inline_buttons import admin_panel_buttons
+from .resources.templates import ADMIN_PANEL_TEMPLATE
 
 __all__ = [
     "include_admin_panel_command_router",
@@ -14,7 +14,7 @@ __all__ = [
 
 admin_panel_command_router = Router(
     must_be_registered=True,
-    minimum_role=Role.ADMIN if not DEBUG else Role.STUDENT
+    minimum_role=Role.ADMIN if not DEBUG else Role.STUDENT,
 )
 
 
@@ -29,7 +29,7 @@ async def admin_panel_command(message: Message) -> None:
 
     await message.answer(
         text=ADMIN_PANEL_TEMPLATE,
-        reply_markup=admin_panel_buttons()
+        reply_markup=admin_panel_buttons(),
     )
 
 

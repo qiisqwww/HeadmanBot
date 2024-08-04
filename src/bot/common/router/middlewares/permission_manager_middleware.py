@@ -1,5 +1,5 @@
 from collections.abc import Awaitable, Callable
-from typing import TYPE_CHECKING, Any, TypeAlias
+from typing import TYPE_CHECKING, Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
@@ -9,15 +9,15 @@ from src.modules.student_management.domain import Role
 
 from .templates import YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE
 
-EventType: TypeAlias = Message | CallbackQuery
-HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
+type EventType = Message | CallbackQuery
+type HandlerType = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
     "PermissionManagerMiddleware",
 ]
 
 if TYPE_CHECKING:
-    from injector import Injector
+    from src.modules.common.infrastructure.container import Container
 
 
 class PermissionManagerMiddleware(BaseMiddleware):
@@ -39,8 +39,8 @@ class PermissionManagerMiddleware(BaseMiddleware):
             await event.answer(YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE)
             return None
 
-        container: Injector = data["container"]
-        fetch_timezone_query = container.get(FetchUniTimezonByGroupIdQuery)
+        container: Container = data["container"]
+        fetch_timezone_query = container.get_dependency(FetchUniTimezonByGroupIdQuery)
 
         timezone = await fetch_timezone_query.execute(student.group_id)
         data["timezone"] = timezone

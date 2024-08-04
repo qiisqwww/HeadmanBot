@@ -5,11 +5,8 @@ from src.bot.common.contextes import EnterGroupContext
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.profile.callback_data import ChooseNewRoleCallbackData
 from src.bot.profile.finite_state.profile_update_states import ProfileUpdateStates
-from src.bot.profile.resources.templates import (
-    INPUT_YOUR_UNIVERSITY_TEMPLATE,
-    successful_role_choose_template
-)
 from src.bot.profile.resources.inline_buttons import university_list_buttons
+from src.bot.profile.resources.templates import INPUT_YOUR_UNIVERSITY_TEMPLATE, successful_role_choose_template
 from src.modules.student_management.application.queries import GetAllUniversitiesQuery
 
 __all__ = [
@@ -17,7 +14,7 @@ __all__ = [
 ]
 
 choose_new_role_router = Router(
-    must_be_registered=True
+    must_be_registered=True,
 )
 
 
@@ -39,14 +36,14 @@ async def get_role_from_user(
 
     await safe_message_edit(
         callback,
-        successful_role_choose_template(await state.role)
+        successful_role_choose_template(await state.role),
     )
 
     universities = await get_all_universities_query.execute()
 
     await callback.message.answer(
         INPUT_YOUR_UNIVERSITY_TEMPLATE,
-        reply_markup=university_list_buttons(universities)
+        reply_markup=university_list_buttons(universities),
     )
 
     await state.set_state(ProfileUpdateStates.waiting_new_uni)

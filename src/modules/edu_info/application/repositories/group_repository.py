@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
 from src.modules.common.domain import UniversityAlias
-
-from ...domain import Group
+from src.modules.edu_info.domain import Group
 
 __all__ = [
     "GroupRepository",

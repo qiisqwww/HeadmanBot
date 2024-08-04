@@ -1,22 +1,15 @@
-from typing import TYPE_CHECKING, TypeAlias
-
-from asyncpg.pool import PoolConnectionProxy
 from injector import inject
+
+from src.modules.common.infrastructure.database import DbContext
 
 __all__ = [
     "PostgresRepositoryImpl",
 ]
 
-if TYPE_CHECKING:
-    from asyncpg import Record
-    DatabaseConnection: TypeAlias = PoolConnectionProxy[Record]
-else:
-    DatabaseConnection: TypeAlias = PoolConnectionProxy
-
 
 class PostgresRepositoryImpl:
-    _con: DatabaseConnection
+    _con: DbContext
 
     @inject
-    def __init__(self, con: DatabaseConnection) -> None:
+    def __init__(self, con: DbContext) -> None:
         self._con = con

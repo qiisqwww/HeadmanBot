@@ -4,14 +4,13 @@ from aiogram.types import Message
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.contextes import RegistrationContext
 from src.bot.common.router import RootRouter, Router
-from src.modules.student_management.application.commands import (
-    ClearCreateStudentDataCacheIfExistsCommand,
-)
-
 from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources.inline_buttons import role_buttons
 from src.bot.registration.resources.reply_buttons import restart_button
 from src.bot.registration.resources.templates import CHOOSE_STUDENT_ROLE_TEMPLATE, start_message_template
+from src.modules.student_management.application.commands import (
+    ClearCreateStudentDataCacheIfExistsCommand,
+)
 
 __all__ = [
     "include_start_command_router",

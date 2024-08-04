@@ -2,31 +2,15 @@ import asyncio
 
 import uvicorn
 
-from src.api import app
-from src.bot import bot
-from src.modules.common.infrastructure import (
-    HTTP_HOST,
-    HTTP_PORT,
-    configurate_logger,
-)
-from src.modules.common.infrastructure.build_scheduler import build_scheduler
-
-
-async def main() -> None:
-    configurate_logger()
-# from src.modules.common.infrastructure.container import project_container
-# from .transform_data import transform
-#
-#     await transform(project_container)
-
-    scheduler = await build_scheduler(bot)
-    scheduler.start()
-
-    server_config = uvicorn.Config(app, host=HTTP_HOST, port=HTTP_PORT)
-    server = uvicorn.Server(server_config)
-
-    await server.serve()
-
+from src.bot import init_bot_webhook
+from src.celery.worker import start_tasks_for_debug
+from src.modules.common.infrastructure.config import DEBUG, HTTP_HOST, HTTP_PORT, UVICORN_WORKERS_COUNT
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(init_bot_webhook())
+
+    if DEBUG:
+        start_tasks_for_debug()
+
+    uvicorn.run("src.api:app", workers=UVICORN_WORKERS_COUNT, host=HTTP_HOST, port=HTTP_PORT)

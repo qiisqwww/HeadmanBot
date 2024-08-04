@@ -10,10 +10,10 @@ from src.bot.registration.callback_data import AskNewFullnameValidityCallbackDat
 from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources.inline_buttons import accept_or_deny_buttons
 from src.bot.registration.resources.templates import (
+    ASK_SURNAME_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     student_send_registration_request_template,
-    ASK_SURNAME_TEMPLATE
 )
 from src.modules.common.infrastructure.config import ADMIN_IDS
 from src.modules.student_management.application.commands import CacheCreateStudentDataCommand
@@ -109,7 +109,8 @@ async def ask_new_fullname_validity_callback(
     headman = await find_group_headman_query.execute(group.id)
 
     if headman is None:
-        raise RuntimeError("Group already must have a headman")
+        msg = "Group already must have a headman"
+        raise RuntimeError(msg)
 
     await state.clear()
     await state.set_state(RegistrationStates.on_verification)

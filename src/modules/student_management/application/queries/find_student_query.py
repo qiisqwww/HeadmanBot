@@ -1,9 +1,8 @@
 from injector import inject
 
 from src.modules.common.application import UseCase
+from src.modules.student_management.application.repositories import StudentRepository
 from src.modules.student_management.domain import Student
-
-from ..repositories import StudentRepository
 
 __all__ = [
     "FindStudentByTelegramIdQuery",

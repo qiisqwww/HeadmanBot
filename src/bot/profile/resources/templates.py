@@ -1,7 +1,7 @@
 from datetime import date
 
 from src.bot.common.render_template import render_template
-from src.modules.student_management.domain import EduProfileInfo, Student, Role
+from src.modules.student_management.domain import EduProfileInfo, Role, Student
 
 __all__ = [
     "profile_info",
@@ -43,7 +43,7 @@ __all__ = [
     "YOUR_APPLY_TO_LEAVE_WAS_SENT_TO_HEADMAN_TEMPLATE",
     "LEAVE_DENIED_TEMPLATE",
     "LEAVE_ACCEPTED_TEMPLATE",
-    "USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE"
+    "USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE",
 ]
 
 
@@ -58,7 +58,7 @@ NEW_BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели данные в неккор
 
 WHAT_DO_YOU_WANNA_EDIT_TEMPLATE = "Что вы хотите отредактировать?"
 
-FAILED_TO_LOAD_EDU_INFO_TEMPLATE = """Не удалось загрузить информацию о пользователе. 
+FAILED_TO_LOAD_EDU_INFO_TEMPLATE = """Не удалось загрузить информацию о пользователе.
 Попробробуйте снова или напишете в @noheadproblemsbot."""
 
 SURE_TO_LEAVE_GROUP_TEMPLATE = """Вы уверены, что хотите выйти из группы?"""
@@ -79,7 +79,7 @@ INPUT_GROUP_NAME_TEMPLATE = """Введите название группы, в 
 
 INPUT_YOUR_UNIVERSITY_TEMPLATE = "Выберите ваш университет"
 
-USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE = """Пользователь, пожелавший выйти не найден. 
+USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE = """Пользователь, пожелавший выйти не найден.
 Его запрос автоматически отклонен"""
 
 FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE = (
@@ -142,21 +142,23 @@ USER_HAS_ALREADY_ENTERED_GROUP_TEMPLATE = """
 Пользователь уже вошел в группу"""
 
 USER_GROUP_ENTER_TIME_OUT_TEMPLATE = """
-Данные пользователя не были найдены в кеше. Либо пользователь их удалил (нажал "Войти в группу" заново), 
+Данные пользователя не были найдены в кеше. Либо пользователь их удалил (нажал "Войти в группу" заново),
 либо прошла 1 неделя."""
 
 
 def profile_info(student: Student, edu_info: EduProfileInfo) -> str:
+    formatted_date = None if student.birthdate is None else student.birthdate.strftime("%d.%m.%Y")
     return render_template(
         "<b>Профиль студента</b>\n\n"
         "Фамилия: {{student.last_name}}\n"
         "Имя: {{student.first_name}}\n"
         "Роль: {{student.role.translation}}\n"
-        "Группа: {% if edu_info.group_name is not none %} {{edu_info.group_name}}\n{% else %} Отсутствует\n{% endif %}"  
+        "Группа: {% if edu_info.group_name is not none %} {{edu_info.group_name}}\n{% else %} Отсутствует\n{% endif %}"
         "Университет: {% if edu_info.university_name is not none %} {{edu_info.university_name}}\n{% else %} "
         "Отсутствует\n{% endif %}"
         "Дата рождения: {% if student.birthdate is not none %} {{student.birthdate}} {% else %} Не указана {% endif %}",
         student=student,
+        birthdate=formatted_date,
         edu_info=edu_info,
     )
 
@@ -176,11 +178,12 @@ def asking_surname_validation_template(last_name: str) -> str:
 
 
 def asking_birthdate_validation_template(new_birthdate: date | None) -> str:
+    formatted_date = None if new_birthdate is None else new_birthdate.strftime("%d.%m.%Y")
     return render_template(
         """Ваша новая дата рождения: {% if new_birthdate is not none %} <b>{{new_birthdate}}</b>
         {% else %}<b>не указана </b>{% endif %}"""
         "\n\nДанные верны?",
-        new_birthdate=new_birthdate,
+        new_birthdate=formatted_date,
     )
 
 

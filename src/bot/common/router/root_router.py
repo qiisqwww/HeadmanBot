@@ -22,7 +22,8 @@ class RootRouter(AiogramRouter):
             self.parent_router,
             (Dispatcher),
         ):
-            raise RuntimeError("Only Dispatcher can be parent for RootRouter.")
+            msg = "Only Dispatcher can be parent for RootRouter."
+            raise RuntimeError(msg)
 
         self._add_handle_exception_middleware()
         self._add_check_message_expire_middleware()

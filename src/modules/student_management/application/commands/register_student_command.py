@@ -1,4 +1,3 @@
-from typing import NoReturn
 
 from injector import inject
 
@@ -54,7 +53,7 @@ class RegisterStudentCommand(UseCase):
         self._attendance_module_gateway = attendance_module_gateway
         self._uow = uow
 
-    async def execute(self, telegram_id: int) -> Student | NoReturn:
+    async def execute(self, telegram_id: int) -> Student:
         async with self._uow:
             create_student_data = await self._cache_student_repository.fetch(
                 telegram_id,
@@ -79,8 +78,9 @@ class RegisterStudentCommand(UseCase):
             )
 
             if student_group is None and create_student_data.role < Role.HEADMAN:
+                msg = "For students with role 'student' and 'vice headman' group must already have been created before."
                 raise RuntimeError(
-                    "For students with role 'student' and 'vice headman' group must already have been created before.",
+                    msg,
                 )
 
             if student_group is None:

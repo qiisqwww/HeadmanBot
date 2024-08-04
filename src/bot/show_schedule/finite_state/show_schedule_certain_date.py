@@ -3,21 +3,20 @@ from datetime import date
 from aiogram import F
 from aiogram.types import Message
 
-from src.modules.student_management.domain import Student, Role
-from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
-from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import ScheduleCertainDateContext
 from src.bot.show_schedule.finite_state.schedule_date_states import ScheduleDateStates
+from src.bot.show_schedule.resources.inline_buttons import show_get_back_button
 from src.bot.show_schedule.resources.templates import (
     INCORRECT_DATE_FORMAT_TEMPLATE,
     NO_LESSONS_TODAY_TEMPLATE,
-    schedule_list_template
+    schedule_list_template,
 )
-from src.bot.show_schedule.resources.inline_buttons import show_get_back_button
-from src.modules.utils.schedule_api.infrastructure.schedule_api import ScheduleApiImpl
 from src.modules.common.domain.university_alias import UniversityAlias
-
+from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
+from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
+from src.modules.student_management.domain import Role, Student
+from src.modules.utils.schedule_api.infrastructure.schedule_api import ScheduleApiImpl
 
 __all__ = [
     "include_show_schedule_certain_date_router",
@@ -25,7 +24,7 @@ __all__ = [
 
 show_schedule_certain_date_router = Router(
     must_be_registered=True,
-    minimum_role=Role.STUDENT
+    minimum_role=Role.STUDENT,
 )
 
 
@@ -68,7 +67,7 @@ async def handling_certain_date(
                 certain_date.weekday(),
                 uni_alias != UniversityAlias.BMSTU,
             ),
-            reply_markup=show_get_back_button()
+            reply_markup=show_get_back_button(),
         )
     except Exception:
         await message.answer(INCORRECT_DATE_FORMAT_TEMPLATE)

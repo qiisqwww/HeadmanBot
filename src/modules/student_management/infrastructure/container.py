@@ -6,9 +6,9 @@ from src.modules.student_management.application.gateways import (
 )
 from src.modules.student_management.application.repositories import (
     CacheCreateStudentDataRepository,
+    CacheStudentEnterGroupDataRepository,
     StudentInfoRepository,
     StudentRepository,
-    CacheStudentEnterGroupDataRepository
 )
 from src.modules.student_management.contract import StudentManagementContract
 
@@ -16,9 +16,9 @@ from .contract import StudentManagementContractImpl
 from .gateways import AttendanceModuleGatewayImpl, EduInfoModuleGatewayImpl
 from .repositories import (
     CacheCreateStudentDataRepositoryImpl,
+    CacheStudentEnterGroupRepositoryImpl,
     StudentInfoRepositoryImpl,
     StudentRepositoryImpl,
-    CacheStudentEnterGroupRepositoryImpl
 )
 
 __all__ = [

@@ -1,9 +1,8 @@
 from collections.abc import Awaitable, Callable
-from typing import Any, TypeAlias
+from typing import TYPE_CHECKING, Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
-from injector import Injector
 
 from src.bot.common.router.middlewares.templates import (
     ALREADY_REGISTERED_TEMPLATE,
@@ -17,8 +16,11 @@ __all__ = [
     "InjectStudentMiddleware",
 ]
 
-EventType: TypeAlias = Message | CallbackQuery
-HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
+if TYPE_CHECKING:
+    from src.modules.common.infrastructure.container import Container
+
+type EventType = Message | CallbackQuery
+type HandlerType = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 
 class InjectStudentMiddleware(BaseMiddleware):
@@ -32,10 +34,10 @@ class InjectStudentMiddleware(BaseMiddleware):
         if event.from_user is None:
             return None
 
-        container: Injector = data["container"]
-        find_student_query = container.get(FindStudentByTelegramIdQuery)
+        container: Container = data["container"]
+        find_student_query = container.get_dependency(FindStudentByTelegramIdQuery)
 
-        if data.get("student", None) is None:
+        if data.get("student") is None:
             student = await find_student_query.execute(event.from_user.id)
         else:
             student = data["student"]

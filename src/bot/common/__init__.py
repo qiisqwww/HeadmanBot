@@ -5,5 +5,5 @@ __all__ = [
     "Router",
     "RootRouter",
     "CommandFilter",
-    "TelegramCommand"
+    "TelegramCommand",
 ]

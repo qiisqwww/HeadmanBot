@@ -9,20 +9,20 @@ from src.bot.common.resources import main_menu, void_inline_buttons
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.profile.callback_data import AcceptStudentEnterGroupCallbackData
 from src.bot.profile.resources.templates import (
-    FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
-    HELP_FOR_HEADMAN,
     ENTER_ACCEPTED_TEMPLATE,
     ENTER_DENIED_TEMPLATE,
+    FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
+    HELP_FOR_HEADMAN,
+    USER_GROUP_ENTER_TIME_OUT_TEMPLATE,
+    USER_HAS_ALREADY_ENTERED_GROUP_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
-    USER_HAS_ALREADY_ENTERED_GROUP_TEMPLATE,
-    USER_GROUP_ENTER_TIME_OUT_TEMPLATE
 )
 from src.modules.student_management.application.commands import (
+    ClearStudentEnterGroupDataCommand,
     NotFoundStudentEnterGroupCachedDataError,
     StudentAlreadyEnteredGroupError,
     StudentEnterGroupCommand,
-    ClearStudentEnterGroupDataCommand
 )
 from src.modules.student_management.domain.enums.role import Role
 from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
@@ -60,7 +60,7 @@ async def accept_or_deny_enter_group_callback(
         await clear_student_enter_group_data_command.execute(callback_data.telegram_id)
         await safe_message_edit(
             callback,
-            ENTER_DENIED_TEMPLATE
+            ENTER_DENIED_TEMPLATE,
         )
         await bot.send_message(callback_data.telegram_id, YOU_WERE_DENIED_TEMPLATE)
         return

@@ -9,7 +9,6 @@ from src.bot.profile.resources.templates import (
     INPUT_GROUP_NAME_TEMPLATE,
     successful_university_choose_template,
 )
-from src.bot.profile.resources.inline_buttons import get_back_button
 from src.modules.student_management.application.queries import GetUniversityByAliasQuery
 
 __all__ = [
@@ -18,7 +17,7 @@ __all__ = [
 
 
 choose_new_university_router = Router(
-    must_be_registered=True
+    must_be_registered=True,
 )
 
 
@@ -41,7 +40,7 @@ async def get_university_from_user(
 
     await safe_message_edit(
         callback,
-        successful_university_choose_template(chosen_uni.name)
+        successful_university_choose_template(chosen_uni.name),
     )
     await callback.message.answer(INPUT_GROUP_NAME_TEMPLATE)
 

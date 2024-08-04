@@ -21,7 +21,7 @@ class Role(StrEnum):
             Role.HEADMAN: "Староста",
             Role.VICE_HEADMAN: "Заместитель старосты",
             Role.STUDENT: "Студент",
-            Role.IS_REGISTERED: "Отсутствует"
+            Role.IS_REGISTERED: "Отсутствует",
         }
 
         return translations[self]

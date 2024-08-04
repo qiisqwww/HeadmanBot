@@ -3,7 +3,7 @@ from typing import Final, final
 from src.modules.common.infrastructure.repositories import RedisRepositoryImpl
 from src.modules.student_management.application.repositories import (
     CacheStudentEnterGroupDataRepository,
-    StudentEnterGroupDTO
+    StudentEnterGroupDTO,
 )
 from src.modules.student_management.infrastructure.mappers import StudentEnterGroupDTOMapper
 

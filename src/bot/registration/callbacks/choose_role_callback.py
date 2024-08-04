@@ -39,7 +39,7 @@ async def get_role_from_user(
     await safe_message_edit(
         callback,
         successful_role_choose_template(await state.role),
-        reply_markup=void_inline_buttons()
+        reply_markup=void_inline_buttons(),
     )
 
     universities = await get_all_universities_query.execute()

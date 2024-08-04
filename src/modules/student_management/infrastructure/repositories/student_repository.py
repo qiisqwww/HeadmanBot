@@ -4,7 +4,8 @@ from typing import final
 from src.modules.common.infrastructure.repositories import PostgresRepositoryImpl
 from src.modules.student_management.application.repositories import (
     CreateStudentDTO,
-    StudentRepository, StudentEnterGroupDTO,
+    StudentEnterGroupDTO,
+    StudentRepository,
 )
 from src.modules.student_management.domain import Role, Student
 from src.modules.student_management.infrastructure.mappers import StudentMapper

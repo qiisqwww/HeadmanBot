@@ -2,35 +2,38 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
 
-from aiogram.types import FSInputFile, Update
+from aiogram import Bot
+from aiogram.enums import ParseMode
+from aiogram.types import Update
 from fastapi import FastAPI, Request
 
-from src.bot import bot, dispatcher
+from src.bot import dispatcher
 from src.modules.common.infrastructure import (
     DEBUG,
     WEBHOOK_PATH,
-    WEBHOOK_SECRET,
-    WEBHOOK_URL,
+    configure_logger,
 )
+from src.modules.common.infrastructure.config.config import BOT_TOKEN
+from src.modules.common.infrastructure.container import Container
 
 __all__ = [
     "app",
 ]
 
-WEBHOOK_SSL_CERT = "headman_bot.crt"
+
+bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator[None, Any]:
-    await bot.delete_webhook(drop_pending_updates=True)
-    if DEBUG:
-        await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
-    else:
-        await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET, certificate=FSInputFile(WEBHOOK_SSL_CERT))
+    configure_logger()
 
+    await Container.init(bot)
 
     yield
 
     await bot.session.close()
+    await Container.close()
 
 
 app = FastAPI(debug=DEBUG, lifespan=lifespan)

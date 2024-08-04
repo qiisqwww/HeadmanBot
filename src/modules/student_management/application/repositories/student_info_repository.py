@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.modules.student_management.domain import StudentInfo, Role
+from src.modules.student_management.domain import Role, StudentInfo
 
 __all__ = [
     "StudentInfoRepository",

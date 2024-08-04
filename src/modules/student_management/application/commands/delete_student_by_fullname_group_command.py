@@ -2,20 +2,14 @@ from typing import final
 
 from injector import inject
 
-from src.modules.common.application import UseCase, UnitOfWork
+from src.modules.common.application import UnitOfWork, UseCase
+from src.modules.student_management.application.exceptions import NotFoundGroupError, NotFoundStudentError
+from src.modules.student_management.application.gateways import AttendanceModuleGateway, EduInfoModuleGateway
 from src.modules.student_management.application.repositories import StudentRepository
-from src.modules.student_management.application.exceptions import (
-    NotFoundStudentError,
-    NotFoundGroupError
-)
-from src.modules.student_management.application.gateways import (
-    EduInfoModuleGateway,
-    AttendanceModuleGateway
-)
 from src.modules.student_management.domain.enums import Role
 
 __all__ = [
-    "DeleteStudentByFullnameGroupCommand"
+    "DeleteStudentByFullnameGroupCommand",
 ]
 
 
@@ -32,7 +26,7 @@ class DeleteStudentByFullnameGroupCommand(UseCase):
             repository: StudentRepository,
             edu_info_module_gateway: EduInfoModuleGateway,
             attendance_module_gateway: AttendanceModuleGateway,
-            uow: UnitOfWork
+            uow: UnitOfWork,
     ) -> None:
         self._repository = repository
         self._edu_info_module_gateway = edu_info_module_gateway
@@ -44,12 +38,14 @@ class DeleteStudentByFullnameGroupCommand(UseCase):
             group = await self._edu_info_module_gateway.find_group_by_name(group_name)
 
             if group is None:
-                raise NotFoundGroupError(f"Not found group with name {group_name}")
+                msg = f"Not found group with name {group_name}"
+                raise NotFoundGroupError(msg)
 
             student = await self._repository.find_by_fullname_and_group_id(first_name, last_name, group.id)
 
             if student is None:
-                raise NotFoundStudentError(f"Not found student with input data")
+                msg = "Not found student with input data"
+                raise NotFoundStudentError(msg)
 
             if student.role == Role.HEADMAN:
                 await self._edu_info_module_gateway.delete_group_by_id(group.id)

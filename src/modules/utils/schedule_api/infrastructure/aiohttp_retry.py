@@ -1,5 +1,5 @@
 from collections.abc import Callable, Coroutine
-from typing import Any, TypeAlias, TypeVar
+from typing import Any, TypeVar
 
 from aiohttp import ClientError
 
@@ -9,7 +9,7 @@ __all__ = [
 
 
 T = TypeVar("T")
-DecoratedCallable: TypeAlias = Callable[..., Coroutine[Any, Any, T]]
+type DecoratedCallable[T] = Callable[..., Coroutine[Any, Any, T]]
 
 
 def aiohttp_retry(attempts: int = 1) -> Callable[[DecoratedCallable[T]], DecoratedCallable[T]]:

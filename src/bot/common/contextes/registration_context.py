@@ -68,7 +68,7 @@ class RegistrationContext:
 
     @property
     async def first_name(self) -> str:
-        first_name =  (await self.get_data()).get("first_name", None)
+        first_name = (await self.get_data()).get("first_name", None)
         assert first_name is not None, "You must have set first_name before."
         return first_name
 
@@ -99,4 +99,16 @@ class RegistrationContext:
         await self._context.set_data({})
 
     async def get_data(self) -> RegistrationData:
+<<<<<<< HEAD
         return await self._context.get_data()  # pyright: ignore[reportGeneralTypeIssues]
+=======
+        res = await self._context.get_data()
+
+        if res.get("role", None) is not None:
+            res["role"] = Role(res["role"])
+
+        if res.get("university_alias", None) is not None:
+            res["university_alias"] = UniversityAlias(res["university_alias"])
+
+        return res  # pyright: ignore[reportReturnType]
+>>>>>>> create_connection_abstraction

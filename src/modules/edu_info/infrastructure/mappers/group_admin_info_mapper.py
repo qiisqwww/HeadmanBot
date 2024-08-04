@@ -1,6 +1,6 @@
 from typing import final
 
-from src.modules.edu_info.domain.models import GroupAdminInfo, Group
+from src.modules.edu_info.domain.models import Group, GroupAdminInfo
 
 __all__ = [
     "GroupAdminInfoMapper",
@@ -15,5 +15,5 @@ class GroupAdminInfoMapper:
             name=group.name,
             headman_telegram_id=headman["telegram_id"],
             headman_first_name=headman["first_name"],
-            headman_last_name=headman["last_name"]
+            headman_last_name=headman["last_name"],
         )

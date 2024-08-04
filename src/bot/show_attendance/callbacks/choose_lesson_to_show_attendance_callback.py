@@ -4,10 +4,7 @@ from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.show_attendance.callback_data import ChooseLessonCallbackData
 from src.bot.show_attendance.resources.inline_buttons import choose_lesson_buttons
-from src.bot.show_attendance.resources.templates import (
-    attendance_for_headmen_template,
-    NO_LESSONS_TODAY_TEMPLATE
-)
+from src.bot.show_attendance.resources.templates import NO_LESSONS_TODAY_TEMPLATE, attendance_for_headmen_template
 from src.modules.attendance.application.queries import (
     GetLessonAttendanceForGroupQuery,
     GetTodayScheduleQuery,

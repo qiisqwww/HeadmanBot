@@ -5,8 +5,8 @@ from aiogram.types import Message
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import ProfileUpdateContext
-from src.bot.profile.profile_field import ProfileField
 from src.bot.profile.finite_state.profile_update_states import ProfileUpdateStates
+from src.bot.profile.profile_field import ProfileField
 from src.bot.profile.resources.inline_buttons import is_field_correct_buttons
 from src.bot.profile.resources.templates import (
     NEW_BIRTHDATE_INCORRECT_TEMPLATE,
@@ -17,7 +17,7 @@ from src.bot.profile.resources.templates import (
 from src.bot.profile.validation import is_valid_name_len, is_valid_surname_len
 
 __all__ = [
-    "include_profile_update_router"
+    "include_profile_update_router",
 ]
 
 

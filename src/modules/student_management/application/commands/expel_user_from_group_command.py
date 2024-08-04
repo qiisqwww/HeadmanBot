@@ -2,8 +2,7 @@ from typing import final
 
 from injector import inject
 
-from src.modules.common.application import UseCase, UnitOfWork
-
+from src.modules.common.application import UnitOfWork, UseCase
 from src.modules.student_management.application.repositories import StudentRepository
 from src.modules.student_management.domain.enums.role import Role
 

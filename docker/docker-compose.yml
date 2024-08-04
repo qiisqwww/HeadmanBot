@@ -18,9 +18,6 @@ services:
       context: ../
     volumes:
       - /var/log/headman_bot:/app/logs
-      - ../update_info.html:/app/update_info.html
-      - ../poll_by_role.html:/app/poll_by_role.html
-      - ../ShowInfoImg.png:/app/ShowInfoImg.png
     depends_on:
       redis:
         condition: service_started

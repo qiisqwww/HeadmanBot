@@ -8,11 +8,11 @@ from src.bot.common import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.profile.callback_data import AcceptStudentLeaveGroupCallbackData
 from src.bot.profile.resources.templates import (
-    SUCCESSFULLY_DID_NOT_LEFT_THE_GROUP_TEMPLATE,
-    LEAVE_DENIED_TEMPLATE,
     LEAVE_ACCEPTED_TEMPLATE,
+    LEAVE_DENIED_TEMPLATE,
+    SUCCESSFULLY_DID_NOT_LEFT_THE_GROUP_TEMPLATE,
     SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE,
-    USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE
+    USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE,
 )
 from src.modules.student_management.application.commands import ExpelUserFromGroupCommand
 from src.modules.student_management.application.queries import FindStudentByTelegramIdQuery
@@ -49,7 +49,7 @@ async def accept_or_deny_leave_group_callback(
     if not callback_data.accepted:
         await safe_message_edit(
             callback,
-            LEAVE_DENIED_TEMPLATE
+            LEAVE_DENIED_TEMPLATE,
         )
         await bot.send_message(callback_data.telegram_id, SUCCESSFULLY_DID_NOT_LEFT_THE_GROUP_TEMPLATE)
         return
@@ -58,7 +58,7 @@ async def accept_or_deny_leave_group_callback(
     if student is None:
         await safe_message_edit(
             callback,
-            USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE
+            USER_WAS_NOT_FOUND_TO_EXPEL_TEMPLATE,
         )
 
     try:
@@ -69,7 +69,7 @@ async def accept_or_deny_leave_group_callback(
 
     await bot.send_message(
         callback_data.telegram_id,
-        SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE
+        SUCCESSFULLY_LEFT_THE_GROUP_TEMPLATE,
     )
 
     await safe_message_edit(callback, LEAVE_ACCEPTED_TEMPLATE)

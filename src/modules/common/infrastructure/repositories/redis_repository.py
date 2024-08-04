@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, TypeAlias
+from typing import TYPE_CHECKING
 
 from injector import inject
 from redis.asyncio import Redis
@@ -8,9 +8,10 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    RedisConnection: TypeAlias = Redis[str]
+    type RedisConnection = Redis[str]
 else:
-    RedisConnection: TypeAlias = Redis
+    type RedisConnection = Redis
+
 
 class RedisRepositoryImpl:
     _con: RedisConnection

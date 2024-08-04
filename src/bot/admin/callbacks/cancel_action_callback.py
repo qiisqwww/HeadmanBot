@@ -1,14 +1,11 @@
 from aiogram.types import CallbackQuery
 
+from src.bot.admin.callback_data import CancelActionCallbackData
+from src.bot.admin.resources.templates import ACTION_WAS_CANCELLED_TEMPLATE
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import DeleteStudentContext
-from src.bot.admin.resources.templates import ACTION_WAS_CANCELLED_TEMPLATE
-from src.bot.admin.callback_data import (
-    CancelActionCallbackData
-)
-from src.modules.student_management.domain.enums import Role
 from src.modules.common.infrastructure import DEBUG
-
+from src.modules.student_management.domain.enums import Role
 
 __all__ = [
     "include_cancel_action_router",
@@ -16,7 +13,7 @@ __all__ = [
 
 cancel_action_router = Router(
     must_be_registered=True,
-    minimum_role=Role.ADMIN if not DEBUG else Role.STUDENT
+    minimum_role=Role.ADMIN if not DEBUG else Role.STUDENT,
 )
 
 

@@ -2,9 +2,9 @@ from typing import final
 
 from injector import inject
 
-from src.modules.common.application import UseCase, UnitOfWork
+from src.modules.common.application import UnitOfWork, UseCase
 from src.modules.student_management.application.exceptions import NotFoundStudentError
-from src.modules.student_management.application.gateways import EduInfoModuleGateway, AttendanceModuleGateway
+from src.modules.student_management.application.gateways import AttendanceModuleGateway, EduInfoModuleGateway
 from src.modules.student_management.application.repositories import StudentRepository
 from src.modules.student_management.domain.enums import Role
 
@@ -26,7 +26,7 @@ class DeleteStudentByTGIDCommand(UseCase):
         repository: StudentRepository,
         edu_info_module_gateway: EduInfoModuleGateway,
         attendance_module_gateway: AttendanceModuleGateway,
-        uow: UnitOfWork
+        uow: UnitOfWork,
     ) -> None:
         self._repository = repository
         self._edu_info_module_gateway = edu_info_module_gateway
@@ -38,8 +38,9 @@ class DeleteStudentByTGIDCommand(UseCase):
             student = await self._repository.find_by_telegram_id(telegram_id)
 
             if student is None:
+                msg = f"Not found student with telegram ID {telegram_id}"
                 raise NotFoundStudentError(
-                    f"Not found student with telegram ID {telegram_id}",
+                    msg,
                 )
 
             if student.role == Role.HEADMAN:

@@ -1,9 +1,8 @@
 from injector import inject
 
 from src.modules.common.application import UseCase
-
-from ...domain import Role
-from ..repositories import StudentInfoRepository
+from src.modules.student_management.application.repositories import StudentInfoRepository
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "GetStudentRoleByTelegramIDQuery",

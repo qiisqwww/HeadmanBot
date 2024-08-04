@@ -5,21 +5,21 @@ from aiogram.types.inline_keyboard_markup import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.bot.profile.callback_data import (
+    AcceptStudentEnterGroupCallbackData,
+    AcceptStudentLeaveGroupCallbackData,
     AskUpdatedBirthdateValidityCallbackData,
     AskUpdatedNameValidityCallbackData,
     AskUpdatedSurnameValidityCallbackData,
+    ChooseNewRoleCallbackData,
+    ChooseUniCallbackData,
+    EnterGroupCallbackData,
     GetBackToProfileCallbackData,
+    LeaveGroupCallbackData,
     ProfileUpdateBirthdateCallbackData,
     ProfileUpdateCallbackData,
     ProfileUpdateNameCallbackData,
     ProfileUpdateSurnameCallbackData,
-    LeaveGroupCallbackData,
-    EnterGroupCallbackData,
     SureToLeaveGroupCallbackData,
-    ChooseNewRoleCallbackData,
-    ChooseUniCallbackData,
-    AcceptStudentEnterGroupCallbackData,
-    AcceptStudentLeaveGroupCallbackData
 )
 from src.bot.profile.profile_field import ProfileField
 from src.modules.student_management.domain import Role, UniversityInfo
@@ -33,7 +33,7 @@ __all__ = [
     "role_buttons",
     "university_list_buttons",
     "accept_or_deny_enter_group_buttons",
-    "accept_or_deny_leave_group_buttons"
+    "accept_or_deny_leave_group_buttons",
 ]
 
 
@@ -56,16 +56,16 @@ def profile_update_choice_buttons(has_group: bool, is_headman: bool) -> InlineKe
         if has_group:
             builder.button(
                 text="Выйти из группы",
-                callback_data=LeaveGroupCallbackData()
+                callback_data=LeaveGroupCallbackData(),
             )
         else:
             builder.button(
                 text="Войти в группу",
-                callback_data=EnterGroupCallbackData()
+                callback_data=EnterGroupCallbackData(),
             )
     builder.button(
         text="Вернуться в профиль",
-        callback_data=GetBackToProfileCallbackData()
+        callback_data=GetBackToProfileCallbackData(),
     )
     builder.adjust(1)
 
@@ -120,14 +120,14 @@ def sure_to_leave_group_buttons() -> InlineKeyboardMarkup:
 
     builder.button(
         text="Да",
-        callback_data=SureToLeaveGroupCallbackData(is_user_sure=True)
+        callback_data=SureToLeaveGroupCallbackData(is_user_sure=True),
     )
     builder.button(
         text="Нет",
-        callback_data=SureToLeaveGroupCallbackData(is_user_sure=False)
+        callback_data=SureToLeaveGroupCallbackData(is_user_sure=False),
     )
     builder.button(
-        text="Вернуться назад", callback_data=ProfileUpdateCallbackData()
+        text="Вернуться назад", callback_data=ProfileUpdateCallbackData(),
     )
     builder.adjust(2)
 
@@ -144,7 +144,7 @@ def role_buttons() -> InlineKeyboardMarkup:
         text="Я староста", callback_data=ChooseNewRoleCallbackData(role=Role.HEADMAN),
     )
     builder.button(
-        text="Вернуться назад", callback_data=ProfileUpdateCallbackData()
+        text="Вернуться назад", callback_data=ProfileUpdateCallbackData(),
     )
     builder.adjust(2)
 
@@ -162,7 +162,7 @@ def university_list_buttons(
             callback_data=ChooseUniCallbackData(university_alias=uni.alias),
         )
     builder.button(
-        text="Вернуться назад", callback_data=ProfileUpdateCallbackData()
+        text="Вернуться назад", callback_data=ProfileUpdateCallbackData(),
     )
     builder.adjust(2)
 

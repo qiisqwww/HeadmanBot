@@ -1,9 +1,7 @@
-from collections.abc import Callable, Coroutine
 from datetime import date
-from typing import Any
 
 from aiogram import F
-from aiogram.types import Message, User
+from aiogram.types import Message
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import RegistrationContext
@@ -25,6 +23,7 @@ from src.bot.registration.resources.templates import (
     asking_fullname_validation_template,
 )
 from src.bot.registration.validation import is_valid_name_len
+from src.modules.common.application.bot_notifier import BotNotifier
 from src.modules.student_management.application.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndAliasQuery,
@@ -61,10 +60,7 @@ async def handling_group(
     check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
     find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
     find_group_headman_query: FindGroupHeadmanQuery,
-    inform_admins_about_exception: Callable[
-        [Exception, User | None],
-        Coroutine[Any, Any, None],
-    ],
+    notifier: BotNotifier,
 ) -> None:
     if message.text is None:
         return
@@ -79,7 +75,7 @@ async def handling_group(
     except ScheduleApiError as e:
         await message.answer(FAILED_TO_CHECK_GROUP_EXISTENCE_TEMPLATE)
         await state.set_state(RegistrationStates.waiting_group)
-        await inform_admins_about_exception(e, message.from_user)
+        await notifier.notify_about_exception(e, message.from_user)
         return
 
     if not group_exists:
@@ -87,8 +83,8 @@ async def handling_group(
         await state.set_state(RegistrationStates.waiting_group)
         return
 
-    """Логика ниже была переработана для учета той ситуации, когда группа уже существует в базе, но студенты 
-    регистрируются в ней с нуля. 
+    """Логика ниже была переработана для учета той ситуации, когда группа уже существует в базе, но студенты
+    регистрируются в ней с нуля.
     Таким образом, старостой в группу МОЖНО зарегаться если группа существует,
     и нельзя только, если староста уже есть."""
     group = await find_group_by_name_and_alias_query.execute(
@@ -180,4 +176,3 @@ async def handling_name(
         ),
         reply_markup=ask_fullname_validity_buttons(),
     )
-    

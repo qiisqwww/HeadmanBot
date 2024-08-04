@@ -3,9 +3,9 @@ from typing import final
 from injector import inject
 
 from src.modules.attendance.application.commands import CreateAttendanceCommand
+from src.modules.attendance.application.repositories import AttendanceRepository, LessonRepository
 from src.modules.attendance.contract import AttendanceModuleContract
 from src.modules.common.domain import UniversityAlias
-from src.modules.attendance.application.repositories import AttendanceRepository, LessonRepository
 
 __all__ = [
     "AttendanceModuleContractImpl",
@@ -23,7 +23,7 @@ class AttendanceModuleContractImpl(AttendanceModuleContract):
             self,
             create_attendance_command: CreateAttendanceCommand,
             attendance_repository: AttendanceRepository,
-            lesson_repository: LessonRepository
+            lesson_repository: LessonRepository,
     ) -> None:
         self._create_attendance_command = create_attendance_command
         self._attendance_repository = attendance_repository

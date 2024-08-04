@@ -1,6 +1,6 @@
 from collections.abc import Awaitable, Callable
 from datetime import datetime
-from typing import Any, TypeAlias
+from typing import Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
@@ -8,8 +8,8 @@ from aiogram.types import CallbackQuery, Message
 from src.bot.common.resources.void_inline_buttons import void_inline_buttons
 from src.bot.common.safe_message_edit import safe_message_edit
 
-EventType: TypeAlias = Message | CallbackQuery
-HandlerType: TypeAlias = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
+type EventType = Message | CallbackQuery
+type HandlerType = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
 
 __all__ = [
     "CheckMessageExpireMiddleware",
@@ -23,7 +23,7 @@ class CheckMessageExpireMiddleware(BaseMiddleware):
         event: EventType,
         data: dict[str, Any],
     ) -> Any:
-        if data.get("callback_data", None) is None:
+        if data.get("callback_data") is None:
             return await handler(event, data)
 
         if not hasattr(data["callback_data"], "created_at"):

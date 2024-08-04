@@ -8,11 +8,11 @@ from src.bot.headman_panel.callback_data.choose_student_to_downgrade_callback_da
 )
 from src.bot.headman_panel.resources.inline_buttons import select_student
 from src.bot.headman_panel.resources.templates import (
+    CHOOSE_USER_TO_DOWNGRADE_TEMPLATE,
     FAILED_TO_DOWNGRADE_VICEHEADMAN_ROLE_TEMPLATE,
     STUDENT_WAS_NOT_FOUND_TEMPLATE,
+    USER_WAS_SUCCESSFULLY_DOWNGRADED,
     YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE,
-    CHOOSE_USER_TO_DOWNGRADE_TEMPLATE,
-    USER_WAS_SUCCESSFULLY_DOWNGRADED
 )
 from src.modules.student_management.application.commands import (
     UnmakeStudentViceHeadmanCommand,

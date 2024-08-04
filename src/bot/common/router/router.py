@@ -20,7 +20,8 @@ class Router(AiogramRouter):
         super().__init__(name=name)
 
         if self.parent_router is not None and not isinstance(self.parent_router, RootRouter):
-                raise RuntimeError("Router parent can be only RootRouter.")
+                msg = "Router parent can be only RootRouter."
+                raise RuntimeError(msg)
 
         if must_be_registered is not None:
             self._add_inject_student_middleware(must_be_registered)

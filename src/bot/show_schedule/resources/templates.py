@@ -10,7 +10,7 @@ __all__ = [
     "schedule_list_template",
     "CHOOSE_DATE_TEMPLATE",
     "INPUT_CERTAIN_DATE_TEMPLATE",
-    "INCORRECT_DATE_FORMAT_TEMPLATE"
+    "INCORRECT_DATE_FORMAT_TEMPLATE",
 ]
 
 CHOOSE_SCHEDULE_PERIOD_TEMPLATE = """
@@ -46,7 +46,7 @@ def get_full_name_of_day(weekday: int) -> str:
         case 6:
             return "воскресенье"
         case _:
-            pass
+            return None
 
 
 def end_time(start_time: time, timezone: str) -> time:

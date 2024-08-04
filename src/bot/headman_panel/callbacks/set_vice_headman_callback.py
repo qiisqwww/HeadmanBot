@@ -6,11 +6,11 @@ from src.bot.common.router import RootRouter, Router
 from src.bot.headman_panel.callback_data import ChooseStudentToEnhanceCallbackData
 from src.bot.headman_panel.resources.inline_buttons import select_student
 from src.bot.headman_panel.resources.templates import (
+    CHOOSE_USER_TO_ENHANCE_TEMPLATE,
     FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE,
     STUDENT_WAS_NOT_FOUND_TEMPLATE,
+    USER_WAS_SUCCESSFULLY_ENHANCED,
     YOU_WAS_GRADED_TO_VICEHEADMAN_TEMPLATE,
-    CHOOSE_USER_TO_ENHANCE_TEMPLATE,
-    USER_WAS_SUCCESSFULLY_ENHANCED
 )
 from src.modules.student_management.application.commands.exceptions import (
     CannotGrantRoleToNonStudentError,

@@ -1,19 +1,20 @@
 from datetime import date, timedelta
+
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.bot.show_schedule.callback_data import (
-    ScheduleWeekCallbackData,
-    ScheduleDateCallbackData,
     BackToWeekChoiceListCallbackData,
-    ScheduleCertainDayCallbackData
+    ScheduleCertainDayCallbackData,
+    ScheduleDateCallbackData,
+    ScheduleWeekCallbackData,
 )
 from src.modules.common.domain import UniversityAlias
 
 __all__ = [
     "show_choose_period_buttons",
     "show_choose_day_buttons",
-    "show_get_back_button"
+    "show_get_back_button",
 ]
 
 
@@ -34,7 +35,7 @@ def get_short_name_of_day(weekday: int) -> str:
         case 6:
             return "ВС"
         case _:
-            pass
+            return None
 
 
 def show_choose_period_buttons(uni: UniversityAlias) -> InlineKeyboardMarkup:
@@ -42,7 +43,7 @@ def show_choose_period_buttons(uni: UniversityAlias) -> InlineKeyboardMarkup:
 
     builder.button(text="Сегодня", callback_data=ScheduleDateCallbackData(
         chosen_day=date.today(),
-        weeks_to_add=0
+        weeks_to_add=0,
     ))
     builder.button(text="Текущая неделя", callback_data=ScheduleWeekCallbackData(weeks_to_add=0))
     builder.button(text="Следующая неделя", callback_data=ScheduleWeekCallbackData(weeks_to_add=1))
@@ -64,8 +65,8 @@ def show_choose_day_buttons(weeks_to_add: int = 0) -> InlineKeyboardMarkup:
             text=get_short_name_of_day(i) + " | " + str(week_runner),
             callback_data=ScheduleDateCallbackData(
                 chosen_day=week_runner,
-                weeks_to_add=weeks_to_add
-            )
+                weeks_to_add=weeks_to_add,
+            ),
         )
         week_runner = week_runner + timedelta(days=1)
     builder.button(text="← Вернуться назад", callback_data=BackToWeekChoiceListCallbackData())

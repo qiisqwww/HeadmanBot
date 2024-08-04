@@ -21,7 +21,8 @@ class UniversityRepositoryImpl(PostgresRepositoryImpl, UniversityRepository):
         record = await self._con.fetchrow(query, alias)
 
         if record is None:
-            raise CorruptedDatabaseError(f"Not found university with {alias=}")
+            msg = f"Not found university with {alias=}"
+            raise CorruptedDatabaseError(msg)
 
         return self._mapper.to_domain(record)
 

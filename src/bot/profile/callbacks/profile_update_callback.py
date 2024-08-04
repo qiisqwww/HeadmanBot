@@ -33,7 +33,7 @@ __all__ = [
 
 
 profile_menu_router = Router(
-    must_be_registered=True
+    must_be_registered=True,
 )
 
 
@@ -45,7 +45,7 @@ def include_profile_menu_router(root_router: RootRouter) -> None:
 async def profile_update(
         callback: CallbackQuery,
         state: ProfileUpdateContext,
-        student: Student
+        student: Student,
 ) -> None:
     if callback.message is None:
         return
@@ -55,8 +55,8 @@ async def profile_update(
         WHAT_DO_YOU_WANNA_EDIT_TEMPLATE,
         profile_update_choice_buttons(
             has_group=student.group_id is not None,
-            is_headman=student.role == Role.HEADMAN
-        )
+            is_headman=student.role == Role.HEADMAN,
+        ),
     )
 
     await state.clear()

@@ -1,8 +1,5 @@
-from collections.abc import Callable, Coroutine
-from typing import Any
-
 from aiogram import Bot
-from aiogram.types import CallbackQuery, User
+from aiogram.types import CallbackQuery
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.resources import main_menu, void_inline_buttons
@@ -13,11 +10,12 @@ from src.bot.registration.resources.templates import (
     HELP_FOR_HEADMAN,
     REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
+    USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
+    USER_REGISTRATION_TIME_OUT_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
-    USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
-    USER_REGISTRATION_TIME_OUT_TEMPLATE
 )
+from src.modules.common.application.bot_notifier import BotNotifier
 from src.modules.student_management.application.commands import (
     ClearCreateStudentDataCacheCommand,
     NotFoundStudentRegistrationCachedDataError,
@@ -48,10 +46,7 @@ async def accept_or_deny_callback(
     bot: Bot,
     clear_create_student_data_command: ClearCreateStudentDataCacheCommand,
     register_student_command: RegisterStudentCommand,
-    inform_admins_about_exception: Callable[
-        [Exception, User | None],
-        Coroutine[Any, Any, None],
-    ],
+    notifier: BotNotifier,
 ) -> None:
     if callback.message is None:
         return
@@ -78,7 +73,7 @@ async def accept_or_deny_callback(
             callback_data.telegram_id,
             FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
         )
-        await inform_admins_about_exception(e, callback.from_user)
+        await notifier.notify_about_exception(e, callback.from_user)
         return
     except StudentAlreadyRegisteredError:
         await safe_message_edit(

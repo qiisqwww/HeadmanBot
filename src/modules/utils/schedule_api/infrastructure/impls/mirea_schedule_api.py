@@ -1,5 +1,5 @@
 from datetime import date, datetime, tzinfo
-from typing import Final, NoReturn, final
+from typing import Final, final
 from zoneinfo import ZoneInfo
 
 import recurring_ical_events
@@ -34,7 +34,7 @@ class MireaScheduleApi(ScheduleAPI):
     def __init__(self) -> None:
         ...
 
-    async def group_exists(self, group_name: str) -> bool | NoReturn:
+    async def group_exists(self, group_name: str) -> bool:
         try:
             isc_link_location_bin = await self._fetch_isc_link_location(group_name)
         except Exception as e:
@@ -60,7 +60,7 @@ class MireaScheduleApi(ScheduleAPI):
         self,
         group_name: str,
         day: date | None = None,
-    ) -> list[Schedule] | NoReturn:
+    ) -> list[Schedule]:
         day = day or datetime.now(tz=self._API_TIMEZONE).date()
 
         try:

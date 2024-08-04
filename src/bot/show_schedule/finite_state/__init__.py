@@ -3,7 +3,7 @@ from src.bot.common import RootRouter
 from .show_schedule_certain_date import include_show_schedule_certain_date_router
 
 __all__ = [
-    "include_show_schedule_finite_state_router"
+    "include_show_schedule_finite_state_router",
 ]
 
 

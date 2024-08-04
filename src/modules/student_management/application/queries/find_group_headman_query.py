@@ -3,9 +3,8 @@ from typing import final
 from injector import inject
 
 from src.modules.common.application import UseCase
+from src.modules.student_management.application.repositories import StudentRepository
 from src.modules.student_management.domain import Role, Student
-
-from ..repositories import StudentRepository
 
 __all__ = [
     "FindGroupHeadmanQuery",
@@ -27,6 +26,7 @@ class FindGroupHeadmanQuery(UseCase):
         )
 
         if headman is None:
-            raise RuntimeError("Not found headman for group.")
+            msg = "Not found headman for group."
+            raise RuntimeError(msg)
 
         return headman

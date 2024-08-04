@@ -1,5 +1,6 @@
 from injector import Binder, singleton
 
+from src.modules.edu_info.application.gateways import StudentManagementGateway
 from src.modules.edu_info.application.repositories import (
     EduInfoRepository,
     GroupInfoRepository,
@@ -7,6 +8,7 @@ from src.modules.edu_info.application.repositories import (
     UniversityRepository,
 )
 from src.modules.edu_info.contract import EduInfoModuleContract
+from src.modules.edu_info.infrastructure.gateways import StudentManagementGatewayImpl
 
 from .contract import EduInfoModuleContractImpl
 from .repositories import (
@@ -15,8 +17,6 @@ from .repositories import (
     GroupRepositoryImpl,
     UniversityRepositoryImpl,
 )
-from src.modules.edu_info.application.gateways import StudentManagementGateway
-from src.modules.edu_info.infrastructure.gateways import StudentManagementGatewayImpl
 
 __all__ = [
     "assemble_edu_info_module",

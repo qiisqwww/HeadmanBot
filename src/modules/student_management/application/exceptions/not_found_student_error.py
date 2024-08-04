@@ -1,7 +1,7 @@
 __all__ = [
-    "NotFoundStudentError"
+    "NotFoundStudentError",
 ]
 
 
 class NotFoundStudentError(Exception):
-    """Raise if administrator is trying to delete student who not exists"""
+    """Raise if administrator is trying to delete student who not exists."""

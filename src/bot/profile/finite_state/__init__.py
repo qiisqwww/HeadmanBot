@@ -1,10 +1,10 @@
 from src.bot.common import RootRouter
 
-from .profile_update import include_profile_update_router
 from .enter_group import include_enter_group_router
+from .profile_update import include_profile_update_router
 
 __all__ = [
-    "include_profile_finite_state_router"
+    "include_profile_finite_state_router",
 ]
 
 

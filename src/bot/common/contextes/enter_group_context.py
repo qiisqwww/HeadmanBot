@@ -3,9 +3,8 @@ from typing import TypedDict
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
-from src.modules.student_management.domain import Role, Student
 from src.modules.common.domain.university_alias import UniversityAlias
-
+from src.modules.student_management.domain import Role
 
 __all__ = [
     "EnterGroupContext",
@@ -47,8 +46,7 @@ class EnterGroupContext:
 
     @property
     async def group_name(self) -> str | None:
-        group_name = (await self.get_data()).get("group_name", None)
-        return group_name
+        return (await self.get_data()).get("group_name", None)
 
     async def set_group_name(self, group_name: str) -> None:
         await self._context.update_data(group_name=group_name)

@@ -3,11 +3,11 @@ from aiogram.types import CallbackQuery
 from src.bot.common.router import RootRouter, Router
 from src.bot.common.safe_message_edit import safe_message_edit
 from src.bot.poll_attendance.callback_data import UpdateAllAttendancesCallbackData
-from src.bot.poll_attendance.resources.templates import your_all_choice_is_template
 from src.bot.poll_attendance.resources.inline_buttons import update_attendance_buttons
+from src.bot.poll_attendance.resources.templates import your_all_choice_is_template
 from src.modules.attendance.application.commands import UpdateAllAttendancesCommand
 from src.modules.attendance.application.queries import GetStudentAttendanceQuery
-from src.modules.student_management.domain import Student, Role
+from src.modules.student_management.domain import Role, Student
 
 __all__ = [
     "include_update_all_attendances_router",
@@ -16,7 +16,7 @@ __all__ = [
 
 update_all_attendances_router = Router(
     must_be_registered=True,
-    minimum_role=Role.STUDENT
+    minimum_role=Role.STUDENT,
 )
 
 

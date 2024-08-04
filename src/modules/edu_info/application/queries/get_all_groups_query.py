@@ -2,8 +2,7 @@ from injector import inject
 
 from src.modules.common.application.use_case import UseCase
 from src.modules.edu_info.application.repositories import GroupRepository
-
-from ...domain import Group
+from src.modules.edu_info.domain import Group
 
 __all__ = [
     "GetAllGroupsQuery",

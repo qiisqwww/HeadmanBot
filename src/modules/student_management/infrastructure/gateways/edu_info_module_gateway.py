@@ -62,7 +62,7 @@ class EduInfoModuleGatewayImpl(EduInfoModuleGateway):
 
         return EduProfileInfo(
             group_name=None if edu_info is None else edu_info[0],
-            university_name=None if edu_info is None else edu_info[1]
+            university_name=None if edu_info is None else edu_info[1],
         )
 
     async def delete_group_by_id(self, group_id: int) -> None:

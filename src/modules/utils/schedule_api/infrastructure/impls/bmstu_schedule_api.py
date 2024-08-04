@@ -1,6 +1,6 @@
 import re
 from datetime import date, datetime, tzinfo
-from typing import Final, NoReturn, final
+from typing import Final, final
 from zoneinfo import ZoneInfo
 
 import recurring_ical_events
@@ -32,10 +32,8 @@ class BmstuScheduleApi(ScheduleAPI):
     def __init__(self) -> None:
         ...
 
-    async def group_exists(self, group_name: str) -> bool | NoReturn:
-        """
-        Returns true if group exists in BMSTU.
-        """
+    async def group_exists(self, group_name: str) -> bool:
+        """Returns true if group exists in BMSTU."""
         try:
             all_schedule_bin = await self._fetch_all_schedule()
         except Exception as e:
@@ -57,9 +55,7 @@ class BmstuScheduleApi(ScheduleAPI):
         group_name: str,
         day: date | None = None,
     ) -> list[Schedule]:
-        """
-        Returns schedule of BMSTU group if exists.
-        """
+        """Returns schedule of BMSTU group if exists."""
         # day = day or datetime.now(tz=self._API_TIMEZONE).date()
         day = day or datetime.now(tz=ZoneInfo("Europe/Moscow")).date()
 
@@ -114,9 +110,7 @@ class BmstuScheduleApi(ScheduleAPI):
         return BeautifulSoup(html, "html.parser")
 
     def _parse_isc_url(self, page: BeautifulSoup, group_name: str) -> str:
-        """
-        Return url to download .ics schedule file of BMSTU group.
-        """
+        """Return url to download .ics schedule file of BMSTU group."""
         group_tags = self._parse_group_tags_soup(page)
 
         group_schedule_url = None
@@ -132,9 +126,7 @@ class BmstuScheduleApi(ScheduleAPI):
 
     @aiohttp_retry(attempts=3)
     async def _fetch_all_schedule(self) -> str:
-        """
-        Fetches index page for schedule using BMSTU API.
-        """
+        """Fetches index page for schedule using BMSTU API."""
         async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session, session.get(
             self._ALL_SCHEDULE_URL,
         ) as response:
@@ -143,9 +135,7 @@ class BmstuScheduleApi(ScheduleAPI):
 
     @aiohttp_retry(attempts=3)
     async def _fetch_isc(self, url: str) -> str:
-        """
-        Fetches isc file for BMSTU group.
-        """
+        """Fetches isc file for BMSTU group."""
         async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(
             url,
         ) as response:
