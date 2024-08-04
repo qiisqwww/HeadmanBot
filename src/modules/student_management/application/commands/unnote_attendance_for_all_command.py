@@ -2,7 +2,7 @@ from typing import final
 
 from injector import inject
 
-from src.modules.common.application import UseCase
+from src.modules.common.application import NoArgsUseCase
 from src.modules.student_management.application.repositories import StudentRepository
 
 __all__ = [
@@ -11,7 +11,7 @@ __all__ = [
 
 
 @final
-class UnnoteAttendanceForAllCommand(UseCase):
+class UnnoteAttendanceForAllCommand(NoArgsUseCase):
     _repository: StudentRepository
 
     @inject

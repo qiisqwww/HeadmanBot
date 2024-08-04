@@ -32,9 +32,6 @@ services:
         condition: service_healthy
     volumes:
       - ../logs:/app/logs
-      - ../update_info.html:/app/update_info.html
-      - ../poll_by_role.html:/app/poll_by_role.html
-      - ../ShowInfoImg.png:/app/ShowInfoImg.png
     ports: 
       - 8000:8000
 
@@ -89,9 +86,6 @@ services:
       retries: 10
     volumes:
       - ../logs:/app/logs
-      - ../update_info.html:/app/update_info.html
-      - ../poll_by_role.html:/app/poll_by_role.html
-      - ../ShowInfoImg.png:/app/ShowInfoImg.png
 
   celery_beat:
     command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
@@ -112,9 +106,6 @@ services:
       retries: 10
     volumes:
       - ../logs:/app/logs
-      - ../update_info.html:/app/update_info.html
-      - ../poll_by_role.html:/app/poll_by_role.html
-      - ../ShowInfoImg.png:/app/ShowInfoImg.png
 
   flower:
     command: celery -A src.celery.worker.worker flower --port=5555
@@ -130,9 +121,6 @@ services:
         condition: service_healthy
     volumes:
       - ../logs:/app/logs
-      - ../update_info.html:/app/update_info.html
-      - ../poll_by_role.html:/app/poll_by_role.html
-      - ../ShowInfoImg.png:/app/ShowInfoImg.png
     ports:
       - 5555:5555
   
