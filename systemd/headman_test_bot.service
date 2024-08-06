@@ -1,0 +1,9 @@
+[Unit]
+After=network.target
+Description=Headman testing bot
+
+[Service]
+Type=simple
+ExecStart=/var/www/HeadmanBot/scripts/start-testing.sh
+ExecStop=/var/www/HeadmanBot/scripts/down-testing.sh
+Restart=always
