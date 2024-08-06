@@ -1,27 +1,10 @@
-version: '3.9'
-
 services:
-  ngrok:
-    image: ngrok/ngrok:alpine
-    env_file:
-      - ../.env/.dev.env
-    command: ["http", "proxy:80", "--domain", "$NGROK_DOMAIN"]
-
-  proxy:
-    depends_on:
-      - headman_bot
-    build:
-      dockerfile: Dockerfile.dev
-      context: ../nginx
-    ports:
-      - 80:80
-
   headman_bot:
     command: python -m src
     env_file:
       - ../.env/.dev.env
     build: 
-      dockerfile: ./docker/Dockerfile.dev
+      dockerfile: ./docker/Dockerfile
       context: ..
     depends_on:
       redis:
@@ -31,49 +14,75 @@ services:
       celery_worker:
         condition: service_healthy
     volumes:
-      - ../logs:/app/logs
+      - ../logs/bot_logs:/app/logs
     ports: 
       - 8000:8000
+    networks:
+        - headman_bot_dev_net
 
   postgres:
-    image: postgres:16.1-alpine3.19
-    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
-    restart: always
+    build: 
+      dockerfile: ./Dockerfile
+      context: ../postgres
     env_file:
       - ../.env/.database.dev.env
-    volumes:
-      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
-      - ../postgres/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ../postgres/migrate.sh:/docker-entrypoint-initdb.d/init.sh
-      - ../postgres/migrations:/docker-entrypoint-initdb.d/migrations
-    ports:
-      - 5432:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 3s
       timeout: 5s
       retries: 10
-
+    volumes:
+      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
+      - ../logs/pg_logs:/logs
+    ports:
+      - 5432:5432
+    networks:
+        - headman_bot_dev_net
 
   redis:
-    image: redis:7.2.3
-    restart: on-failure
-    volumes:
-      - headman_bot_redis_dev_data:/data
-    ports:
-      - 6379:6379
+    build: 
+      dockerfile: ./Dockerfile
+      context: ../redis
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
       interval: 3s
       timeout: 5s
       retries: 10
+    volumes:
+      - headman_bot_redis_dev_data:/data
+      - ../logs/redis_logs:/var/log/redis
+    ports:
+      - 6379:6379
+    networks:
+        - headman_bot_dev_net
+
+  ngrok:
+    image: ngrok/ngrok:alpine
+    env_file:
+      - ../.env/.dev.env
+    command: ["http", "proxy:80", "--domain", "$NGROK_DOMAIN"]
+    networks:
+        - headman_bot_dev_net
+
+  proxy:
+    depends_on:
+      - headman_bot
+    build:
+      dockerfile: Dockerfile.dev
+      context: ../nginx
+    volumes:
+      - ../logs/nginx_logs:/var/log/nginx
+    ports:
+      - 80:80
+    networks:
+        - headman_bot_dev_net
 
   celery_worker:
     command: celery -A src.celery.worker.worker worker  --loglevel=info
     env_file:
       - ../.env/.dev.env
     build: 
-      dockerfile: ./docker/Dockerfile.dev
+      dockerfile: ./docker/Dockerfile
       context: ..
     depends_on:
       redis:
@@ -86,14 +95,16 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - ../logs:/app/logs
+      - ../logs/celery_worker_logs:/app/logs
+    networks:
+        - headman_bot_dev_net
 
   celery_beat:
     command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
     env_file:
       - ../.env/.dev.env
     build: 
-      dockerfile: ./docker/Dockerfile.dev
+      dockerfile: ./docker/Dockerfile
       context: ..
     depends_on:
       redis:
@@ -106,26 +117,33 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - ../logs:/app/logs
+      - ../logs/celery_beat_logs:/app/logs
+    networks:
+        - headman_bot_dev_net
 
   flower:
     command: celery -A src.celery.worker.worker flower --port=5555
     env_file:
       - ../.env/.dev.env
     build: 
-      dockerfile: ./docker/Dockerfile.dev
+      dockerfile: ./docker/Dockerfile
       context: ..
     depends_on:
       celery_worker:
         condition: service_healthy
       celery_beat:
         condition: service_healthy
-    volumes:
-      - ../logs:/app/logs
     ports:
       - 5555:5555
+    volumes:
+      - ../logs/flower_logs:/app/logs
+    networks:
+        - headman_bot_dev_net
   
-
 volumes:
   headman_bot_postgres_dev_data:
   headman_bot_redis_dev_data:
+
+networks:
+  headman_bot_dev_net:
+    driver: bridge

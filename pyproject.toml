@@ -1,17 +1,18 @@
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+package-mode = false
 
 [tool.poetry]
 name = "headmanbot"
 version = "0.1.0"
 description = "Telegram bot which helps the headman"
-authors = ["NeoTheBestDeveloper <neothebestmain@protonmail.com>", "qiisqwww dmitriy <qiisqwww@gmail.com>"]
+authors = ["NeoTheBestDeveloper Oleg <neothebestmain@protonmail.com>", "qiisqwww dmitriy <qiisqwww@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aiogram = "^3.2.0"
+aiogram = "3.10.0"
 httpx = "^0.26.0"
 asyncpg = "^0.29.0"
 loguru = "^0.7.2"
@@ -71,24 +72,4 @@ strict = ["src"]
 reportMissingImports = false
 
 [tool.pytest_env]
-DEBUG=true
-BOT_TOKEN=""
-LOGGING_PATH="logs/log.log"
-TZ=""
-DB_USER=""
-DB_PASS=""
-DB_NAME=""
-DB_PORT=228
-DB_HOST=""
-REDIS_PORT=337
-REDIS_HOST=""
-ADMIN_IDS="228"
-HTTP_PORT=8080
-HTTP_HOST=""
-WEBHOOK_PATH=""
-WEBHOOK_URL=""
-WEBHOOK_SECRET=""
-NGROK_AUTHTOKEN="" 
-NGROK_DOMAIN=""
-THROTTLING_EXPIRE_TIME=60
-THROTTLING_RATE_PER_MINUTE=1000
+TESTING=true

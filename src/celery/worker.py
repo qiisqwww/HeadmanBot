@@ -3,14 +3,16 @@ import asyncio
 from aiogram import Bot
 from celery import Celery
 from celery.schedules import crontab
+from celery.app.log import Logging
 
 from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
 from src.modules.common.application import NoArgsUseCase
 from src.modules.common.application.command import AskAttendanceCommand
-from src.modules.common.infrastructure.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
+from src.modules.common.infrastructure.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND, configure_logger
 from src.modules.common.infrastructure.config.config import BOT_TOKEN
 from src.modules.common.infrastructure.container import Container
 from src.modules.student_management.application.commands import UnnoteAttendanceForAllCommand
+
 
 worker = Celery(__name__)
 worker.conf.broker_url = CELERY_BROKER_URL
@@ -18,6 +20,11 @@ worker.conf.result_backend = CELERY_RESULT_BACKEND
 worker.conf.timezone = "Europe/Moscow"
 worker.autodiscover_tasks()
 
+
+logging = Logging(worker)
+logging.setup(loglevel="info", logfile="logs/logging-info.log")
+logging.setup(loglevel="error", logfile="logs/logging-error.log")
+configure_logger()
 
 def execute_command(action: type[NoArgsUseCase], bot_token: str = BOT_TOKEN) -> None:
     async def _async_wrapper() -> None:

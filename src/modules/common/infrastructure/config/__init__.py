@@ -11,7 +11,6 @@ from .config import (
     DEBUG,
     HTTP_HOST,
     HTTP_PORT,
-    LOGGING_PATH,
     REDIS_HOST,
     REDIS_PORT,
     THROTTLING_RATE_PER_MINUTE,
@@ -25,7 +24,6 @@ from .logger_config import configure_logger
 __all__ = [
     "BOT_TOKEN",
     "DEBUG",
-    "LOGGING_PATH",
     "ADMIN_IDS",
     "DB_USER",
     "DB_PASS",

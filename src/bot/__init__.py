@@ -1,9 +1,8 @@
 from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.types import FSInputFile
-from redis.asyncio import Redis
 
+from redis.asyncio import Redis
 from src.modules.common.infrastructure import (
     DEBUG,
     WEBHOOK_SECRET,
@@ -24,13 +23,14 @@ WEBHOOK_SSL_CERT = "headman_bot.crt"
 
 
 async def init_bot_webhook() -> None:
-    bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
-    await bot.delete_webhook(drop_pending_updates=True)
-    if DEBUG:
-        await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
-    else:
-        await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET, certificate=FSInputFile(WEBHOOK_SSL_CERT))
-    await bot.session.close()
+    async with Bot(BOT_TOKEN) as bot:
+        await bot.delete_webhook(drop_pending_updates=True)
+        if DEBUG:
+            await bot.set_webhook(url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+        else:
+            await bot.set_webhook(
+                url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET, certificate=FSInputFile(WEBHOOK_SSL_CERT),
+            )
 
 
 dispatcher = Dispatcher(

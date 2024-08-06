@@ -47,7 +47,6 @@ class DbContext:
     async def new(cls: type[Self]) -> Self:
         """Create new DbContext instead of __init__ method."""
         new_connection = cls.__new__(cls)
-        logger.error(f"POOOL ID={id(cls._db_pool)}")
         new_connection._con = await cls._db_pool.acquire()  # noqa: SLF001 , PGH003# pyright: ignore
         return new_connection
 
@@ -117,7 +116,7 @@ class DbContext:
 
         query = " ".join(query.split())
 
-        logger.debug(f"SQL query: {query}")
+        logger.log("SQL", query)
 
     @classmethod
     async def _create_pool(cls: type[Self]) -> None:

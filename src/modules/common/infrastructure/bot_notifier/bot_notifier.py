@@ -1,6 +1,7 @@
 from typing import final
 
 from aiogram import Bot
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import User
 from injector import inject
@@ -18,14 +19,13 @@ __all__ = [
     "BotNotifierImpl",
 ]
 
-
 @final
 class BotNotifierImpl(BotNotifier):
     _bot: Bot
 
     @inject
     def __init__(self) -> None:
-        self._bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
+        self._bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     async def notify_about_exception(self, exception: Exception, cause_by_student: User | None) -> None:
         for admin_id in ADMIN_IDS:
