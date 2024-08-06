@@ -32,7 +32,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
+      - /var/lib/headman_test_bot_db:/var/lib/postgresql/data
       - ../logs/pg_logs:/logs
     networks:
         - headman_bot_test_net
@@ -48,7 +48,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - headman_bot_redis_dev_data:/data
+      - /var/lib/headman_test_bot_redis:/data
       - ../logs/redis_logs:/var/log/redis
     networks:
         - headman_bot_test_net
@@ -132,10 +132,6 @@ services:
       - ../logs/flower_logs:/app/logs
     networks:
         - headman_bot_test_net
-  
-volumes:
-  headman_bot_postgres_dev_data:
-  headman_bot_redis_dev_data:
 
 networks:
   headman_bot_test_net:
