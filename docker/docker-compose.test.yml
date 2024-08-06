@@ -1,0 +1,142 @@
+services:
+  headman_bot:
+    restart: always
+    command: python -m src
+    env_file:
+      - ../.env/.test.env
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: ..
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+          condition: service_healthy
+      celery_worker:
+        condition: service_healthy
+    volumes:
+      - ../logs/bot_logs:/app/logs
+    networks:
+        - headman_bot_test_net
+
+  postgres:
+    restart: always
+    build: 
+      dockerfile: ./Dockerfile
+      context: ../postgres
+    env_file:
+      - ../.env/.database.test.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
+      - ../logs/pg_logs:/logs
+    networks:
+        - headman_bot_test_net
+
+  redis:
+    restart: always
+    build: 
+      dockerfile: ./Dockerfile
+      context: ../redis
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - headman_bot_redis_dev_data:/data
+      - ../logs/redis_logs:/var/log/redis
+    networks:
+        - headman_bot_test_net
+
+  proxy:
+    restart: always
+    depends_on:
+      - headman_bot
+    build:
+      dockerfile: Dockerfile
+      context: ../nginx
+    volumes:
+      - ../logs/nginx_logs:/var/log/nginx
+    ports:
+      - 443:443
+    networks:
+        - headman_bot_test_net
+
+  celery_worker:
+    command: celery -A src.celery.worker.worker worker  --loglevel=info
+    restart: always
+    env_file:
+      - ../.env/.test.env
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: ..
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+          condition: service_healthy
+    healthcheck:
+      test: celery status
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ../logs/celery_worker_logs:/app/logs
+    networks:
+        - headman_bot_test_net
+
+  celery_beat:
+    command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
+    restart: always
+    env_file:
+      - ../.env/.test.env
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: ..
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+          condition: service_healthy
+    healthcheck:
+      test: celery -A src.celery.worker status
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ../logs/celery_beat_logs:/app/logs
+    networks:
+        - headman_bot_test_net
+
+  flower:
+    command: celery -A src.celery.worker.worker flower --port=5555
+    restart: always
+    env_file:
+      - ../.env/.test.env
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: ..
+    depends_on:
+      celery_worker:
+        condition: service_healthy
+      celery_beat:
+        condition: service_healthy
+    ports:
+      - 5555:5555
+    volumes:
+      - ../logs/flower_logs:/app/logs
+    networks:
+        - headman_bot_test_net
+  
+volumes:
+  headman_bot_postgres_dev_data:
+  headman_bot_redis_dev_data:
+
+networks:
+  headman_bot_test_net:
+    driver: bridge
