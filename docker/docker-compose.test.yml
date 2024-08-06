@@ -63,7 +63,7 @@ services:
     volumes:
       - ../logs/nginx_logs:/var/log/nginx
     ports:
-      - 4443:443
+      - 8443:443
     networks:
         - headman_bot_test_net
 
