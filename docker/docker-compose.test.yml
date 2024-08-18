@@ -136,3 +136,6 @@ services:
 networks:
   headman_bot_test_net:
     driver: bridge
+
+volumes:
+  headman_test_bot_db:
