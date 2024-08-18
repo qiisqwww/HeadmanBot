@@ -2,7 +2,7 @@ services:
   headman_bot:
     command: python -m src
     env_file:
-      - ../.env/.dev.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -25,7 +25,7 @@ services:
       dockerfile: ./Dockerfile
       context: ../postgres
     env_file:
-      - ../.env/.database.dev.env
+      - ../.env/.database.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 3s
@@ -59,7 +59,7 @@ services:
   ngrok:
     image: ngrok/ngrok:alpine
     env_file:
-      - ../.env/.dev.env
+      - ../.env/.env
     command: ["http", "proxy:80", "--domain", "$NGROK_DOMAIN"]
     networks:
         - headman_bot_dev_net
@@ -80,7 +80,7 @@ services:
   celery_worker:
     command: celery -A src.celery.worker.worker worker  --loglevel=info
     env_file:
-      - ../.env/.dev.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -102,7 +102,7 @@ services:
   celery_beat:
     command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
     env_file:
-      - ../.env/.dev.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -124,7 +124,7 @@ services:
   flower:
     command: celery -A src.celery.worker.worker flower --port=5555
     env_file:
-      - ../.env/.dev.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..

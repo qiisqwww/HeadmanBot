@@ -3,7 +3,7 @@ services:
     restart: always
     command: python -m src
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -25,7 +25,7 @@ services:
       dockerfile: ./Dockerfile
       context: ../postgres
     env_file:
-      - ../.env/.database.test.env
+      - ../.env/.database.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 3s
@@ -71,7 +71,7 @@ services:
     command: celery -A src.celery.worker.worker worker  --loglevel=info
     restart: always
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -94,7 +94,7 @@ services:
     command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
     restart: always
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -117,7 +117,7 @@ services:
     command: celery -A src.celery.worker.worker flower --port=5555
     restart: always
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
