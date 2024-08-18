@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo docker-compose -f /var/www/HeadmanBotTest/docker/docker-compose.test.yml stop
+sudo docker-compose -f /opt/HeadmanBotTest/docker/docker-compose.test.yml stop

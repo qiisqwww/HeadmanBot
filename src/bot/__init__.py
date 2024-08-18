@@ -19,7 +19,7 @@ __all__ = [
     "init_bot_webhook",
 ]
 
-WEBHOOK_SSL_CERT = "headman_bot.crt"
+WEBHOOK_SSL_CERT = "headman_bot.pem"
 
 
 async def init_bot_webhook() -> None:
