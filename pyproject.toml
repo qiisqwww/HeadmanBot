@@ -1,14 +1,12 @@
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-package-mode = false
 
 [tool.poetry]
 name = "headmanbot"
 version = "0.1.0"
 description = "Telegram bot which helps the headman"
 authors = ["NeoTheBestDeveloper Oleg <neothebestmain@protonmail.com>", "qiisqwww dmitriy <qiisqwww@gmail.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
