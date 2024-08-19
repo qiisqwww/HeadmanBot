@@ -5,12 +5,10 @@ from loguru import logger
 
 from src.bot import init_bot_webhook
 from src.celery.worker import start_tasks_for_debug
-from src.modules.common.infrastructure import configure_logger
 from src.modules.common.infrastructure.config import DEBUG, HTTP_HOST, HTTP_PORT, UVICORN_WORKERS_COUNT
 
 
 def main() -> None:
-    configure_logger()
     try:
         loop = asyncio.new_event_loop()
         loop.run_until_complete(init_bot_webhook())

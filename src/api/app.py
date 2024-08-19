@@ -29,6 +29,7 @@ bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 async def lifespan(_: FastAPI) -> AsyncGenerator[None, Any]:
 
     await Container.init(bot)
+    configure_logger()
 
     yield
 

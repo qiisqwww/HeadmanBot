@@ -12,8 +12,6 @@ services:
         condition: service_healthy
       postgres:
           condition: service_healthy
-      celery_worker:
-        condition: service_healthy
     volumes:
       - ../logs/bot_logs:/app/logs
     networks:
@@ -80,11 +78,6 @@ services:
         condition: service_healthy
       postgres:
           condition: service_healthy
-    healthcheck:
-      test: celery status
-      interval: 3s
-      timeout: 5s
-      retries: 10
     volumes:
       - ../logs/celery_worker_logs:/app/logs
     networks:
@@ -103,11 +96,6 @@ services:
         condition: service_healthy
       postgres:
           condition: service_healthy
-    healthcheck:
-      test: celery -A src.celery.worker status
-      interval: 3s
-      timeout: 5s
-      retries: 10
     volumes:
       - ../logs/celery_beat_logs:/app/logs
     networks:
@@ -121,11 +109,6 @@ services:
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
-    depends_on:
-      celery_worker:
-        condition: service_healthy
-      celery_beat:
-        condition: service_healthy
     ports:
       - 5555:5555
     volumes:
