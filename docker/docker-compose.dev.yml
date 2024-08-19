@@ -1,3 +1,5 @@
+name: headman_bot_dev
+
 services:
   headman_bot:
     command: python -m src

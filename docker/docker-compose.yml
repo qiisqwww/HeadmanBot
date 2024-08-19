@@ -1,3 +1,5 @@
+name: headman_bot_prod
+
 services:
   proxy:
     depends_on:

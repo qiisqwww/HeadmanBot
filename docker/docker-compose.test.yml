@@ -1,3 +1,5 @@
+name: headman_bot_test
+
 services:
   headman_bot:
     restart: always
