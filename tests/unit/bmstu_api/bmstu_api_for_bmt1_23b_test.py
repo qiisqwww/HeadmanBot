@@ -7,7 +7,7 @@ import pytest
 from pytest import MonkeyPatch
 
 from src.modules.utils.schedule_api.domain import Schedule
-from src.modules.utils.schedule_api.infrastructure.impls import BmstuScheduleApi
+from src.modules.utils.schedule_api.infrastructure.impls import BMSTUScheduleAPI
 
 CALENDAR_PATH: Final[Path] = Path("./tests/unit/bmstu_api/assets/БМТ1-23Б.ics")
 GROUP_NAME: Final[str] = "БМТ1-23Б"
@@ -110,7 +110,7 @@ async def test_fetch_bmt1_23b_schedule(
     monkeypatch: MonkeyPatch,
     isc_calendar: str,
 ) -> None:
-    api = BmstuScheduleApi()
+    api = BMSTUScheduleAPI()
 
     async def fetch_isc(*_) -> str:
         return isc_calendar

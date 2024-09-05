@@ -19,12 +19,12 @@ from src.modules.utils.schedule_api.infrastructure.exceptions import (
 )
 
 __all__ = [
-    "BmstuScheduleApi",
+    "BMSTUScheduleAPI",
 ]
 
 
 @final
-class BmstuScheduleApi(ScheduleAPI):
+class BMSTUScheduleAPI(ScheduleAPI):
     _ALL_SCHEDULE_URL: Final[str] = "https://lks.bmstu.ru/schedule/list"
     _SUNDAY: Final[int] = 6
     _API_TIMEZONE: Final[tzinfo] = ZoneInfo("UTC")

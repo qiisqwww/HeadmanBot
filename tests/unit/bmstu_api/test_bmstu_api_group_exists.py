@@ -1,7 +1,7 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from src.modules.utils.schedule_api.infrastructure.impls import BmstuScheduleApi
+from src.modules.utils.schedule_api.infrastructure.impls import BMSTUScheduleAPI
 
 
 @pytest.mark.asyncio()
@@ -20,6 +20,6 @@ async def test_bmstu_api_group_exists(
     async def fetch_all_schedule_soup_stub(*args, **kwargs) -> BeautifulSoup:
         return all_schedule_page
 
-    api = BmstuScheduleApi()
+    api = BMSTUScheduleAPI()
     monkeypatch.setattr(api, "_parse_html", fetch_all_schedule_soup_stub)
     assert await api.group_exists(group_name) is exists

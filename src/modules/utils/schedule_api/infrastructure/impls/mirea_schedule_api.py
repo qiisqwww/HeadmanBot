@@ -20,12 +20,12 @@ from src.modules.utils.schedule_api.infrastructure.exceptions import (
 from .mirea_isc_link_schema import MireaIscLinkSchema
 
 __all__ = [
-    "MireaScheduleApi",
+    "MIREAScheduleAPI",
 ]
 
 
 @final
-class MireaScheduleApi(ScheduleAPI):
+class MIREAScheduleAPI(ScheduleAPI):
     _FIND_URL: Final[
         str
     ] = "https://schedule-of.mirea.ru/schedule/api/search?match={group_name}"
