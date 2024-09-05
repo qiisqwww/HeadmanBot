@@ -71,6 +71,38 @@ class NSTUScheduleAPI(ScheduleAPI):
 
         today_schedule_soup = [item for item in list(week_schedule_soup[today].children) if isinstance(item, Tag)][1]
 
+        schedule = []
+        for lesson in [item for item in list(today_schedule_soup.children) if isinstance(item, Tag)]:
+            lessons_this_time = lesson.find_all("div", class_="schedule__table-row")  # На это время (в разные недели)
+            if all(lesson_this_time.text.strip() == "" for lesson_this_time in lessons_this_time):
+                continue
+
+            #  Необходимо определить, какая именно пара будет проходить в это время на этой неделе
+            lesson_this_time = None
+            if len(lessons_this_time) == 1:
+                lesson_this_time = lessons_this_time[0]
+            else:
+                #  TODO:  Реализовать вычисление недели и выбор пары в зависимости от недели
+                lesson_this_time = lessons_this_time[0]  # Временное решение для тестирования
+                pass
+
+            #  Я очень уважаю человека создававшего сайт, потому мне приходится таким клевым образом
+            #  в информации о паре падать в первый из подтегов класса Tag, а затем брать текст из его дочерних
+            lesson_infos = [ch for ch in lesson_this_time.children if isinstance(ch, Tag)][0]
+            text = [lesson_info.text for lesson_info in lesson_infos.children][1]
+
+            #  Получаем время начала пары
+            start_time = datetime.strptime(
+                lesson.find("div", class_="schedule__table-time").text.split("-")[0],
+                '%H:%M'
+            ).time()
+
+            schedule.append(Schedule(
+                lesson_name=,
+                start_time=start_time,
+                classroom=
+            ))
+
     @aiohttp_retry(attempts=3)
     async def _fetch_all_schedule(self) -> str:
         async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session:
