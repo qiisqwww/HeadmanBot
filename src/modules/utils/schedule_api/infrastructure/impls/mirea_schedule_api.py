@@ -8,7 +8,7 @@ from icalendar import Calendar, Event
 from pydantic import ValidationError
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule
+from src.modules.utils.schedule_api.domain import Schedule, UniTimezone
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
@@ -61,7 +61,7 @@ class MIREAScheduleAPI(ScheduleAPI):
         group_name: str,
         day: date | None = None,
     ) -> list[Schedule] | NoReturn:
-        day = day or datetime.now(tz=self._API_TIMEZONE).date()
+        day = day or datetime.now(tz=ZoneInfo(UniTimezone.MIREA_TZ)).date()
 
         try:
             isc_link_location_bin = await self._fetch_isc_link_location(group_name)

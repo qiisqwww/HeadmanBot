@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup, Tag
 from icalendar import Calendar, Event
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule
+from src.modules.utils.schedule_api.domain import Schedule, UniTimezone
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
@@ -61,7 +61,7 @@ class BMSTUScheduleAPI(ScheduleAPI):
         Returns schedule of BMSTU group if exists.
         """
         # day = day or datetime.now(tz=self._API_TIMEZONE).date()
-        day = day or datetime.now(tz=ZoneInfo("Europe/Moscow")).date()
+        day = day or datetime.now(tz=ZoneInfo(UniTimezone.BMSTU_TZ)).date()
 
         if day.weekday() == self._SUNDAY:
             return []
