@@ -18,7 +18,8 @@ __all__ = [
 
 
 class NSTUScheduleAPI(ScheduleAPI):
-    _FIND_URL: Final[str] = "https://www.nstu.ru/studies/schedule/schedule_classes/schedule?group={group_name}"
+    _FIND_URL: Final[str] = \
+        "https://www.nstu.ru/studies/schedule/schedule_classes/schedule?group={group_name}&print=true"
 
     def __init__(self) -> None:
         ...
