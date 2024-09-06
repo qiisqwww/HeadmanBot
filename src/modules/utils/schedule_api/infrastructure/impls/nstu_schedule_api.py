@@ -30,7 +30,7 @@ class NSTUScheduleAPI(ScheduleAPI):
 
     async def group_exists(self, group_name: str) -> bool | NoReturn:
         try:
-            all_schedule_bin = await self._fetch_all_schedule()
+            all_schedule_bin = await self._fetch_all_schedule(group_name)
         except Exception as e:
             err_msg = "Failed to fetch index page for schedule using NSTU API."
             raise FailedToCheckGroupExistenceError(err_msg) from e
@@ -57,7 +57,7 @@ class NSTUScheduleAPI(ScheduleAPI):
             return []
 
         try:
-            all_schedule_bin = await self._fetch_all_schedule()
+            all_schedule_bin = await self._fetch_all_schedule(group_name)
         except Exception as e:
             err_msg = "Failed to fetch index page for schedule using NSTU API."
             raise FailedToCheckGroupExistenceError(err_msg) from e
@@ -117,10 +117,16 @@ class NSTUScheduleAPI(ScheduleAPI):
                 '%H:%M'
             ).time()
 
+
+            lesson_type = LessonType.from_name(lesson_this_time_info[-2]).formatted
+
+            if lesson_type in (LessonType.PRACTISE, LessonType.LECTION):
+                lesson_name = lesson_type + lesson_this_time_info[-3].split("·")[0]
+            else:
+                lesson_name = lesson_this_time_info[0]
+
             schedule.append(Schedule(
-                lesson_name=LessonType.from_name(
-                    lesson_this_time_info[-2]
-                ).formatted + lesson_this_time_info[-3].split("·")[0],
+                lesson_name=lesson_name,
                 start_time=start_time,
                 classroom=lesson_this_time_info[-1]
             ))
@@ -128,8 +134,8 @@ class NSTUScheduleAPI(ScheduleAPI):
         return schedule
 
     @aiohttp_retry(attempts=3)
-    async def _fetch_all_schedule(self) -> str:
+    async def _fetch_all_schedule(self, group_name: str) -> str:
         async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session:
-            response = await session.get(self._GROUP_SCHEDULE_URL)
+            response = await session.get(self._GROUP_SCHEDULE_URL.format(group_name=group_name))
             response_payload = await response.text()
         return response_payload
