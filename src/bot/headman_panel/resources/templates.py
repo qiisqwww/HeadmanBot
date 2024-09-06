@@ -63,7 +63,7 @@ USER_WAS_SUCCESSFULLY_DOWNGRADED = """
 
 def students_list(students: list[Student]) -> str:
     return render_template(
-        """<b>Список людей в группе</b>
+        """<b>Список группы</b>
 
 {% for student in students | sort(attribute='fullname') -%}
     {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
