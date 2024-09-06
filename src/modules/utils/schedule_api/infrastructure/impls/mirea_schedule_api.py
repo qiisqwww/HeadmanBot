@@ -18,6 +18,7 @@ from src.modules.utils.schedule_api.infrastructure.exceptions import (
 )
 
 from .mirea_isc_link_schema import MireaIscLinkSchema
+from .mirea_schedule_api_fallback import MireaScheduleApiFallback
 
 __all__ = [
     "MireaScheduleApi",
@@ -30,6 +31,7 @@ class MireaScheduleApi(ScheduleAPI):
         str
     ] = "https://schedule-of.mirea.ru/schedule/api/search?match={group_name}"
     _API_TIMEZONE: Final[tzinfo] = ZoneInfo("Europe/Moscow")
+    _FALLBACK: Final[ScheduleAPI] = MireaScheduleApiFallback()
 
     def __init__(self) -> None:
         ...
@@ -108,6 +110,9 @@ class MireaScheduleApi(ScheduleAPI):
             err_msg = "Failed to parse isc file with schedule from MIREA API."
             raise ParsingScheduleAPIResponseError(err_msg) from e
 
+
+        if not schedule:
+            return await self._FALLBACK.fetch_schedule(group_name, day)
         return schedule
 
     def _parse_schedule_from_calendar(
