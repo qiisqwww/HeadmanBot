@@ -11,6 +11,7 @@ from src.bot.headman_panel.callback_data.choose_student_to_downgrade_callback_da
 from src.bot.headman_panel.callback_data.choose_student_to_enchance_callback_data import (
     ChooseStudentToEnhanceCallbackData,
 )
+from src.bot.headman_panel.callback_data.students_list_callback_data import ShowStudentListCallbackData
 from src.modules.student_management.domain.enums.role import Role
 from src.modules.student_management.domain.models.student import Student
 
@@ -63,6 +64,10 @@ def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
         builder.button(
             text="Убрать зама старосты",
             callback_data=UnsetViceHeadmanCallbackData(),
+        )
+        builder.button(
+            text="Список группы",
+            callback_data=ShowStudentListCallbackData(),
         )
 
     builder.adjust(1)

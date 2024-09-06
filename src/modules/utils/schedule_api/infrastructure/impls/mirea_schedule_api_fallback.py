@@ -3,11 +3,9 @@ from typing import ClassVar, final, NoReturn
 from itertools import batched
 from zoneinfo import ZoneInfo
 
+import pandas as pd
 from bs4 import BeautifulSoup
 from aiohttp import ClientSession
-from loguru import logger
-import pandas as pd
-import numpy as np
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule
@@ -97,3 +95,12 @@ class MireaScheduleApiFallback(ScheduleAPI):
             payload = await response.content.read()
         return payload
 
+groups = [
+"ИКБО-50-23",
+"ИКБО-15-23",
+"ИКБО-13-23",
+"ТКБО-02-23",
+"ИМБО-10-23",
+"ИКБО-12-23",
+"ИНБО-14-23",
+]
