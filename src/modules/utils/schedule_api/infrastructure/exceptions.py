@@ -4,6 +4,7 @@ __all__ = [
     "FailedToCheckGroupExistenceError",
     "ParsingScheduleAPIResponseError",
     "GroupNotFoundError",
+    "UnexpectedScheduleDataError"
 ]
 
 class ScheduleApiError(Exception):
@@ -22,3 +23,6 @@ class FailedToCheckGroupExistenceError(ScheduleApiError):
 
 class ParsingScheduleAPIResponseError(ScheduleApiError):
     """Failed to parse answer from university API."""
+
+class UnexpectedScheduleDataError(ScheduleApiError):
+    """Got an unexpected schedule data."""
