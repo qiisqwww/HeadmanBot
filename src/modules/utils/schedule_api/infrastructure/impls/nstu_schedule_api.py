@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Final, NoReturn
 from zoneinfo import ZoneInfo
 
@@ -93,11 +93,15 @@ class NSTUScheduleAPI(ScheduleAPI):
                 if len(filtered_applicant_info) > 5:
                     err_msg = (
                         "Got an unexpected count of arguments for lesson from NSTU API (or the format "
-                        "data is storen in was changed"
+                        "data is stored in was changed"
                     )
                     raise UnexpectedScheduleDataError(err_msg)
 
-                if len(filtered_applicant_info) != 4:
+                if all(stamp not in filtered_applicant_info[0].lower() for stamp in [
+                    "недели",
+                    "по чётным",
+                    "по нечётным"
+                ]):
                     lesson_this_time_info = filtered_applicant_info
                     break
 
@@ -111,24 +115,22 @@ class NSTUScheduleAPI(ScheduleAPI):
                 elif "по нечётным" in filtered_applicant_info[0].lower():
                     lesson_this_time_info = filtered_applicant_info[1:] if current_week % 2 != 0 else None
 
-            #  Получаем время начала пары
-            start_time = datetime.strptime(
+            if lesson_this_time_info is None:
+                continue
+
+            # Необходимо достать время начала пары
+            start_time = (datetime.strptime(
                 lesson.find("div", class_="schedule__table-time").text.split("-")[0],
                 '%H:%M'
-            ).time()
+            ) - datetime.now(tz=ZoneInfo(UniTimezone.NSTU_TZ)).utcoffset()).time()
 
-
-            lesson_type = LessonType.from_name(lesson_this_time_info[-2]).formatted
-
-            if lesson_type in (LessonType.PRACTISE, LessonType.LECTION):
-                lesson_name = lesson_type + lesson_this_time_info[-3].split("·")[0]
-            else:
-                lesson_name = lesson_this_time_info[0]
+            lesson_type = LessonType.from_name(lesson_this_time_info[-2])
+            lesson_name = lesson_type.formatted + lesson_this_time_info[0].split("·")[0]
 
             schedule.append(Schedule(
                 lesson_name=lesson_name,
                 start_time=start_time,
-                classroom=lesson_this_time_info[-1]
+                classroom=lesson_this_time_info[-1].strip()
             ))
 
         return schedule
