@@ -9,3 +9,4 @@ __all__ = [
 class UniversityAlias(StrEnum):
     MIREA = "MIREA"
     BMSTU = "BMSTU"
+    NSTU = "NSTU"

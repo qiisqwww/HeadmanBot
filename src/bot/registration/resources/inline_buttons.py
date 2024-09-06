@@ -29,6 +29,7 @@ def university_list_buttons(
             text=uni.name,
             callback_data=UniversityCallbackData(university_alias=uni.alias),
         )
+    builder.adjust(2)
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 

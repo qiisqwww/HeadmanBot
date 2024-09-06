@@ -2,7 +2,7 @@ from datetime import datetime, time, timedelta
 
 from src.bot.common.convert_time import convert_time_from_utc
 from src.bot.common.render_template import render_template
-from src.modules.utils.schedule_api.domain.schedule import Schedule
+from src.modules.utils.schedule_api.domain.models.schedule import Schedule
 
 __all__ = [
     "CHOOSE_SCHEDULE_PERIOD_TEMPLATE",
