@@ -17,7 +17,8 @@ async def build_scheduler(bot: Bot) -> AsyncScheduler:
     attendance_jobs = [MakeAttendanceRelevantJob(bot, project_container)]
     student_management_jobs = [UnnoteAttendanceJob(project_container)]
     common_jobs = [
-        SendingJob(bot, project_container),
+        SendingJob(bot, project_container, 7), # For Moscow
+        SendingJob(bot, project_container, 3), # For Novosibirjs
         InformAboutUpdateJob(bot, project_container),
         PollByRoleJob(bot, project_container)
     ]

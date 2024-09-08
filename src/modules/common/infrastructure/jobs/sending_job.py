@@ -38,25 +38,33 @@ __all__ = [
 ]
 
 
+hour_to_tz_mapper = {
+    3: "Asia/Novosibirsk",
+    7: "Europe/Moscow",
+}
+
 @final
 class SendingJob(AsyncJob):
     """Send everyone message which allow user to choose lessons which will be visited."""
 
     _bot: Bot
     _build_container: Callable[[], AbstractAsyncContextManager[Injector]]
+    _hour: int
 
     def __init__(
             self,
             bot: Bot,
             build_container: Callable[[], AbstractAsyncContextManager[Injector]],
+            hour: int,
     ) -> None:
         self._bot = bot
         self._build_container = build_container
+        self._hour = hour
 
         if not DEBUG:
             self._trigger = "cron"
             self._trigger_args = {
-                "hour": 7,
+                "hour": hour,
                 "minute": 00,
                 "day_of_week": "mon-sat",
             }
@@ -71,11 +79,14 @@ class SendingJob(AsyncJob):
             delete_student_by_tg_id = container.get(DeleteStudentByTGIDCommand)
 
             fetch_group_timezone = container.get(FetchUniTimezonByGroupIdQuery)
+            expected_timezone = hour_to_tz_mapper[self._hour]
             find_group_headman_query = container.get(FindGroupHeadmanQuery)
 
             for group in groups:
                 try:
                     timezone = await fetch_group_timezone.execute(group.id)
+                    if timezone != expected_timezone:
+                        continue
                     await self._send_to_group(
                         group,
                         delete_student_by_tg_id,
