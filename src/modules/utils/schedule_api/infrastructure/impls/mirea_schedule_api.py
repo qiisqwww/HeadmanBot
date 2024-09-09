@@ -1,10 +1,11 @@
 from datetime import date, datetime, tzinfo
-from typing import Final, NoReturn, final
+from typing import Final, final
 from zoneinfo import ZoneInfo
 
 import recurring_ical_events
 from aiohttp import ClientSession
 from icalendar import Calendar, Event
+from loguru import logger
 from pydantic import ValidationError
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
@@ -36,7 +37,7 @@ class MIREAScheduleAPI(ScheduleAPI):
     def __init__(self) -> None:
         ...
 
-    async def group_exists(self, group_name: str) -> bool | NoReturn:
+    async def group_exists(self, group_name: str) -> bool:
         try:
             isc_link_location_bin = await self._fetch_isc_link_location(group_name)
         except Exception as e:
@@ -62,7 +63,14 @@ class MIREAScheduleAPI(ScheduleAPI):
         self,
         group_name: str,
         day: date | None = None,
-    ) -> list[Schedule] | NoReturn:
+    ) -> list[Schedule]:
+        try:
+            schedule = await self._FALLBACK.fetch_schedule(group_name, day)
+            if schedule:
+                return schedule
+        except Exception as e:
+            logger.exception(e)
+
         day = day or datetime.now(tz=ZoneInfo(UniTimezone.MIREA_TZ)).date()
 
         try:
@@ -111,8 +119,6 @@ class MIREAScheduleAPI(ScheduleAPI):
             raise ParsingScheduleAPIResponseError(err_msg) from e
 
 
-        if not schedule:
-            return await self._FALLBACK.fetch_schedule(group_name, day)
         return schedule
 
     def _parse_schedule_from_calendar(
