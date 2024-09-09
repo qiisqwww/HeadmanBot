@@ -6,7 +6,7 @@ from aiohttp import ClientSession
 from bs4 import BeautifulSoup, Tag
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule, UniTimezone, LessonType
+from src.modules.utils.schedule_api.domain import Schedule, UniTimezone, NSTULessonType
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
@@ -124,7 +124,7 @@ class NSTUScheduleAPI(ScheduleAPI):
                 '%H:%M'
             ) - datetime.now(tz=ZoneInfo(UniTimezone.NSTU_TZ)).utcoffset()).time()
 
-            lesson_type = LessonType.from_name(lesson_this_time_info[-2])
+            lesson_type = NSTULessonType.from_name(lesson_this_time_info[-2])
             lesson_name = lesson_type.formatted + lesson_this_time_info[0].split("·")[0]
 
             schedule.append(Schedule(

@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 from aiohttp import ClientSession
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule, UniTimezone
+from src.modules.utils.schedule_api.domain import Schedule, UniTimezone, BMSTULessonType
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
@@ -18,6 +18,7 @@ __all__ = [
 ]
 
 
+# TODO: rework errors for all API classes
 @final
 class BMSTUScheduleAPI(ScheduleAPI):
     _ALL_GROUPS_URL: Final[str] = "https://lks.bmstu.ru/lks-back/api/v1/structure"
@@ -49,7 +50,6 @@ class BMSTUScheduleAPI(ScheduleAPI):
         """
         Returns schedule of BMSTU group if exists.
         """
-        # day = day or datetime.now(tz=self._API_TIMEZONE).date()
         day = day or datetime.now(tz=ZoneInfo(UniTimezone.BMSTU_TZ)).date()
         current_week = day.isocalendar().week - self._FIRST_WEEK + 1
 
@@ -80,15 +80,23 @@ class BMSTUScheduleAPI(ScheduleAPI):
                     elif week_parity == 1 and lesson["week"] == "zn":
                         continue
 
+                lesson_name = (BMSTULessonType.from_name(lesson["discipline"].get("actType", "")).formatted +
+                               lesson["discipline"]["fullName"])
+
                 start_time = ((datetime.strptime(
                     lesson["startTime"],
                     '%H:%M'
                 )) - datetime.now(tz=ZoneInfo(UniTimezone.BMSTU_TZ)).utcoffset()).time()
 
+                classroom = ""
+                if lesson["audiences"]:
+                    classroom = lesson["audiences"][0].get("name", "")
+                print(classroom)
+
                 schedule.append(Schedule(
-                    lesson_name=lesson["discipline"]["fullName"],
+                    lesson_name=lesson_name,
                     start_time=start_time,
-                    classroom=lesson["audiences"][0].get("name", "")
+                    classroom=classroom
                 ))
         except Exception as e:
             err_msg = "Failed to parse schedule from json file using BMSTU API"
@@ -108,18 +116,26 @@ class BMSTUScheduleAPI(ScheduleAPI):
 
     @aiohttp_retry(3)
     async def _fetch_group_schedule(self, group_uuid: str) -> dict[str, Any]:
+        """
+        Fetches group schedule using BMSTU API.
+        """
         async with (ClientSession() as session, session.get(
                 self._GROUP_SCHEDULE_URL.format(group_uuid=group_uuid)) as response):
             response_payload: dict[str, Any] = await response.json()
 
         return response_payload
 
-    async def _get_group_data(self, all_schedule_json: dict, group_name: str) -> dict | None:
+    @staticmethod
+    async def _get_group_data(all_schedule_json: dict, group_name: str) -> dict | None:  # TODO: Refactor this shit
+        """
+        Returns list of group's schedule from json.
+        """
         for universities in all_schedule_json["data"]["children"]:
             for institutes in universities["children"]:
                 for direction in institutes["children"]:
                     for course in direction["children"]:
                         for group in course["children"]:
-                            if group["abbr"] == group_name: return group
+                            if group["abbr"] == group_name:
+                                return group
 
         return None

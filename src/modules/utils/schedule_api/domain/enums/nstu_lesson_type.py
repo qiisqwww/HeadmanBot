@@ -1,15 +1,13 @@
 from typing import Self
 from enum import StrEnum, verify, UNIQUE
 
-from loguru import logger
-
 __all__ = [
-    "LessonType",
+    "NSTULessonType",
 ]
 
 
 @verify(UNIQUE)
-class LessonType(StrEnum):
+class NSTULessonType(StrEnum):
     LECTION = "ЛК"
     PRACTISE = "ПР"
     LABORATORY = "ЛБ"
