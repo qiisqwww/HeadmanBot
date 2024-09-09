@@ -65,8 +65,7 @@ async def handling_certain_date(
                 schedule,
                 timezone,
                 "сегодня" if certain_date == date.today() else str(certain_date),
-                certain_date.weekday(),
-                uni_alias != UniversityAlias.BMSTU,
+                certain_date.weekday()
             ),
             reply_markup=show_get_back_button()
         )

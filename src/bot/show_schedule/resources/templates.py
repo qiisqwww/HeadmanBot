@@ -71,15 +71,14 @@ def schedule_list_template(
     schedule: list[Schedule],
     timezone: str,
     day: str,
-    weekday: int,
-    has_classrooms: bool,
+    weekday: int
 ) -> str:
     return render_template(
         """
 Расписание на {{day}} ({{day_of_week}}):
 
 {% for lesson in schedule | sort(attribute='start_time') -%}
-    Пара {{ loop.index }} {{ convert_time_from_utc(lesson.start_time, timezone).strftime('%H:%M')}}-{{end_time(lesson.start_time, timezone).strftime('%H:%M') }} {% if has_classrooms and lesson.classroom %} <em>{{ lesson.classroom }}</em>{% endif %}\n
+    Пара {{ loop.index }} {{ convert_time_from_utc(lesson.start_time, timezone).strftime('%H:%M')}}-{{end_time(lesson.start_time, timezone).strftime('%H:%M') }} <em>{{ lesson.classroom }}</em>\n
 <b>{{ lesson.lesson_name }}</b>
 
 {% endfor %}""",
@@ -88,6 +87,5 @@ def schedule_list_template(
         end_time=end_time,
         timezone=timezone,
         day=day,
-        day_of_week=get_full_name_of_day(weekday),
-        has_classrooms=has_classrooms,
+        day_of_week=get_full_name_of_day(weekday)
     )

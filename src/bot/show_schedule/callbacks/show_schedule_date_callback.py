@@ -65,8 +65,7 @@ async def show_chosen_date_schedule_callback(
             schedule,
             timezone,
             "сегодня" if chosen_day == date.today() else str(chosen_day),
-            chosen_day.weekday(),
-            uni_alias != UniversityAlias.BMSTU,
+            chosen_day.weekday()
         ),
         show_choose_day_buttons(callback_data.weeks_to_add)
     )
