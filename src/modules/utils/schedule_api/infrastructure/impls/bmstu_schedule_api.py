@@ -1,12 +1,8 @@
-import re
 from datetime import date, datetime, tzinfo
-from typing import Final, NoReturn, final
+from typing import Final, NoReturn, final, Any
 from zoneinfo import ZoneInfo
 
-import recurring_ical_events
 from aiohttp import ClientSession
-from bs4 import BeautifulSoup, Tag
-from icalendar import Calendar, Event
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule, UniTimezone
@@ -14,7 +10,6 @@ from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
     FailedToFetchScheduleError,
-    GroupNotFoundError,
     ParsingScheduleAPIResponseError,
 )
 
@@ -25,7 +20,9 @@ __all__ = [
 
 @final
 class BMSTUScheduleAPI(ScheduleAPI):
-    _ALL_SCHEDULE_URL: Final[str] = "https://lks.bmstu.ru/schedule/list"
+    _ALL_GROUPS_URL: Final[str] = "https://lks.bmstu.ru/lks-back/api/v1/structure"
+    _GROUP_SCHEDULE_URL: Final[str] = "https://lks.bmstu.ru/lks-back/api/v1/schedules/groups/{group_uuid}/public"
+    _FIRST_WEEK: Final[int] = 36
     _SUNDAY: Final[int] = 6
     _API_TIMEZONE: Final[tzinfo] = ZoneInfo("UTC")
 
@@ -37,20 +34,12 @@ class BMSTUScheduleAPI(ScheduleAPI):
         Returns true if group exists in BMSTU.
         """
         try:
-            all_schedule_bin = await self._fetch_all_schedule()
+            all_schedule_json = await self._fetch_all_schedule()
         except Exception as e:
             err_msg = "Failed to fetch index page for schedule using BMSTU API."
             raise FailedToCheckGroupExistenceError(err_msg) from e
 
-        try:
-            all_schedule_soup = BeautifulSoup(all_schedule_bin, "html.parser")
-            group_tags = self._parse_group_tags_soup(all_schedule_soup)
-            group_names = [tag.text.strip() for tag in group_tags]
-        except Exception as e:
-            err_msg = "Failed to parse index page for schedule using BMSTU API."
-            raise ParsingScheduleAPIResponseError(err_msg) from e
-
-        return group_name in group_names
+        return await self._get_group_data(all_schedule_json, group_name) is not None
 
     async def fetch_schedule(
         self,
@@ -62,96 +51,75 @@ class BMSTUScheduleAPI(ScheduleAPI):
         """
         # day = day or datetime.now(tz=self._API_TIMEZONE).date()
         day = day or datetime.now(tz=ZoneInfo(UniTimezone.BMSTU_TZ)).date()
+        current_week = day.isocalendar().week - self._FIRST_WEEK + 1
 
         if day.weekday() == self._SUNDAY:
             return []
 
         try:
-            all_schedule_bin = await self._fetch_all_schedule()
+            all_schedule_json = await self._fetch_all_schedule()
         except Exception as e:
             err_msg = "Failed to fetch index page for schedule using BMSTU API."
-            raise FailedToCheckGroupExistenceError(err_msg) from e
-
-        try:
-            all_schedule_soup = self._parse_html(all_schedule_bin)
-            isc_url = self._parse_isc_url(all_schedule_soup, group_name)
-        except Exception as e:
-            err_msg = "Failed to parse isc file location from index schedule page using BMSTU API."
-            raise ParsingScheduleAPIResponseError(err_msg) from e
-
-        try:
-            isc_file = await self._fetch_isc(isc_url)
-        except Exception as e:
-            err_msg = "Failed to fetch isc file with schedule using MIREA API."
             raise FailedToFetchScheduleError(err_msg) from e
 
         try:
-            calendar: Calendar = Calendar.from_ical(
-                isc_file,
-            )  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            events: list[Event] = recurring_ical_events.of(calendar).at(
-                day,
-            )  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            schedule = [
-                Schedule(
-                    lesson_name=str(
-                        event["SUMMARY"],
-                    ),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
-                    start_time=event[
-                        "DTSTART"
-                    ].dt.timetz(),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
-                    classroom=str(event.get("LOCATION", "")),
-                )
-                for event in events
-            ]
+            group_data = await self._get_group_data(all_schedule_json, group_name)
+            group_schedule = (await self._fetch_group_schedule(group_data["uuid"]))["data"]
         except Exception as e:
-            err_msg = "Failed to parse schedule from isc file using BMSTU API"
+            err_msg = "Failed to fetch group_schedule using group_data using BMSTU API."
+            raise ParsingScheduleAPIResponseError(err_msg) from e
+
+        try:
+            schedule = []
+            for lesson in group_schedule["schedule"]:
+                if lesson["day"] != day.weekday() + 1: continue
+                if lesson["week"] != "all":
+                    week_parity = current_week % 2
+                    if week_parity == 0 and lesson["week"] == "ch":
+                        continue
+                    elif week_parity == 1 and lesson["week"] == "zn":
+                        continue
+
+                start_time = ((datetime.strptime(
+                    lesson["startTime"],
+                    '%H:%M'
+                )) - datetime.now(tz=ZoneInfo(UniTimezone.BMSTU_TZ)).utcoffset()).time()
+
+                schedule.append(Schedule(
+                    lesson_name=lesson["discipline"]["fullName"],
+                    start_time=start_time,
+                    classroom=lesson["audiences"][0].get("name", "")
+                ))
+        except Exception as e:
+            err_msg = "Failed to parse schedule from json file using BMSTU API"
             raise ParsingScheduleAPIResponseError(err_msg) from e
 
         return schedule
 
-    def _parse_html(self, html: str) -> BeautifulSoup:
-        return BeautifulSoup(html, "html.parser")
-
-    def _parse_isc_url(self, page: BeautifulSoup, group_name: str) -> str:
-        """
-        Return url to download .ics schedule file of BMSTU group.
-        """
-        group_tags = self._parse_group_tags_soup(page)
-
-        group_schedule_url = None
-        for tag in group_tags:
-            if tag.text.strip() == group_name:
-                group_schedule_url = tag.attrs["href"]
-
-        if group_schedule_url is None:
-            err_msg = f"Failed to find location of isc file for group '{group_name}'"
-            raise GroupNotFoundError(err_msg)
-
-        return f"https://lks.bmstu.ru{group_schedule_url}.ics"
-
     @aiohttp_retry(attempts=3)
-    async def _fetch_all_schedule(self) -> str:
+    async def _fetch_all_schedule(self) -> dict[str, Any]:
         """
         Fetches index page for schedule using BMSTU API.
         """
-        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session, session.get(
-            self._ALL_SCHEDULE_URL,
-        ) as response:
-            response_payload: str = await response.text()
+        async with ClientSession() as session, session.get(self._ALL_GROUPS_URL) as response:
+            response_payload: dict[str, Any] = await response.json()
+
         return response_payload
 
-    @aiohttp_retry(attempts=3)
-    async def _fetch_isc(self, url: str) -> str:
-        """
-        Fetches isc file for BMSTU group.
-        """
-        async with ClientSession(timeout=self._REQUEST_TIMEOUT) as client, client.get(
-            url,
-        ) as response:
-            payload: str = await response.text()
-        return payload
+    @aiohttp_retry(3)
+    async def _fetch_group_schedule(self, group_uuid: str) -> dict[str, Any]:
+        async with (ClientSession() as session, session.get(
+                self._GROUP_SCHEDULE_URL.format(group_uuid=group_uuid)) as response):
+            response_payload: dict[str, Any] = await response.json()
 
-    def _parse_group_tags_soup(self, soup: BeautifulSoup) -> list[Tag]:
-        group_pat = re.compile("/schedule/*")
-        return soup.find_all(href=group_pat)
+        return response_payload
+
+    async def _get_group_data(self, all_schedule_json: dict, group_name: str) -> dict | None:
+        for universities in all_schedule_json["data"]["children"]:
+            for institutes in universities["children"]:
+                for direction in institutes["children"]:
+                    for course in direction["children"]:
+                        for group in course["children"]:
+                            if group["abbr"] == group_name: return group
+
+        return None
