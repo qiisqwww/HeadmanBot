@@ -7,7 +7,7 @@ __all__ = [
     "asking_fullname_validation_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
-    "REGISTRATION_ACCEPTED_TEMPLATE",
+    "registration_accepted_template",
     "YOU_WERE_DENIED_TEMPLATE",
     "YOU_WERE_ACCEPTED_TEMPLATE",
     "ASK_UNIVERSITY_TEMPLATE",
@@ -47,7 +47,6 @@ INCORRECT_STUDENT_ROLE_TEMPLATE = "Пожалуйста, нажмите на о�
 
 REGISTRATION_DENIED_TEMPLATE = "Вы отказали пользователю в регистрации."
 
-REGISTRATION_ACCEPTED_TEMPLATE = "Пользователь был успешно зарегистрирован."
 
 YOU_WERE_ACCEPTED_TEMPLATE = "Ваше заявление на регистрацию было одобрено."
 
@@ -146,17 +145,34 @@ def student_send_registration_request_template(
     first_name: str,
     role: Role,
     telegram_id: int,
+    group: str,
     username: str | None,
 ) -> str:
     return render_template(
         """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> @{{ username }}
-подал заявку на регистарцию в боте.""",
+подал заявку на регистарцию в боте в группу - {{ group }}.""",
+        role=role,
+        telegram_id=telegram_id,
+        fullname=f"{last_name} {first_name}",
+        username=username if username is not None else "",
+        group=group,
+    )
+
+def registration_accepted_template(
+    last_name: str,
+    first_name: str,
+    role: Role,
+    telegram_id: int,
+    username: str | None,
+) -> str:
+    return render_template(
+        """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> @{{ username }}
+был успешно зарегистрирован в бота.""",
         role=role,
         telegram_id=telegram_id,
         fullname=f"{last_name} {first_name}",
         username=username if username is not None else "",
     )
-
 
 def start_message_template(last_name: str | None, first_name: str) -> str:
     return render_template(

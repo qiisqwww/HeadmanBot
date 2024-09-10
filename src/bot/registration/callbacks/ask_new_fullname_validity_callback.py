@@ -10,10 +10,10 @@ from src.bot.registration.callback_data import AskNewFullnameValidityCallbackDat
 from src.bot.registration.finite_state.registration_states import RegistrationStates
 from src.bot.registration.resources.inline_buttons import accept_or_deny_buttons
 from src.bot.registration.resources.templates import (
+    ASK_SURNAME_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_ADMINS_TEMPLATE,
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     student_send_registration_request_template,
-    ASK_SURNAME_TEMPLATE
 )
 from src.modules.common.infrastructure.config import ADMIN_IDS
 from src.modules.student_management.application.commands import CacheCreateStudentDataCommand
@@ -81,6 +81,7 @@ async def ask_new_fullname_validity_callback(
     last_name = await state.last_name
     first_name = await state.first_name
     role = await state.role
+    group_name = await state.group_name
 
     if role == Role.HEADMAN:
         await state.clear()
@@ -93,9 +94,10 @@ async def ask_new_fullname_validity_callback(
                     first_name,
                     role,
                     telegram_id,
+                    group_name,
                     callback.from_user.username,
                 ),
-                reply_markup=accept_or_deny_buttons(telegram_id),
+                reply_markup=accept_or_deny_buttons(telegram_id, callback.from_user.username),
             )
         return
 
@@ -120,7 +122,8 @@ async def ask_new_fullname_validity_callback(
             first_name,
             role,
             telegram_id,
+            group_name,
             callback.from_user.username,
         ),
-        reply_markup=accept_or_deny_buttons(telegram_id),
+        reply_markup=accept_or_deny_buttons(telegram_id, callback.from_user.username),
     )

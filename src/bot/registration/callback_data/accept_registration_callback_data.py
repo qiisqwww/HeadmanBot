@@ -8,3 +8,4 @@ __all__ = [
 class AcceptRegistrationCallbackData(CallbackData, prefix="confirm_access"):  # type: ignore
     telegram_id: int
     accepted: bool
+    username: str | None

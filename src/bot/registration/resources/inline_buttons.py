@@ -47,16 +47,24 @@ def role_buttons() -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
-def accept_or_deny_buttons(student_id: int) -> InlineKeyboardMarkup:
+def accept_or_deny_buttons(student_id: int, username: str | None) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(
         text="Одобрить",
-        callback_data=AcceptRegistrationCallbackData(telegram_id=student_id, accepted=True),
+        callback_data=AcceptRegistrationCallbackData(
+            telegram_id=student_id,
+            accepted=True,
+            username=username,
+        ),
     )
     builder.button(
         text="Отказать",
-        callback_data=AcceptRegistrationCallbackData(telegram_id=student_id, accepted=False),
+        callback_data=AcceptRegistrationCallbackData(
+            telegram_id=student_id,
+            accepted=False,
+            username=username,
+        ),
     )
 
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
