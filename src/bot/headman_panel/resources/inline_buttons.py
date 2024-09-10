@@ -65,6 +65,8 @@ def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
             text="Убрать зама старосты",
             callback_data=UnsetViceHeadmanCallbackData(),
         )
+
+    if role >= Role.VICE_HEADMAN:
         builder.button(
             text="Список группы",
             callback_data=ShowStudentListCallbackData(),
