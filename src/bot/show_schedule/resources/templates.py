@@ -78,7 +78,7 @@ def schedule_list_template(
 Расписание на {{day}} ({{day_of_week}}):
 
 {% for lesson in schedule | sort(attribute='start_time') -%}
-    Пара {{ loop.index }} {{ convert_time_from_utc(lesson.start_time, timezone).strftime('%H:%M')}}-{{end_time(lesson.start_time, timezone).strftime('%H:%M') }} <em>{{ lesson.classroom }}</em>\n
+    Пара {{ loop.index }} {{ convert_time_from_utc(lesson.start_time, timezone).strftime('%H:%M')}}-{{end_time(lesson.start_time, timezone).strftime('%H:%M') }} <em>{{ lesson.classroom }}</em>
 <b>{{ lesson.lesson_name }}</b>
 
 {% endfor %}""",
