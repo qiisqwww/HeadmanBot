@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from typing import Final, NoReturn
 from zoneinfo import ZoneInfo
 
@@ -9,49 +9,43 @@ from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule, UniTimezone, NSTULessonType
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
-    FailedToCheckGroupExistenceError,
     ParsingScheduleAPIResponseError,
     UnexpectedScheduleDataError,
     FailedToFetchScheduleError
 )
 
 __all__ = [
-    "NSTUScheduleAPI"
+    "STUScheduleAPI"
 ]
 
 
-class NSTUScheduleAPI(ScheduleAPI):
+class STUScheduleAPI(ScheduleAPI):
     _GROUP_SCHEDULE_URL: Final[str] = \
         "https://www.nstu.ru/studies/schedule/schedule_classes/schedule?group={group_name}&print=true"
+    _FIND_GROUP_ID_URL = \
+        "http://www.stu.ru/education/raspisanie_groups.php?faculty=&group=&cur_year=2024&_=1726061460938"
     _SUNDAY: Final[int] = 6
-    _FIRST_WEEK = 36
 
     def __init__(self) -> None:
         ...
 
     async def group_exists(self, group_name: str) -> bool | NoReturn:
         try:
-            all_schedule_bin = await self._fetch_all_schedule(group_name)
+            all_groups_bin = await self._fetch_all_groups()
         except Exception as e:
-            err_msg = "Failed to fetch index page for schedule using NSTU API."
+            err_msg = "Failed to fetch index page for schedule using STU API."
             raise FailedToFetchScheduleError(err_msg) from e
 
         try:
-            all_schedule_soup = BeautifulSoup(all_schedule_bin, "html.parser")
-            info_about_lessons = all_schedule_soup.find(
-                "div",
-                {"class": "schedule__table-body"}).findAll(
-                "div",
-                {"class": "schedule__table-row"})
+            group_id = await self._find_group_id(all_groups_bin, group_name)
         except Exception as e:
             err_msg = "Failed to parse index page for schedule using NSTU API."
             raise ParsingScheduleAPIResponseError(err_msg) from e
 
-        return len(info_about_lessons) != 0
+        return group_id is not None
 
     async def fetch_schedule(self, group_name: str, day: date | None = None) -> list[Schedule] | NoReturn:
         day = day or datetime.now(tz=ZoneInfo(UniTimezone.NSTU_TZ))
-        current_week = day.isocalendar().week - self._FIRST_WEEK + 1
 
         today = day.weekday()
         if today == self._SUNDAY:
@@ -152,3 +146,26 @@ class NSTUScheduleAPI(ScheduleAPI):
             response_payload = await response.text()
 
         return response_payload
+
+    @aiohttp_retry(attempts=3)
+    async def _fetch_all_groups(self) -> str | None:
+        async with ClientSession() as session:
+            response = await session.get(self._FIND_GROUP_ID_URL)
+            response_payload = await response.text()
+
+        return response_payload
+
+    @staticmethod
+    async def _find_group_id(response_payload: str, group_name: str) -> str | None:
+        group_founder_soup = BeautifulSoup(response_payload, "html.parser")
+        groups = group_founder_soup.find("select", {"id": "group"}).find_all("option", {"data-faculty": True})
+
+        group_id, previous_group_id = None, None
+        for group in groups:
+            if group_name == group.text.strip():
+                group_id = group.get("value")
+            elif group_name in group.text:
+                previous_group_id = group.get("value")
+            else:
+                group_id = previous_group_id
+                break
