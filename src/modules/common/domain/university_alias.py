@@ -10,3 +10,4 @@ class UniversityAlias(StrEnum):
     MIREA = "MIREA"
     BMSTU = "BMSTU"
     NSTU = "NSTU"
+    STU = "STU"
