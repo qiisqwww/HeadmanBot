@@ -21,7 +21,7 @@ __all__ = [
 
 class STUScheduleAPI(ScheduleAPI):
     _GROUP_SCHEDULE_URL: Final[str] = \
-        "https://www.nstu.ru/studies/schedule/schedule_classes/schedule?group={group_name}&print=true"
+        "http://www.stu.ru/education/raspisanie_table.php?group={group_id}&lecturer_oid=0&date_from={date_from}&cur_year={year}&_=1726056684017"
     _FIND_GROUP_ID_URL = \
         "http://www.stu.ru/education/raspisanie_groups.php?faculty=&group=&cur_year=2024&_=1726061460938"
     _SUNDAY: Final[int] = 6
@@ -33,13 +33,13 @@ class STUScheduleAPI(ScheduleAPI):
         try:
             all_groups_bin = await self._fetch_all_groups()
         except Exception as e:
-            err_msg = "Failed to fetch index page for schedule using STU API."
+            err_msg = "Failed to fetch index page for groups using STU API."
             raise FailedToFetchScheduleError(err_msg) from e
 
         try:
             group_id = await self._find_group_id(all_groups_bin, group_name)
         except Exception as e:
-            err_msg = "Failed to parse index page for schedule using NSTU API."
+            err_msg = "Failed to parse index page for groups using STU API."
             raise ParsingScheduleAPIResponseError(err_msg) from e
 
         return group_id is not None
@@ -52,87 +52,43 @@ class STUScheduleAPI(ScheduleAPI):
             return []
 
         try:
-            all_schedule_bin = await self._fetch_all_schedule(group_name)
+            all_groups_bin = await self._fetch_all_groups(group_name)
         except Exception as e:
-            err_msg = "Failed to fetch index page for schedule using NSTU API."
+            err_msg = "Failed to fetch index page for groups using STU API."
+            raise FailedToFetchScheduleError(err_msg) from e
+
+        try:
+            group_id = await self._find_group_id(all_groups_bin, group_name)
+        except Exception as e:
+            err_msg = "Failed to parse index page for groups using STU API."
+            raise ParsingScheduleAPIResponseError(err_msg) from e
+
+        try:
+            all_schedule_bin = await self._fetch_all_schedule(group_id, str(day.date()), day.year)
+        except Exception as e:
+            err_msg = "Failed to fetch index page for schedule using STU API."
             raise FailedToFetchScheduleError(err_msg) from e
 
         try:
             all_schedule_soup = BeautifulSoup(all_schedule_bin, "html.parser")
-            week_schedule_soup = [day for day in all_schedule_soup.find(
-                "div",
-                {"class": "schedule__table-body"}).children if isinstance(day, Tag)]
+            schedule_table = all_schedule_soup.find("tbody").findall("tr", {"style": True})
         except Exception as e:
-            err_msg = "Failed to parse index page for schedule using NSTU API."
+            err_msg = "Failed to parse index page for schedule using STU API."
             raise ParsingScheduleAPIResponseError(err_msg) from e
-        today_schedule_soup = [item for item in list(week_schedule_soup[today].children) if isinstance(item, Tag)][1]
 
         try:
             schedule = []
-            # Итерируемся только по дочерним объектам, которые являются объектами класса Tag
-            for lesson in [item for item in list(today_schedule_soup.children) if isinstance(item, Tag)]:
-                lessons_this_time = lesson.find_all("div",
-                                                    class_="schedule__table-row")  # На это время (в разные недели)
-                if all(lesson_this_time.text.strip() == "" for lesson_this_time in lessons_this_time):
-                    continue
-
-                # Необходимо определить, какая именно пара будет проходить в это время на этой неделе
-                lesson_this_time_info = None
-                for applicant_lesson_this_time in lessons_this_time:
-                    applicant_lesson_infos = [ch for ch in applicant_lesson_this_time.children if isinstance(ch, Tag)][
-                        0]
-                    applicant_lesson_info = [lesson_info.text for lesson_info in applicant_lesson_infos.children][1]
-
-                    filtered_applicant_info = []
-                    for l in applicant_lesson_info.split("\n"):
-                        if len(l.replace("\t", "")) > 0:
-                            filtered_applicant_info.append(l.replace("\t", ""))
-
-                    if len(filtered_applicant_info) > 5:
-                        err_msg = (
-                            "Got an unexpected count of arguments for lesson from NSTU API (or the format "
-                            "data is stored in was changed"
-                        )
-                        raise UnexpectedScheduleDataError(err_msg)
-
-                    if all(stamp not in filtered_applicant_info[0].lower() for stamp in [
-                        "недели",
-                        "по чётным",
-                        "по нечётным"
-                    ]):
-                        lesson_this_time_info = filtered_applicant_info
+            for line in schedule_table:
+                date_tag = line.find("td", attrs={"rowspan": True})
+                if date_tag:
+                    schedule_date = ".".join(str(day).split("-")[::-1])
+                    if schedule_date not in date_tag:
                         break
-
-                    if "недели" in filtered_applicant_info[0].lower():
-                        weeks = filtered_applicant_info[0].split(" ")[1:]
-                        if str(current_week) in weeks:
-                            lesson_this_time_info = filtered_applicant_info[1:]
-                            break
-                    if "по чётным" in filtered_applicant_info[0].lower():
-                        lesson_this_time_info = filtered_applicant_info[1:] if current_week % 2 == 0 else None
-                    elif "по нечётным" in filtered_applicant_info[0].lower():
-                        lesson_this_time_info = filtered_applicant_info[1:] if current_week % 2 != 0 else None
-
-                if lesson_this_time_info is None:
                     continue
 
-                # Необходимо достать время начала пары
-                start_time = (datetime.strptime(
-                    lesson.find("div", class_="schedule__table-time").text.split("-")[0],
-                    '%H:%M'
-                ) - datetime.now(tz=ZoneInfo(UniTimezone.NSTU_TZ)).utcoffset()).time()
-
-                lesson_type = NSTULessonType.from_name(lesson_this_time_info[-2])
-                lesson_name = lesson_type.formatted + lesson_this_time_info[0].split("·")[0]
-
-                schedule.append(Schedule(
-                    lesson_name=lesson_name,
-                    start_time=start_time,
-                    classroom=lesson_this_time_info[-1].strip()
-                ))
         except Exception as e:
             err_msg = (
-                "Got an unexpected count of arguments for lesson from NSTU API (or the format "
+                "Got an unexpected count of arguments for lesson from STU API (or the format "
                 "data is stored in was changed"
             )
             raise ParsingScheduleAPIResponseError(err_msg) from e
@@ -140,9 +96,13 @@ class STUScheduleAPI(ScheduleAPI):
         return schedule
 
     @aiohttp_retry(attempts=3)
-    async def _fetch_all_schedule(self, group_name: str) -> str:
+    async def _fetch_all_schedule(self, group_id: str, date_from: str, year: int) -> str:
         async with ClientSession(timeout=self._REQUEST_TIMEOUT) as session:
-            response = await session.get(self._GROUP_SCHEDULE_URL.format(group_name=group_name))
+            response = await session.get(self._GROUP_SCHEDULE_URL.format(
+                group_id=group_id,
+                date_from=date_from,
+                year=year
+            ))
             response_payload = await response.text()
 
         return response_payload
@@ -169,3 +129,5 @@ class STUScheduleAPI(ScheduleAPI):
             else:
                 group_id = previous_group_id
                 break
+
+        return group_id
