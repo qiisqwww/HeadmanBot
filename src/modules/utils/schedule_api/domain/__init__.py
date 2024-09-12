@@ -1,5 +1,11 @@
 from src.modules.utils.schedule_api.domain.models import Schedule
-from src.modules.utils.schedule_api.domain.enums import Weekday, UniTimezone, NSTULessonType, BMSTULessonType
+from src.modules.utils.schedule_api.domain.enums import (
+    Weekday,
+    UniTimezone,
+    NSTULessonType,
+    BMSTULessonType,
+    STULessonType
+)
 
 __all__ = [
     "Schedule",
@@ -7,4 +13,5 @@ __all__ = [
     "UniTimezone",
     "NSTULessonType",
     "BMSTULessonType",
+    "STULessonType"
 ]

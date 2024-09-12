@@ -72,7 +72,8 @@ class BMSTUScheduleAPI(ScheduleAPI):
         try:
             schedule = []
             for lesson in group_schedule["schedule"]:
-                if lesson["day"] != day.weekday() + 1: continue
+                if lesson["day"] != day.weekday() + 1:
+                    continue
                 if lesson["week"] != "all":
                     week_parity = current_week % 2
                     if week_parity == 0 and lesson["week"] == "ch":
