@@ -7,7 +7,7 @@ import pytest
 from pytest import MonkeyPatch
 
 from src.modules.utils.schedule_api.domain import Schedule
-from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api import (
+from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api.mirea_schedule_api import (
     MIREAScheduleAPI,
 )
 

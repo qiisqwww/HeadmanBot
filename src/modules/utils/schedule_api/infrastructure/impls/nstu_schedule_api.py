@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from typing import Final, NoReturn
 from zoneinfo import ZoneInfo
 
@@ -9,7 +9,6 @@ from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule, UniTimezone, NSTULessonType
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
-    FailedToCheckGroupExistenceError,
     ParsingScheduleAPIResponseError,
     UnexpectedScheduleDataError,
     FailedToFetchScheduleError

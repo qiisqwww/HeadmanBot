@@ -18,8 +18,8 @@ from src.modules.utils.schedule_api.infrastructure.exceptions import (
     ParsingScheduleAPIResponseError,
 )
 
-from .mirea_isc_link_schema import MireaIscLinkSchema
-from .mirea_schedule_api_fallback import MireaScheduleApiFallback
+from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api.mirea_isc_link_schema import MireaIscLinkSchema
+from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api.mirea_schedule_api_fallback import MireaScheduleApiFallback
 
 __all__ = [
     "MIREAScheduleAPI",
