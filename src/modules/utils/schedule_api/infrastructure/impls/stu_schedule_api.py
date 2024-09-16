@@ -142,12 +142,10 @@ class STUScheduleAPI(ScheduleAPI):
         for group in groups:
             if group_name == group.text.strip():
                 group_id = group.get("value")
-            elif group_name in group.text:
-                previous_group_id = group.get("value")
-                previous_text = group.text
-            else:
-                if group_name == previous_text[:(len(previous_text) - len(group.text))].strip():
-                    group_id = previous_group_id
-                    break
+            if previous_text and group_name == previous_text[:(len(previous_text) - len(group.text))].strip():
+                group_id = previous_group_id
+                break
+            previous_text = group.text
+            previous_group_id = group.get("value")
 
         return group_id
