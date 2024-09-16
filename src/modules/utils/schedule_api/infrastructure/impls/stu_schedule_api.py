@@ -138,14 +138,16 @@ class STUScheduleAPI(ScheduleAPI):
             {"id": "group"}
         ).find_all("option", {"data-faculty": True})
 
-        group_id, previous_group_id = None, None
+        group_id, previous_group_id, previous_text = None, None, None
         for group in groups:
             if group_name == group.text.strip():
                 group_id = group.get("value")
             elif group_name in group.text:
                 previous_group_id = group.get("value")
+                previous_text = group.text
             else:
-                group_id = previous_group_id
-                break
+                if group_name == previous_text[:(len(previous_text) - len(group.text))].strip():
+                    group_id = previous_group_id
+                    break
 
         return group_id
