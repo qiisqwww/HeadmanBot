@@ -61,13 +61,13 @@ USER_WAS_SUCCESSFULLY_ENHANCED = """
 USER_WAS_SUCCESSFULLY_DOWNGRADED = """
 У пользователя была успешна убрана роль зама старосты"""
 
+
 def students_list(students: list[Student]) -> str:
     return render_template(
         """<b>Список группы</b>
 
 {% for student in students | sort(attribute='fullname') -%}
-    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
-{% endfor %}
-""",
+    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> {% if student.birthdate %} <em>ДР: {{ student.birthdate }}</em> {% else %} {% endif %} 
+{% endfor %}""",
         students=students,
     )
