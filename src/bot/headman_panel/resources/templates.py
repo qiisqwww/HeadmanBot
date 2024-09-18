@@ -1,3 +1,5 @@
+from datetime import date
+
 from src.bot.common.render_template import render_template
 from src.modules.student_management.domain.models.student import Student
 
@@ -19,7 +21,6 @@ __all__ = [
     "students_birthdate_list"
 ]
 
-
 YOU_CAN_NOT_ANSWER_TIME_TEMPLATE = """
 Вы не можете отметиться! Занятия уже начались!"""
 
@@ -31,7 +32,6 @@ ALL_PAIRS_TEMPLATE = """
 
 NO_PAIRS_TEMPLATE = """
 Вы выбрали <b>не посещать пары</b>"""
-
 
 YOU_WAS_GRADED_TO_VICEHEADMAN_TEMPLATE = """Вы были повышены до заместителя старосты.
 Вы теперь можете просматривать посещаемость группы. Для просмотра посещаемости нажмите на кнопку "Группа".
@@ -74,6 +74,10 @@ def students_list(students: list[Student]) -> str:
 
 
 def students_birthdate_list(students: list[Student]) -> str:
+    students = sorted(
+        students,
+        key=lambda student: student.birthdate if student.birthdate else date(9999, 1, 1),
+    )
     return render_template(
         """<b>Дни рождения студентов</b>
 
