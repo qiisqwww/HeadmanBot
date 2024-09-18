@@ -42,7 +42,7 @@ services:
     env_file:
       - ../.env/.database.dev.env
     volumes:
-      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
+      - ../postgres/data:/var/lib/postgresql/data
       - ../postgres/postgresql.conf:/etc/postgresql/postgresql.conf
       - ../postgres/migrate.sh:/docker-entrypoint-initdb.d/init.sh
       - ../postgres/migrations:/docker-entrypoint-initdb.d/migrations

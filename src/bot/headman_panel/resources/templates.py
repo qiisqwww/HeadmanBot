@@ -14,10 +14,10 @@ __all__ = [
     "CHOOSE_USER_TO_ENHANCE_TEMPLATE",
     "FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE",
     "USER_WAS_SUCCESSFULLY_ENHANCED",
-    "USER_WAS_SUCCESSFULLY_DOWNGRADED"
+    "USER_WAS_SUCCESSFULLY_DOWNGRADED",
+    "students_list",
+    "students_birthdate_list"
 ]
-
-
 
 
 YOU_CAN_NOT_ANSWER_TIME_TEMPLATE = """
@@ -67,7 +67,18 @@ def students_list(students: list[Student]) -> str:
         """<b>Список группы</b>
 
 {% for student in students | sort(attribute='fullname') -%}
-    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> {% if student.birthdate %} <em>ДР: {{ student.birthdate }}</em> {% else %} {% endif %} 
+    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>  
+{% endfor %}""",
+        students=students,
+    )
+
+
+def students_birthdate_list(students: list[Student]) -> str:
+    return render_template(
+        """<b>Дни рождения студентов</b>
+
+{% for student in students | sort(attribute='birthdate') -%}
+    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> {% if student.birthdate %} ДР: {{ student.birthdate }} {% else %} {% endif %} 
 {% endfor %}""",
         students=students,
     )
