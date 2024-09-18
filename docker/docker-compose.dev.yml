@@ -5,7 +5,7 @@ services:
     image: ngrok/ngrok:alpine
     env_file:
       - ../.env/.dev.env
-    command: ["http", "proxy:80", "--domain", "$NGROK_DOMAIN"]
+    command: [ "http", "proxy:80", "--domain", "$NGROK_DOMAIN" ]
 
   proxy:
     depends_on:
@@ -19,37 +19,37 @@ services:
   headman_bot:
     env_file:
       - ../.env/.dev.env
-    build: 
+    build:
       dockerfile: ./docker/Dockerfile.dev
       context: ..
     depends_on:
       redis:
         condition: service_started
       postgres:
-          condition: service_healthy
+        condition: service_healthy
     volumes:
       - ../logs:/app/logs
       - ../update_info.html:/app/update_info.html
       - ../poll_by_role.html:/app/poll_by_role.html
       - ../ShowInfoImg.png:/app/ShowInfoImg.png
-    ports: 
+    ports:
       - 8080:8080
 
   postgres:
     image: postgres:16.1-alpine3.19
-    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    command: [ "postgres", "-c", "config_file=/etc/postgresql/postgresql.conf" ]
     restart: always
     env_file:
       - ../.env/.database.dev.env
     volumes:
-      - ../postgres/data:/var/lib/postgresql/data
+      - headman_bot_postgres_dev_data:/var/lib/postgresql/data
       - ../postgres/postgresql.conf:/etc/postgresql/postgresql.conf
       - ../postgres/migrate.sh:/docker-entrypoint-initdb.d/init.sh
       - ../postgres/migrations:/docker-entrypoint-initdb.d/migrations
     ports:
       - 5432:5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 3s
       timeout: 5s
       retries: 10
