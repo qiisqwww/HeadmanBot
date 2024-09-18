@@ -81,7 +81,7 @@ def students_birthdate_list(students: list[Student]) -> str:
     return render_template(
         """<b>Дни рождения студентов</b>
 
-{% for student in students | sort(attribute='birthdate') -%}
+{% for student in students -%}
     {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> {% if student.birthdate %} ДР: {{ student.birthdate }} {% else %} {% endif %} 
 {% endfor %}""",
         students=students,
