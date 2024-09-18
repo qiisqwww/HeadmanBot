@@ -82,7 +82,7 @@ def students_birthdate_list(students: list[Student]) -> str:
         """<b>Дни рождения студентов</b>
 
 {% for student in students -%}
-    {{loop.index}}. {% if student.birthdate %} ДР: {{ student.birthdate }} {% else %} {% endif %} <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> 
+    {{loop.index}}.\t{% if student.birthdate %} ДР: {{ student.birthdate.strftime('%Y.%m.%d') }} {% else %} Неизвестно {% endif %}\t<a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> 
 {% endfor %}""",
         students=students,
     )
