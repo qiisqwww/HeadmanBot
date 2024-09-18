@@ -76,13 +76,13 @@ def students_list(students: list[Student]) -> str:
 def students_birthdate_list(students: list[Student]) -> str:
     students = sorted(
         students,
-        key=lambda student: student.birthdate if student.birthdate else date(9999, 1, 1),
+        key=lambda student: student.birthdate.replace(year=1) if student.birthdate else date(9999, 1, 1),
     )
     return render_template(
         """<b>Дни рождения студентов</b>
 
 {% for student in students -%}
-    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> {% if student.birthdate %} ДР: {{ student.birthdate }} {% else %} {% endif %} 
+    {{loop.index}}. {% if student.birthdate %} ДР: {{ student.birthdate }} {% else %} {% endif %} <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> 
 {% endfor %}""",
         students=students,
     )
