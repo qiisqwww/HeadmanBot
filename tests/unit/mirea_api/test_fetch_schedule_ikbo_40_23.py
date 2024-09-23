@@ -7,8 +7,8 @@ import pytest
 from pytest import MonkeyPatch
 
 from src.modules.utils.schedule_api.domain import Schedule
-from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api import (
-    MireaScheduleApi,
+from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api.mirea_schedule_api import (
+    MIREAScheduleAPI,
 )
 
 CALENDAR_PATH: Final[Path] = Path("./tests/unit/mirea_api/assets/ИКБО-40-23.ics")
@@ -81,7 +81,7 @@ async def test_fetch_ikbo_40_23_schedule(
     isc_calendar: str,
     isc_location: bytes,
 ) -> None:
-    api = MireaScheduleApi()
+    api = MIREAScheduleAPI()
 
     async def fetch_isc(*_) -> str:
         return isc_calendar

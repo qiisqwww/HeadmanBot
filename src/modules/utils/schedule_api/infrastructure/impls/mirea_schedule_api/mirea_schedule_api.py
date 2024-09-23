@@ -5,10 +5,11 @@ from zoneinfo import ZoneInfo
 import recurring_ical_events
 from aiohttp import ClientSession
 from icalendar import Calendar, Event
+from loguru import logger
 from pydantic import ValidationError
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
-from src.modules.utils.schedule_api.domain import Schedule
+from src.modules.utils.schedule_api.domain import Schedule, UniTimezone
 from src.modules.utils.schedule_api.infrastructure.aiohttp_retry import aiohttp_retry
 from src.modules.utils.schedule_api.infrastructure.exceptions import (
     FailedToCheckGroupExistenceError,
@@ -17,19 +18,21 @@ from src.modules.utils.schedule_api.infrastructure.exceptions import (
     ParsingScheduleAPIResponseError,
 )
 
-from .mirea_isc_link_schema import MireaIscLinkSchema
+from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api.mirea_isc_link_schema import MireaIscLinkSchema
+from src.modules.utils.schedule_api.infrastructure.impls.mirea_schedule_api.mirea_schedule_api_fallback import MireaScheduleApiFallback
 
 __all__ = [
-    "MireaScheduleApi",
+    "MIREAScheduleAPI",
 ]
 
 
 @final
-class MireaScheduleApi(ScheduleAPI):
+class MIREAScheduleAPI(ScheduleAPI):
     _FIND_URL: Final[
         str
     ] = "https://schedule-of.mirea.ru/schedule/api/search?match={group_name}"
     _API_TIMEZONE: Final[tzinfo] = ZoneInfo("Europe/Moscow")
+    _FALLBACK: Final[ScheduleAPI] = MireaScheduleApiFallback()
 
     def __init__(self) -> None:
         ...
@@ -61,7 +64,14 @@ class MireaScheduleApi(ScheduleAPI):
         group_name: str,
         day: date | None = None,
     ) -> list[Schedule]:
-        day = day or datetime.now(tz=self._API_TIMEZONE).date()
+        try:
+            schedule = await self._FALLBACK.fetch_schedule(group_name, day)
+            if schedule:
+                return schedule
+        except Exception as e:
+            logger.exception(e)
+
+        day = day or datetime.now(tz=ZoneInfo(UniTimezone.MIREA_TZ)).date()
 
         try:
             isc_link_location_bin = await self._fetch_isc_link_location(group_name)
@@ -107,6 +117,7 @@ class MireaScheduleApi(ScheduleAPI):
         except Exception as e:
             err_msg = "Failed to parse isc file with schedule from MIREA API."
             raise ParsingScheduleAPIResponseError(err_msg) from e
+
 
         return schedule
 

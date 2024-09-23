@@ -1,7 +1,7 @@
 
 import pytest
 
-from src.modules.utils.schedule_api.infrastructure.impls import MireaScheduleApi
+from src.modules.utils.schedule_api.infrastructure.impls import MIREAScheduleAPI
 
 
 @pytest.mark.asyncio()
@@ -15,5 +15,5 @@ from src.modules.utils.schedule_api.infrastructure.impls import MireaScheduleApi
     ],
 )
 async def test_mirea_api_group_exists(group_name: str, exists: bool) -> None:
-    api = MireaScheduleApi()
+    api = MIREAScheduleAPI()
     assert await api.group_exists(group_name) == exists

@@ -57,6 +57,7 @@ def vice_headman_menu() -> ReplyKeyboardMarkup:
     )
 
     builder.row(
+        KeyboardButton(text=TelegramCommand.GROUP_PANEL),
         KeyboardButton(text=TelegramCommand.HELP),
     )
 

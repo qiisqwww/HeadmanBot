@@ -32,7 +32,6 @@ async def init_bot_webhook() -> None:
                 url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET, certificate=FSInputFile(WEBHOOK_SSL_CERT),
             )
 
-
 dispatcher = Dispatcher(
     storage=RedisStorage(Redis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}?decode_responses=True")),
     container=Container,

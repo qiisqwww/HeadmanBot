@@ -1,3 +1,6 @@
+from src.bot.common.render_template import render_template
+from src.modules.student_management.domain.models.student import Student
+
 __all__ = [
     "ALL_PAIRS_TEMPLATE",
     "NO_PAIRS_TEMPLATE",
@@ -13,6 +16,8 @@ __all__ = [
     "USER_WAS_SUCCESSFULLY_ENHANCED",
     "USER_WAS_SUCCESSFULLY_DOWNGRADED",
 ]
+
+
 
 
 YOU_CAN_NOT_ANSWER_TIME_TEMPLATE = """
@@ -55,3 +60,14 @@ USER_WAS_SUCCESSFULLY_ENHANCED = """
 
 USER_WAS_SUCCESSFULLY_DOWNGRADED = """
 У пользователя была успешна убрана роль зама старосты"""
+
+def students_list(students: list[Student]) -> str:
+    return render_template(
+        """<b>Список группы</b>
+
+{% for student in students | sort(attribute='fullname') -%}
+    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
+{% endfor %}
+""",
+        students=students,
+    )

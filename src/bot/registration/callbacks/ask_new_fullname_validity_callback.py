@@ -81,6 +81,7 @@ async def ask_new_fullname_validity_callback(
     last_name = await state.last_name
     first_name = await state.first_name
     role = await state.role
+    group_name = await state.group_name
 
     if role == Role.HEADMAN:
         await state.clear()
@@ -93,9 +94,10 @@ async def ask_new_fullname_validity_callback(
                     first_name,
                     role,
                     telegram_id,
+                    group_name,
                     callback.from_user.username,
                 ),
-                reply_markup=accept_or_deny_buttons(telegram_id),
+                reply_markup=accept_or_deny_buttons(telegram_id, callback.from_user.username),
             )
         return
 
@@ -121,7 +123,8 @@ async def ask_new_fullname_validity_callback(
             first_name,
             role,
             telegram_id,
+            group_name,
             callback.from_user.username,
         ),
-        reply_markup=accept_or_deny_buttons(telegram_id),
+        reply_markup=accept_or_deny_buttons(telegram_id, callback.from_user.username),
     )

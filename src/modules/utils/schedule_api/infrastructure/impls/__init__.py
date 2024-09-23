@@ -1,7 +1,11 @@
-from .bmstu_schedule_api import BmstuScheduleApi
-from .mirea_schedule_api import MireaScheduleApi
+from .bmstu_schedule_api import BMSTUScheduleAPI
+from .mirea_schedule_api import MIREAScheduleAPI
+from .nstu_schedule_api import NSTUScheduleAPI
+from .stu_schedule_api import STUScheduleAPI
 
 __all__ = [
-    "BmstuScheduleApi",
-    "MireaScheduleApi",
+    "BMSTUScheduleAPI",
+    "MIREAScheduleAPI",
+    "NSTUScheduleAPI",
+    "STUScheduleAPI",
 ]
