@@ -1,3 +1,5 @@
+from datetime import date
+
 from src.bot.common.render_template import render_template
 from src.modules.student_management.domain.models.student import Student
 
@@ -15,10 +17,9 @@ __all__ = [
     "FAILED_TO_GRANT_VICEHEADMAN_ROLE_TEMPLATE",
     "USER_WAS_SUCCESSFULLY_ENHANCED",
     "USER_WAS_SUCCESSFULLY_DOWNGRADED",
+    "students_list",
+    "students_birthdate_list"
 ]
-
-
-
 
 YOU_CAN_NOT_ANSWER_TIME_TEMPLATE = """
 Вы не можете отметиться! Занятия уже начались!"""
@@ -31,7 +32,6 @@ ALL_PAIRS_TEMPLATE = """
 
 NO_PAIRS_TEMPLATE = """
 Вы выбрали <b>не посещать пары</b>"""
-
 
 YOU_WAS_GRADED_TO_VICEHEADMAN_TEMPLATE = """Вы были повышены до заместителя старосты.
 Вы теперь можете просматривать посещаемость группы. Для просмотра посещаемости нажмите на кнопку "Группа".
@@ -61,13 +61,28 @@ USER_WAS_SUCCESSFULLY_ENHANCED = """
 USER_WAS_SUCCESSFULLY_DOWNGRADED = """
 У пользователя была успешна убрана роль зама старосты"""
 
+
 def students_list(students: list[Student]) -> str:
     return render_template(
         """<b>Список группы</b>
 
 {% for student in students | sort(attribute='fullname') -%}
-    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>
-{% endfor %}
-""",
+    {{loop.index}}. <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a>  
+{% endfor %}""",
+        students=students,
+    )
+
+
+def students_birthdate_list(students: list[Student]) -> str:
+    students = sorted(
+        students,
+        key=lambda student: student.birthdate.replace(year=1) if student.birthdate else date(9999, 1, 1),
+    )
+    return render_template(
+        """<b>Дни рождения студентов</b>
+
+{% for student in students -%}
+{% if student.birthdate %} {{ student.birthdate.strftime('%d.%m.%Y') }} {% else %} Неизвестно {% endif %} - <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> 
+{% endfor %}""",
         students=students,
     )

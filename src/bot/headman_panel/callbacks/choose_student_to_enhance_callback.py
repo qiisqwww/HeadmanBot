@@ -34,7 +34,7 @@ async def choose_student_to_enhance_callback(
     students_list = await get_student_by_group.execute(student.group_id)
     await callback.message.answer(
         CHOOSE_USER_TO_ENHANCE_TEMPLATE,
-        reply_markup=select_student(students_list, enchance_to_vice_headman=True),
+        reply_markup=select_student(students_list, enhance_to_vice_headman=True),
     )
 
     await callback.answer(None)

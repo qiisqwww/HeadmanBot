@@ -11,7 +11,7 @@ from src.bot.headman_panel.callback_data.choose_student_to_downgrade_callback_da
 from src.bot.headman_panel.callback_data.choose_student_to_enchance_callback_data import (
     ChooseStudentToEnhanceCallbackData,
 )
-from src.bot.headman_panel.callback_data.students_list_callback_data import ShowStudentListCallbackData
+from src.bot.headman_panel.callback_data import ShowStudentListCallbackData
 from src.modules.student_management.domain.enums.role import Role
 from src.modules.student_management.domain.models.student import Student
 
@@ -23,18 +23,18 @@ __all__ = [
 
 def select_student(
     students: list[Student],
-    enchance_to_vice_headman: bool,
+    enhance_to_vice_headman: bool,
 ) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    if enchance_to_vice_headman:
+    if enhance_to_vice_headman:
         students = list(filter(lambda s: s.role == Role.STUDENT, students))
     else:
         students = list(filter(lambda s: s.role == Role.VICE_HEADMAN, students))
 
     CallbackDataClass = (
         ChooseStudentToEnhanceCallbackData
-        if enchance_to_vice_headman
+        if enhance_to_vice_headman
         else ChooseStudentToDowngradeCallbackData
     )
 
@@ -58,11 +58,11 @@ def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
 
     if role >= Role.HEADMAN:
         builder.button(
-            text="Назначить зама старосты",
+            text="Назначить зам. старосты",
             callback_data=SetViceHeadmanCallbackData(),
         )
         builder.button(
-            text="Убрать зама старосты",
+            text="Убрать зам. старосты",
             callback_data=UnsetViceHeadmanCallbackData(),
         )
 
@@ -70,6 +70,10 @@ def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
         builder.button(
             text="Список группы",
             callback_data=ShowStudentListCallbackData(),
+        )
+        builder.button(
+            text="Дни рождения студентов",
+            callback_data=ShowStudentListCallbackData(show_birthdate=True)
         )
 
     builder.adjust(1)

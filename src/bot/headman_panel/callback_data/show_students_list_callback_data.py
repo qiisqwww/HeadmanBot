@@ -12,4 +12,4 @@ class ShowStudentListCallbackData(
     CallbackData,
     prefix="show_students_list_headman",
 ):
-    ...
+    show_birthdate: bool = False
