@@ -120,3 +120,7 @@ class StudentRepository(ABC):
     @abstractmethod
     async def enter_group_by_telegram_id(self, student_data: StudentEnterGroupDTO, group_id: int) -> None:
         ...
+
+    @abstractmethod
+    async def change_admin_group_by_telegram_id(self, telegram_id: int, group_id: int) -> None:
+        ...

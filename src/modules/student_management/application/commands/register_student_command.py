@@ -21,7 +21,7 @@ __all__ = [
 
 class StudentAlreadyRegisteredError(RuntimeError):
     """Raise if student already exists. For example, headman was already accepted by first
-    admin but second also have clicked accept button.
+    admin_panel but second also have clicked accept button.
     """
 
 

@@ -21,7 +21,7 @@ __all__ = [
 
 class StudentAlreadyEnteredGroupError(RuntimeError):
     """Raise if student already entered the group. For example, headman was already accepted by first
-    admin but second also have clicked accept button.
+    admin_panel but second also have clicked accept button.
     """
 
 

@@ -1,13 +1,13 @@
 from aiogram.types import CallbackQuery
 
-from src.bot.admin.callback_data import (
+from src.bot.admin_panel.callback_data import (
     DeleteStudentCallbackData,
     GroupsListCallbackData,
     MakeNewAdminCallbackData,
     StudentsCountCallbackData,
 )
-from src.bot.admin.resources.inline_buttons import delete_user_choice_buttons
-from src.bot.admin.resources.templates import (
+from src.bot.admin_panel.resources.inline_buttons import delete_user_choice_buttons
+from src.bot.admin_panel.resources.templates import (
     DELETE_STUDENT_CHOICE_TEMPLATE,
     group_list_template,
     students_count_template,

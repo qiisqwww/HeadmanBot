@@ -14,6 +14,11 @@ __all__ = [
     "students_count_template",
     "group_list_template",
     "INCORRECT_DATA_ERROR_TEMPLATE",
+    "INPUT_NEW_GROUP_NAME_TEMPLATE",
+    "CHOSEN_GROUP_DOES_NOT_EXIST_TEMPLATE",
+    "CHOOSE_UNI_TEMPLATE",
+    "successful_university_choose_template",
+    "YOUR_GROUP_WAS_CHANGED_TEMPLATE"
 ]
 
 
@@ -45,6 +50,14 @@ ACTION_WAS_CANCELLED_TEMPLATE = "Действие было отменено"
 
 INCORRECT_DATA_ERROR_TEMPLATE = "Неверные формат данных. Ввведите число."
 
+CHOOSE_UNI_TEMPLATE = "Выберите университет из предложенных"
+
+INPUT_NEW_GROUP_NAME_TEMPLATE = "Введите название новой группы"
+
+CHOSEN_GROUP_DOES_NOT_EXIST_TEMPLATE = "Указанная группа еще не зарегестрирована в боте. Укажите другую"
+
+YOUR_GROUP_WAS_CHANGED_TEMPLATE = "Ваша группа была изменена"
+
 
 def students_count_template(students_count: int, active_students_count: int) -> str:
     return render_template(
@@ -66,4 +79,11 @@ Telegram ID старосты: {{ group.headman_telegram_id }}
 
 {% endfor %}""",
         groups=groups,
+    )
+
+
+def successful_university_choose_template(university_name: str) -> str:
+    return render_template(
+        "Вы успешно выбрали университет <b>{{university_name}}</b>.",
+        university_name=university_name,
     )
