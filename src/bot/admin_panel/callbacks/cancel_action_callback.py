@@ -22,7 +22,7 @@ def include_cancel_action_router(root_router: RootRouter) -> None:
 
 
 @cancel_action_router.callback_query(CancelActionCallbackData.filter())
-async def cancel_action(callback: CallbackQuery, state: DeleteStudentContext) -> None:  # TODO INTERFACE FOR STATE
+async def cancel_action(callback: CallbackQuery, state: DeleteStudentContext) -> None:
     if callback.message is None or callback.message.from_user is None:
         return
 

@@ -23,7 +23,7 @@ class ChangeGroupAdminContext:
     async def university_id(self) -> int:
         university_id = (await self._context.get_data()).get("university_id", None)
         assert university_id is not None, "You must have set university_id before."
-        return UniversityAlias(university_id)
+        return university_id
 
     async def set_university_id(self, university_id: int) -> None:
         await self._context.update_data(university_id=university_id)
