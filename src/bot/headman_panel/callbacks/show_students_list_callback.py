@@ -28,5 +28,6 @@ async def show_students_list(
     students = await get_students_query.execute(student.group_id)
     template = students_birthdate_list(students) if callback_data.show_birthdate else students_list(students)
 
+    print()
     await callback.message.answer(template)
     await callback.answer(None)

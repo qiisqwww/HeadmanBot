@@ -69,7 +69,7 @@ def group_panel_menu(role: Role) -> InlineKeyboardMarkup:
     if role >= Role.VICE_HEADMAN:
         builder.button(
             text="Список группы",
-            callback_data=ShowStudentListCallbackData(),
+            callback_data=ShowStudentListCallbackData(show_birthdate=False),
         )
         builder.button(
             text="Дни рождения студентов",
