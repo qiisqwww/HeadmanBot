@@ -18,7 +18,8 @@ __all__ = [
     "CHOSEN_GROUP_DOES_NOT_EXIST_TEMPLATE",
     "CHOOSE_UNI_TEMPLATE",
     "successful_university_choose_template",
-    "YOUR_GROUP_WAS_CHANGED_TEMPLATE"
+    "YOUR_GROUP_WAS_CHANGED_TEMPLATE",
+    "GROUP_BELONGS_TO_ANOTHER_UNI_TEMPLATE"
 ]
 
 
@@ -55,6 +56,8 @@ CHOOSE_UNI_TEMPLATE = "Выберите университет из предло
 INPUT_NEW_GROUP_NAME_TEMPLATE = "Введите название новой группы"
 
 CHOSEN_GROUP_DOES_NOT_EXIST_TEMPLATE = "Указанная группа еще не зарегестрирована в боте. Укажите другую"
+
+GROUP_BELONGS_TO_ANOTHER_UNI_TEMPLATE = "Указанная группа принадлежит другому университету. Попробуйте снова"
 
 YOUR_GROUP_WAS_CHANGED_TEMPLATE = "Ваша группа была изменена"
 
