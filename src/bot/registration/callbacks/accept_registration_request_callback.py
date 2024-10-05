@@ -8,12 +8,12 @@ from src.bot.registration.callback_data import AcceptRegistrationCallbackData
 from src.bot.registration.resources.templates import (
     FAILED_TO_FETCH_SCHEDULE_TEMPLATE,
     HELP_FOR_HEADMAN,
-    REGISTRATION_ACCEPTED_TEMPLATE,
     REGISTRATION_DENIED_TEMPLATE,
     USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE,
     USER_REGISTRATION_TIME_OUT_TEMPLATE,
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
+    registration_accepted_template,
 )
 from src.modules.common.application.bot_notifier import BotNotifier
 from src.modules.student_management.application.commands import (
@@ -104,6 +104,12 @@ async def accept_or_deny_callback(
         )
     await safe_message_edit(
         callback,
-        REGISTRATION_ACCEPTED_TEMPLATE,
+        registration_accepted_template(
+            student.last_name,
+            student.first_name,
+            student.role,
+            student.telegram_id,
+            callback_data.username,
+        ),
         void_inline_buttons(),
     )

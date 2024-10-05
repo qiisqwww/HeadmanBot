@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
+from loguru import logger
 
 from src.bot.common.resources import SOMETHING_WENT_WRONG_FOR_STUDENT_TEMPLATE
 
@@ -27,6 +28,7 @@ class HandleExceptionMiddleware(BaseMiddleware):
         try:
             return await handler(event, data)
         except Exception as e:
+            logger.exception(e)
             notifier: BotNotifier = data["notifier"]
             await notifier.notify_about_exception(e, event.from_user)
 

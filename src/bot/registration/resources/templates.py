@@ -7,7 +7,7 @@ __all__ = [
     "asking_fullname_validation_template",
     "CHOOSE_STUDENT_ROLE_TEMPLATE",
     "REGISTRATION_DENIED_TEMPLATE",
-    "REGISTRATION_ACCEPTED_TEMPLATE",
+    "registration_accepted_template",
     "YOU_WERE_DENIED_TEMPLATE",
     "YOU_WERE_ACCEPTED_TEMPLATE",
     "ASK_UNIVERSITY_TEMPLATE",
@@ -47,7 +47,6 @@ INCORRECT_STUDENT_ROLE_TEMPLATE = "Пожалуйста, нажмите на о�
 
 REGISTRATION_DENIED_TEMPLATE = "Вы отказали пользователю в регистрации."
 
-REGISTRATION_ACCEPTED_TEMPLATE = "Пользователь был успешно зарегистрирован."
 
 YOU_WERE_ACCEPTED_TEMPLATE = "Ваше заявление на регистрацию было одобрено."
 
@@ -62,14 +61,13 @@ HELP_FOR_HEADMAN = """
 
 3. Отправить боту сообщение "Узнать посещаемость" или нажать на кнопку в доступной Вам панели внизу. Вы получите доступ к списку студентов с информацией о планируемой посещаемости вашей группы на текущий день.
 
-Если у Вас остались какие-либо вопросы, можете задать их в личные сообщения разработчикам: @neothebest228 или @qiisqwww
+Если у Вас остались какие-либо вопросы, можете задать их в личные сообщения разработчикам: @neo_the_dev или @qiisqwww
 """
 
 YOU_WERE_DENIED_TEMPLATE = """
 Ваше заявление на регистрацию было отклонено.
 
-Если вы считаете, что это была ошибка, обратитесь к своему старосте или
-напишите в службу обратной связи --- @noheadproblemsbot"""
+Если вы считаете, что это была ошибка, обратитесь к своему старосте или напишите в службу обратной связи --- @noheadproblemsbot"""
 
 ASK_UNIVERSITY_TEMPLATE = "Выберите свой университет."
 
@@ -102,7 +100,7 @@ BIRTHDATE_INCORRECT_TEMPLATE = "Вы ввели некорректные дан�
 HEADMAN_ALREADY_EXISTS_TEMPLATE = "У выбранной группы уже есть староста."
 
 GROUP_DOESNT_REGISTERED_TEMPLATE = """Группа еще не зарегистрирована в боте.
-Попросите своего старосту зарегестрироваться, или введите название группы заново."""
+Попросите своего старосту зарегистрироваться, или введите название группы заново."""
 
 TOO_MUCH_NAME_LENGTH_TEMPLATE = "Имя должно быть длиной не более 255 символов. Попробуйте снова."
 
@@ -120,7 +118,7 @@ FAILED_TO_FETCH_SCHEDULE_TEMPLATE = (
 )
 
 USER_HAS_ALREADY_BEEN_REGISTERED_TEMPLATE = """
-Пользователь уже был зарегестрирован"""
+Пользователь уже был зарегистрирован"""
 
 USER_REGISTRATION_TIME_OUT_TEMPLATE = """
 Данные пользователя не были найдены в кеше. Либо пользователь их удалил (нажал "Зарегистрироваться заново"),
@@ -146,17 +144,34 @@ def student_send_registration_request_template(
     first_name: str,
     role: Role,
     telegram_id: int,
+    group: str,
     username: str | None,
 ) -> str:
     return render_template(
         """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> @{{ username }}
-подал заявку на регистарцию в боте.""",
+подал заявку на регистарцию в боте в группу - {{ group }}.""",
+        role=role,
+        telegram_id=telegram_id,
+        fullname=f"{last_name} {first_name}",
+        username=username if username is not None else "",
+        group=group,
+    )
+
+def registration_accepted_template(
+    last_name: str,
+    first_name: str,
+    role: Role,
+    telegram_id: int,
+    username: str | None,
+) -> str:
+    return render_template(
+        """{{role.translation}} <a href='tg://user?id={{telegram_id}}'>{{ fullname }}</a> @{{ username }}
+был успешно зарегистрирован в бота.""",
         role=role,
         telegram_id=telegram_id,
         fullname=f"{last_name} {first_name}",
         username=username if username is not None else "",
     )
-
 
 def start_message_template(last_name: str | None, first_name: str) -> str:
     return render_template(

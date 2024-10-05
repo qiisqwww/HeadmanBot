@@ -38,7 +38,7 @@ async def choose_student_to_downgrade_callback(
     students_list = await get_student_by_group.execute(student.group_id)
     await callback.message.answer(
         CHOOSE_USER_TO_DOWNGRADE_TEMPLATE,
-        reply_markup=select_student(students_list, enchance_to_vice_headman=False),
+        reply_markup=select_student(students_list, enhance_to_vice_headman=False),
     )
 
     await callback.answer(None)

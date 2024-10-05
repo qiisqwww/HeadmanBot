@@ -123,12 +123,12 @@ async def handling_birth_month(message: Message, state: RegistrationContext) -> 
         return
 
     if message.text == "0":
-        await state.set_birthday(None)
+        await state.set_birthdate(None)
     else:
         try:
             day, month, year = map(int, message.text.split("."))
             birthdate = date(year=year, month=month, day=day)
-            await state.set_birthday(birthdate)
+            await state.set_birthdate(birthdate.isoformat())
         except Exception:
             await message.answer(BIRTHDATE_INCORRECT_TEMPLATE)
             await state.set_state(RegistrationStates.waiting_birthdate)

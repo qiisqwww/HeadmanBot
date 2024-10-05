@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery
 
-from src.bot.admin.callback_data import CancelActionCallbackData
-from src.bot.admin.resources.templates import ACTION_WAS_CANCELLED_TEMPLATE
+from src.bot.admin_panel.callback_data import CancelActionCallbackData
+from src.bot.admin_panel.resources.templates import ACTION_WAS_CANCELLED_TEMPLATE
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import DeleteStudentContext
 from src.modules.common.infrastructure import DEBUG

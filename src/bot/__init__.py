@@ -19,7 +19,7 @@ __all__ = [
     "init_bot_webhook",
 ]
 
-WEBHOOK_SSL_CERT = "headman_bot.crt"
+WEBHOOK_SSL_CERT = "headman_bot.pem"
 
 
 async def init_bot_webhook() -> None:
@@ -31,7 +31,6 @@ async def init_bot_webhook() -> None:
             await bot.set_webhook(
                 url=WEBHOOK_URL, secret_token=WEBHOOK_SECRET, certificate=FSInputFile(WEBHOOK_SSL_CERT),
             )
-
 
 dispatcher = Dispatcher(
     storage=RedisStorage(Redis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}?decode_responses=True")),

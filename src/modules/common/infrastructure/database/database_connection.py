@@ -67,8 +67,7 @@ class DbContext:
         *args: object,
         timeout: float | None = None,
     ) -> list[Record]:
-        if DEBUG:
-            self._log_query(query, args)
+        self._log_query(query, args)
         return await self._con.fetch(query, *args, timeout=timeout)
 
     async def fetchrow(
@@ -77,8 +76,7 @@ class DbContext:
         *args: object,
         timeout: float | None = None,
     ) -> Record | None:
-        if DEBUG:
-            self._log_query(query, args)
+        self._log_query(query, args)
         return await self._con.fetchrow(query, *args, timeout=timeout)
 
     async def fetchval(
@@ -87,8 +85,7 @@ class DbContext:
         *args: object,
         timeout: float | None = None,
     ) -> Any:  # noqa: ANN401
-        if DEBUG:
-            self._log_query(query, args)
+        self._log_query(query, args)
         return await self._con.fetchval(query, *args, timeout=timeout)
 
     async def executemany(
@@ -105,8 +102,7 @@ class DbContext:
         *args: object,
         timeout: float | None = None,
     ) -> str:
-        if DEBUG:
-            self._log_query(query, args)
+        self._log_query(query, args)
         return await self._con.execute(query, *args, timeout=timeout)
 
     @staticmethod

@@ -25,6 +25,7 @@ from .unnote_attendance_for_all_command import UnnoteAttendanceForAllCommand
 from .update_student_birthdate_command import UpdateStudentBirthdateCommand
 from .update_student_first_name_command import UpdateStudentFirstNameCommand
 from .update_student_last_name_command import UpdateStudentLastNameCommand
+from .change_admin_group_command import ChangeAdminGroupCommand
 
 __all__ = [
     "CacheCreateStudentDataCommand",
@@ -49,4 +50,5 @@ __all__ = [
     "NotFoundStudentEnterGroupCachedDataError",
     "ClearStudentEnterGroupDataIfExistsCommand",
     "ClearStudentEnterGroupDataCommand",
+    "ChangeAdminGroupCommand"
 ]

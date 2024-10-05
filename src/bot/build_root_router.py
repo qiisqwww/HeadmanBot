@@ -1,4 +1,4 @@
-from .admin import include_admin_router
+from .admin_panel import include_admin_router
 from .common import RootRouter
 from .headman_panel import include_group_panel_router
 from .help import include_help_command_router

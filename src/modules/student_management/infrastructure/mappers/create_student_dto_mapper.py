@@ -21,7 +21,7 @@ class CreateStudentDTOMapper:
             "group_name": data.group_name,
             "telegram_id":  str(data.telegram_id),
             "university_alias": data.university_alias.value,
-            "birthdate": "0" if data.birthdate is None else data.birthdate.isoformat(),
+            "birthdate": "0" if data.birthdate is None else data.birthdate,
         }
 
     def from_redis_dict(self, data: Mapping[str, str]) -> CreateStudentDTO:
@@ -32,5 +32,5 @@ class CreateStudentDTOMapper:
             group_name=data["group_name"],
             telegram_id=int(data["telegram_id"]),
             university_alias=UniversityAlias(data["university_alias"]),
-            birthdate = None if data["birthdate"] == "0" else date.fromisoformat(data["birthdate"]),
+            birthdate=None if data["birthdate"] == "0" else date.fromisoformat(data["birthdate"]),
         )

@@ -1,9 +1,11 @@
+name: headman_bot_test
+
 services:
   headman_bot:
     restart: always
     command: python -m src
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -12,8 +14,6 @@ services:
         condition: service_healthy
       postgres:
           condition: service_healthy
-      celery_worker:
-        condition: service_healthy
     volumes:
       - ../logs/bot_logs:/app/logs
     networks:
@@ -25,7 +25,7 @@ services:
       dockerfile: ./Dockerfile
       context: ../postgres
     env_file:
-      - ../.env/.database.test.env
+      - ../.env/.database.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 3s
@@ -63,7 +63,7 @@ services:
     volumes:
       - ../logs/nginx_logs:/var/log/nginx
     ports:
-      - 443:443
+      - 8443:443
     networks:
         - headman_bot_test_net
 
@@ -71,7 +71,7 @@ services:
     command: celery -A src.celery.worker.worker worker  --loglevel=info
     restart: always
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -80,11 +80,6 @@ services:
         condition: service_healthy
       postgres:
           condition: service_healthy
-    healthcheck:
-      test: celery status
-      interval: 3s
-      timeout: 5s
-      retries: 10
     volumes:
       - ../logs/celery_worker_logs:/app/logs
     networks:
@@ -94,7 +89,7 @@ services:
     command: celery -A src.celery.worker.worker beat -S redbeat.RedBeatScheduler  --loglevel=info
     restart: always
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
@@ -103,11 +98,6 @@ services:
         condition: service_healthy
       postgres:
           condition: service_healthy
-    healthcheck:
-      test: celery -A src.celery.worker status
-      interval: 3s
-      timeout: 5s
-      retries: 10
     volumes:
       - ../logs/celery_beat_logs:/app/logs
     networks:
@@ -117,15 +107,10 @@ services:
     command: celery -A src.celery.worker.worker flower --port=5555
     restart: always
     env_file:
-      - ../.env/.test.env
+      - ../.env/.env
     build: 
       dockerfile: ./docker/Dockerfile
       context: ..
-    depends_on:
-      celery_worker:
-        condition: service_healthy
-      celery_beat:
-        condition: service_healthy
     ports:
       - 5555:5555
     volumes:

@@ -2,6 +2,7 @@ venv
 logs.logs
 .env.txt
 __pycache__
+postgres/data
 .idea
 database.db
 bot.db

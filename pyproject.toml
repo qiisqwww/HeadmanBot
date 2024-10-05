@@ -1,18 +1,16 @@
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-package-mode = false
 
 [tool.poetry]
 name = "headmanbot"
 version = "0.1.0"
 description = "Telegram bot which helps the headman"
 authors = ["NeoTheBestDeveloper Oleg <neothebestmain@protonmail.com>", "qiisqwww dmitriy <qiisqwww@gmail.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aiogram = "3.10.0"
+aiogram = "3.13.0"
 httpx = "^0.26.0"
 asyncpg = "^0.29.0"
 loguru = "^0.7.2"
@@ -28,6 +26,8 @@ recurring-ical-events = "^2.1.2"
 celery = "^5.4.0"
 flower = "^2.0.1"
 celery-redbeat = "^2.2.0"
+pandas = "^2.2.2"
+openpyxl = "^3.1.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest-asyncio = "^0.23.2"
