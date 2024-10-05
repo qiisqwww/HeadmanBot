@@ -1,12 +1,12 @@
 from aiogram.types import CallbackQuery
 
-from src.bot.admin.callback_data import (
+from src.bot.admin_panel.callback_data import (
     DeleteByNameAndGroupCallbackData,
     DeleteByTGIDCallbackData,
 )
-from src.bot.admin.finite_state.delete_student_states import DeleteStudentStates
-from src.bot.admin.resources.inline_buttons import cancel_button
-from src.bot.admin.resources.templates import (
+from src.bot.admin_panel.finite_state.delete_student_states import DeleteStudentStates
+from src.bot.admin_panel.resources.inline_buttons import cancel_button
+from src.bot.admin_panel.resources.templates import (
     INPUT_FULLNAME_GROUP_TEMPLATE,
     INPUT_STUDENT_TG_ID_TEMPLATE,
 )

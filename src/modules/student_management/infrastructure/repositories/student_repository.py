@@ -168,3 +168,7 @@ class StudentRepositoryImpl(PostgresRepositoryImpl, StudentRepository):
     async def enter_group_by_telegram_id(self, student_data: StudentEnterGroupDTO, group_id: int) -> None:
         query_update = "UPDATE student_management.students SET group_id = $1, role = $2 WHERE telegram_id = $3"
         await self._con.execute(query_update, group_id, student_data.role, student_data.telegram_id)
+
+    async def change_admin_group_by_telegram_id(self, telegram_id: int, group_id: int) -> None:
+        query = "UPDATE student_management.students SET group_id = $1 WHERE telegram_id = $2"
+        await self._con.execute(query, group_id, telegram_id)

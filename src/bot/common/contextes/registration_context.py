@@ -88,7 +88,7 @@ class RegistrationContext:
     async def birthdate(self) -> date | None:
         return (await self.get_data()).get("birthdate", None)
 
-    async def set_birthday(self, birthdate: date | None) -> None:
+    async def set_birthdate(self, birthdate: str | None) -> None:
         await self._context.update_data(birthdate=birthdate)
 
     async def set_state(self, state: StateType = None) -> None:
