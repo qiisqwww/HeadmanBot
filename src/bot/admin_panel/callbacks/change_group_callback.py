@@ -1,14 +1,14 @@
 from aiogram.types import CallbackQuery
 
 from src.bot.admin_panel.callback_data import ChangeGroupCallbackData
-from src.bot.admin_panel.resources.templates import CHOOSE_UNI_TEMPLATE
-from src.bot.admin_panel.resources.inline_buttons import university_list_buttons
 from src.bot.admin_panel.finite_state.change_group_admin_states import ChangeGroupAdminStates
+from src.bot.admin_panel.resources.inline_buttons import university_list_buttons
+from src.bot.admin_panel.resources.templates import CHOOSE_UNI_TEMPLATE
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import ChangeGroupAdminContext
-from src.modules.common.infrastructure import DEBUG
-from src.modules.student_management.domain.enums import Role
+from src.common.infrastructure import DEBUG
 from src.modules.student_management.application.queries import GetAllUniversitiesQuery
+from src.modules.student_management.domain.enums import Role
 
 __all__ = [
     "include_change_group_router",

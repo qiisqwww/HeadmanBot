@@ -1,5 +1,12 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
+from src.modules.student_management.application.commands import (
+    UnmakeStudentViceHeadmanCommand,
+)
+from src.modules.student_management.application.commands.exceptions import (
+    CannotDowngradeNonViceHeadmanError,
+    StudentNotFoundError,
+)
 
 from src.bot.common.resources import main_menu
 from src.bot.common.router import RootRouter, Router
@@ -14,18 +21,11 @@ from src.bot.headman_panel.resources.templates import (
     USER_WAS_SUCCESSFULLY_DOWNGRADED,
     YOU_WAS_DOWNGRADED_TO_STUDENT_TEMPLATE,
 )
-from src.modules.student_management.application.commands import (
-    UnmakeStudentViceHeadmanCommand,
-)
-from src.modules.student_management.application.commands.exceptions import (
-    CannotDowngradeNonViceHeadmanError,
-    StudentNotFoundError,
-)
-from src.modules.student_management.application.queries.get_students_from_group_query import (
+from src.dto.entities.student import Student
+from src.dto.enums.role import Role
+from src.queries.get_students_from_group_query import (
     GetStudentsFromGroupQuery,
 )
-from src.modules.student_management.domain.enums.role import Role
-from src.modules.student_management.domain.models.student import Student
 
 unset_vice_headman_router = Router(
     must_be_registered=True,
@@ -39,12 +39,12 @@ def include_unset_vice_headman_router(root_router: RootRouter) -> None:
 
 @unset_vice_headman_router.callback_query(ChooseStudentToDowngradeCallbackData.filter())
 async def unset_vice_headman(
-    callback: CallbackQuery,
-    callback_data: ChooseStudentToDowngradeCallbackData,
-    bot: Bot,
-    student: Student,
-    unmake_student_vice_headman_command: UnmakeStudentViceHeadmanCommand,
-    get_students_by_group: GetStudentsFromGroupQuery,
+        callback: CallbackQuery,
+        callback_data: ChooseStudentToDowngradeCallbackData,
+        bot: Bot,
+        student: Student,
+        unmake_student_vice_headman_command: UnmakeStudentViceHeadmanCommand,
+        get_students_by_group: GetStudentsFromGroupQuery,
 ) -> None:
     if callback.message is None:
         return

@@ -1,7 +1,6 @@
 from aiogram import Router as AiogramRouter
 
-from src.modules.student_management.domain import Role
-
+from src.dto.enums import Role
 from .middlewares import InjectStudentMiddleware, PermissionManagerMiddleware
 from .root_router import RootRouter
 
@@ -12,16 +11,16 @@ __all__ = [
 
 class Router(AiogramRouter):
     def __init__(
-        self,
-        must_be_registered: bool | None = False,
-        minimum_role: Role = Role.IS_REGISTERED,
-        name: str | None = None,
+            self,
+            must_be_registered: bool | None = False,
+            minimum_role: Role = Role.IS_REGISTERED,
+            name: str | None = None,
     ) -> None:
         super().__init__(name=name)
 
         if self.parent_router is not None and not isinstance(self.parent_router, RootRouter):
-                msg = "Router parent can be only RootRouter."
-                raise RuntimeError(msg)
+            msg = "Router parent can be only RootRouter."
+            raise RuntimeError(msg)
 
         if must_be_registered is not None:
             self._add_inject_student_middleware(must_be_registered)

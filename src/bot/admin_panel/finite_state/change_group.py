@@ -1,21 +1,21 @@
 from aiogram.types import Message
 
 from src.bot.admin_panel.finite_state.change_group_admin_states import ChangeGroupAdminStates
+from src.bot.admin_panel.resources.inline_buttons import cancel_button
 from src.bot.admin_panel.resources.templates import (
     CHOSEN_GROUP_DOES_NOT_EXIST_TEMPLATE,
     YOUR_GROUP_WAS_CHANGED_TEMPLATE,
     GROUP_BELONGS_TO_ANOTHER_UNI_TEMPLATE
 )
-from src.bot.admin_panel.resources.inline_buttons import cancel_button
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import ChangeGroupAdminContext
-from src.modules.common.infrastructure import DEBUG
-from src.modules.student_management.domain.enums import Role
+from src.common.infrastructure import DEBUG
 from src.modules.student_management.application.commands.change_admin_group_command import (
     ChangeAdminGroupCommand,
     GroupWasNotRegisteredException,
     GroupBelongsToAnotherUviException
 )
+from src.modules.student_management.domain.enums import Role
 
 __all__ = [
     "include_input_new_group_finite_state_router",
@@ -33,9 +33,9 @@ def include_input_new_group_finite_state_router(root_router: RootRouter) -> None
 
 @input_new_group_finite_state_router.message(ChangeGroupAdminStates.waiting_group)
 async def input_new_group(
-    message: Message,
-    state: ChangeGroupAdminContext,
-    change_admin_group_command: ChangeAdminGroupCommand,
+        message: Message,
+        state: ChangeGroupAdminContext,
+        change_admin_group_command: ChangeAdminGroupCommand,
 ) -> None:
     if message.text is None or message.from_user is None:
         return

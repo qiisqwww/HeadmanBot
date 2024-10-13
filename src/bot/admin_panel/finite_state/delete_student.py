@@ -1,4 +1,9 @@
 from aiogram.types import Message
+from src.modules.student_management.application.commands import (
+    DeleteStudentByFullnameGroupCommand,
+    DeleteStudentByTGIDCommand,
+)
+from src.modules.student_management.domain.enums import Role
 
 from src.bot.admin_panel.finite_state.delete_student_states import DeleteStudentStates
 from src.bot.admin_panel.resources.templates import (
@@ -10,16 +15,11 @@ from src.bot.admin_panel.resources.templates import (
 )
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import DeleteStudentContext
-from src.modules.common.infrastructure import DEBUG
-from src.modules.student_management.application.commands import (
-    DeleteStudentByFullnameGroupCommand,
-    DeleteStudentByTGIDCommand,
-)
-from src.modules.student_management.application.exceptions import (
+from src.common.exceptions import (
     NotFoundGroupError,
     NotFoundStudentError,
 )
-from src.modules.student_management.domain.enums import Role
+from src.common.infrastructure import DEBUG
 
 __all__ = [
     "include_delete_user_finite_state_router",
@@ -37,9 +37,9 @@ def include_delete_user_finite_state_router(root_router: RootRouter) -> None:
 
 @delete_user_finite_state_router.message(DeleteStudentStates.waiting_telegram_id)
 async def ask_student_telegram_id(
-    message: Message,
-    delete_student_by_tg_id_command: DeleteStudentByTGIDCommand,
-    state: DeleteStudentContext,
+        message: Message,
+        delete_student_by_tg_id_command: DeleteStudentByTGIDCommand,
+        state: DeleteStudentContext,
 ) -> None:
     if message.text is None or message.from_user is None:
         return
@@ -66,9 +66,9 @@ async def ask_student_telegram_id(
 
 @delete_user_finite_state_router.message(DeleteStudentStates.waiting_fullname_group)
 async def ask_student_fullname_group_name(
-    message: Message,
-    delete_student_by_fullname_group_command: DeleteStudentByFullnameGroupCommand,
-    state: DeleteStudentContext,
+        message: Message,
+        delete_student_by_fullname_group_command: DeleteStudentByFullnameGroupCommand,
+        state: DeleteStudentContext,
 ) -> None:
     if message.text is None or message.from_user is None:
         return

@@ -1,8 +1,6 @@
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
 
-from src.modules.common.domain.university_alias import UniversityAlias
-
 __all__ = [
     "ChangeGroupAdminContext",
 ]

@@ -2,6 +2,7 @@ from datetime import date
 
 from aiogram import F
 from aiogram.types import Message
+from src.modules.student_management.domain import Role, Student
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.contextes import ScheduleCertainDateContext
@@ -12,11 +13,9 @@ from src.bot.show_schedule.resources.templates import (
     NO_LESSONS_TODAY_TEMPLATE,
     schedule_list_template,
 )
-from src.modules.common.domain.university_alias import UniversityAlias
-from src.modules.edu_info.application.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
-from src.modules.student_management.application.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
-from src.modules.student_management.domain import Role, Student
-from src.modules.utils.schedule_api.infrastructure.schedule_api import ScheduleApiImpl
+from src.queries.fetch_uni_alias_by_group_id_query import FetchUniAliasByGroupIdQuery
+from src.queries.get_edu_profile_info_query import GetEduProfileInfoQuery
+from src.utils.schedule_api.infrastructure import ScheduleApiImpl
 
 __all__ = [
     "include_show_schedule_certain_date_router",

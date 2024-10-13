@@ -1,7 +1,7 @@
 from datetime import date
 
 from src.bot.common.render_template import render_template
-from src.modules.student_management.domain.models.student import Student
+from src.dto.entities.student import Student
 
 __all__ = [
     "ALL_PAIRS_TEMPLATE",

@@ -2,7 +2,7 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from src.bot.common.command_filter import TelegramCommand
-from src.modules.student_management.domain import Role
+from src.dto.enums import Role
 
 __all__ = [
     "main_menu",

@@ -2,9 +2,8 @@ from aiogram.types import Message
 
 from src.bot.common.command_filter import CommandFilter, TelegramCommand
 from src.bot.common.router import RootRouter, Router
-from src.modules.common.infrastructure import DEBUG
+from src.common.infrastructure import DEBUG
 from src.modules.student_management.domain.enums import Role
-
 from .resources.inline_buttons import admin_panel_buttons
 from .resources.templates import ADMIN_PANEL_TEMPLATE
 
@@ -31,6 +30,3 @@ async def admin_panel_command(message: Message) -> None:
         text=ADMIN_PANEL_TEMPLATE,
         reply_markup=admin_panel_buttons(),
     )
-
-
-

@@ -3,6 +3,12 @@ from typing import Any
 
 from aiogram import Bot
 from aiogram.types import CallbackQuery, User
+from src.modules.student_management.application.commands import (
+    ClearStudentEnterGroupDataCommand,
+    NotFoundStudentEnterGroupCachedDataError,
+    StudentAlreadyEnteredGroupError,
+    StudentEnterGroupCommand,
+)
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.resources import main_menu, void_inline_buttons
@@ -18,19 +24,12 @@ from src.bot.profile.resources.templates import (
     YOU_WERE_ACCEPTED_TEMPLATE,
     YOU_WERE_DENIED_TEMPLATE,
 )
-from src.modules.student_management.application.commands import (
-    ClearStudentEnterGroupDataCommand,
-    NotFoundStudentEnterGroupCachedDataError,
-    StudentAlreadyEnteredGroupError,
-    StudentEnterGroupCommand,
-)
-from src.modules.student_management.domain.enums.role import Role
-from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
+from src.dto.enums.role import Role
+from src.utils.schedule_api.infrastructure import ScheduleApiError
 
 __all__ = [
     "include_accept_student_enter_group_callback_router",
 ]
-
 
 accept_student_enter_group_callback_router = Router(
     must_be_registered=True,
@@ -43,15 +42,15 @@ def include_accept_student_enter_group_callback_router(root_router: RootRouter) 
 
 @accept_student_enter_group_callback_router.callback_query(AcceptStudentEnterGroupCallbackData.filter())
 async def accept_or_deny_enter_group_callback(
-    callback: CallbackQuery,
-    callback_data: AcceptStudentEnterGroupCallbackData,
-    bot: Bot,
-    clear_student_enter_group_data_command: ClearStudentEnterGroupDataCommand,
-    student_enter_group_command: StudentEnterGroupCommand,
-    inform_admins_about_exception: Callable[
-        [Exception, User | None],
-        Coroutine[Any, Any, None],
-    ],
+        callback: CallbackQuery,
+        callback_data: AcceptStudentEnterGroupCallbackData,
+        bot: Bot,
+        clear_student_enter_group_data_command: ClearStudentEnterGroupDataCommand,
+        student_enter_group_command: StudentEnterGroupCommand,
+        inform_admins_about_exception: Callable[
+            [Exception, User | None],
+            Coroutine[Any, Any, None],
+        ],
 ) -> None:
     if callback.message is None:
         return

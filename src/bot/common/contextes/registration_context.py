@@ -3,9 +3,9 @@ from typing import TypedDict
 
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StateType
-
-from src.modules.common.domain.university_alias import UniversityAlias
 from src.modules.student_management.domain import Role
+
+from src.dto.enums.university_alias import UniversityAlias
 
 __all__ = [
     "RegistrationContext",

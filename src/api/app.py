@@ -9,32 +9,27 @@ from aiogram.types import Update
 from fastapi import FastAPI, Request
 
 from src.bot import dispatcher
-from src.modules.common.infrastructure import (
+from src.common.config import (
+    BOT_TOKEN,
     DEBUG,
     WEBHOOK_PATH,
     configure_logger,
 )
-from src.modules.common.infrastructure.config.config import BOT_TOKEN
-from src.modules.common.infrastructure.container import Container
 
 __all__ = [
     "app",
 ]
-
 
 bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator[None, Any]:
-
-    await Container.init(bot)
     configure_logger()
 
     yield
 
     await bot.session.close()
-    await Container.close()
 
 
 app = FastAPI(debug=DEBUG, lifespan=lifespan)

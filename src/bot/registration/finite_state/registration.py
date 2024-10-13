@@ -23,14 +23,14 @@ from src.bot.registration.resources.templates import (
     asking_fullname_validation_template,
 )
 from src.bot.registration.validation import is_valid_name_len
-from src.modules.common.application.bot_notifier import BotNotifier
+from src.common import BotNotifier
 from src.modules.student_management.application.queries import (
     CheckGroupExistsInUniQuery,
     FindGroupByNameAndAliasQuery,
     FindGroupHeadmanQuery,
 )
 from src.modules.student_management.domain import Role
-from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
+from src.utils.schedule_api.infrastructure import ScheduleApiError
 
 __all__ = [
     "include_registration_finite_state_router",
@@ -55,12 +55,12 @@ async def incorrect_university(message: Message) -> None:
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_group)
 async def handling_group(
-    message: Message,
-    state: RegistrationContext,
-    check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
-    find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
-    find_group_headman_query: FindGroupHeadmanQuery,
-    notifier: BotNotifier,
+        message: Message,
+        state: RegistrationContext,
+        check_group_exists_in_uni_query: CheckGroupExistsInUniQuery,
+        find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
+        find_group_headman_query: FindGroupHeadmanQuery,
+        notifier: BotNotifier,
 ) -> None:
     if message.text is None:
         return
@@ -155,8 +155,8 @@ async def handling_surname(message: Message, state: RegistrationContext) -> None
 
 @registration_finite_state_router.message(F.text, RegistrationStates.waiting_name)
 async def handling_name(
-    message: Message,
-    state: RegistrationContext,
+        message: Message,
+        state: RegistrationContext,
 ) -> None:
     if message.from_user is None or message.text is None:
         return

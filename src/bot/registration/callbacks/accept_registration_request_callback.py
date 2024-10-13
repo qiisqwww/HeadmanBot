@@ -1,5 +1,11 @@
 from aiogram import Bot
 from aiogram.types import CallbackQuery
+from src.modules.student_management.application.commands import (
+    ClearCreateStudentDataCacheCommand,
+    NotFoundStudentRegistrationCachedDataError,
+    RegisterStudentCommand,
+    StudentAlreadyRegisteredError,
+)
 
 from src.bot.common import RootRouter, Router
 from src.bot.common.resources import main_menu, void_inline_buttons
@@ -15,20 +21,13 @@ from src.bot.registration.resources.templates import (
     YOU_WERE_DENIED_TEMPLATE,
     registration_accepted_template,
 )
-from src.modules.common.application.bot_notifier import BotNotifier
-from src.modules.student_management.application.commands import (
-    ClearCreateStudentDataCacheCommand,
-    NotFoundStudentRegistrationCachedDataError,
-    RegisterStudentCommand,
-    StudentAlreadyRegisteredError,
-)
-from src.modules.student_management.domain.enums.role import Role
-from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
+from src.common import BotNotifier
+from src.dto.enums.role import Role
+from src.utils.schedule_api.infrastructure import ScheduleApiError
 
 __all__ = [
     "include_accept_registration_callback_router",
 ]
-
 
 accept_registration_callback_router = Router(
     must_be_registered=None,
@@ -41,12 +40,12 @@ def include_accept_registration_callback_router(root_router: RootRouter) -> None
 
 @accept_registration_callback_router.callback_query(AcceptRegistrationCallbackData.filter())
 async def accept_or_deny_callback(
-    callback: CallbackQuery,
-    callback_data: AcceptRegistrationCallbackData,
-    bot: Bot,
-    clear_create_student_data_command: ClearCreateStudentDataCacheCommand,
-    register_student_command: RegisterStudentCommand,
-    notifier: BotNotifier,
+        callback: CallbackQuery,
+        callback_data: AcceptRegistrationCallbackData,
+        bot: Bot,
+        clear_create_student_data_command: ClearCreateStudentDataCacheCommand,
+        register_student_command: RegisterStudentCommand,
+        notifier: BotNotifier,
 ) -> None:
     if callback.message is None:
         return

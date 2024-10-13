@@ -9,7 +9,7 @@ from src.bot.show_schedule.callback_data import (
     ScheduleDateCallbackData,
     ScheduleWeekCallbackData,
 )
-from src.modules.common.domain import UniversityAlias
+from src.common import UniversityAlias
 
 __all__ = [
     "show_choose_period_buttons",
@@ -58,7 +58,7 @@ def show_choose_period_buttons(uni: UniversityAlias) -> InlineKeyboardMarkup:
 def show_choose_day_buttons(weeks_to_add: int = 0) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    day_of_week = date.today() + timedelta(days=7*weeks_to_add)
+    day_of_week = date.today() + timedelta(days=7 * weeks_to_add)
     week_runner = day_of_week - timedelta(days=day_of_week.weekday() % 7)
     for i in range(7):
         builder.button(

@@ -5,15 +5,15 @@ from src.bot.headman_panel.callback_data import (
     SetViceHeadmanCallbackData,
     UnsetViceHeadmanCallbackData,
 )
+from src.bot.headman_panel.callback_data import ShowStudentListCallbackData
 from src.bot.headman_panel.callback_data.choose_student_to_downgrade_callback_data import (
     ChooseStudentToDowngradeCallbackData,
 )
 from src.bot.headman_panel.callback_data.choose_student_to_enchance_callback_data import (
     ChooseStudentToEnhanceCallbackData,
 )
-from src.bot.headman_panel.callback_data import ShowStudentListCallbackData
-from src.modules.student_management.domain.enums.role import Role
-from src.modules.student_management.domain.models.student import Student
+from src.dto.entities.student import Student
+from src.dto.enums.role import Role
 
 __all__ = [
     "group_panel_menu",
@@ -22,8 +22,8 @@ __all__ = [
 
 
 def select_student(
-    students: list[Student],
-    enhance_to_vice_headman: bool,
+        students: list[Student],
+        enhance_to_vice_headman: bool,
 ) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 

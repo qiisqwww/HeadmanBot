@@ -8,7 +8,7 @@ from loguru import logger
 from src.bot.common.resources import SOMETHING_WENT_WRONG_FOR_STUDENT_TEMPLATE
 
 if TYPE_CHECKING:
-    from src.modules.common.application.bot_notifier import BotNotifier
+    from src.common.bot_notifier import BotNotifier
 
 type EventType = Message | CallbackQuery
 type HandlerType = Callable[[EventType, dict[str, Any]], Awaitable[Any]]
@@ -20,10 +20,10 @@ __all__ = [
 
 class HandleExceptionMiddleware(BaseMiddleware):
     async def __call__(
-        self,
-        handler: HandlerType,
-        event: EventType,
-        data: dict[str, Any],
+            self,
+            handler: HandlerType,
+            event: EventType,
+            data: dict[str, Any],
     ) -> Any:
         try:
             return await handler(event, data)

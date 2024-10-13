@@ -1,7 +1,6 @@
-
 import pytest
 
-from src.modules.utils.schedule_api.infrastructure.impls import MIREAScheduleAPI
+from src.utils.schedule_api.infrastructure import MIREAScheduleAPI
 
 
 @pytest.mark.asyncio()

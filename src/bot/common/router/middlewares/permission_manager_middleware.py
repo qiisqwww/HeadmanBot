@@ -6,7 +6,6 @@ from aiogram.types import CallbackQuery, Message
 
 from src.modules.edu_info.application.queries import FetchUniTimezonByGroupIdQuery
 from src.modules.student_management.domain import Role
-
 from .templates import YOU_DONT_HAVE_ENOUGH_RIGHTS_TEMPLATE
 
 type EventType = Message | CallbackQuery
@@ -17,7 +16,7 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    from src.modules.common.infrastructure.container import Container
+    from src.common.infrastructure import Container
 
 
 class PermissionManagerMiddleware(BaseMiddleware):
@@ -28,10 +27,10 @@ class PermissionManagerMiddleware(BaseMiddleware):
         super().__init__()
 
     async def __call__(
-        self,
-        handler: HandlerType,
-        event: EventType,
-        data: dict[str, Any],
+            self,
+            handler: HandlerType,
+            event: EventType,
+            data: dict[str, Any],
     ) -> Any:
         student = data["student"]
 

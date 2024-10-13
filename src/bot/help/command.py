@@ -2,8 +2,7 @@ from aiogram.types import Message
 
 from src.bot.common import CommandFilter, RootRouter, Router, TelegramCommand
 from src.bot.common.resources.main_menu import main_menu
-from src.modules.student_management.domain.models.student import Student
-
+from src.dto.entities.student import Student
 from .templates import HELP_TEMPLATE
 
 __all__ = [

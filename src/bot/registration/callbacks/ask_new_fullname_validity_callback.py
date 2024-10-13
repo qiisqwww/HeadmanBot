@@ -15,7 +15,7 @@ from src.bot.registration.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     student_send_registration_request_template,
 )
-from src.modules.common.infrastructure.config import ADMIN_IDS
+from src.common.infrastructure import ADMIN_IDS
 from src.modules.student_management.application.commands import CacheCreateStudentDataCommand
 from src.modules.student_management.application.queries import (
     FindGroupByNameAndAliasQuery,
@@ -28,7 +28,6 @@ __all__ = [
     "include_ask_new_fullname_validity_router",
 ]
 
-
 ask_new_fullname_validity_router = Router()
 
 
@@ -40,13 +39,13 @@ def include_ask_new_fullname_validity_router(root_router: RootRouter) -> None:
     AskNewFullnameValidityCallbackData.filter(),
 )
 async def ask_new_fullname_validity_callback(
-    callback: CallbackQuery,
-    callback_data: AskNewFullnameValidityCallbackData,
-    state: RegistrationContext,
-    bot: Bot,
-    find_group_headman_query: FindGroupHeadmanQuery,
-    find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
-    cache_student_data_command: CacheCreateStudentDataCommand,
+        callback: CallbackQuery,
+        callback_data: AskNewFullnameValidityCallbackData,
+        state: RegistrationContext,
+        bot: Bot,
+        find_group_headman_query: FindGroupHeadmanQuery,
+        find_group_by_name_and_alias_query: FindGroupByNameAndAliasQuery,
+        cache_student_data_command: CacheCreateStudentDataCommand,
 ) -> None:
     if callback.message is None:
         return

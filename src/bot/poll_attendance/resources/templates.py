@@ -1,7 +1,8 @@
 from src.bot.common.convert_time import convert_time_from_utc
 from src.bot.common.render_template import render_template
-from src.modules.attendance.domain import Attendance, VisitStatus
-from src.modules.student_management.domain import StudentInfo
+
+from src.dto.entities import Student, Attendance
+from src.dto.enums import VisitStatus
 
 __all__ = [
     "POLL_TEMPLATE",
@@ -9,7 +10,6 @@ __all__ = [
     "your_choice_is_template",
     "student_was_not_polled_warning_template",
 ]
-
 
 POLL_TEMPLATE = "На какие сегодняшие пары ты придешь?"
 
@@ -36,8 +36,8 @@ def your_choice_is_template(attendance: Attendance, timezone: str) -> str:
     )
 
 
-def student_was_not_polled_warning_template(student_info: StudentInfo) -> str:
+def student_was_not_polled_warning_template(student: Student) -> str:
     template = """
-Студент <a href="tg://user?id={{ student_info.telegram_id }}">{{ student_info.fullname }}</a> не получил рассылку,
+Студент <a href="tg://user?id={{ student.telegram_id }}">{{ student.fullname }}</a> не получил рассылку,
 так как заблокировал бота."""
-    return render_template(template, student_info=student_info)
+    return render_template(template, student=student)

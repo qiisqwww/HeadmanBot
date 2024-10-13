@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    from src.modules.common.infrastructure.container import Container
+    from src.common.infrastructure import Container
 
 type EventType = Message | CallbackQuery
 type HandlerType = Callable[[EventType, dict[str, Any]], Awaitable[Any]]

@@ -4,7 +4,6 @@ from aiogram import Router as AiogramRouter
 from .root_middlewares import (
     CheckMessageExpireMiddleware,
     HandleExceptionMiddleware,
-    InjectContainerMiddleware,
     InjectDependenciesMiddleware,
     ThrottlingMiddleware,
 )
@@ -19,8 +18,8 @@ class RootRouter(AiogramRouter):
         super().__init__(name=name)
 
         if self.parent_router is not None and not isinstance(
-            self.parent_router,
-            (Dispatcher),
+                self.parent_router,
+                (Dispatcher),
         ):
             msg = "Only Dispatcher can be parent for RootRouter."
             raise RuntimeError(msg)
@@ -38,10 +37,6 @@ class RootRouter(AiogramRouter):
     def _add_handle_exception_middleware(self) -> None:
         self.message.middleware(HandleExceptionMiddleware())
         self.callback_query.middleware(HandleExceptionMiddleware())
-
-    def _add_inject_container_middleware(self) -> None:
-        self.message.middleware(InjectContainerMiddleware())
-        self.callback_query.middleware(InjectContainerMiddleware())
 
     def _add_inject_dependencies_middleware(self) -> None:
         self.message.middleware(InjectDependenciesMiddleware())

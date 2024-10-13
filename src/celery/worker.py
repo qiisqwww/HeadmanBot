@@ -1,17 +1,15 @@
 import asyncio
 
-from aiogram import Bot
 from celery import Celery
 from celery.app.log import Logging
 from celery.schedules import crontab
 
-from src.modules.attendance.application.commands import MakeAttendanceRelevantCommand
-from src.modules.common.application import NoArgsUseCase
-from src.modules.common.application.command import AskAttendanceCommand
-from src.modules.common.infrastructure.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
-from src.modules.common.infrastructure.config.config import BOT_TOKEN
-from src.modules.common.infrastructure.container import Container
-from src.modules.student_management.application.commands import UnnoteAttendanceForAllCommand
+from src.commands import MakeAttendanceRelevantCommand, UnnoteAttendanceForAllCommand, AskAttendanceCommand
+from src.common.bot_notifier import BotNotifier
+from src.common.config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
+from src.common.database import DbContext, create_db_pool
+from src.common.facade import Facade
+from src.common.use_case import NoArgsUseCase
 
 worker = Celery(__name__)
 worker.conf.broker_url = CELERY_BROKER_URL
@@ -19,18 +17,34 @@ worker.conf.result_backend = CELERY_RESULT_BACKEND
 worker.conf.timezone = "Europe/Moscow"
 worker.autodiscover_tasks()
 
-
 logging = Logging(worker)
 logging.setup(loglevel="info", logfile="logs/logging-info.log")
 logging.setup(loglevel="error", logfile="logs/logging-error.log")
+
+
 # configure_logger()
 
-def execute_command(action: type[NoArgsUseCase], bot_token: str = BOT_TOKEN) -> None:
+def execute_command(action: type[NoArgsUseCase]) -> None:
     async def _async_wrapper() -> None:
-        await Container.init(Bot(bot_token))
-        async with Container() as container:
-            command = container.get_dependency(action)
-            await command.execute()
+        try:
+            async with DbContext() as con:
+                command = action(con=con)
+                await command.execute()
+        except Exception as e:
+            await BotNotifier().notify_about_job_exception(e, action.__name__)
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(_async_wrapper())
+
+
+def execute_facade(action: type[Facade]) -> None:
+    async def _async_wrapper() -> None:
+        try:
+            with create_db_pool() as pool:
+                command = action(pool=pool)
+                await command.execute()
+        except Exception as e:
+            await BotNotifier().notify_about_job_exception(e, action.__name__)
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(_async_wrapper())
@@ -43,7 +57,8 @@ def make_attendance_relevant_task() -> None:
 
 @worker.task(name="Ask attendance")
 def ask_attendance_task() -> None:
-    execute_command(AskAttendanceCommand)
+    execute_facade(AskAttendanceCommand)
+
 
 @worker.task(name="Unnote attendance")
 def unnote_students_attendance() -> None:

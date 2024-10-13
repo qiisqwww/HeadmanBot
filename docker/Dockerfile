@@ -21,7 +21,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY poetry.lock pyproject.toml /app/
 
 # Configurate poetry and install requirement dependencies.
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi --without dev
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-root --no-ansi --without dev
 
 # Copy project into container.
 COPY . .

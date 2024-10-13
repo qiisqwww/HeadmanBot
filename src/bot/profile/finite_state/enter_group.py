@@ -18,7 +18,7 @@ from src.bot.profile.resources.templates import (
     YOUR_APPLY_WAS_SENT_TO_HEADMAN_TEMPLATE,
     student_send_enter_group_request_template,
 )
-from src.modules.common.infrastructure.config import ADMIN_IDS
+from src.common.infrastructure import ADMIN_IDS
 from src.modules.student_management.application.commands import CacheStudentEnterGroupDataCommand
 from src.modules.student_management.application.queries import (
     CheckGroupExistsInUniQuery,
@@ -27,12 +27,11 @@ from src.modules.student_management.application.queries import (
 )
 from src.modules.student_management.application.repositories import StudentEnterGroupDTO
 from src.modules.student_management.domain import Role, Student
-from src.modules.utils.schedule_api.infrastructure.exceptions import ScheduleApiError
+from src.utils.schedule_api.infrastructure import ScheduleApiError
 
 __all__ = [
     "include_enter_group_router",
 ]
-
 
 enter_group_router = Router(
     must_be_registered=True,
@@ -172,4 +171,3 @@ async def new_group_handler(
         ),
         reply_markup=accept_or_deny_enter_group_buttons(student.telegram_id),
     )
-
