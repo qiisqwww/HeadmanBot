@@ -3,7 +3,7 @@ from typing import Final, NoReturn
 from zoneinfo import ZoneInfo
 
 from aiohttp import ClientSession
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule, UniTimezone, STULessonType

@@ -4,7 +4,8 @@ from src.modules.utils.schedule_api.domain.enums import (
     UniTimezone,
     NSTULessonType,
     BMSTULessonType,
-    STULessonType
+    STULessonType,
+    MIIKAIKLessonType
 )
 
 __all__ = [
@@ -13,5 +14,6 @@ __all__ = [
     "UniTimezone",
     "NSTULessonType",
     "BMSTULessonType",
-    "STULessonType"
+    "STULessonType",
+    "MIIKAIKLessonType",
 ]

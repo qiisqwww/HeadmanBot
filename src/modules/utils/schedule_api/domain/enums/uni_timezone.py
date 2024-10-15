@@ -10,3 +10,4 @@ class UniTimezone(StrEnum):
     BMSTU_TZ = "Europe/Moscow"
     NSTU_TZ = "Asia/Novosibirsk"
     STU_TZ = "Asia/Novosibirsk"
+    MIIGAIK_TZ = "Europe/Moscow"
