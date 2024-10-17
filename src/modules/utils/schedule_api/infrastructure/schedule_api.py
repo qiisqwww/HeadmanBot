@@ -5,7 +5,7 @@ from src.modules.common.domain import UniversityAlias
 from src.modules.utils.schedule_api.application import ScheduleAPI
 from src.modules.utils.schedule_api.domain import Schedule
 
-from .impls import BMSTUScheduleAPI, MIREAScheduleAPI, NSTUScheduleAPI, STUScheduleAPI
+from .impls import BMSTUScheduleAPI, MIREAScheduleAPI, NSTUScheduleAPI, STUScheduleAPI, MIIGAIKScheduleAPI
 
 __all__ = [
     "ScheduleApiImpl",
@@ -26,6 +26,8 @@ class ScheduleApiImpl(ScheduleAPI):
                 self._api_impl = NSTUScheduleAPI()
             case UniversityAlias.STU:
                 self._api_impl = STUScheduleAPI()
+            case UniversityAlias.MIIGAIK:
+                self._api_impl = MIIGAIKScheduleAPI()
 
     async def group_exists(self, group_name: str) -> bool | NoReturn:
         return await self._api_impl.group_exists(group_name)

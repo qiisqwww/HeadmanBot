@@ -11,3 +11,4 @@ class UniversityAlias(StrEnum):
     BMSTU = "BMSTU"
     NSTU = "NSTU"
     STU = "STU"
+    MIIGAIK = 'MIIGAIK'
