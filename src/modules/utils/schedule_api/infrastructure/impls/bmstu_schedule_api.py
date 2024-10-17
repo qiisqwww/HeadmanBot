@@ -81,8 +81,9 @@ class BMSTUScheduleAPI(ScheduleAPI):
                     elif week_parity == 1 and lesson["week"] == "zn":
                         continue
 
-                lesson_name = (BMSTULessonType.from_name(lesson["discipline"].get("actType", "")).formatted +
-                               lesson["discipline"]["fullName"])
+                lesson_name = (BMSTULessonType.from_name(lesson.get("discipline", {}).get("actType", "")).formatted +
+                               (lesson.get("discipline", {}).get("fullName", "") if lesson.get("discipline", {})
+                                .get("fullName", "") else ""))
 
                 start_time = ((datetime.strptime(
                     lesson["startTime"],
